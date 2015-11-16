@@ -813,7 +813,8 @@ public class GpsDB_Query {
 
 	public boolean deleteRow_PondInfo(String rowId) {
 		String where = GpsSQLiteHelper.CL_POND_INDEX + "=" + rowId;
-		String where1 = GpsSQLiteHelper.CL_WEEKLY_UPDATES_ID + "=" + rowId;
+		String where1 = GpsSQLiteHelper.CL_WEEKLY_UPDATES_PONDID + "=" + rowId;
+
 		boolean isdeleted = db.delete(GpsSQLiteHelper.TBLPOND, where, null) != 0;
 		if (isdeleted) {
 			isdeleted = db.delete(GpsSQLiteHelper.TBLPOND_WeeklyUpdates, where1, null) != 0;
