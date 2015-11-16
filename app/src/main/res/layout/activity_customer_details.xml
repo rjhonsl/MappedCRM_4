@@ -1,0 +1,696 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/ll_titlebar"
+        android:background="#009688"
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        >
+
+        <ImageButton
+            android:layout_weight="1"
+            android:background="@drawable/bg_material_transparent"
+            android:src="@drawable/ic_keyboard_arrow_left_white_24dp"
+            android:layout_width="0dp"
+            android:id="@+id/btn_title_left"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:text="Customer Details"
+            android:gravity="center"
+            android:id="@+id/title"
+            android:textSize="19sp"
+            android:layout_weight="12"
+            android:textColor="@color/background_material_light"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"/>
+
+        <ImageButton
+            android:layout_weight="1"
+            android:background="@drawable/bg_material_transparent"
+            android:src="@drawable/ic_filler24dp"
+            android:layout_width="0dp"
+            android:id="@+id/btn_title_right1"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+    <ScrollView android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/ll_titlebar"
+                android:layout_above="@+id/ll_bottombutton">
+
+        <LinearLayout android:layout_width="fill_parent"
+                      android:layout_height="fill_parent"
+                      android:orientation="vertical"
+                      android:paddingTop="10dp"
+                      android:paddingBottom="10dp"
+                      android:paddingLeft="10dp"
+                      android:paddingRight="10dp">
+
+
+
+
+
+
+            <LinearLayout android:layout_width="fill_parent"
+                          android:layout_height="wrap_content"
+                          android:paddingLeft="20dp"
+                          android:id="@+id/ll_farmID"
+                          android:background="@drawable/bg_material_transparent_rectangle_greypressed"
+                          android:paddingRight="20dp"
+                          android:paddingTop="10dp"
+                          android:paddingBottom="10dp"
+                          android:orientation="vertical">
+
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:textSize="17dp"
+                          android:id="@+id/lbl_farmid"
+                          android:textColor="@color/gray_900"
+                          android:text="Farm ID" />
+
+
+                <LinearLayout android:layout_width="wrap_content"
+                              android:layout_height="wrap_content"
+                              android:orientation="horizontal"
+                              android:paddingTop="3dp"
+                    >
+
+                    <LinearLayout android:layout_width="wrap_content"
+                                  android:layout_height="wrap_content"
+                                  android:orientation="vertical"
+                                  android:layout_weight="1">
+
+
+                        <TextView android:layout_width="wrap_content"
+                                  android:layout_height="wrap_content"
+
+                                  android:textColor="@color/gray_500"
+                                  android:id="@+id/txtFarmid"
+                                  android:text="FF0001" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+
+            <LinearLayout android:layout_width="fill_parent"
+                          android:layout_height="wrap_content"
+                          android:paddingTop="10dp"
+                          android:paddingBottom="10dp"
+                          android:orientation="vertical">
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:textSize="13dp"
+                          android:textStyle="bold"
+                          android:textColor="@color/gray_700"
+                          android:text="BASIC INFORMATION" />
+                <View android:layout_width="fill_parent" android:layout_height="1dp"
+                      android:background="@color/gray_300"
+                    />
+            </LinearLayout>
+
+
+            <LinearLayout android:layout_width="fill_parent"
+                          android:layout_height="wrap_content"
+                          android:paddingLeft="20dp"
+                          android:paddingRight="20dp"
+                          android:paddingTop="10dp"
+                          android:background="@drawable/bg_material_transparent_rectangle_greypressed"
+                          android:id="@+id/ll_fullname"
+                          android:paddingBottom="10dp"
+                android:orientation="vertical">
+
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:textSize="17dp"
+                          android:background="@drawable/bg_material_transparent_rectangle_greypressed"
+                          android:id="@+id/lbl_fullname"
+                          android:textColor="@color/gray_900"
+                          android:text="Full Name" />
+
+
+                <LinearLayout android:layout_width="fill_parent"
+                              android:layout_height="wrap_content"
+                              android:orientation="horizontal"
+                    >
+
+                    <LinearLayout android:layout_width="wrap_content"
+                                  android:layout_height="wrap_content"
+                                  android:orientation="vertical"
+                        >
+
+
+                        <TextView android:layout_width="wrap_content"
+                                  android:layout_height="wrap_content"
+                                  android:textColor="@color/gray_500"
+                                  android:id="@+id/txtFirstName"
+                                  android:paddingRight="10dp"
+                                  android:text="Juan" />
+
+                    </LinearLayout>
+
+                    <LinearLayout android:layout_width="wrap_content"
+                                  android:layout_height="wrap_content"
+                                  android:orientation="vertical"
+                        >
+
+
+                        <TextView android:layout_width="wrap_content"
+                                  android:layout_height="wrap_content"
+                                  android:textColor="@color/gray_500"
+                                  android:id="@+id/txtMiddleName"
+                                  android:paddingRight="10dp"
+                                  android:text="M." />
+
+                    </LinearLayout>
+
+                    <LinearLayout android:layout_width="wrap_content"
+                                  android:layout_height="wrap_content"
+                                  android:orientation="vertical"
+                                  >
+
+
+                        <TextView android:layout_width="wrap_content"
+                                  android:layout_height="wrap_content"
+                                  android:textColor="@color/gray_600"
+                                  android:id="@+id/txtLastName"
+                                  android:text="Villa Fuerte" />
+
+                    </LinearLayout>
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+
+
+
+            <LinearLayout android:layout_width="fill_parent"
+                          android:layout_height="wrap_content"
+                          android:id="@+id/ll_birthDetails"
+                          android:background="@drawable/bg_material_transparent_rectangle_greypressed"
+                          android:paddingLeft="20dp"
+                          android:paddingRight="20dp"
+                          android:paddingTop="10dp"
+                          android:paddingBottom="10dp"
+                          android:orientation="vertical">
+
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:background="@drawable/bg_material_transparent_rectangle_greypressed"
+                          android:textSize="17dp"
+                          android:id="@+id/lbl_BirthDetails"
+                          android:textColor="@color/gray_900"
+                          android:text="Birthday/Birth Place" />
+
+
+                <LinearLayout android:layout_width="fill_parent"
+                              android:layout_height="wrap_content"
+                              android:orientation="horizontal"
+                              android:paddingTop="3dp"
+                    >
+
+                        <TextView android:layout_width="wrap_content"
+                                  android:layout_height="wrap_content"
+                                  android:textColor="@color/gray_500"
+                                  android:id="@+id/txtBirthday"
+                                  android:paddingRight="10dp"
+                                  android:text="September 10, 2015" />
+
+                        <TextView android:layout_width="wrap_content"
+                                  android:layout_height="wrap_content"
+                                  android:textColor="@color/gray_500"
+                                  android:paddingRight="10dp"
+                                  android:text="-" />
+
+                        <TextView android:layout_width="wrap_content"
+                                  android:layout_height="wrap_content"
+                                  android:textColor="@color/gray_500"
+                                  android:id="@+id/txtBirthPlace"
+                                  android:paddingRight="10dp"
+                                  android:text="Caloocan City" />
+
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+
+
+
+
+
+            <LinearLayout android:layout_width="fill_parent"
+                          android:layout_height="wrap_content"
+                          android:background="@drawable/bg_material_transparent_rectangle_greypressed"
+                          android:id="@+id/ll_address"
+                          android:paddingLeft="20dp"
+                          android:paddingRight="20dp"
+                          android:paddingTop="10dp"
+                          android:paddingBottom="10dp"
+                          android:orientation="vertical">
+
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:background="@drawable/bg_material_transparent_rectangle_greypressed"
+                          android:textSize="17dp"
+                          android:id="@+id/lbl_address"
+                          android:textColor="@color/gray_900"
+                          android:text="Address" />
+
+
+                <LinearLayout android:layout_width="fill_parent"
+                              android:layout_height="wrap_content"
+                              android:orientation="horizontal"
+                              android:paddingTop="3dp"
+                    >
+                    <TextView android:layout_width="wrap_content"
+                              android:layout_height="wrap_content"
+                              android:textColor="@color/gray_500"
+                              android:id="@+id/txtHouseNumber2"
+                              android:paddingRight="10dp"
+                              android:text="123" />
+
+                    <TextView android:layout_width="wrap_content"
+                              android:layout_height="wrap_content"
+                              android:textColor="@color/gray_500"
+                              android:id="@+id/txtStreet"
+                              android:paddingRight="10dp"
+                              android:text="Sampaguita St." />
+
+                    <TextView android:layout_width="wrap_content"
+                              android:layout_height="wrap_content"
+                              android:textColor="@color/gray_500"
+                              android:id="@+id/txtSubdivision"
+                              android:text="Some Village Name" />
+
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="fill_parent"
+                              android:layout_height="wrap_content"
+                              android:orientation="horizontal"
+                              android:paddingTop="3dp"
+                    >
+                    <TextView android:layout_width="wrap_content"
+                              android:layout_height="wrap_content"
+                              android:textColor="@color/gray_500"
+                              android:id="@+id/txtBarangay"
+                              android:paddingRight="10dp"
+                              android:text="Pungo" />
+
+                    <TextView android:layout_width="wrap_content"
+                              android:layout_height="wrap_content"
+                              android:textColor="@color/gray_500"
+                              android:id="@+id/txtCity"
+                              android:paddingRight="10dp"
+                              android:text="Calumpit" />
+
+                    <TextView android:layout_width="wrap_content"
+                              android:layout_height="wrap_content"
+                              android:textColor="@color/gray_500"
+                              android:id="@+id/txtProvince"
+                              android:text="Bulacan" />
+
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+
+
+            <LinearLayout android:layout_width="fill_parent"
+                          android:layout_height="wrap_content"
+                          android:background="@drawable/bg_material_transparent_rectangle_greypressed"
+                          android:id="@+id/ll_houseStatus"
+                          android:paddingLeft="20dp"
+                          android:paddingRight="20dp"
+                          android:paddingTop="10dp"
+                          android:paddingBottom="10dp"
+                          android:orientation="vertical">
+
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:textSize="17dp"
+                          android:background="@drawable/bg_material_transparent_rectangle_greypressed"
+                          android:id="@+id/lbl_houseStatus"
+                          android:textColor="@color/gray_900"
+                          android:text="House Status" />
+
+
+                <LinearLayout android:layout_width="fill_parent"
+                              android:layout_height="wrap_content"
+                              android:orientation="horizontal"
+                              android:paddingTop="3dp"
+                    >
+                    <TextView android:layout_width="wrap_content"
+                              android:layout_height="wrap_content"
+                              android:textColor="@color/gray_500"
+                              android:id="@+id/txtHouseStatus"
+                              android:paddingRight="10dp"
+                              android:text="Owned" />
+
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+
+
+
+
+
+
+            <LinearLayout android:layout_width="fill_parent"
+                          android:layout_height="wrap_content"
+                          android:paddingTop="10dp"
+                          android:paddingBottom="10dp"
+                          android:orientation="vertical">
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:textSize="13dp"
+                          android:textStyle="bold"
+                          android:textColor="@color/gray_700"
+                          android:text="CONTACT INFORMATION" />
+                <View android:layout_width="fill_parent" android:layout_height="1dp"
+                      android:background="@color/gray_300"
+                    />
+            </LinearLayout>
+
+
+            <LinearLayout android:layout_width="fill_parent"
+                          android:id="@+id/ll_telephone"
+                          android:background="@drawable/bg_material_transparent_rectangle_greypressed"
+                          android:layout_height="wrap_content"
+                          android:paddingLeft="20dp"
+                          android:paddingRight="20dp"
+                          android:paddingTop="10dp"
+                          android:paddingBottom="10dp"
+                          android:orientation="vertical">
+
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:background="@drawable/bg_material_transparent_rectangle_greypressed"
+                      android:textSize="17dp"
+                      android:id="@+id/lbl_telephone"
+                      android:textColor="@color/gray_900"
+                      android:text="Telephone" />
+
+
+                <LinearLayout android:layout_width="fill_parent"
+                              android:layout_height="wrap_content"
+                              android:orientation="horizontal"
+                              android:paddingTop="3dp"  >
+
+                    <LinearLayout android:layout_width="wrap_content"
+                                  android:layout_height="wrap_content"
+                                  android:orientation="vertical"
+                                  android:layout_weight="1">
+
+
+                        <TextView android:layout_width="wrap_content"
+                                  android:layout_height="wrap_content"
+                                  android:textColor="@color/gray_500"
+                                  android:id="@+id/txtTelephone"
+                                  android:text="7111111" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+
+
+            <LinearLayout android:layout_width="fill_parent"
+                          android:layout_height="wrap_content"
+                          android:background="@drawable/bg_material_transparent_rectangle_greypressed"
+                          android:id="@+id/ll_cellphone"
+                          android:paddingLeft="20dp"
+                          android:paddingRight="20dp"
+                          android:paddingTop="10dp"
+                          android:paddingBottom="10dp"
+                          android:orientation="vertical">
+
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:background="@drawable/bg_material_transparent_rectangle_greypressed"
+                          android:id="@+id/lbl_cellphone"
+                          android:textSize="17dp"
+                          android:textColor="@color/gray_900"
+                          android:text="Cellphone" />
+
+
+                <LinearLayout android:layout_width="fill_parent"
+                              android:layout_height="wrap_content"
+                              android:orientation="horizontal"
+                              android:paddingTop="3dp"  >
+
+                    <LinearLayout android:layout_width="wrap_content"
+                                  android:layout_height="wrap_content"
+                                  android:orientation="vertical"
+                                  android:layout_weight="1">
+
+
+                        <TextView android:layout_width="wrap_content"
+                                  android:layout_height="wrap_content"
+                                  android:textColor="@color/gray_500"
+                                  android:id="@+id/txtCellphone"
+                                  android:text="09151234567" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+
+
+
+            <LinearLayout android:layout_width="fill_parent"
+                          android:layout_height="wrap_content"
+                          android:paddingTop="10dp"
+                          android:paddingBottom="10dp"
+                          android:orientation="vertical">
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:textSize="13dp"
+                          android:textStyle="bold"
+                          android:textColor="@color/gray_700"
+                          android:text="SPOUSE INFORMATION" />
+                <View android:layout_width="fill_parent" android:layout_height="1dp"
+                      android:background="@color/gray_300"
+                    />
+            </LinearLayout>
+
+
+
+
+
+            <LinearLayout android:layout_width="fill_parent"
+                          android:layout_height="wrap_content"
+                          android:background="@drawable/bg_material_transparent_rectangle_greypressed"
+                          android:id="@+id/ll_civilStatus"
+                          android:paddingLeft="20dp"
+                          android:paddingRight="20dp"
+                          android:paddingTop="10dp"
+                          android:paddingBottom="10dp"
+                          android:orientation="vertical">
+
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:background="@drawable/bg_material_transparent_rectangle_greypressed"
+                          android:textSize="17dp"
+                          android:id="@+id/lbl_civilStatus"
+                          android:textColor="@color/gray_900"
+                          android:text="Civil Status" />
+
+
+                <LinearLayout android:layout_width="fill_parent"
+                              android:layout_height="wrap_content"
+                              android:orientation="horizontal"
+                              android:paddingTop="3dp"
+                    >
+
+                    <TextView android:layout_width="wrap_content"
+                              android:layout_height="wrap_content"
+                              android:textColor="@color/gray_500"
+                              android:id="@+id/txtCivilStatus"
+                              android:paddingRight="10dp"
+                              android:text="Married" />
+
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+
+
+
+
+            <LinearLayout android:layout_width="fill_parent"
+                          android:layout_height="wrap_content"
+                          android:background="@drawable/bg_material_transparent_rectangle_greypressed"
+                          android:id="@+id/ll_spouseFullname"
+                          android:paddingLeft="20dp"
+                          android:paddingRight="20dp"
+                          android:paddingTop="10dp"
+                          android:paddingBottom="10dp"
+                          android:orientation="vertical">
+
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:background="@drawable/bg_material_transparent_rectangle_greypressed"
+                          android:id="@+id/lbl_Spousefullname"
+                          android:textSize="17dp"
+                          android:textColor="@color/gray_900"
+                          android:text="Spouse Full Name" />
+
+
+                <LinearLayout android:layout_width="fill_parent"
+                              android:layout_height="wrap_content"
+                              android:orientation="horizontal"
+                              android:paddingTop="3dp"  >
+
+                    <LinearLayout android:layout_width="wrap_content"
+                                  android:layout_height="wrap_content"
+                                  android:orientation="vertical"
+                                  android:layout_weight="1">
+
+
+                        <LinearLayout android:layout_width="fill_parent"
+                                      android:layout_height="wrap_content"
+                                      android:orientation="horizontal"
+                            >
+                            <TextView android:layout_width="wrap_content"
+                                      android:layout_height="wrap_content"
+                                      android:textColor="@color/gray_500"
+                                      android:id="@+id/txt_S_FirstName"
+                                      android:paddingRight="10dp"
+                                      android:text="Juanita" />
+
+                            <TextView android:layout_width="wrap_content"
+                                      android:layout_height="wrap_content"
+                                      android:textColor="@color/gray_500"
+                                      android:id="@+id/txt_S_MiddleName"
+                                      android:paddingRight="10dp"
+                                      android:text="M." />
+
+                            <TextView android:layout_width="wrap_content"
+                                      android:layout_height="wrap_content"
+                                      android:textColor="@color/gray_500"
+                                      android:id="@+id/txt_S_LastName"
+                                      android:text="Villafuerte" />
+
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+            <LinearLayout android:layout_width="fill_parent"
+                          android:layout_height="wrap_content"
+                          android:background="@drawable/bg_material_transparent_rectangle_greypressed"
+                          android:id="@+id/ll_spouseBirthday"
+                          android:paddingLeft="20dp"
+                          android:paddingRight="20dp"
+                          android:paddingTop="10dp"
+                          android:paddingBottom="10dp"
+                          android:orientation="vertical">
+
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:background="@drawable/bg_material_transparent_rectangle_greypressed"
+                          android:id="@+id/lbl_spouseBirthday"
+                          android:textSize="17dp"
+                          android:textColor="@color/gray_900"
+                          android:text="Spouse Birthday" />
+
+
+                <LinearLayout android:layout_width="fill_parent"
+                              android:layout_height="wrap_content"
+                              android:orientation="horizontal"
+                              android:paddingTop="3dp"
+                    >
+
+                    <TextView android:layout_width="wrap_content"
+                              android:layout_height="wrap_content"
+                              android:textColor="@color/gray_500"
+                              android:id="@+id/txt_S_Birthday"
+                              android:paddingRight="10dp"
+                              android:text="September 10, 2015" />
+
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+
+
+
+            <LinearLayout android:layout_width="fill_parent"
+                          android:layout_height="wrap_content"
+                          android:paddingTop="10dp"
+                          android:paddingBottom="10dp"
+                          android:orientation="vertical">
+                    />
+            </LinearLayout>
+
+
+
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <LinearLayout android:layout_width="fill_parent"
+                  android:layout_height="wrap_content"
+                  android:orientation="horizontal"
+                  android:id="@+id/ll_bottombutton"
+                  android:layout_alignParentBottom="true"
+                  android:gravity="center"
+        >
+
+        <ImageButton android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:id="@+id/btn_delete"
+            android:layout_weight="1"
+            android:textColor="@color/deepteal_500"
+            android:padding="5dp"
+            android:background="@drawable/bg_material_transparent"
+            android:src="@drawable/ic_delete_darkteal_24dp"
+            />
+
+        <ImageButton android:layout_width="wrap_content"
+             android:layout_height="fill_parent"
+             android:id="@+id/btn_edit"
+             android:layout_weight="1"
+             android:padding="5dp"
+             android:textColor="@color/deepteal_500"
+             android:background="@drawable/bg_material_transparent"
+             android:src="@drawable/ic_edit_darkteal_24dp"
+            />
+    </LinearLayout>
+</RelativeLayout>

@@ -1,0 +1,36 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.1"
+
+    defaultConfig {
+        applicationId "com.santeh.rjhonsl.samplemap"
+        minSdkVersion 16
+        targetSdkVersion 22
+
+        versionCode 26
+        versionName "0.25.1"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile 'com.android.support:appcompat-v7:23.1.0'
+    compile 'com.google.android.gms:play-services:7.5.0'
+    compile files('libs/volley.jar')
+    compile files('libs/joda-time-2.8.2.jar')
+    compile 'com.android.support:design:23.1.0'
+    compile 'com.google.maps.android:android-maps-utils:0.4+'
+    compile 'com.github.flavienlaurent.datetimepicker:library:0.0.2'
+}

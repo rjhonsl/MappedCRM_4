@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:id="@+id/ll_titlebar"
+        android:background="@color/accent_material_light">
+
+        <ImageButton android:layout_width="wrap_content"
+                     android:padding="5dp"
+                     android:layout_weight="1"
+                     android:id="@+id/title_back"
+                     android:layout_height="wrap_content"
+                     android:background="@drawable/bg_material_transparent"
+                     android:layout_alignParentLeft="true"
+                     android:src="@drawable/ic_keyboard_arrow_left_white_24dp"/>
+
+        <TextView
+            android:layout_weight="8"
+            android:gravity="center"
+            android:text="Weekly Reports"
+            android:textSize="20sp"
+            android:paddingRight="0dp"
+            android:paddingLeft="0dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:textColor="@color/background_material_light"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <ImageButton android:layout_width="wrap_content"
+                     android:layout_centerHorizontal="true"
+                     android:layout_centerVertical="true"
+                     android:padding="8dp"
+                     android:layout_height="wrap_content"
+                     android:background="@drawable/bg_material_transparent"
+                     android:layout_alignParentRight="true"
+                     android:layout_weight="1"
+            android:src="@drawable/ic_filler24dp"/>
+
+
+    </LinearLayout>
+
+    <LinearLayout android:layout_width="fill_parent"
+                  android:layout_height="wrap_content"
+                  android:padding="5dp"
+                  android:id="@+id/pondinfoHolder"
+                  android:layout_below="@+id/ll_titlebar"
+        android:orientation="vertical">
+
+        <TextView
+            android:textSize="18sp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:id="@+id/lbl_weeklyreports_farmName"
+            android:textColor="@color/gray_600"
+            android:layout_width="fill_parent"
+            android:gravity="center"
+            android:layout_height="wrap_content"
+            android:text="Case 1 - Tilapia "/>
+
+        <View  android:layout_marginBottom="3dp"
+            android:layout_width="fill_parent" android:layout_height="1dp"
+              android:background="#97a7a7"/>
+
+
+
+        <LinearLayout android:layout_width="fill_parent"
+                      android:layout_height="wrap_content"
+                      android:orientation="horizontal"
+
+            >
+
+            <TextView
+                android:textStyle="bold"
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp"
+                android:layout_weight="1"
+                android:id="@+id/txt_weeklyreports_DateStocked"
+                android:textColor="@color/gray_600"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Date Stocked: "/>
+
+            <TextView
+                android:layout_gravity="right"
+                android:textStyle="bold"
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp"
+                android:id="@+id/txt_weeklyreports_quantity"
+                android:textColor="@color/gray_600"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Quantity: "/>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+    <View android:layout_width="fill_parent" android:layout_height="1dp"
+          android:background="@color/material_blue_grey_900"/>
+
+
+    <ListView android:layout_width="fill_parent"
+              android:layout_below="@id/pondinfoHolder"
+              android:layout_height="wrap_content"
+              android:id="@+id/lv_pond_weeklyReports"
+              android:animateLayoutChanges="true"/>
+
+
+
+    <ImageButton android:layout_width="wrap_content"
+                 android:background="@drawable/bg_red_oval"
+                 android:padding="12dp"
+                 android:layout_above="@+id/btn_details"
+                 android:layout_alignParentRight="true"
+                 android:layout_marginRight="15dp"
+                 android:layout_marginBottom="5dp"
+                 android:layout_height="wrap_content"
+                 android:src="@drawable/ic_addreport_white_24dp"
+                 android:id="@+id/btn_addreport"
+        />
+
+
+    <ImageButton android:layout_width="wrap_content"
+                 android:background="@drawable/bg_skyblue_oval"
+                 android:padding="12dp"
+                 android:layout_alignParentBottom="true"
+                 android:layout_alignParentRight="true"
+                 android:layout_marginRight="15dp"
+                 android:layout_marginBottom="15dp"
+                 android:layout_height="wrap_content"
+                 android:src="@drawable/ic_info_white_24dp"
+                 android:id="@+id/btn_details"
+        />
+
+
+
+
+</RelativeLayout>

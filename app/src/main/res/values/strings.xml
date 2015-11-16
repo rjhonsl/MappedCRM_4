@@ -1,0 +1,149 @@
+<resources>
+    <string name="app_name">Santeh CRM</string>
+    <string name="title_activity_maps">Santeh CRM</string>
+    <string name="openDrawer">Navigation Drawer Opened</string>
+    <string name="closeDrawer">Navigation Drawer Closed</string>
+    <string name="NA">N/A</string>
+    <string name="version_number">0.19a</string>
+    <string name="VolleyUnexpectedError">Something went wrong. Please try again later.</string>
+    <string name="error002">Cannot get device location</string>
+    <string name="textfill">SAMPLE TITLE</string>
+
+    <string-array name="nav_items">
+        <item>Home</item>
+        <item>Stockings</item>
+        <item>Fingerlings</item>
+        <item>Item 3</item>
+        <item>settings</item>
+    </string-array>
+
+    <string-array name="cultureType">
+        <item>Cage</item>
+        <item>Pen</item>
+        <item>Pond</item>
+    </string-array>
+
+    <string-array name="waterType">
+        <item>Fresh Water</item>
+        <item>Marine Water</item>
+        <item>Brackish Water</item>
+    </string-array>
+
+    <string-array name="company">
+        <item>PetOne</item>
+        <item>ProNatural</item>
+        <item>Santeh</item>
+        <item>Tateh</item>
+    </string-array>
+
+    <string-array name="province">
+        <item>Abra</item>
+        <item>Agusan Del Norte</item>
+        <item>Agusan del Sur</item>
+        <item>Aklan</item>
+        <item>Albay</item>
+        <item>Antique</item>
+        <item>Apayao</item>
+        <item>Aurora</item>
+        <item>Basilan</item>
+        <item>Bataan</item>
+        <item>Batanes</item>
+        <item>Batangas</item>
+        <item>Benguet</item>
+        <item>Biliran</item>
+        <item>Bohol</item>
+        <item>Bukidnon</item>
+        <item>Bulacan</item>
+        <item>Cagayan</item>
+        <item>Camarines Norte</item>
+        <item>Camarines Sur</item>
+        <item>Camiguin</item>
+        <item>Capiz</item>
+        <item>Catanduanes</item>
+        <item>Cavite</item>
+        <item>Cebu</item>
+        <item>Compostela Valley</item>
+        <item>Cotabato</item>
+        <item>Davao del Norte</item>
+        <item>Davao del Sur</item>
+        <item>Davao Occidental</item>
+        <item>Davao Oriental</item>
+        <item>Dinagat Islands</item>
+        <item>Eastern Samar</item>
+        <item>Guimaras</item>
+        <item>Ifugao</item>
+        <item>Ilocos Norte</item>
+        <item>Ilocos Sur</item>
+        <item>Iloilo</item>
+        <item>Isabela</item>
+        <item>Kalinga</item>
+        <item>La Union</item>
+        <item>Laguna</item>
+        <item>Lanao del Norte</item>
+        <item>Lanao del Sur</item>
+        <item>Leyte</item>
+        <item>Maguindanao</item>
+        <item>Marinduque</item>
+        <item>Masbate</item>
+        <item>Metro Manila</item>
+        <item>Misamis Occidental</item>
+        <item>Misamis Oriental</item>
+        <item>Mountain Province</item>
+        <item>Negros Occidental</item>
+        <item>Negros Oriental</item>
+        <item>Northern Samar</item>
+        <item>Nueva Ecija</item>
+        <item>Nueva Vizcaya</item>
+        <item>Occidental Mindoro</item>
+        <item>Oriental Mindoro</item>
+        <item>Palawan</item>
+        <item>Pampanga</item>
+        <item>Pangasinan</item>
+        <item>Quezon</item>
+        <item>Quirino</item>
+        <item>Rizal</item>
+        <item>Romblon</item>
+        <item>Samar</item>
+        <item>Sarangani</item>
+        <item>Siquijor</item>
+        <item>Sorsogon</item>
+        <item>South Cotabato</item>
+        <item>Southern Leyte</item>
+        <item>Sultan Kudarat</item>
+        <item>Sulu</item>
+        <item>Surigao del Norte</item>
+        <item>Surigao del Sur</item>
+        <item>Tarlac</item>
+        <item>Tawi-Tawi</item>
+        <item>Zambales</item>
+        <item>Zamboanga del Norte</item>
+        <item>Zamboanga del Sur</item>
+        <item>Zamboanga Sibugay</item>
+    </string-array>
+
+    <string-array name="cultureLevel">
+        <item>Extensive</item>
+        <item>Intensive</item>
+        <item>Semi-Intesive</item>
+        <item>Mono-Culture</item>
+        <item>Poly-Culture</item>
+    </string-array>
+
+
+
+    <string-array name="species">
+        <item>Bangus</item>
+        <item>Catfish</item>
+        <item>Crab</item>
+        <item>Grouper</item>
+        <item>Home</item>
+        <item>Pangasius</item>
+        <item>Pompano</item>
+        <item>Prawns</item>
+        <item>Tilapia</item>
+        <item>Rabbit Fish</item>
+        <item>Seabass</item>
+        <item>Snapper</item>
+    </string-array>
+
+</resources>

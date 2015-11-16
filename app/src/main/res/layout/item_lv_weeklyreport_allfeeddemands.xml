@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:padding="9dp"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <LinearLayout android:layout_width="fill_parent"
+                  android:layout_height="wrap_content"
+                  android:orientation="horizontal"
+                  android:gravity="center"
+
+        >
+
+        <LinearLayout android:layout_width="65dp"
+                      android:background="@color/accent_material_light"
+                      android:paddingBottom="3dp"
+                      android:layout_marginTop="8dp"
+                      android:layout_marginBottom="7dp"
+                      android:layout_marginLeft="4dp"
+                      android:layout_marginRight="4dp"
+                      android:layout_height="65dp"
+                      android:orientation="vertical"
+                      android:gravity="center"
+            >
+
+            <TextView android:layout_width="wrap_content"
+                      android:textColor="#FFFFFF"
+                      android:layout_height="wrap_content"
+                      android:id="@+id/itemlv_feedconsSummary_initials"
+                      android:textSize="34sp"
+                      android:text="J"
+                      android:gravity="center"/>
+
+
+        </LinearLayout>
+
+
+        />
+        <LinearLayout android:layout_width="fill_parent"
+                      android:padding="5dp"
+                      android:layout_marginLeft="5dp"
+                      android:layout_height="wrap_content"
+                      android:orientation="vertical">
+            <TextView
+                android:id="@+id/itemlv_feedconsSummary_farmname"
+                android:text="Gorio's Fish Farm"
+                android:textSize="15sp"
+                android:textColor="@color/gray_900"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/itemlv_feedconsSummary_address"
+                android:text="Santo Nino, Calumpit, Bulacan"
+                android:textSize="14sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/itemlv_feedconsSummary_reportCount"
+                android:textColor="@color/red_600"
+                android:text="Reports:  4"
+                android:textSize="14sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+
+
+            <TextView
+                android:id="@+id/itemlv_feedconsSummary_consumption"
+                android:text="Consumption this week:  29000(g)"
+                android:visibility="gone"
+                android:textSize="14sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+
+
+</LinearLayout>
