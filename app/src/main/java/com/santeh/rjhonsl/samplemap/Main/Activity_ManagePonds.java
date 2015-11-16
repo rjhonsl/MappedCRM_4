@@ -138,15 +138,6 @@ public class Activity_ManagePonds extends AppCompatActivity {
 
                         if (results[0] > 1000) {
                             final Dialog d = Helper.createCustomThemedDialogOKOnly(activity, "Out of range", "You must be near the farm to Add a new pond.", "OK", R.color.red);
-                            d.show();
-
-                            Button ok = (Button) d.findViewById(R.id.btn_dialog_okonly_OK);
-                            ok.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    d.hide();
-                                }
-                            });
                         } else {
                             Intent intent = new Intent(Activity_ManagePonds.this, Activity_AddPond.class);
                             intent.putExtra("custid", id);
@@ -238,6 +229,8 @@ public class Activity_ManagePonds extends AppCompatActivity {
         intent.putExtra("area", pondInfoList.get(position1).getArea());
         intent.putExtra("culturesystem", pondInfoList.get(position1).getCulturesystem());
         intent.putExtra("remarks", pondInfoList.get(position1).getRemarks());
+        intent.putExtra("latitude", latitude);
+        intent.putExtra("longitude", longitude);
         startActivity(intent);
     }
 

@@ -657,6 +657,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                                 intent.putExtra("culturesystem", details[9]);
                                 intent.putExtra("levelofculture", details[10]);
                                 intent.putExtra("watertype", details[11]);
+                                intent.putExtra("isposted", Integer.parseInt(details[12]));
 
                                 intent.putExtra("fromActivity", "viewCustinfo");
                                 startActivity(intent);
@@ -945,6 +946,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     custInfoObject.setCulturelevel(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_FARMINFO_CULTlVL)));
                     custInfoObject.setWaterType(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_FARMINFO_WATTYPE)));
                     custInfoObject.setDateAddedToDB(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_FARMINFO_dateAdded)));
+                    custInfoObject.setIsPosted_farm(cur.getInt(cur.getColumnIndex(GpsSQLiteHelper.CL_FARMINFO_IsPosted)));
                     custInfoObject.setAllSpecie(cur.getString(cur.getColumnIndex("allSpecie"))); //(obj.getString("allSpecie"));
 
                     /** POND INFO **/
@@ -1323,7 +1325,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     Helper.map_addMarker(maps, custLatlng,
                             R.drawable.ic_place_red_24dp, ci.getFarmname(), ci.getAddress(), ci.getCi_id() + "", ci.getTotalStockOfFarm() + "",
                             ci.getAllSpecie() + "#-#" + ci.getCust_latitude() + "#-#" + ci.getCust_longtitude() + "#-#" + ci.getFarmID() + "#-#"
-                                    + ci.getContact_name() + "#-#" + ci.getContact_number() + "#-#" + ci.getCultureType() + "#-#" + ci.getCulturelevel() + "#-#" + ci.getWaterType());
+                                    + ci.getContact_name() + "#-#" + ci.getContact_number() + "#-#" + ci.getCultureType() + "#-#" + ci.getCulturelevel() + "#-#" + ci.getWaterType() + "#-#" + ci.getIsPosted_farm());
                 }
             } else {prompt_noFarm();}
         } else {prompt_noFarm(); }

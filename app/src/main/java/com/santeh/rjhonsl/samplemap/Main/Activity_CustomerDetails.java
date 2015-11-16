@@ -233,7 +233,7 @@ public class Activity_CustomerDetails extends FragmentActivity implements DatePi
         btn_edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                    if (custInfoObject.getIsPosted() == 0) {
+                    if (custInfoObject.getIsPosted() == 0) {
                         if (!isEditPressed) {
                             Helper.createCustomThemedDialogOKOnly(activity, "Edit", "You can start editing by long pressing the details (smaller texts under the label) that you want to change. \n\nNOTE: Spouse information cannot be modified.", "OK", R.color.skyblue_500);
                             isEditPressed = true;
@@ -312,10 +312,9 @@ public class Activity_CustomerDetails extends FragmentActivity implements DatePi
                                 }
                             });
                         }
-//                    } else {
-//                        Helper.createCustomThemedDialogOKOnly(activity, "Oops", "This Data is uploaded in the internet. You have to contact admin to make changes on this post.", "OK", R.color.skyblue_500);
-//                    }
-
+                    } else {
+                        Helper.createCustomThemedDialogOKOnly(activity, "Oops", "This Data is uploaded in the internet. You have to contact admin to make changes on this post.", "OK", R.color.skyblue_500);
+                    }
             }
         });
 

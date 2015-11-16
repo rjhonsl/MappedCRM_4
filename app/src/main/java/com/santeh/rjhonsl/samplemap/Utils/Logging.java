@@ -39,7 +39,7 @@ public class Logging {
                         userAction, actionType,
                         fusedLocation.getLastKnowLocation().latitude + "", fusedLocation.getLastKnowLocation().longitude + "");
             }
-        }, 280);
+        }, 500);
 
         return true;
     }

@@ -117,7 +117,7 @@
         <activity android:name=".Main.Activity_EditPonds">
         </activity>
 
-        <activity android:name=".Main.Activity_Pond_WeekDetails">
+        <activity android:name=".Main.Activity_Pond_WeekDetails_TEST">
         </activity>
 
         <activity android:name=".Main.Activity_Add_CustomerInformation_Basic">

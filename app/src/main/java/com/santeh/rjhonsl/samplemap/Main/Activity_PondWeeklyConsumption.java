@@ -5,7 +5,9 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.database.Cursor;
+import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -20,6 +22,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.google.android.gms.maps.model.LatLng;
 import com.santeh.rjhonsl.samplemap.APIs.MyVolleyAPI;
 import com.santeh.rjhonsl.samplemap.Adapter.Adapter_Growouts_PondWeekLyConsumption;
 import com.santeh.rjhonsl.samplemap.DBase.GpsDB_Query;
@@ -27,6 +30,7 @@ import com.santeh.rjhonsl.samplemap.DBase.GpsSQLiteHelper;
 import com.santeh.rjhonsl.samplemap.Obj.CustInfoObject;
 import com.santeh.rjhonsl.samplemap.Parsers.PondWeeklyUpdateParser;
 import com.santeh.rjhonsl.samplemap.R;
+import com.santeh.rjhonsl.samplemap.Utils.FusedLocation;
 import com.santeh.rjhonsl.samplemap.Utils.Helper;
 import com.santeh.rjhonsl.samplemap.Utils.Logging;
 
@@ -75,6 +79,9 @@ public class Activity_PondWeeklyConsumption extends Activity {
     int startWeek, currentweek;
 
     GpsDB_Query db;
+    private String latitude;
+    private String longitude;
+    private FusedLocation fusedLocation;
 
 
     @Override
@@ -91,6 +98,8 @@ public class Activity_PondWeeklyConsumption extends Activity {
         PD.setCancelable(false);
 
         initViewsFromXML();
+        fusedLocation = new FusedLocation(context, activity);
+        fusedLocation.connectToApiClient();
 
 
         ImageButton btn_title_back = (ImageButton) findViewById(R.id.title_back);
@@ -106,12 +115,14 @@ public class Activity_PondWeeklyConsumption extends Activity {
             if (getIntent().hasExtra("id")){id = getIntent().getIntExtra("id",0);}
             if (getIntent().hasExtra("abw")){ abw = getIntent().getIntExtra("abw",0);}
             if (getIntent().hasExtra("survivalrate")){survivalrate = getIntent().getStringExtra("survivalrate");}
-            if (getIntent().hasExtra("area")){ area = getIntent().getIntExtra("area",0);}
+            if (getIntent().hasExtra("area")){ area = getIntent().getIntExtra("area", 0);}
             if (getIntent().hasExtra("quantity")){ quantity = getIntent().getIntExtra("quantity", 0);}
             if (getIntent().hasExtra("specie")){ specie = getIntent().getStringExtra("specie");}
             if (getIntent().hasExtra("datestocked")){ datestocked = getIntent().getStringExtra("datestocked");}
             if (getIntent().hasExtra("culturesystem")){culturesystem = getIntent().getStringExtra("culturesystem");}
             if (getIntent().hasExtra("remarks")){ remarks = getIntent().getStringExtra("remarks");}
+            if (getIntent().hasExtra("remarks")){ latitude = getIntent().getStringExtra("latitude");}
+            if (getIntent().hasExtra("remarks")){ longitude = getIntent().getStringExtra("longitude");}
 
             getpondData(id, Helper.variables.URL_SELECT_POND_WEEKLY_UPDATES_BY_ID);
         }
@@ -172,40 +183,61 @@ public class Activity_PondWeeklyConsumption extends Activity {
         btn_addreport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Dialog d = new Dialog(activity);//
-                d.requestWindowFeature(Window.FEATURE_NO_TITLE); //notitle
-                d.setContentView(R.layout.dialog_material_themed_addpondreport);//Set the xml view of the dialog
-                Button add = (Button) d.findViewById(R.id.btnAdd);
-                Button cancel = (Button) d.findViewById(R.id.btnCancel);
-                final EditText edtAbw = (EditText) d.findViewById(R.id.edtAbw);
-                final EditText edtRemarks = (EditText) d.findViewById(R.id.edtRemarks);
-                if (strabw ==  0){
-                    edtAbw.setText(""+abw);
-                }else{
-                    edtAbw.setText(""+strabw);
-                }
 
-                d.show();
-                add.setOnClickListener(new View.OnClickListener() {
+                final LatLng currentloc = fusedLocation.getLastKnowLocation();
+                final LatLng farmlocat = new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude));
+
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
                     @Override
-                    public void onClick(View v) {
+                    public void run() {
+                        float[] results = new float[1];
+                        Location.distanceBetween(farmlocat.latitude, farmlocat.longitude,
+                                currentloc.latitude, currentloc.longitude, results);
+//                        Helper.toastLong(activity, results[0]+"");
 
-                        if (!edtAbw.getText().toString().equalsIgnoreCase("") || !edtRemarks.getText().toString().equalsIgnoreCase("")) {
-                            d.hide();
-                            AddReport(edtAbw.getText().toString(), Helper.variables.URL_INSERT_POND_REPORT, edtRemarks.getText().toString());
-                        } else {
-                            Helper.toastLong(activity, "You have to complete all fields to continue");
+                        if (results[0] > 1000) {
+                            final Dialog d = Helper.createCustomThemedDialogOKOnly(activity, "Out of range", "You must be near the farm to Add a new pond.", "OK", R.color.red);
+                        }else{
+                            final Dialog d = new Dialog(activity);//
+                            d.requestWindowFeature(Window.FEATURE_NO_TITLE); //notitle
+                            d.setContentView(R.layout.dialog_material_themed_addpondreport);//Set the xml view of the dialog
+                            Button add = (Button) d.findViewById(R.id.btnAdd);
+                            Button cancel = (Button) d.findViewById(R.id.btnCancel);
+                            final EditText edtAbw = (EditText) d.findViewById(R.id.edtAbw);
+                            final EditText edtRemarks = (EditText) d.findViewById(R.id.edtRemarks);
+                            if (strabw == 0) {
+                                edtAbw.setText("" + abw);
+                            } else {
+                                edtAbw.setText("" + strabw);
+                            }
+
+                            d.show();
+                            add.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+
+                                    if (!edtAbw.getText().toString().equalsIgnoreCase("") || !edtRemarks.getText().toString().equalsIgnoreCase("")) {
+                                        d.hide();
+                                        AddReport(edtAbw.getText().toString(), Helper.variables.URL_INSERT_POND_REPORT, edtRemarks.getText().toString());
+                                    } else {
+                                        Helper.toastLong(activity, "You have to complete all fields to continue");
+                                    }
+
+                                }
+                            });
+
+                            cancel.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    d.hide();
+                                }
+                            });
                         }
 
                     }
-                });
+                }, 280);
 
-                cancel.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        d.hide();
-                    }
-                });
             }
         });
 
@@ -218,7 +250,7 @@ public class Activity_PondWeeklyConsumption extends Activity {
 //////                prestationEco str=(prestationEco)o;//As you are using Default String Adapter
 //////                Toast.makeText(getBaseContext(),str.getTitle(),Toast.LENGTH_SHORT).show();
 //
-//                Intent intent = new Intent(activity, Activity_Pond_WeekDetails.class);
+//                Intent intent = new Intent(activity, Activity_Pond_WeekDetails_TEST.class);
 //                intent.putExtra("pondindex", id);
 //                intent.putExtra("")
 //                startActivity(intent);
@@ -235,81 +267,86 @@ public class Activity_PondWeeklyConsumption extends Activity {
                     if (position==0) {
                         Helper.createCustomThemedDialogOKOnly(activity, "Warning", "You cannot Edit or Delete Initial Stocking Data", "OK", R.color.red);
                     }else {
-                        String[] options = {"Edit ABW and Remarks", "Delete"};
-                        final Dialog d = Helper.createCustomThemedListDialog(activity, options, "Options ", R.color.deepteal_400);
-                        d.show();
+                       if (pondweeklyList.get(position).getIsPosted_weekly() == 1) {
+                           Helper.createCustomThemedDialogOKOnly(activity, "Oops", "Item is already posted on our server. Please contact admin for changes.", "OK", R.color.red);
+                       }else{
+                           String[] options = {"Edit ABW and Remarks", "Delete"};
+                           final Dialog d = Helper.createCustomThemedListDialog(activity, options, "Options ", R.color.deepteal_400);
+                           d.show();
 
-                        ListView lvOptions = (ListView) d.findViewById(R.id.dialog_list_listview);
-                        lvOptions.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(AdapterView<?> parent, View view, int position1, long id) {
-                                if (position1 == 0 ){
+                           ListView lvOptions = (ListView) d.findViewById(R.id.dialog_list_listview);
+                           lvOptions.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                               @Override
+                               public void onItemClick(AdapterView<?> parent, View view, int position1, long id) {
+                                   if (position1 == 0 ){
 
-                                    d.hide();
+                                       d.hide();
 
-                                    final Dialog d2 = new Dialog(activity);//
-                                    d2.requestWindowFeature(Window.FEATURE_NO_TITLE); //notitle
-                                    d2.setContentView(R.layout.dialog_material_themed_addpondreport);//Set the xml view of the dialog
-                                    Button add = (Button) d2.findViewById(R.id.btnAdd);
-                                    TextView txttitle = (TextView) d2.findViewById(R.id.txtTitle);
-                                    txttitle.setText("Edit Week Details ");
-                                    add.setText("UPDATE");
+                                       final Dialog d2 = new Dialog(activity);//
+                                       d2.requestWindowFeature(Window.FEATURE_NO_TITLE); //notitle
+                                       d2.setContentView(R.layout.dialog_material_themed_addpondreport);//Set the xml view of the dialog
+                                       Button add = (Button) d2.findViewById(R.id.btnAdd);
+                                       TextView txttitle = (TextView) d2.findViewById(R.id.txtTitle);
+                                       txttitle.setText("Edit Week Details ");
+                                       add.setText("UPDATE");
 
-                                    Button cancel = (Button) d2.findViewById(R.id.btnCancel);
-                                    final EditText edtAbw = (EditText) d2.findViewById(R.id.edtAbw);
-                                    final EditText edtRemarks = (EditText) d2.findViewById(R.id.edtRemarks);
+                                       Button cancel = (Button) d2.findViewById(R.id.btnCancel);
+                                       final EditText edtAbw = (EditText) d2.findViewById(R.id.edtAbw);
+                                       final EditText edtRemarks = (EditText) d2.findViewById(R.id.edtRemarks);
 
-                                    edtAbw.setText(""+ pondweeklyList.get(position).getSizeofStock());
-                                    edtRemarks.setText(""+ pondweeklyList.get(position).getRemarks());
+                                       edtAbw.setText(""+ pondweeklyList.get(position).getSizeofStock());
+                                       edtRemarks.setText(""+ pondweeklyList.get(position).getRemarks());
 
-                                    d2.show();
-                                    add.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            d2.hide();
-                                            modifyWeeklyDetail(pondweeklyList.get(position).getId() + "", edtRemarks.getText().toString(), edtAbw.getText().toString(),
-                                                    Helper.variables.URL_UPDATE_POND_WEEKLY_DETAIL_BY_ID);
-                                        }
-                                    });
+                                       d2.show();
+                                       add.setOnClickListener(new View.OnClickListener() {
+                                           @Override
+                                           public void onClick(View v) {
+                                               d2.hide();
+                                               modifyWeeklyDetail(pondweeklyList.get(position).getId() + "", edtRemarks.getText().toString(), edtAbw.getText().toString(),
+                                                       Helper.variables.URL_UPDATE_POND_WEEKLY_DETAIL_BY_ID);
+                                           }
+                                       });
 
-                                    cancel.setOnClickListener(new View.OnClickListener() {
-                                        @Override public void onClick(View v) {
-                                            d2.hide();
-                                        }
-                                    });
+                                       cancel.setOnClickListener(new View.OnClickListener() {
+                                           @Override public void onClick(View v) {
+                                               d2.hide();
+                                           }
+                                       });
 
-                                }else if (position1 == 1){
-                                    d.hide();
-                                    final Dialog del = Helper.createCustomDialogThemedYesNO(activity, "Are you sure you want to delete selected week?", "Delete", "NO", "DELETE", R.color.red);
-                                    del.show();
+                                   }else if (position1 == 1){
+                                       d.hide();
+                                       final Dialog del = Helper.createCustomDialogThemedYesNO(activity, "Are you sure you want to delete selected week?", "Delete", "NO", "DELETE", R.color.red);
+                                       del.show();
 
-                                    Button cancel = (Button) del.findViewById(R.id.btn_dialog_yesno_opt1);
-                                    Button delete = (Button) del.findViewById(R.id.btn_dialog_yesno_opt2);
-                                    delete.setTextColor(getResources().getColor(R.color.red));
+                                       Button cancel = (Button) del.findViewById(R.id.btn_dialog_yesno_opt1);
+                                       Button delete = (Button) del.findViewById(R.id.btn_dialog_yesno_opt2);
+                                       delete.setTextColor(getResources().getColor(R.color.red));
 
-                                    cancel.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            del.hide();
-                                        }
-                                    });
+                                       cancel.setOnClickListener(new View.OnClickListener() {
+                                           @Override
+                                           public void onClick(View v) {
+                                               del.hide();
+                                           }
+                                       });
 
-                                    delete.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            del.hide();
-                                            if (db.deleteRow_Weekly(pondweeklyList.get(position).getId() + "")) {
-                                                Helper.toastShort(activity, "Deleted successfully");
-                                                finish();
-                                            } else {
-                                                Helper.toastShort(activity, "Delete failed. Try again.");
-                                                finish();
-                                            }
-                                        }
-                                    });
-                                }
-                            }
-                        });
+                                       delete.setOnClickListener(new View.OnClickListener() {
+                                           @Override
+                                           public void onClick(View v) {
+                                               del.hide();
+                                               if (db.deleteRow_Weekly(pondweeklyList.get(position).getId() + "")) {
+                                                   Helper.toastShort(activity, "Deleted successfully");
+                                                   finish();
+                                               } else {
+                                                   Helper.toastShort(activity, "Delete failed. Try again.");
+                                                   finish();
+                                               }
+                                           }
+                                       });
+                                   }
+                               }
+                           });
+                       }
+
                     }
                 }
                 return false;
@@ -360,7 +397,8 @@ public class Activity_PondWeeklyConsumption extends Activity {
                         custInfoObject.setSizeofStock(cur.getInt(cur.getColumnIndex(GpsSQLiteHelper.CL_WEEKLY_UPDATES_CURRENT_ABW)));
                         custInfoObject.setRemarks(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_WEEKLY_UPDATES_REMARKS)));
                         custInfoObject.setPondID(cur.getInt(cur.getColumnIndex(GpsSQLiteHelper.CL_WEEKLY_UPDATES_PONDID)));
-                        custInfoObject.setDateStocked(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_WEEKLY_UPDATES_DATEADDED)));
+                        custInfoObject.setPondID(cur.getInt(cur.getColumnIndex(GpsSQLiteHelper.CL_WEEKLY_UPDATES_PONDID)));
+                        custInfoObject.setIsPosted_weekly(cur.getInt(cur.getColumnIndex(GpsSQLiteHelper.CL_WEEKLY_UPDATES_isposted)));
                         pondweeklyList.add(custInfoObject);
                     }
 

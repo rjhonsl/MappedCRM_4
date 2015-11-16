@@ -53,6 +53,7 @@ public class Activity_FarmInfo_Edit extends Activity{
     ImageButton btnback;
 
     GpsDB_Query db;
+    private int isposted;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,35 +106,40 @@ public class Activity_FarmInfo_Edit extends Activity{
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Dialog d = Helper.createCustomDialogThemedYesNO(activity, "Are you sure you want to delete this record? ", "Delete", "NO", "YES", R.color.red);
-                Button no = (Button) d.findViewById(R.id.btn_dialog_yesno_opt1);
-                Button yes = (Button) d.findViewById(R.id.btn_dialog_yesno_opt2);
-                d.show();
-                no.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        d.hide();
-                    }
-                });
-                yes.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        boolean isDeleted = db.deleteRow_FarmInfo(farmIndexId+"");
-                        if (isDeleted) {
-                            Helper.toastShort(activity, "Record has been deleted.");
-                            Intent intent = new Intent(activity, MapsActivity.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                            intent.putExtra("fromActivity", "addfarminfo");
 
-                            Logging.logUserAction(activity, activity.getBaseContext(),
-                                    Helper.userActions.TSR.DELETE_FARM + ":" + Helper.variables.getGlobalVar_currentUserID(activity) + "-" + farmIndexId + "-" + edtFarmName.getText().toString(),
-                                    Helper.variables.ACTIVITY_LOG_TYPE_TSR_MONITORING);
-
-                            startActivity(intent);
-                            finish(); // call this to finish the current activity
+                if (isposted == 1) {
+                    Helper.createCustomThemedDialogOKOnly(activity, "Oops", "Item is alrady posted on our servers. Please contact admin for further changes.", "OK", R.color.red);
+                }else{
+                    final Dialog d = Helper.createCustomDialogThemedYesNO(activity, "Are you sure you want to delete this record? ", "Delete", "NO", "YES", R.color.red);
+                    Button no = (Button) d.findViewById(R.id.btn_dialog_yesno_opt1);
+                    Button yes = (Button) d.findViewById(R.id.btn_dialog_yesno_opt2);
+                    d.show();
+                    no.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            d.hide();
                         }
-                    }
-                });
+                    });
+                    yes.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            boolean isDeleted = db.deleteRow_FarmInfo(farmIndexId+"");
+                            if (isDeleted) {
+                                Helper.toastShort(activity, "Record has been deleted.");
+                                Intent intent = new Intent(activity, MapsActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                intent.putExtra("fromActivity", "addfarminfo");
+
+                                Logging.logUserAction(activity, activity.getBaseContext(),
+                                        Helper.userActions.TSR.DELETE_FARM + ":" + Helper.variables.getGlobalVar_currentUserID(activity) + "-" + farmIndexId + "-" + edtFarmName.getText().toString(),
+                                        Helper.variables.ACTIVITY_LOG_TYPE_TSR_MONITORING);
+
+                                startActivity(intent);
+                                finish(); // call this to finish the current activity
+                            }
+                        }
+                    });
+                }
             }
         });
 
@@ -324,115 +330,117 @@ public class Activity_FarmInfo_Edit extends Activity{
             if (intent.hasExtra("culturesystem")){culturesystem = intent.getStringExtra("culturesystem");}
             if (intent.hasExtra("levelofculture")){levelofculture = intent.getStringExtra("levelofculture");}
             if (intent.hasExtra("watertype")){watertype = intent.getStringExtra("watertype");}
+            if (intent.hasExtra("isposted")){isposted = intent.getIntExtra("isposted", 3);}
+
+            Helper.toastShort(activity, isposted+"");
         }
     }
 
 
     public void updateCustomerInformation() {
+        if (isposted == 1) {
+            Helper.createCustomThemedDialogOKOnly(activity, "Oops", "Item is alrady posted on our servers. Please contact admin for further changes.", "OK", R.color.red);
+        }else{
+            latitude = txtlat.getText().toString();
+            longitude = txtlong.getText().toString();
+            if (    latitude.equalsIgnoreCase("") || longitude.equalsIgnoreCase("") ||
+                    edtContactname.getText().toString().equalsIgnoreCase("") ||
+                    edtCompany.getText().toString().equalsIgnoreCase("") ||
+                    edtAddress.getText().toString().equalsIgnoreCase("") ||
+                    edtFarmName.getText().toString().equalsIgnoreCase("") ||
+                    edtFarmId.getText().toString().equalsIgnoreCase("") ||
+                    edtContactNumber.getText().toString().equalsIgnoreCase("") ||
+                    edtCultureSystem.getText().toString().equalsIgnoreCase("") ||
+                    edtLevelOfCulture.getText().toString().equalsIgnoreCase("") ||
+                    edtWaterType.getText().toString().equalsIgnoreCase(""))
+            {
+                Helper.toastShort(activity,   "You must complete all fields to continue.");
 
-        latitude = txtlat.getText().toString();
-        longitude = txtlong.getText().toString();
-        if (    latitude.equalsIgnoreCase("") || longitude.equalsIgnoreCase("") ||
-                edtContactname.getText().toString().equalsIgnoreCase("") ||
-                edtCompany.getText().toString().equalsIgnoreCase("") ||
-                edtAddress.getText().toString().equalsIgnoreCase("") ||
-                edtFarmName.getText().toString().equalsIgnoreCase("") ||
-                edtFarmId.getText().toString().equalsIgnoreCase("") ||
-                edtContactNumber.getText().toString().equalsIgnoreCase("") ||
-                edtCultureSystem.getText().toString().equalsIgnoreCase("") ||
-                edtLevelOfCulture.getText().toString().equalsIgnoreCase("") ||
-                edtWaterType.getText().toString().equalsIgnoreCase(""))
-        {
-            Helper.toastShort(activity,    Helper.variables.URL_DELETE_CUSTINFO_BY_ID);
+            } else {
+                PD.show();
+                PD.setMessage("Saving changes...");
 
-        } else {
-            PD.show();
-            PD.setMessage("Saving changes...");
+                if (Helper.variables.getGlobalVar_currentLevel(activity) != 4){
+                    StringRequest postRequest = new StringRequest(Request.Method.POST, Helper.variables.URL_UPDATE_CUSTOMERINFORMATION_BY_ID,
+                            new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
 
-            if (Helper.variables.getGlobalVar_currentLevel(activity) != 4){
-                StringRequest postRequest = new StringRequest(Request.Method.POST, Helper.variables.URL_UPDATE_CUSTOMERINFORMATION_BY_ID,
-                        new Response.Listener<String>() {
-                            @Override
-                            public void onResponse(String response) {
-
-                                if (!Helper.extractResponseCodeBySplit(response).equalsIgnoreCase("0")) {
-                                    PD.dismiss();
-                                    Helper.toastShort(activity, "Update successful.");
-                                    Logging.logUserAction(activity, context, Helper.userActions.TSR.Edit_FARM + ": index " + farmIndexId, Helper.variables.ACTIVITY_LOG_TYPE_TSR_MONITORING);
-                                } else {
-                                    PD.dismiss();
-                                    Helper.toastShort(activity, getResources().getString(R.string.VolleyUnexpectedError));
+                                    if (!Helper.extractResponseCodeBySplit(response).equalsIgnoreCase("0")) {
+                                        PD.dismiss();
+                                        Helper.toastShort(activity, "Update successful.");
+                                        Logging.logUserAction(activity, context, Helper.userActions.TSR.Edit_FARM + ": index " + farmIndexId, Helper.variables.ACTIVITY_LOG_TYPE_TSR_MONITORING);
+                                    } else {
+                                        PD.dismiss();
+                                        Helper.toastShort(activity, getResources().getString(R.string.VolleyUnexpectedError));
+                                    }
                                 }
-                            }
-                        }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        PD.dismiss();
-                        Helper.toastShort(activity, "Failed to connect to server.");
-                    }
-                }) {
-                    @Override
-                    protected Map<String, String> getParams() {
-                        Map<String, String> params = new HashMap<String, String>();
-                        params.put("id", farmIndexId+"");
-                        params.put("latitude", String.valueOf(txtlat.getText()));
-                        params.put("longitude", String.valueOf(txtlong.getText()));
-                        params.put("contactName", edtContactname.getText().toString());
-                        params.put("company", edtCompany.getText().toString());
-                        params.put("address", edtAddress.getText().toString());
-                        params.put("farmName", edtFarmName.getText().toString());
-                        params.put("farmID", edtFarmId.getText().toString());
-                        params.put("contactNumber", edtContactNumber.getText().toString());
-                        params.put("cultureType", edtCultureSystem.getText().toString());
-                        params.put("cultureLevel", edtLevelOfCulture.getText().toString());
-                        params.put("waterType", edtWaterType.getText().toString());
-                        params.put("username", Helper.variables.getGlobalVar_currentUserName(activity));
-                        params.put("password", Helper.variables.getGlobalVar_currentUserPassword(activity));
-                        params.put("deviceid", Helper.getMacAddress(activity));
-
-                        return params;
-                    }
-                };
-
-                // Adding request to request queue
-                MyVolleyAPI api = new MyVolleyAPI();
-                api.addToReqQueue(postRequest, Activity_FarmInfo_Edit.this);
-            }else{
-
-                db.open();
-               int rowsAffectedCount = db.updateRowFarmInfo(
-                        farmIndexId+"",
-                        edtContactname.getText()+"",
-                        edtCompany.getText()+"",
-                        edtAddress.getText()+"",
-                        edtFarmName.getText()+"",
-                        edtFarmId.getText()+"",
-                        edtContactNumber.getText()+"",
-                        edtCultureSystem.getText()+"",
-                        edtLevelOfCulture.getText()+"",
-                        edtWaterType.getText()+""
-                        );
-
-                if (rowsAffectedCount > 0) {
-                    PD.dismiss();
-                    Helper.createCustomThemedDialogOKOnly(activity, "Success", "Changes was successfully saved.", "OK", R.color.blue);
-                    Intent intent = new Intent(activity, MapsActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent.putExtra("fromActivity", "addfarminfo");
-
-                    Logging.logUserAction(activity, activity.getBaseContext(),
-                            Helper.userActions.TSR.Edit_FARM + ":" + Helper.variables.getGlobalVar_currentUserID(activity) + "-" + farmIndexId + "-" + edtFarmName.getText().toString(),
-                            Helper.variables.ACTIVITY_LOG_TYPE_TSR_MONITORING);
-
-                    startActivity(intent);
-                    finish(); // call this to finish the current activity
+                            }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            PD.dismiss();
+                            Helper.toastShort(activity, "Failed to connect to server.");
+                        }
+                    }) {
+                        @Override
+                        protected Map<String, String> getParams() {
+                            Map<String, String> params = new HashMap<String, String>();
+                            params.put("id", farmIndexId+"");
+                            params.put("latitude", String.valueOf(txtlat.getText()));
+                            params.put("longitude", String.valueOf(txtlong.getText()));
+                            params.put("contactName", edtContactname.getText().toString());
+                            params.put("company", edtCompany.getText().toString());
+                            params.put("address", edtAddress.getText().toString());
+                            params.put("farmName", edtFarmName.getText().toString());
+                            params.put("farmID", edtFarmId.getText().toString());
+                            params.put("contactNumber", edtContactNumber.getText().toString());
+                            params.put("cultureType", edtCultureSystem.getText().toString());
+                            params.put("cultureLevel", edtLevelOfCulture.getText().toString());
+                            params.put("waterType", edtWaterType.getText().toString());
+                            params.put("username", Helper.variables.getGlobalVar_currentUserName(activity));
+                            params.put("password", Helper.variables.getGlobalVar_currentUserPassword(activity));
+                            params.put("deviceid", Helper.getMacAddress(activity));
+                            return params;
+                        }
+                    };
+                    // Adding request to request queue
+                    MyVolleyAPI api = new MyVolleyAPI();
+                    api.addToReqQueue(postRequest, Activity_FarmInfo_Edit.this);
                 }else{
-                    Helper.createCustomThemedDialogOKOnly(activity, "Error", "Something happened. Please try again.", "OK", R.color.red);
+
+                    db.open();
+                    int rowsAffectedCount = db.updateRowFarmInfo(
+                            farmIndexId+"",
+                            edtContactname.getText()+"",
+                            edtCompany.getText()+"",
+                            edtAddress.getText()+"",
+                            edtFarmName.getText()+"",
+                            edtFarmId.getText()+"",
+                            edtContactNumber.getText()+"",
+                            edtCultureSystem.getText()+"",
+                            edtLevelOfCulture.getText()+"",
+                            edtWaterType.getText()+""
+                    );
+
+                    if (rowsAffectedCount > 0) {
+                        PD.dismiss();
+                        Helper.createCustomThemedDialogOKOnly(activity, "Success", "Changes was successfully saved.", "OK", R.color.blue);
+                        Intent intent = new Intent(activity, MapsActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.putExtra("fromActivity", "addfarminfo");
+
+                        Logging.logUserAction(activity, activity.getBaseContext(),
+                                Helper.userActions.TSR.Edit_FARM + ":" + Helper.variables.getGlobalVar_currentUserID(activity) + "-" + farmIndexId + "-" + edtFarmName.getText().toString(),
+                                Helper.variables.ACTIVITY_LOG_TYPE_TSR_MONITORING);
+
+                        startActivity(intent);
+                        finish(); // call this to finish the current activity
+                    }else{
+                        Helper.createCustomThemedDialogOKOnly(activity, "Error", "Something happened. Please try again.", "OK", R.color.red);
+                    }
                 }
             }
-
         }
-
 
     }
 
@@ -447,7 +455,5 @@ public class Activity_FarmInfo_Edit extends Activity{
         super.onResume();
         db.open();
     }
-
-
 
 }

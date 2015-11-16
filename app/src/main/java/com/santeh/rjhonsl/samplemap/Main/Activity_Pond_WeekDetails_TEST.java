@@ -9,7 +9,7 @@ import com.santeh.rjhonsl.samplemap.R;
 /**
  * Created by rjhonsl on 9/30/2015.
  */
-public class Activity_Pond_WeekDetails extends FragmentActivity implements DatePickerDialog.OnDateSetListener {
+public class Activity_Pond_WeekDetails_TEST extends FragmentActivity implements DatePickerDialog.OnDateSetListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
