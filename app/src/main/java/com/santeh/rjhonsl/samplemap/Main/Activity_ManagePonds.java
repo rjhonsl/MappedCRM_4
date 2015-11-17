@@ -277,7 +277,7 @@ public class Activity_ManagePonds extends AppCompatActivity {
                         custInfoObject.setRemarks(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_remarks)));
                         custInfoObject.setCustomerID(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_customerId)));
                         custInfoObject.setIsPosted(cur.getInt(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_isPosted)));
-
+                        custInfoObject.setCurrentABW(cur.getInt(cur.getColumnIndex(GpsSQLiteHelper.CL_WEEKLY_UPDATES_CURRENT_ABW)));
                         pondInfoList.add(custInfoObject);
                     }
                     populateListViewAdapter();

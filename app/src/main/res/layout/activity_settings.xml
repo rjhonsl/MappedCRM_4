@@ -40,6 +40,7 @@
             android:orientation="vertical"
             android:layout_marginBottom="10dp"
             android:background="@drawable/bg_white_box_curvebottom">
+
             <TextView
                 android:textSize="13sp"
                 android:layout_marginTop="10dp"
@@ -96,6 +97,49 @@
                     />
 
             </LinearLayout> </LinearLayout>
+
+
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/bg_white_box_curvebottom">
+                <TextView
+                    android:textSize="13sp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:paddingLeft="25dp"
+                    android:textStyle="bold"
+                    android:textColor="#00665a"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="BACKUP AND RESTORE"
+
+                    />
+
+                <LinearLayout
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:orientation="vertical"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:padding="17dp"
+                        android:textSize="18sp"
+                        android:textColor="#a3002a24"
+                        android:textStyle="normal"
+                        android:id="@+id/txt_settings_restore"
+                        android:background="@drawable/bg_white_box_noshadow"
+                        android:drawableLeft="@drawable/ic_restore_darkteal_24dp"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="    Restore Data from Server"
+                        />
+
+
+                </LinearLayout> </LinearLayout>
 
 
             <LinearLayout

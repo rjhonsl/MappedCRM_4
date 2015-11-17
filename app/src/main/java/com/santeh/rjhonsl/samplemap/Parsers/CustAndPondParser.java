@@ -114,6 +114,14 @@ public class CustAndPondParser {
 				}
 
 
+				try {
+					if (obj.has("lid"))
+					custInfoObject.setFarmLocalID(obj.getInt("lid"));
+				}catch (Exception e){
+					custInfoObject.setFarmID("lid");
+				}
+
+
 				Log.d("PARSING", "c number");
 				try {
 					if (obj.has("contact_number"))

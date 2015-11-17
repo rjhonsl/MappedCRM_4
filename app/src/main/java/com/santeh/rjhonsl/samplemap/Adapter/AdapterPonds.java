@@ -70,7 +70,7 @@ public class AdapterPonds extends ArrayAdapter<CustInfoObject> {
 		}
 
 
-		holder.species.setText(ItemList.get(position).getSpecie()+"");
+		holder.species.setText(ItemList.get(position).getSpecie()+" - "+ ItemList.get(position).getCurrentABW()+"g");
 		holder.quantity.setText("Quantity: "+ItemList.get(position).getQuantity()+"");
 		holder.datestocked.setText("Date Stocked: "+ItemList.get(position).getDateStocked()+"");
 		holder.pondid.setText(ItemList.get(position).getPondID()+"");

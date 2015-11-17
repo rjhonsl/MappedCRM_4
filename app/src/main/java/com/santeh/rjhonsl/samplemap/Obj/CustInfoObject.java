@@ -61,6 +61,8 @@ public class CustInfoObject {
 	private int currentweekofStock;
 	private int startweekofStock;
 	private int week;
+	private int currentABW;
+	private int farmLocatID;
 
 	private int isVisited;
 	private int isactive;
@@ -796,5 +798,21 @@ public class CustInfoObject {
 
 	public void setAddedBy_farm(String addedBy_farm) {
 		this.addedBy_farm = addedBy_farm;
+	}
+
+	public int getCurrentABW() {
+		return currentABW;
+	}
+
+	public void setCurrentABW(int currentABW) {
+		this.currentABW = currentABW;
+	}
+
+	public int getFarmLocatID() {
+		return farmLocatID;
+	}
+
+	public void setFarmLocalID(int farmLocatID) {
+		this.farmLocatID = farmLocatID;
 	}
 }

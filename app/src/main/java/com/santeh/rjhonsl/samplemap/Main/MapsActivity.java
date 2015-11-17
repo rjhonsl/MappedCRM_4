@@ -82,6 +82,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     ImageButton btn_add_marker, btn_cancelAddmarker;
     ActionBarDrawerToggle drawerListener;
     Marker clickedMarker;
+    int strikes = 0;
 
     double curlat, curLong;
 
@@ -1201,12 +1202,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         Helper.createCustomThemedDialogOKOnly(activity, "Warning", "You have not added any customer address", "OK", R.color.red);
     }
 
-
     public void getListOfFarms(final String farmid){
         PD.setMessage("Please wait...");
         PD.show();
         String url = Helper.variables.URL_SELECT_FARM_BY_FARMID;
-        if (userlvl == 1 || userlvl == 2 || userlvl == 3){
+        if (userlvl == 1 || userlvl == 2 || userlvl == 3 || userlvl == 0){
             StringRequest postRequest = new StringRequest(Request.Method.POST, url,
                     new Response.Listener<String>() {
                         @Override
@@ -1241,7 +1241,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             MyVolleyAPI api = new MyVolleyAPI();
             api.addToReqQueue(postRequest, MapsActivity.this);
-        }else if(userlvl == 0 || userlvl == 4) {
+        }else if( userlvl == 4) {
             Cursor cur = db.getFARM_POND_CUSTOMER_BY_FARMID(Helper.variables.getGlobalVar_currentUserID(activity)+"", farmid);
             activeSelection = "customer";
             if (cur.getCount() > 0){
@@ -1515,15 +1515,17 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private void startSynchingDB_FARMINFO() {
         if (db.getFarmInfo_notPosted_Count(activity) > 0) {
-            StringRequest postRequest = new StringRequest(Request.Method.POST, Helper.variables.URL_PHP_RAW_QUERY_POST,
+            StringRequest postRequest = new StringRequest(Request.Method.POST, Helper.variables.URL_PHP_RAW_QUERY_POST_INSERT,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(final String response) {
                             if (!response.substring(1, 2).equalsIgnoreCase("0")) {
                                 db.updateUnPostedToPosted_FARM();
                                 startSynchingDB_CUSTINFO();
+                                Log.d("SYNC", "SYNC OK - FARM.");
                             } else {
-                                Helper.toastShort(activity, "SYNC INTERRUPTED. Please try syncing again.");
+                                Log.d("SYNC", "SYNC FAILED - FARM."+ response);
+                                strikes = strikes + 1;
                             }
                         }
                     },
@@ -1561,15 +1563,17 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private void startSynchingDB_CUSTINFO() {
 
         if (db.getCustInfo_notPosted_Count(activity) > 0) {
-            StringRequest postRequest = new StringRequest(Request.Method.POST, Helper.variables.URL_PHP_RAW_QUERY_POST,
+            StringRequest postRequest = new StringRequest(Request.Method.POST, Helper.variables.URL_PHP_RAW_QUERY_POST_INSERT,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(final String response) {
                             if (!response.substring(1, 2).equalsIgnoreCase("0")) {
                                 startSynchingDB_PondInfo();
                                 db.updateUnPostedToPosted_Cust();
+                                Log.d("SYNC", "SYNC OK - CUST.");
                             } else {
-                                Helper.toastShort(activity, "SYNC INTERRUPTED. Please try syncing again.");
+                                Log.d("SYNC", "SYNC FAILED - CUST."+ response);
+                                strikes = strikes + 1;
                             }
                         }
                     },
@@ -1605,15 +1609,17 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private void startSynchingDB_PondInfo() {
 
         if (db.getPond_notPosted_Count(activity) > 0) {
-            StringRequest postRequest = new StringRequest(Request.Method.POST, Helper.variables.URL_PHP_RAW_QUERY_POST,
+            StringRequest postRequest = new StringRequest(Request.Method.POST, Helper.variables.URL_PHP_RAW_QUERY_POST_INSERT,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(final String response) {
                             if (!response.substring(1, 2).equalsIgnoreCase("0")) {
                                 db.updateUnPostedToPosted_POND();
                                 startSynchingDB_weeklyPondReport();
+                                Log.d("SYNC", "SYNC OK - POND.");
                             } else {
-                                Helper.toastShort(activity, "SYNC INTERRUPTED. Please try syncing again.");
+                                Log.d("SYNC", "SYNC FAILED - POND."+ response);
+                                strikes = strikes + 1;
                             }
                         }
                     },
@@ -1650,7 +1656,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private void startSynchingDB_weeklyPondReport() {
 
         if (db.getWeeklyPosted_notPosted_Count(activity) > 0) {
-            StringRequest postRequest = new StringRequest(Request.Method.POST, Helper.variables.URL_PHP_RAW_QUERY_POST,
+            StringRequest postRequest = new StringRequest(Request.Method.POST, Helper.variables.URL_PHP_RAW_QUERY_POST_INSERT,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(final String response) {
@@ -1658,10 +1664,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                                 db.updateUnPostedToPosted_WEEKLY();
                                 txtViewTop.setVisibility(View.GONE);
                                 txtViewTop.clearAnimation();
+                                Log.d("SYNC", "SYNC OK - WEEK.");
                                 sync_userActivities1();
                                 Helper.toastShort(activity, "SYNC FINISHED.");
                             } else {
-                                Helper.toastShort(activity, "SYNC INTERRUPTED. Please try syncing again.");
+                                strikes = strikes + 1;
                             }
                         }
                     },
@@ -1693,23 +1700,31 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             Helper.toastShort(activity, "SYNC FINISHED.");
             txtViewTop.setVisibility(View.GONE);
             txtViewTop.clearAnimation();
+            sync_userActivities1();
         }
     }
 
     private void sync_userActivities1() {
         //        Helper.createCustomThemedDialogOKOnly_scrolling(activity, "SQL STRING", db.getSQLStringForInsert_UNPOSTED_USERACTIVITY(), "OK", R.color.red);
         if (db.getUserActivity_notPosted_Count(activity) > 0) {
-            StringRequest postRequest = new StringRequest(Request.Method.POST, Helper.variables.URL_PHP_RAW_QUERY_POST,
+            StringRequest postRequest = new StringRequest(Request.Method.POST, Helper.variables.URL_PHP_RAW_QUERY_POST_INSERT,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(final String response) {
                             if (!response.substring(1, 2).equalsIgnoreCase("0")) {
                                 db.updateUnPostedToPosted_USERACTIVITY();
-                                Log.d("SYNC", "SYNC FINISHED USERS.");
                             } else {
                                 Log.d("SYNC", "SYNC INTERRUPTED. Please try syncing again. USERS");
                             }
                             Log.d("SYNC", ""+response);
+
+                            if (strikes > 0){
+                                Helper.toastShort(activity, "SYNC FAILED. Please try syncing again.");
+                                strikes = 0;
+                            }else{
+                                strikes = 0;
+                                Helper.toastShort(activity, "SYNC FINISHED.");
+                            }
                         }
                     },
                     new Response.ErrorListener() {

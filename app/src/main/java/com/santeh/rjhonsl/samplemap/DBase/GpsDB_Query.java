@@ -163,6 +163,32 @@ public class GpsDB_Query {
 		return  db.insert(GpsSQLiteHelper.TBLFARMiNFO, null, values);
 	}
 
+	public long insertFarmInformation_RESTORE(String latitude, String longitude, String contactName, String company, String address,
+									  String farmname, String farmid, String contactnumber, String cultureType, String cultureLevel, String waterType, String dateAdded,
+									  String userID, int id){
+
+		ContentValues values = new ContentValues();
+		values.put(GpsSQLiteHelper.CL_FarmInfo_ID, id);
+		values.put(GpsSQLiteHelper.CL_FARMINFO_LAT, latitude);
+		values.put(GpsSQLiteHelper.CL_FARMINFO_LNG, longitude);
+		values.put(GpsSQLiteHelper.CL_FARMINFO_CONTACT_NAME, contactName);
+		values.put(GpsSQLiteHelper.CL_FARMINFO_COMPANY, company);
+		values.put(GpsSQLiteHelper.CL_FARMINFO_FARM_ADDRESS, address);
+		values.put(GpsSQLiteHelper.CL_FARMINFO_FARM_NAME, farmname);
+		values.put(GpsSQLiteHelper.CL_FARMINFO_FARM_ID, farmid);
+		values.put(GpsSQLiteHelper.CL_FARMINFO_C_NUMBER, contactnumber);
+		values.put(GpsSQLiteHelper.CL_FARMINFO_CULTYPE, cultureType);
+		values.put(GpsSQLiteHelper.CL_FARMINFO_CULTlVL, cultureLevel);
+		values.put(GpsSQLiteHelper.CL_FARMINFO_WATTYPE, waterType);
+		values.put(GpsSQLiteHelper.CL_FARMINFO_dateAdded, dateAdded);
+		values.put(GpsSQLiteHelper.CL_FARMINFO_addedby, userID);
+		values.put(GpsSQLiteHelper.CL_FARMINFO_IsPosted, 0);
+
+		return  db.insert(GpsSQLiteHelper.TBLFARMiNFO, null, values);
+	}
+
+
+
 
 
 	/********************************************
@@ -250,7 +276,7 @@ public class GpsDB_Query {
 		if (cur.getCount() > 0) {
 			while (cur.moveToNext()) {
 				String  mci_lname = cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_LastName)).replaceAll("'", "\\'");
-				String  mci_fname = cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_LastName)).replaceAll("'", "\\'");
+				String  mci_fname = cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_FirstName)).replaceAll("'", "\\'");
 				String  mci_mname = cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_MiddleName)).replaceAll("'", "\\'"),
 						mci_farmid = cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_FarmId)).replaceAll("'", "\\'"),
 						mci_housenumber = cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_HouseNumber)).replaceAll("'", "\\'"),
@@ -377,7 +403,7 @@ public class GpsDB_Query {
 
 	public String getSQLStringForInsert_UNPOSTED_WEEKLY() {
 		String sqlString = "" +
-				"INSERT INTO `tblpond_weeklyupdates` (`wu_id`, `wu_currentabw`, `wu_remakrs`, `wu_pondid`, `wu_dateAdded`, `wu_lid`) VALUES ";
+				"INSERT INTO `tblpond_weeklyupdates` (`wu_id`, `wu_currentabw`,`wu_survivalRate`, `wu_remakrs`, `wu_pondid`, `wu_dateAdded`, `wu_lid`) VALUES ";
 		String query = "SELECT * FROM " + GpsSQLiteHelper.TBLPOND_WeeklyUpdates + " WHERE "
 				+ GpsSQLiteHelper.CL_WEEKLY_UPDATES_isposted+ " = 0 ";
 		String[] params = new String[]{};
@@ -389,12 +415,14 @@ public class GpsDB_Query {
 				String wu_id = tempid.replaceAll("'", "\\'");
 				String wu_currentabw = cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_WEEKLY_UPDATES_CURRENT_ABW)).replaceAll("'", "\\'");
 				String wu_remakrs = cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_WEEKLY_UPDATES_REMARKS)).replaceAll("'", "\\'");
+				String wu_survivalRate = cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_WEEKLY_UPDATES_CURRENT_SURVIVALRATE)).replaceAll("'", "\\'");
 				String wu_pondid =  getUserIdOfPond(cur.getInt(cur.getColumnIndex(GpsSQLiteHelper.CL_WEEKLY_UPDATES_PONDID))+"") + "-" +cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_WEEKLY_UPDATES_PONDID)).replaceAll("'", "\\'");
 				String wu_dateAdded = cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_WEEKLY_UPDATES_DATEADDED)).replaceAll("'", "\\'");
 				String wu_lid = cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_WEEKLY_UPDATES_ID)).replaceAll("'", "\\'");
 				sqlString = sqlString +
 						"( '" + wu_id + "',  " +
 						"'"+wu_currentabw+"', " +
+						"'"+wu_survivalRate+"', " +
 						"'"+wu_remakrs+"', " +
 						"'"+wu_pondid+"', " +
 						"'"+wu_dateAdded+"', " +
@@ -592,9 +620,15 @@ public class GpsDB_Query {
 	}
 	public Cursor getLocal_PondsByFarmIndex(String farmid){
 		dbhelper.getWritableDatabase();
-		String query = "SELECT * FROM `tblPond` WHERE `customerId`= ?\n" +
-			"ORDER BY CAST(`tblPond`.`pondid` AS SIGNED)  ASC";
+		String query =
+		"SELECT *  FROM `tblPond`\n" +
+				"INNER JOIN tblpond_weeklyupdates ON tblPond.id = tblpond_weeklyupdates.wu_pondid\n" +
+				"WHERE `customerId`= ?\n" +
+				"GROUP BY tblPond.id\n" +
+				"ORDER BY CAST(`tblPond`.`pondid` AS SIGNED)  ASC";
 
+//		"SELECT * FROM `tblPond` WHERE `customerId`= ?\n" +
+//				"ORDER BY CAST(`tblPond`.`pondid` AS SIGNED)  ASC";
 		String[] params = new String[] {farmid};
 		return db.rawQuery(query, params);
 	}
