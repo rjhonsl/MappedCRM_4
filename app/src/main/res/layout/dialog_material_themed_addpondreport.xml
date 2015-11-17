@@ -67,6 +67,22 @@
                   android:id="@+id/edtAbw"
             />
 
+        <TextView
+            android:layout_marginRight="15dp"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textSize="13sp"
+            android:textColor="@color/material_blue_grey_800"
+            android:text="Current Survival Rate(%):"
+            />
+
+        <EditText android:layout_width="200dp"
+                  android:layout_height="wrap_content"
+                  android:layout_marginRight="15dp"
+                  android:inputType="number"
+                  android:id="@+id/edtSurvivalRate"
+            />
+
 
         <TextView
             android:layout_marginTop="5dp"

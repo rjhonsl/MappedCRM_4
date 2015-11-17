@@ -10,7 +10,7 @@ public class GpsSQLiteHelper extends SQLiteOpenHelper {
 	private static final String LOGTAG = "DB_GPS";
 	private static final String DATABASE_NAME = "local.db";
 	//each time you change data structure, you must increment this by 1
-	private static final int DATABASE_VERSION = 15;
+	private static final int DATABASE_VERSION = 16;
 
 	//Reference for tblmaincustomerinfo
 	public static final String TBLMAINCUSTOMERINFO 				= "tblmaincustomerinfo";
@@ -124,11 +124,12 @@ public class GpsSQLiteHelper extends SQLiteOpenHelper {
 
 	public static final String CL_WEEKLY_UPDATES_ID				= "wu_id";
 	public static final String CL_WEEKLY_UPDATES_CURRENT_ABW	= "wu_currentabw";
+	public static final String CL_WEEKLY_UPDATES_CURRENT_SURVIVALRATE	= "wu_survivalRate";
 	public static final String CL_WEEKLY_UPDATES_REMARKS		= "wu_remakrs";
 	public static final String CL_WEEKLY_UPDATES_PONDID			= "wu_pondid";
 	public static final String CL_WEEKLY_UPDATES_DATEADDED 		= "wu_dateAdded";
 	public static final String CL_WEEKLY_UPDATES_isposted		= "wu_isposted";
-	public static final String[] ALL_KEY_WEEKLY_UPDATES			= new String[]{CL_WEEKLY_UPDATES_ID, CL_WEEKLY_UPDATES_CURRENT_ABW,CL_WEEKLY_UPDATES_REMARKS,CL_WEEKLY_UPDATES_PONDID,
+	public static final String[] ALL_KEY_WEEKLY_UPDATES			= new String[]{CL_WEEKLY_UPDATES_ID, CL_WEEKLY_UPDATES_CURRENT_ABW, CL_WEEKLY_UPDATES_CURRENT_SURVIVALRATE, CL_WEEKLY_UPDATES_REMARKS,CL_WEEKLY_UPDATES_PONDID,
 			CL_WEEKLY_UPDATES_DATEADDED, CL_WEEKLY_UPDATES_isposted};
 
 
@@ -268,6 +269,7 @@ public class GpsSQLiteHelper extends SQLiteOpenHelper {
 					"(" +
 					CL_WEEKLY_UPDATES_ID				+ " INTEGER PRIMARY KEY AUTOINCREMENT, " +
 					CL_WEEKLY_UPDATES_CURRENT_ABW 		+ " INTEGER, " +
+					CL_WEEKLY_UPDATES_CURRENT_SURVIVALRATE 	+ " INTEGER, " +
 					CL_WEEKLY_UPDATES_REMARKS 			+ " TEXT, " +
 					CL_WEEKLY_UPDATES_PONDID 			+ " TEXT, " +
 					CL_WEEKLY_UPDATES_DATEADDED 		+ " INTEGER, " +

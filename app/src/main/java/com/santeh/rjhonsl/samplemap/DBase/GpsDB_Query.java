@@ -69,12 +69,13 @@ public class GpsDB_Query {
 		return  db.insert(GpsSQLiteHelper.TBLUSER_ACTIVITY, null, values);
 	}
 
-	public long insertWeeklyUpdates(String abw, String remakrs, String pondid, String dateAdded){
+	public long insertWeeklyUpdates(String abw, String remakrs, String pondid, String dateAdded, String survivalRate){
 
 		ContentValues values = new ContentValues();
 		values.put(GpsSQLiteHelper.CL_WEEKLY_UPDATES_CURRENT_ABW, abw);
 		values.put(GpsSQLiteHelper.CL_WEEKLY_UPDATES_REMARKS, remakrs);
 		values.put(GpsSQLiteHelper.CL_WEEKLY_UPDATES_PONDID, pondid);
+		values.put(GpsSQLiteHelper.CL_WEEKLY_UPDATES_CURRENT_SURVIVALRATE, survivalRate);
 		values.put(GpsSQLiteHelper.CL_WEEKLY_UPDATES_DATEADDED, dateAdded);
 		values.put(GpsSQLiteHelper.CL_WEEKLY_UPDATES_isposted, 0);
 
@@ -96,7 +97,7 @@ public class GpsDB_Query {
 		values.put(GpsSQLiteHelper.CL_POND_customerId, customerid);
 		values.put(GpsSQLiteHelper.CL_POND_isPosted, 0);
 		long id = db.insert(GpsSQLiteHelper.TBLPOND, null, values);
-		insertWeeklyUpdates(sizeofStock, remarks, id + "", dateStocked);
+		insertWeeklyUpdates(sizeofStock, remarks, id + "", dateStocked, survivalRate);
 		return id;
 	}
 
@@ -420,7 +421,7 @@ public class GpsDB_Query {
 
 				String user_act_id = "";
 				String user_act_userid = cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_USER_ACTIVITY_USERID)) + "";
-				String user_act_actiondone = actionDone.replace("'","\\'");
+				String user_act_actiondone = actionDone.replace("'", "\\'");
 				String user_act_latitude = cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_USER_ACTIVITY_LAT)).replaceAll("'", "\\'");
 				String user_act_longitude = cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_USER_ACTIVITY_LNG)).replaceAll("'", "\\'");
 				String user_act_datetime = cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_USER_ACTIVITY_DATETIME)).replaceAll("'", "\\'");
@@ -821,4 +822,10 @@ public class GpsDB_Query {
 		}
 		return isdeleted;
 	}
+
+
+	public void delete_ALL_ITEM_ON_TABLE(String TABLE_NAME) {
+		db.execSQL("delete from "+ TABLE_NAME);
+	}
+
 }

@@ -63,7 +63,7 @@ public class Activity_PondWeeklyConsumption extends Activity {
     ImageButton btn_details, btn_addreport;
 
     String strrecommended = "", strRemarks = "", strFeedtype="";
-    int strweeknum, strabw;
+    int strweeknum, strabw, strSurvivalRate;
 
     ListView lvPonds;
     String [] pondListArray;
@@ -158,7 +158,7 @@ public class Activity_PondWeeklyConsumption extends Activity {
                 txtSpecie.setText(specie + "");
                 txtqty.setText(quantity + "");
                 txtabw.setText(abw + "g");
-                txtSurvivalRate.setText(survivalrate + "%");
+                txtSurvivalRate.setText(strSurvivalRate + "%");
                 txtDateStocked.setText(datestocked + "");
                 txtArea.setText(area + "m²");
                 txtCultureSystem.setText(culturesystem + "");
@@ -205,11 +205,18 @@ public class Activity_PondWeeklyConsumption extends Activity {
                             Button add = (Button) d.findViewById(R.id.btnAdd);
                             Button cancel = (Button) d.findViewById(R.id.btnCancel);
                             final EditText edtAbw = (EditText) d.findViewById(R.id.edtAbw);
+                            final EditText edtSurvivalRate = (EditText) d.findViewById(R.id.edtSurvivalRate);
                             final EditText edtRemarks = (EditText) d.findViewById(R.id.edtRemarks);
                             if (strabw == 0) {
                                 edtAbw.setText("" + abw);
                             } else {
                                 edtAbw.setText("" + strabw);
+                            }
+
+                            if (strSurvivalRate == 0) {
+                                edtSurvivalRate.setText("" + survivalrate);
+                            } else {
+                                edtSurvivalRate.setText("" + strSurvivalRate);
                             }
 
                             d.show();
@@ -219,7 +226,7 @@ public class Activity_PondWeeklyConsumption extends Activity {
 
                                     if (!edtAbw.getText().toString().equalsIgnoreCase("") || !edtRemarks.getText().toString().equalsIgnoreCase("")) {
                                         d.hide();
-                                        AddReport(edtAbw.getText().toString(), Helper.variables.URL_INSERT_POND_REPORT, edtRemarks.getText().toString());
+                                        AddReport(edtAbw.getText().toString(), Helper.variables.URL_INSERT_POND_REPORT, edtRemarks.getText().toString(), edtSurvivalRate.getText().toString());
                                     } else {
                                         Helper.toastLong(activity, "You have to complete all fields to continue");
                                     }
@@ -245,16 +252,12 @@ public class Activity_PondWeeklyConsumption extends Activity {
         lvPonds.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-////                Object o = adapterPondWeeklyReport.getItem(position);
-//////                prestationEco str=(prestationEco)o;//As you are using Default String Adapter
-//////                Toast.makeText(getBaseContext(),str.getTitle(),Toast.LENGTH_SHORT).show();
-//
-//                Intent intent = new Intent(activity, Activity_Pond_WeekDetails_TEST.class);
-//                intent.putExtra("pondindex", id);
-//                intent.putExtra("")
-//                startActivity(intent);
-//
+//                pondweeklyList
+                Helper.createCustomThemedDialogOKOnly(activity, "Details",
+                        "ABW: "+pondweeklyList.get(position).getSizeofStock()+"g\n\n" +
+                        "Survival Rate: " + pondweeklyList.get(position).getSurvivalrate_per_pond()+"%\n\n"+
+                        "Date reported: " + pondweeklyList.get(position).getDateAddedToDB()+""
+                        , "OK", R.color.blue);
             }
         });
 
@@ -293,9 +296,11 @@ public class Activity_PondWeeklyConsumption extends Activity {
                                        Button cancel = (Button) d2.findViewById(R.id.btnCancel);
                                        final EditText edtAbw = (EditText) d2.findViewById(R.id.edtAbw);
                                        final EditText edtRemarks = (EditText) d2.findViewById(R.id.edtRemarks);
+                                       final EditText editSurvivalRate = (EditText) d2.findViewById(R.id.edtSurvivalRate);
 
                                        edtAbw.setText(""+ pondweeklyList.get(position).getSizeofStock());
                                        edtRemarks.setText(""+ pondweeklyList.get(position).getRemarks());
+                                       editSurvivalRate.setText(""+ pondweeklyList.get(position).getSurvivalrate_per_pond());
 
                                        d2.show();
                                        add.setOnClickListener(new View.OnClickListener() {
@@ -346,10 +351,9 @@ public class Activity_PondWeeklyConsumption extends Activity {
                                }
                            });
                        }
-
                     }
                 }
-                return false;
+                return true;
             }
         });
     }
@@ -397,7 +401,8 @@ public class Activity_PondWeeklyConsumption extends Activity {
                         custInfoObject.setSizeofStock(cur.getInt(cur.getColumnIndex(GpsSQLiteHelper.CL_WEEKLY_UPDATES_CURRENT_ABW)));
                         custInfoObject.setRemarks(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_WEEKLY_UPDATES_REMARKS)));
                         custInfoObject.setPondID(cur.getInt(cur.getColumnIndex(GpsSQLiteHelper.CL_WEEKLY_UPDATES_PONDID)));
-                        custInfoObject.setPondID(cur.getInt(cur.getColumnIndex(GpsSQLiteHelper.CL_WEEKLY_UPDATES_PONDID)));
+                        custInfoObject.setDateAddedToDB(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_WEEKLY_UPDATES_DATEADDED)));
+                        custInfoObject.setSurvivalrate_per_pond(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_WEEKLY_UPDATES_CURRENT_SURVIVALRATE)));
                         custInfoObject.setIsPosted_weekly(cur.getInt(cur.getColumnIndex(GpsSQLiteHelper.CL_WEEKLY_UPDATES_isposted)));
                         pondweeklyList.add(custInfoObject);
                     }
@@ -469,6 +474,7 @@ public class Activity_PondWeeklyConsumption extends Activity {
 
                     strRemarks = pondweeklyList.get(i).getRemarks();
                     strabw = pondweeklyList.get(i).getSizeofStock();
+                    strSurvivalRate = Integer.parseInt(pondweeklyList.get(i).getSurvivalrate_per_pond());
 
                     if (specie.equalsIgnoreCase("tilapia")){
                         strweeknum = Helper.get_Tilapia_WeekNum_byABW(strabw);
@@ -480,7 +486,7 @@ public class Activity_PondWeeklyConsumption extends Activity {
 
                     strrecommended = (Double.parseDouble(Helper.computeWeeklyFeedConsumption(Double.parseDouble(strabw + ""), quantity,
                             Helper.get_TilapiaFeedingRate_by_WeekNum(strweeknum),
-                            (Double.parseDouble(survivalrate) / 100)))/1000)+"";
+                            (Double.parseDouble(strSurvivalRate+"") / 100)))/1000)+"";
                     if (specie.equalsIgnoreCase("tilapia")){
                         strFeedtype = Helper.getTilapiaTypeByNumberOfWeeks(Helper.get_Tilapia_WeekNum_byABW(strabw));
                     }else if (specie.equalsIgnoreCase("bangus")) {
@@ -490,6 +496,7 @@ public class Activity_PondWeeklyConsumption extends Activity {
                     weekinfo1.setId(pondweeklyList.get(i).getId());
                     weekinfo1.setRemarks(strRemarks);
                     weekinfo1.setSizeofStock(strabw);
+                    weekinfo1.setSurvivalrate_per_pond(strSurvivalRate+"");
                     weekinfo1.setWeek(strweeknum);
                     weekinfo1.setRecommendedConsumption(strrecommended);
                     weekinfo1.setCurrentFeedType(strFeedtype);
@@ -502,7 +509,7 @@ public class Activity_PondWeeklyConsumption extends Activity {
     }
 
 
-    private void AddReport(final String abw2, String url, final String remarks2){
+    private void AddReport(final String abw2, String url, final String remarks2, String survivalRate){
         PD.setMessage("Saving Report. Please wait... ");
         PD.show();
 //        params.put("username", Helper.variables.getGlobalVar_currentUserName(activity));
@@ -512,7 +519,7 @@ public class Activity_PondWeeklyConsumption extends Activity {
 //                params.put("remarks", remarks2);
 //                params.put("pondindex", id+"");
 
-        final long result = db.insertWeeklyUpdates(abw2, remarks2, id+"", Helper.getDateDBformat());
+        final long result = db.insertWeeklyUpdates(abw2, remarks2, id+"", Helper.getDateDBformat(), survivalRate);
 
         if (result != -1){
             PD.dismiss();

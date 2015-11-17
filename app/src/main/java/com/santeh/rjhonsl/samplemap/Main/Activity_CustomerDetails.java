@@ -258,62 +258,74 @@ public class Activity_CustomerDetails extends FragmentActivity implements DatePi
                                     d.hide();
                                     if (txtfarmid.getText().toString().equalsIgnoreCase("")) {
                                         Helper.createCustomThemedDialogOKOnly(activity, "Warning", "FarmID is required to continue", "OK", R.color.red);
+                                        txtfarmid.setText(" --- ");
                                     }else if(txtfirstname.getText().toString().equalsIgnoreCase("") || txtlastname.getText().toString().equalsIgnoreCase("")  || txtmiddlename.getText().toString().equalsIgnoreCase("") ){
                                         Helper.createCustomThemedDialogOKOnly(activity, "Warning", "Full name is required", "OK", R.color.red);
                                     }else if(txtBirthPlace.getText().toString().equalsIgnoreCase("")){
+                                        txtBirthPlace.setText(" --- ");
                                         Helper.createCustomThemedDialogOKOnly(activity, "Warning", "Birthplace is required to continue", "OK", R.color.red);
                                     }else if(txtHouseNumber.getText().toString().equalsIgnoreCase("") || txtBarangay.getText().toString().equalsIgnoreCase("")|| txtCity.getText().toString().equalsIgnoreCase("") || txtProvince.getText().toString().equalsIgnoreCase("")){
+                                        txtHouseNumber.setText("00");
                                         Helper.createCustomThemedDialogOKOnly(activity, "Warning", "Address is required to continue", "OK", R.color.red);
+                                    }else if(txthouseStatus.getText().toString().equalsIgnoreCase("")){
+                                        txthouseStatus.setText("Owned");
+                                        Helper.createCustomThemedDialogOKOnly(activity, "Warning", "House number is required to continue", "OK", R.color.red);
+                                    }else if(txtCellphone.getText().toString().equalsIgnoreCase("")){
+                                        Helper.createCustomThemedDialogOKOnly(activity, "Warning", "Cellphone number is required to continue", "OK", R.color.red);
+                                        txtCellphone.setText("091501234565");
+                                    }else{
+                                        isEditPressed = false;
+                                        toggleEditPressed();
+
+                                        String strSpouseFname, strSpouseMname, strSpouseLname, strSpouseBirthday;
+                                        if (txtCivilStatus.getText().toString().equalsIgnoreCase("married")) {
+                                            strSpouseFname = txtSpouseFname.getText().toString();
+                                            strSpouseMname = txtSpouseMname.getText().toString();
+                                            strSpouseLname = txtSpouseLname.getText().toString();
+                                            strSpouseBirthday = txtSpouseBirthday.getText().toString();
+                                        } else {
+                                            strSpouseFname = " --- ";
+                                            strSpouseMname = " --- ";
+                                            strSpouseLname = " --- ";
+                                            strSpouseBirthday = "1970-1-1";
+                                        }
+
+                                        long id1 = db.updateCustomerInfo(id, txtfirstname.getText().toString(), txtlastname.getText().toString(),
+                                                txtmiddlename.getText().toString(), txtfarmid.getText().toString(), txtHouseNumber.getText().toString(), txtStreet.getText().toString(),
+                                                txtSubdivision.getText().toString(), txtBarangay.getText().toString(), txtCity.getText().toString(), txtProvince.getText().toString(), txtbirthday.getText().toString(),
+                                                txtBirthPlace.getText().toString(), strSpouseBirthday, txttelePhone.getText().toString(), txtCellphone.getText().toString(),
+                                                txtCivilStatus.getText().toString(), strSpouseFname, strSpouseMname, strSpouseLname);
+                                        if (id1 != -1) {
+                                            Dialog d = Helper.createCustomThemedDialogOKOnly(activity, "Success", "Changes has been saved successfully", "OK", R.color.blue);
+                                            Button ok = (Button) d.findViewById(R.id.btn_dialog_okonly_OK);
+                                            ok.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+
+                                                    Intent intent = new Intent(activity, MapsActivity.class);
+                                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                    intent.putExtra("fromActivity", "addfarminfo");
+
+                                                    Logging.logUserAction(activity, activity.getBaseContext(),
+                                                            Helper.userActions.TSR.EDIT_MAIN_CUSTOMERINFO + ":" + Helper.variables.getGlobalVar_currentUserID(activity) + "-" + id + "-" + txtfirstname.getText().toString() + " " + txtlastname.getText().toString(),
+                                                            Helper.variables.ACTIVITY_LOG_TYPE_TSR_MONITORING);
+                                                    startActivity(intent);
+                                                    finish();
+                                                }
+                                            });
+                                        } else {
+                                            Helper.createCustomThemedDialogOKOnly(activity, "Error", "Something happened. Please try again.", "OK", R.color.red);
+                                        }
+
                                     }
 
 
-                                    isEditPressed = false;
-                                    toggleEditPressed();
-
-                                    String strSpouseFname, strSpouseMname, strSpouseLname, strSpouseBirthday;
-                                    if (txtCivilStatus.getText().toString().equalsIgnoreCase("married")) {
-                                        strSpouseFname = txtSpouseFname.getText().toString();
-                                        strSpouseMname = txtSpouseMname.getText().toString();
-                                        strSpouseLname = txtSpouseLname.getText().toString();
-                                        strSpouseBirthday = txtSpouseBirthday.getText().toString();
-                                    } else {
-                                        strSpouseFname = " --- ";
-                                        strSpouseMname = " --- ";
-                                        strSpouseLname = " --- ";
-                                        strSpouseBirthday = "1970-1-1";
-                                    }
-                                    long id1 = db.updateCustomerInfo(id, txtfirstname.getText().toString(), txtlastname.getText().toString(),
-                                            txtmiddlename.getText().toString(), txtfarmid.getText().toString(), txtHouseNumber.getText().toString(), txtStreet.getText().toString(),
-                                            txtSubdivision.getText().toString(), txtBarangay.getText().toString(), txtCity.getText().toString(), txtProvince.getText().toString(), txtbirthday.getText().toString(),
-                                            txtBirthPlace.getText().toString(), strSpouseBirthday, txttelePhone.getText().toString(), txtCellphone.getText().toString(),
-                                            txtCivilStatus.getText().toString(), strSpouseFname, strSpouseMname, strSpouseLname);
-                                    if (id1 != -1) {
-                                        Dialog d = Helper.createCustomThemedDialogOKOnly(activity, "Success", "Changes has been saved successfully", "OK", R.color.blue);
-                                        Button ok = (Button) d.findViewById(R.id.btn_dialog_okonly_OK);
-                                        ok.setOnClickListener(new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View v) {
-
-                                                Intent intent = new Intent(activity, MapsActivity.class);
-                                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                                intent.putExtra("fromActivity", "addfarminfo");
-
-                                                Logging.logUserAction(activity, activity.getBaseContext(),
-                                                        Helper.userActions.TSR.EDIT_MAIN_CUSTOMERINFO + ":" + Helper.variables.getGlobalVar_currentUserID(activity) + "-" + id + "-" + txtfirstname.getText().toString() + " " + txtlastname.getText().toString(),
-                                                        Helper.variables.ACTIVITY_LOG_TYPE_TSR_MONITORING);
-                                                startActivity(intent);
-                                                finish();
-                                            }
-                                        });
-                                    } else {
-                                        Helper.createCustomThemedDialogOKOnly(activity, "Error", "Something happened. Please try again.", "OK", R.color.red);
-                                    }
 
                                 }
                             });
                         }
                     } else {
-                        Helper.createCustomThemedDialogOKOnly(activity, "Oops", "This Data is uploaded in the internet. You have to contact admin to make changes on this post.", "OK", R.color.skyblue_500);
+                        Helper.createCustomThemedDialogOKOnly(activity, "Oops", "This data is already uploaded to our servers. Please contact admin to make changes.", "OK", R.color.skyblue_500);
                     }
             }
         });

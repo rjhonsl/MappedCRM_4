@@ -560,6 +560,56 @@ public class Helper {
         }//
     }
 
+    public static int get_Vannamei_WeekNum_byABW(int abw){
+
+        if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[21]){
+            return 22;
+        }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[20]){
+            return 21;
+        }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[19]){
+            return 20;
+        }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[18]){
+            return 19;
+        }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[17]){
+            return 18;
+        }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[16]){
+            return 17;
+        }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[15]){
+            return 16;
+        }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[14]){
+            return 15;
+        }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[13]){
+            return 14;
+        }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[12]){
+            return 13;
+        }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[11]){
+            return 12;
+        }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[10]){
+            return 11;
+        }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[9]){
+            return 10;
+        }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[8]){
+            return 9;
+        }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[7]){
+            return 8;
+        }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[6]){
+            return 7;
+        }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[5]){
+            return 6;
+        }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[4]){
+            return 5;
+        }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[3]){
+            return 4;
+        }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[2]){
+            return 3;
+        }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[1]){
+            return 2;
+        }else{
+            return 1;
+        }//
+    }
+
+
 
     public static int get_Vannamei_Extenxive_WeekNum_byABW(int abw){
 

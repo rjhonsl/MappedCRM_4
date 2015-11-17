@@ -563,7 +563,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                                 String[] options = {"Farm Information", "Customer Information"};
                                 final Dialog d1 = Helper.createCustomThemedListDialogWithPrompt(activity, options, "Add Marker",
-                                        "Select the type of marker you want to add on this location.\n\nLat. " + touchLocation.latitude + "     Lng. " + touchLocation.longitude, R.color.blue);
+                                        "Select the type of marker you want to add on this location.\n\nLat: " + touchLocation.latitude + "\nLng: " + touchLocation.longitude, R.color.blue);
                                 ListView lvoptions = (ListView) d1.findViewById(R.id.dialog_list_listview);
                                 lvoptions.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                     @Override
