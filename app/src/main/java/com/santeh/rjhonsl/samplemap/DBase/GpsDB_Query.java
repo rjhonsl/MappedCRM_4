@@ -97,7 +97,8 @@ public class GpsDB_Query {
 		values.put(GpsSQLiteHelper.CL_POND_customerId, customerid);
 		values.put(GpsSQLiteHelper.CL_POND_isPosted, 0);
 		long id = db.insert(GpsSQLiteHelper.TBLPOND, null, values);
-		insertWeeklyUpdates(sizeofStock, remarks, id + "", dateStocked, survivalRate);
+		String currentTime = Helper.convertLongtoDateTime_DB_Format(System.currentTimeMillis());
+		insertWeeklyUpdates(sizeofStock, remarks, id + "", currentTime, survivalRate);
 		return id;
 	}
 
@@ -182,7 +183,7 @@ public class GpsDB_Query {
 		values.put(GpsSQLiteHelper.CL_FARMINFO_WATTYPE, waterType);
 		values.put(GpsSQLiteHelper.CL_FARMINFO_dateAdded, dateAdded);
 		values.put(GpsSQLiteHelper.CL_FARMINFO_addedby, userID);
-		values.put(GpsSQLiteHelper.CL_FARMINFO_IsPosted, 0);
+		values.put(GpsSQLiteHelper.CL_FARMINFO_IsPosted, 1);
 
 		return  db.insert(GpsSQLiteHelper.TBLFARMiNFO, null, values);
 	}
@@ -642,6 +643,16 @@ public class GpsDB_Query {
 		return cur.getCount();
 	}
 
+
+
+	public int getTableCount(String tableName) {
+		String query = "SELECT * FROM "+tableName+";";
+		String[] params = new String[] {};
+//		rawQuery("SELECT id, name FROM people WHERE name = ? AND id = ?", new String[] {"David", "2"});
+		Cursor cur = db.rawQuery(query, params);
+		return cur.getCount();
+	}
+
 	public int getPond_Count() {
 		String query = "SELECT * FROM "+GpsSQLiteHelper.TBLPOND+";";
 		String[] params = new String[] {};
@@ -859,7 +870,9 @@ public class GpsDB_Query {
 
 
 	public void delete_ALL_ITEM_ON_TABLE(String TABLE_NAME) {
-		db.execSQL("delete from "+ TABLE_NAME);
+		if (getTableCount(TABLE_NAME) > 0) {
+			db.execSQL("delete from " + TABLE_NAME);
+		}
 	}
 
 }

@@ -484,11 +484,18 @@ public class Activity_PondWeeklyConsumption extends Activity {
                         strweeknum = Helper.get_Bangus_WeekNum_byABW(strabw);
                     }
 
-                    strrecommended = (Double.parseDouble(Helper.computeWeeklyFeedConsumption(Double.parseDouble(strabw + ""), quantity,
-                            Helper.get_TilapiaFeedingRate_by_WeekNum(strweeknum),
-                            (Double.parseDouble(strSurvivalRate+"") / 100)))/1000)+"";
+                    if(specie.equalsIgnoreCase("tilapia")){
+                        strrecommended = (Double.parseDouble(Helper.computeWeeklyFeedConsumption(Double.parseDouble(strabw + ""), quantity,
+                                Helper.get_TilapiaFeedingRate_by_WeekNum(strweeknum),
+                                (Double.parseDouble(strSurvivalRate+"") / 100)))/1000)+"";
+                    }else if (specie.equalsIgnoreCase("bangus")){
+                        strrecommended = (Double.parseDouble(Helper.computeWeeklyFeedConsumption(Double.parseDouble(strabw + ""), quantity,
+                                Helper.get_BangusFeedingRate_by_WeekNum(strweeknum),
+                                (Double.parseDouble(strSurvivalRate+"") / 100)))/1000)+"";
+                    }
+
                     if (specie.equalsIgnoreCase("tilapia")){
-                        strFeedtype = Helper.getTilapiaTypeByNumberOfWeeks(Helper.get_Tilapia_WeekNum_byABW(strabw));
+                        strFeedtype = Helper.getTilapiaFeedTypeByNumberOfWeeks(Helper.get_Tilapia_WeekNum_byABW(strabw));
                     }else if (specie.equalsIgnoreCase("bangus")) {
                         strFeedtype = Helper.getBangusFeedtypeByABW(strabw);
                     }

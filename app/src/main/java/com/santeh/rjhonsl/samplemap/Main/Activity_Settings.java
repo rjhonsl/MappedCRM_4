@@ -111,7 +111,6 @@ public class Activity_Settings extends Activity{
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(final String response) {
-                        Helper.createCustomThemedDialogOKOnly_scrolling(activity, "Response", response, "OK", R.color.red);
                         PD.dismiss();
                         if (!response.substring(1, 2).equalsIgnoreCase("0")) {
                             custInfoObjectList =  CustAndPondParser.parseFeed(response);
@@ -133,11 +132,11 @@ public class Activity_Settings extends Activity{
                                                 custInfoObjectList.get(i).getCulturelevel(),
                                                 custInfoObjectList.get(i).getWaterType(),
                                                 custInfoObjectList.get(i).getDateAddedToDB(),
-                                                custInfoObjectList.get(i).getAddedBy(),
-                                                custInfoObjectList.get(i).getFarmLocatID()
+                                                custInfoObjectList.get(i).getFarm_addedBy(),
+                                                custInfoObjectList.get(i).getFarmLocalID()
                                         );
                                     }
-
+                                    Helper.toastShort(activity, "Restore Successful.");
                                     Log.d("RESTORE", "RESTORE SUCCESSFUL - farminfo");
                                 }
                             }
@@ -173,6 +172,8 @@ public class Activity_Settings extends Activity{
         MyVolleyAPI api = new MyVolleyAPI();
         api.addToReqQueue(postRequest, this);
     }
+
+
 
     @Override
     protected void onResume() {

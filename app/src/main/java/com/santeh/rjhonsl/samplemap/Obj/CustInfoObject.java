@@ -32,6 +32,7 @@ public class CustInfoObject {
 	private String dateTime;
 	private String assingedArea;
 	private String actionType;
+	private String farm_addedBy;
 
 
 	private String username;
@@ -62,7 +63,7 @@ public class CustInfoObject {
 	private int startweekofStock;
 	private int week;
 	private int currentABW;
-	private int farmLocatID;
+	private int farmLocalID;
 
 	private int isVisited;
 	private int isactive;
@@ -808,11 +809,19 @@ public class CustInfoObject {
 		this.currentABW = currentABW;
 	}
 
-	public int getFarmLocatID() {
-		return farmLocatID;
+	public int getFarmLocalID() {
+		return farmLocalID;
 	}
 
 	public void setFarmLocalID(int farmLocatID) {
-		this.farmLocatID = farmLocatID;
+		this.farmLocalID = farmLocatID;
+	}
+
+	public String getFarm_addedBy() {
+		return farm_addedBy;
+	}
+
+	public void setFarm_addedBy(String farm_addedBy) {
+		this.farm_addedBy = farm_addedBy;
 	}
 }

@@ -118,7 +118,8 @@ public class CustAndPondParser {
 					if (obj.has("lid"))
 					custInfoObject.setFarmLocalID(obj.getInt("lid"));
 				}catch (Exception e){
-					custInfoObject.setFarmID("lid");
+					int x = Integer.parseInt(null);
+					custInfoObject.setFarmLocalID(x);
 				}
 
 
@@ -163,6 +164,15 @@ public class CustAndPondParser {
 					custInfoObject.setDateAddedToDB(obj.getString("dateAdded"));
 				}catch (Exception e){
 					custInfoObject.setDateAddedToDB("None");
+				}
+
+
+				Log.d("PARSING", "addedby");
+				try {
+					if (obj.has("addedby"))
+						custInfoObject.setFarm_addedBy(obj.getString("addedby"));
+				}catch (Exception e){
+					custInfoObject.setFarm_addedBy("2");
 				}
 
 

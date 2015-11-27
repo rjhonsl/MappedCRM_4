@@ -297,8 +297,9 @@ public class Activity_LoginScreen extends Activity{
         txtusername.getBackground().setColorFilter(getResources().getColor(R.color.yellow), PorterDuff.Mode.SRC_IN);
         txtpassword.getBackground().setColorFilter(getResources().getColor(R.color.yellow), PorterDuff.Mode.SRC_IN);
 
-        txtpassword.setText("10");
-        txtusername.setText("jhonar10");
+        txtusername.setText("tsr");
+        txtpassword.setText("tsr");
+
     }
 
     private void toggle_showpassword() {

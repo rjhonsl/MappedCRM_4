@@ -477,6 +477,15 @@ public class Helper {
 
     }
 
+    public static double get_BangusFeedingRate_by_WeekNum(int weeknum){
+        if (weeknum > 21){
+            return Helper.variables.ARRAY_BANGUS_FEEDING_RATE_PER_WEEK[21];
+        }else{
+            return Helper.variables.ARRAY_BANGUS_FEEDING_RATE_PER_WEEK[weeknum-1];
+        }
+
+    }
+
     public static int get_currentWeek_by_stockedDate(String stockedDate, int abw){
 
         DateTime dt = new DateTime();
@@ -690,7 +699,7 @@ public class Helper {
 
 
 
-    public static String getTilapiaTypeByNumberOfWeeks(int week){
+    public static String getTilapiaFeedTypeByNumberOfWeeks(int week){
         String feedtype;
 
         if (week <= 6) {
