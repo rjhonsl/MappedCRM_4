@@ -420,6 +420,13 @@ public class CustAndPondParser {
 					}
 				}
 
+
+				if (obj.has("mci_type")){
+					if (!obj.isNull("mci_type")) {
+						custInfoObject.setCustomerType(obj.getString("mci_type"));
+					}
+				}
+
 				custInfoObjectList.add(custInfoObject);
 
 			}

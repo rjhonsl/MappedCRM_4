@@ -30,7 +30,7 @@ public class Activity_Add_CustomerInformation_Summary extends FragmentActivity{
     private String farmid, fname, lname, mname, birthday, birthplace;
     private ImageButton btnBack, btnNext;
     private String housenumber="", street="", subdivision="", city="", barangay="", province="", housestat="", telephone="",
-            cellphone="", s_birthday="", s_fname="", s_lname="", s_mname="", civilstatus="";
+            cellphone="", s_birthday="", s_fname="", s_lname="", s_mname="", civilstatus="", custtype="";
 
 
     public static final String DATEPICKER_TAG = "datepicker";
@@ -38,7 +38,7 @@ public class Activity_Add_CustomerInformation_Summary extends FragmentActivity{
     DatePickerDialog datePickerDialog;
 
     TextView txtFarmID, txtFname, txtMname, txtLname, txtBirthday, txtBirthPlace, txtHouseNumber, txtStreet, txtSubdivision, txtBarangay,
-        txtCity, txtProvince, txttelephone, txtCellphone, txtHouseStatus, txtCivilStatus, txt_S_fname, txt_S_mname, txt_S_lname, txt_S_Birthday;
+        txtCity, txtProvince, txttelephone, txtCellphone, txtHouseStatus, txtCivilStatus, txt_S_fname, txt_S_mname, txt_S_lname, txt_S_Birthday, txtCustType;
 
     LinearLayout ll;
 
@@ -85,6 +85,7 @@ public class Activity_Add_CustomerInformation_Summary extends FragmentActivity{
         if (getIntent().hasExtra("tel")){telephone = getIntent().getStringExtra("tel");}else{telephone ="";}
         if (getIntent().hasExtra("cel")){cellphone = getIntent().getStringExtra("cel");}else{cellphone ="";}
         if (getIntent().hasExtra("housestat")){housestat = getIntent().getStringExtra("housestat");}else{housestat ="";}
+        if (getIntent().hasExtra("custtype")){custtype = getIntent().getStringExtra("custtype");}
 
         if (getIntent().hasExtra("civilstatus")){civilstatus = getIntent().getStringExtra("civilstatus");}else{civilstatus ="";}
         if (getIntent().hasExtra("s_fname")){s_fname = getIntent().getStringExtra("s_fname");}else{s_fname =" --- ";}
@@ -112,6 +113,7 @@ public class Activity_Add_CustomerInformation_Summary extends FragmentActivity{
         txt_S_mname = (TextView) findViewById(R.id.txt_s_mname);
         txt_S_lname = (TextView) findViewById(R.id.txt_s_lname);
         txt_S_Birthday = (TextView) findViewById(R.id.txt_s_birthday);
+        txtCustType = (TextView) findViewById(R.id.txt_custtype);
 
 
         if (s_fname.equalsIgnoreCase("")){
@@ -171,6 +173,7 @@ public class Activity_Add_CustomerInformation_Summary extends FragmentActivity{
         txt_S_mname.setText(s_mname+" ");
         txt_S_lname.setText(s_lname+" ");
         txt_S_Birthday.setText(s_birthday+" ");
+        txtCustType.setText(custtype+" ");
 
 
         btnBack.setOnClickListener(new View.OnClickListener() {
@@ -217,7 +220,7 @@ public class Activity_Add_CustomerInformation_Summary extends FragmentActivity{
         long result = db.insertMainCustomerInformation(
                 Helper.variables.getGlobalVar_currentUserID(activity),
                 lname, mname, fname, farmid, housenumber, street, subdivision, barangay, city, province, birthday, birthplace, telephone,
-                cellphone, civilstatus, s_fname, s_lname, s_mname, s_birthday, housestat, lat+"", lng+""
+                cellphone, civilstatus, s_fname, s_lname, s_mname, s_birthday, housestat, lat+"", lng+"", custtype
         );
 
         Log.d("LOCAL DB", "Insert MainCustomer Info" + result);

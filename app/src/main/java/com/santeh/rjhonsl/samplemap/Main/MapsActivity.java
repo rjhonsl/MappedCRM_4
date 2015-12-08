@@ -514,7 +514,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         public void run() {
                             curLatlng = fusedLocation.getLastKnowLocation();
 
-                            moveCameraAnimate(map, new LatLng(curLatlng.latitude, curLatlng.longitude), 15);
+                            moveCameraAnimate(map, new LatLng(curLatlng.latitude, curLatlng.longitude), 17);
                             handler1.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {

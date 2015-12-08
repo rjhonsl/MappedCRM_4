@@ -94,6 +94,7 @@ public class CustInfoObject {
 	private String addedBy_cust;
 	private String addedBy_pond;
 	private String addedBy_weekly;
+	private String customerType;
 
 
 
@@ -823,5 +824,13 @@ public class CustInfoObject {
 
 	public void setFarm_addedBy(String farm_addedBy) {
 		this.farm_addedBy = farm_addedBy;
+	}
+
+	public String getCustomerType() {
+		return customerType;
+	}
+
+	public void setCustomerType(String customerType) {
+		this.customerType = customerType;
 	}
 }

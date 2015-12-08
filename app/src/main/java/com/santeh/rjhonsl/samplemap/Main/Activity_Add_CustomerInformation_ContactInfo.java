@@ -28,7 +28,7 @@ public class Activity_Add_CustomerInformation_ContactInfo extends FragmentActivi
     private ImageButton btnBack, btnNext;
     private String housenumber, street, subdivision, city, barangay, province;
 
-    EditText edtTelephone, edtCellphone, edtHouseStatus;
+    EditText edtTelephone, edtCellphone, edtHouseStatus, edtCustomerType;
 
 
     @Override
@@ -44,6 +44,7 @@ public class Activity_Add_CustomerInformation_ContactInfo extends FragmentActivi
         edtTelephone = (EditText) findViewById(R.id.edt_telephone);
         edtCellphone = (EditText) findViewById(R.id.edt_cellphone);
         edtHouseStatus = (EditText) findViewById(R.id.edt_housestatus);
+        edtCustomerType = (EditText) findViewById(R.id.edt_custType);
 
         if (getIntent().hasExtra("latitude")){lat= getIntent().getDoubleExtra("latitude", 0);}
         if (getIntent().hasExtra("longtitude")){lng= getIntent().getDoubleExtra("longtitude", 0);}
@@ -78,9 +79,28 @@ public class Activity_Add_CustomerInformation_ContactInfo extends FragmentActivi
             }
         });
 
+
+        edtCustomerType.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final String[] options = {"Farm Owner","Distributor"};
+                final Dialog d = Helper.createCustomThemedListDialog(activity, options, "Type", R.color.deepteal_500);
+                ListView lv = (ListView) d.findViewById(R.id.dialog_list_listview);
+                lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        edtCustomerType.setText(options[position]);
+                        d.hide();
+                    }
+                });
+            }
+        });
+
+
         TextView txtnote = (TextView) findViewById(R.id.txt_note);
 //        txtnote.setText(lat + " "+lng +" " + farmid + " " + fname+ " " + lname + " " + mname+ " " + birthday+ " " + birthplace +
 //                " " + housenumber + " " + street + " " + subdivision + " " + barangay + " " + city + " " + province);
+
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -113,6 +133,7 @@ public class Activity_Add_CustomerInformation_ContactInfo extends FragmentActivi
                     intent.putExtra("tel", edtTelephone.getText()+"");
                     intent.putExtra("cel", edtCellphone.getText()+"");
                     intent.putExtra("housestat", edtHouseStatus.getText() + "");
+                    intent.putExtra("custtype", edtCustomerType.getText() + "");
 
                     startActivity(intent);
                     overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);

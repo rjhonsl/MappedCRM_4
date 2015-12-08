@@ -425,6 +425,29 @@
             </LinearLayout>
 
 
+            <LinearLayout android:layout_width="fill_parent"
+                          android:layout_height="wrap_content"
+                          android:orientation="horizontal"
+                          android:paddingLeft="7dp"
+                          android:paddingRight="7dp"
+            >
+
+                <TextView android:layout_width="135dp"
+                          android:layout_height="wrap_content"
+                          android:textSize="14sp"
+                          android:textColor="@color/gray_600"
+                          android:text="Customer Type" />
+
+                <TextView android:layout_width="fill_parent"
+                          android:layout_height="wrap_content"
+                          android:textSize="14sp"
+                          android:id="@+id/txt_custtype"
+                          android:textColor="@color/gray_800"
+                          android:text="Distributor" />
+
+            </LinearLayout>
+
+
 
             <TextView
                 android:layout_width="wrap_content" android:layout_height="wrap_content"

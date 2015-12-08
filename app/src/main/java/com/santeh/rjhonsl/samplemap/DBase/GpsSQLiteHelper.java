@@ -10,7 +10,7 @@ public class GpsSQLiteHelper extends SQLiteOpenHelper {
 	private static final String LOGTAG = "DB_GPS";
 	private static final String DATABASE_NAME = "local.db";
 	//each time you change data structure, you must increment this by 1
-	private static final int DATABASE_VERSION = 16;
+	private static final int DATABASE_VERSION = 17;
 
 	//Reference for tblmaincustomerinfo
 	public static final String TBLMAINCUSTOMERINFO 				= "tblmaincustomerinfo";
@@ -41,12 +41,13 @@ public class GpsSQLiteHelper extends SQLiteOpenHelper {
 	public static final String CL_MAINCUSTINFO_DateAdded 		= "mci_dateadded";
 	public static final String CL_MAINCUSTINFO_AddedBy			= "mci_addedby";
 	public static final String CL_MAINCUSTINFO_isposted			= "mci_isposted";
+	public static final String CL_MAINCUSTINFO_type				= "mci_type";
 
 	public static final String[] ALL_KEY_MAINCUSTOMERINFO 		= new String[]{CL_MAINCUSTINFO_ID, CL_MAINCUSTINFO_LastName, CL_MAINCUSTINFO_FirstName, CL_MAINCUSTINFO_MiddleName,
 			CL_MAINCUSTINFO_FarmId, CL_MAINCUSTINFO_HouseNumber, CL_MAINCUSTINFO_Street, CL_MAINCUSTINFO_Subdivision, CL_MAINCUSTINFO_Barangay, CL_MAINCUSTINFO_City, CL_MAINCUSTINFO_Province,
 			CL_MAINCUSTINFO_CBirthday, CL_MAINCUSTINFO_CBirthPlace, CL_MAINCUSTINFO_Telephone, CL_MAINCUSTINFO_Cellphone, CL_MAINCUSTINFO_CivilStatus, CL_MAINCUSTINFO_S_FirstName,
 			CL_MAINCUSTINFO_S_LastName, CL_MAINCUSTINFO_S_MiddleName, CL_MAINCUSTINFO_S_BirthDay, CL_MAINCUSTINFO_HouseStatus, CL_MAINCUSTINFO_Latitude, CL_MAINCUSTINFO_Longitude,
-			CL_MAINCUSTINFO_DateAdded, CL_MAINCUSTINFO_AddedBy, CL_MAINCUSTINFO_isposted};
+			CL_MAINCUSTINFO_DateAdded, CL_MAINCUSTINFO_AddedBy, CL_MAINCUSTINFO_isposted, CL_MAINCUSTINFO_type};
 
 
 	//reference for tblarea
@@ -195,7 +196,8 @@ public class GpsSQLiteHelper extends SQLiteOpenHelper {
 					CL_MAINCUSTINFO_Longitude 	+ " TEXT, " +
 					CL_MAINCUSTINFO_DateAdded 	+ " DATETIME, " +
 					CL_MAINCUSTINFO_AddedBy		+ " INTEGER, " +
-					CL_MAINCUSTINFO_isposted	+ " INTEGER " +
+					CL_MAINCUSTINFO_isposted	+ " INTEGER, " +
+					CL_MAINCUSTINFO_type		+ " INTEGER " +
 					")";
 
 
@@ -319,9 +321,9 @@ public class GpsSQLiteHelper extends SQLiteOpenHelper {
 	//create tb
 	public void onCreate(SQLiteDatabase db) {
 		db.execSQL(TBL_CREATE_MAINCUSTOMERINFO);
-		db.execSQL(TBL_CREATE_AREA);
-		db.execSQL(TBL_CREATE_ASSIGNED_AREA);
-		db.execSQL(TBL_CREATE_MUNICIPALITY);
+//		db.execSQL(TBL_CREATE_AREA);
+//		db.execSQL(TBL_CREATE_ASSIGNED_AREA);
+//		db.execSQL(TBL_CREATE_MUNICIPALITY);
 		db.execSQL(TBL_CREATE_FARMINFO);
 		db.execSQL(TBL_CREATE_POND);
 		db.execSQL(TBL_CREATE_WEEKLYUPDATES);

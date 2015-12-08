@@ -106,8 +106,15 @@ public class GpsDB_Query {
 	public long insertMainCustomerInformation(int userid, String lname, String mname, String fname, String farmid, String housenumber, String street,
 											  String subdivision, String barangay, String city, String province, String birthday, String birthplace, String telephone,
 											  String cellphone, String civilstatus, String s_fname, String s_lname, String s_mname, String s_birthday, String housestat,
-											  String lat, String lng){
+											  String lat, String lng, String custtype){
 		ContentValues values = new ContentValues();
+
+		int customerType = 0;
+		if (custtype.equalsIgnoreCase("distributor")){
+			customerType = 1;
+		}else{
+			customerType = 0;
+		}
 
 		values.put(GpsSQLiteHelper.CL_MAINCUSTINFO_AddedBy, userid);
 		values.put(GpsSQLiteHelper.CL_MAINCUSTINFO_LastName, lname);
@@ -133,6 +140,7 @@ public class GpsDB_Query {
 		values.put(GpsSQLiteHelper.CL_MAINCUSTINFO_DateAdded, Helper.getDateDBformat());
 		values.put(GpsSQLiteHelper.CL_MAINCUSTINFO_Latitude, lat);
 		values.put(GpsSQLiteHelper.CL_MAINCUSTINFO_Longitude, lng);
+		values.put(GpsSQLiteHelper.CL_MAINCUSTINFO_type, customerType);
 		values.put(GpsSQLiteHelper.CL_MAINCUSTINFO_isposted, 0);
 
 		return  db.insert(GpsSQLiteHelper.TBLMAINCUSTOMERINFO, null, values);

@@ -30,7 +30,7 @@ public class Activity_Add_CustomerInformation_SpouseInfo extends FragmentActivit
     private double lat = 0, lng = 0;
     private String farmid, fname, lname, mname, birthday, birthplace;
     private ImageButton btnBack, btnNext;
-    private String housenumber, street, subdivision, city, barangay, province, housestat, telephone, cellphone;
+    private String housenumber, street, subdivision, city, barangay, province, housestat, telephone, cellphone, custtype;
 
     EditText edtfname, edtmname, edtlname, edtBirthday, edtCivilStatus;
     LinearLayout ll;
@@ -84,6 +84,7 @@ public class Activity_Add_CustomerInformation_SpouseInfo extends FragmentActivit
         if (getIntent().hasExtra("tel")){telephone = getIntent().getStringExtra("tel");}
         if (getIntent().hasExtra("cel")){cellphone = getIntent().getStringExtra("cel");}
         if (getIntent().hasExtra("housestat")){housestat = getIntent().getStringExtra("housestat");}
+        if (getIntent().hasExtra("custtype")){custtype = getIntent().getStringExtra("custtype");}
 
 
         edtBirthday.setOnClickListener(new View.OnClickListener() {
@@ -170,6 +171,7 @@ public class Activity_Add_CustomerInformation_SpouseInfo extends FragmentActivit
         intent.putExtra("tel", telephone+"");
         intent.putExtra("cel", cellphone+"");
         intent.putExtra("housestat", housestat+ "");
+        intent.putExtra("custtype", custtype + "");
 
         intent.putExtra("civilstatus", edtCivilStatus.getText().toString()+ "");
         intent.putExtra("s_fname", edtfname.getText().toString()+ "");
