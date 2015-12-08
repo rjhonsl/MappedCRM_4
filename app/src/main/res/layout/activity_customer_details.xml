@@ -373,6 +373,7 @@
                           android:background="@drawable/bg_material_transparent_rectangle_greypressed"
                           android:paddingLeft="20dp"
                           android:paddingRight="20dp"
+                          android:id="@+id/ll_custtype"
                           android:paddingTop="10dp"
                           android:paddingBottom="10dp"
                           android:orientation="vertical">

@@ -77,7 +77,7 @@
                           android:layout_height="wrap_content"
                           android:textSize="14sp"
                           android:textColor="@color/gray_600"
-                          android:text="Farm ID"
+                          android:text="Customer Code:"
                     />
                 <TextView android:layout_width="5dp" android:layout_height="wrap_content"
                           android:text="*"

@@ -69,10 +69,10 @@ public class Activity_CustomerDetails extends FragmentActivity implements DatePi
 
     TextView txtmiddlename, txtfirstname, txtlastname, txtbirthday, txtfarmid, txtBirthPlace, txtHouseNumber, txtStreet, txtSubdivision,
                 txtBarangay, txtCity, txtProvince, txthouseStatus, txttelePhone, txtCellphone, txtSpouseFname, txtSpouseMname, txtSpouseLname,
-                txtSpouseBirthday, title, txtCivilStatus;
+                txtSpouseBirthday, title, txtCivilStatus, txtCustType;
 
     TextView lblFarmId, lblFullName, lblBirthDetails, lblAddress, lblHouseStatus, lblTelephone, lblCellphone, lblCivilStatus, lblSpouseFullname, lblSpouseBirthday;
-    LinearLayout llFarmId, llFullName, llBirthDetails, llAddress, llHouseStatus, llTelephone, llCellphone, llCivilStatus, llSpouseFullname, llSpouseBirthday;
+    LinearLayout llFarmId, llFullName, llBirthDetails, llAddress, llCustomerType, llHouseStatus, llTelephone, llCellphone, llCivilStatus, llSpouseFullname, llSpouseBirthday;
     int userlvl;
     private int dd, mm, yyyy;
 
@@ -123,6 +123,7 @@ public class Activity_CustomerDetails extends FragmentActivity implements DatePi
         txtSpouseLname = (TextView) findViewById(R.id.txt_S_LastName);
         txtSpouseMname = (TextView) findViewById(R.id.txt_S_MiddleName);
         txtSpouseBirthday = (TextView) findViewById(R.id.txt_S_Birthday);
+        txtCustType = (TextView) findViewById(R.id.txt_custtype);
 
         lblFarmId = (TextView) findViewById(R.id.lbl_farmid);
         lblFullName = (TextView) findViewById(R.id.lbl_fullname);
@@ -135,6 +136,7 @@ public class Activity_CustomerDetails extends FragmentActivity implements DatePi
         lblSpouseFullname = (TextView) findViewById(R.id.lbl_Spousefullname);
         lblSpouseBirthday = (TextView) findViewById(R.id.lbl_spouseBirthday);
 
+
         llFarmId = (LinearLayout) findViewById(R.id.ll_farmID);
         llFullName = (LinearLayout) findViewById(R.id.ll_fullname);
         llBirthDetails = (LinearLayout) findViewById(R.id.ll_birthDetails);
@@ -146,6 +148,7 @@ public class Activity_CustomerDetails extends FragmentActivity implements DatePi
         llSpouseFullname = (LinearLayout) findViewById(R.id.ll_spouseFullname);
         llSpouseBirthday = (LinearLayout) findViewById(R.id.ll_spouseBirthday);
         ll_btnHolder_bottom = (LinearLayout) findViewById(R.id.ll_bottombutton);
+        llCustomerType = (LinearLayout) findViewById(R.id.ll_custtype);
 
         if (Helper.variables.getGlobalVar_currentLevel(activity) == 4){
             ll_btnHolder_bottom.setVisibility(View.VISIBLE);
@@ -290,11 +293,19 @@ public class Activity_CustomerDetails extends FragmentActivity implements DatePi
                                             strSpouseBirthday = "1970-1-1";
                                         }
 
+                                        String custType;
+
+                                        if (txtCustType.getText().toString().equalsIgnoreCase("distributor")){
+                                            custType = "1";
+                                        }else{
+                                            custType = "0";
+                                        }
+
                                         long id1 = db.updateCustomerInfo(id, txtfirstname.getText().toString(), txtlastname.getText().toString(),
                                                 txtmiddlename.getText().toString(), txtfarmid.getText().toString(), txtHouseNumber.getText().toString(), txtStreet.getText().toString(),
                                                 txtSubdivision.getText().toString(), txtBarangay.getText().toString(), txtCity.getText().toString(), txtProvince.getText().toString(), txtbirthday.getText().toString(),
                                                 txtBirthPlace.getText().toString(), strSpouseBirthday, txttelePhone.getText().toString(), txtCellphone.getText().toString(),
-                                                txtCivilStatus.getText().toString(), strSpouseFname, strSpouseMname, strSpouseLname);
+                                                txtCivilStatus.getText().toString(), strSpouseFname, strSpouseMname, strSpouseLname, custType);
                                         if (id1 != -1) {
                                             Dialog d = Helper.createCustomThemedDialogOKOnly(activity, "Success", "Changes has been saved successfully", "OK", R.color.blue);
                                             Button ok = (Button) d.findViewById(R.id.btn_dialog_okonly_OK);
@@ -391,6 +402,17 @@ public class Activity_CustomerDetails extends FragmentActivity implements DatePi
             }
         });
 
+        llCustomerType.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                return editCustomerType();
+            }
+
+
+
+
+        });
+
         lblHouseStatus.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -464,9 +486,11 @@ public class Activity_CustomerDetails extends FragmentActivity implements DatePi
 
     }
 
+
+
     private boolean editFarmID() {
         if (isEditPressed){
-            final Dialog d = Helper.createCustomDialogThemedYesNO_WithEditText(activity, "Enter new Farm ID:", txtfarmid.getText().toString(), "Edit", "CANCEL", "SAVE", R.color.blue);
+            final Dialog d = Helper.createCustomDialogThemedYesNO_WithEditText(activity, "Enter new Customer Code:", txtfarmid.getText().toString(), "Edit", "CANCEL", "SAVE", R.color.blue);
             final EditText edt = (EditText) d.findViewById(R.id.dialog_edttext);
             Button cancel = (Button) d.findViewById(R.id.btn_dialog_yesno_opt1);
             Button save = (Button) d.findViewById(R.id.btn_dialog_yesno_opt2);
@@ -787,12 +811,13 @@ public class Activity_CustomerDetails extends FragmentActivity implements DatePi
     private boolean editHouseStatus() {
         if (isEditPressed) {
             final String[] options = new String[]{"Owned", "Rented"};
-            Dialog d = Helper.createCustomThemedListDialog(activity, options, "House Status", R.color.blue );
+            final Dialog d = Helper.createCustomThemedListDialog(activity, options, "House Status", R.color.blue );
             ListView lv = (ListView) d.findViewById(R.id.dialog_list_listview);
             lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     txthouseStatus.setText(options[position]);
+                    d.hide();
                 }
             });
 
@@ -801,6 +826,27 @@ public class Activity_CustomerDetails extends FragmentActivity implements DatePi
         }
         return false;
     }
+
+
+    private boolean editCustomerType() {
+        if (isEditPressed) {
+            final String[] options = new String[]{"Farm Owner", "Distributor"};
+            final Dialog d = Helper.createCustomThemedListDialog(activity, options, "Customer Type", R.color.blue );
+            ListView lv = (ListView) d.findViewById(R.id.dialog_list_listview);
+            lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    txtCustType.setText(options[position]);
+                    d.hide();
+                }
+            });
+
+            d.show();
+
+        }
+        return false;
+    }
+
 
 
     private boolean editCivilStatus() {
@@ -940,6 +986,7 @@ public class Activity_CustomerDetails extends FragmentActivity implements DatePi
                         custInfoObject.setCust_longtitude(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_Longitude)));
                         custInfoObject.setCust_latitude(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_Latitude)));
                         custInfoObject.setDateAddedToDB(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_DateAdded)));
+                        custInfoObject.setCustomerType(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_type)));
                         custInfoObject.setAddedBy(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_AddedBy)));
                         custInfoObject.setIsPosted(cur.getInt(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_isposted)));
 
@@ -981,7 +1028,14 @@ public class Activity_CustomerDetails extends FragmentActivity implements DatePi
         txtSpouseLname.setText(custInfoObject.getSpouse_lname()+"");
         txtSpouseMname.setText(custInfoObject.getSpouse_mname()+"");
         txtSpouseBirthday.setText(custInfoObject.getSpouse_birthday()+"");
-    
+
+        if (custInfoObject.getCustomerType().equalsIgnoreCase("1")){
+            txtCustType.setText("Distributor");
+        }else if (custInfoObject.getCustomerType().equalsIgnoreCase("0")){
+            txtCustType.setText("Farm Owner");
+        }
+
+
         isPosted = custInfoObject.getIsPosted();
         
 

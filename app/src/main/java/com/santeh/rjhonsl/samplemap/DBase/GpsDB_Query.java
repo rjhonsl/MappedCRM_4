@@ -268,13 +268,30 @@ public class GpsDB_Query {
 			}
 		}
 
-		return sqlString.substring(0, sqlString.length() - 1);
+		String strSql = sqlString.substring(0, sqlString.length() - 1);
+		strSql = strSql + " " +
+				"ON DUPLICATE KEY UPDATE " +
+				" 	 latitude = VALUES(latitude), " +
+				"    longtitude = VALUES(longtitude), " +
+				"    contact_name = VALUES(contact_name), " +
+				"    company = VALUES(company), " +
+				"    farm_name = VALUES(farm_name), " +
+				"    address = VALUES(address), " +
+				"    farmid = VALUES(farmid), " +
+				"    contact_number = VALUES(contact_number), " +
+				"    culture_type = VALUES(culture_type), " +
+				"    culture_level = VALUES(culture_level), " +
+				"    water_type = VALUES(water_type), " +
+				"    dateAdded = VALUES(dateAdded), " +
+				"    addedby = VALUES(addedby)";
+
+		return strSql;
 	}
 
 
 	public String getSQLStringForInsert_UNPOSTED_CustomerINFO(Activity activity) {
 		String sqlString = "" +
-				"INSERT INTO `tblmaincustomerinfo` (`mci_id`, `mci_lname`, `mci_fname`, `mci_mname`, `mci_farmid`, `mci_housenumber`, `mci_street`, `mci_subdivision`, `mci_barangay`, `mci_city`, `mci_province`, `mci_customerbirthday`, `mci_birthplace`, `mci_telephone`, `mci_cellphone`, `mci_civilstatus`, `mci_s_fname`, `mci_s_lname`, `mci_s_mname`, `mci_s_birthday`, `mci_housestatus`, `mci_latitude`, `mci_longitude`, `mci_dateadded`, `mci_addedby`, `mci_lid`)  VALUES ";
+				"INSERT INTO `tblmaincustomerinfo` (`mci_id`, `mci_lname`, `mci_fname`, `mci_mname`, `mci_farmid`, `mci_housenumber`, `mci_street`, `mci_subdivision`, `mci_barangay`, `mci_city`, `mci_province`, `mci_customerbirthday`, `mci_birthplace`, `mci_telephone`, `mci_cellphone`, `mci_civilstatus`, `mci_s_fname`, `mci_s_lname`, `mci_s_mname`, `mci_s_birthday`, `mci_housestatus`, `mci_latitude`, `mci_longitude`, `mci_dateadded`, `mci_addedby`, `mci_lid`, `mci_type`)  VALUES ";
 		String query = "SELECT * FROM " + GpsSQLiteHelper.TBLMAINCUSTOMERINFO + " WHERE "
 				+ GpsSQLiteHelper.CL_MAINCUSTINFO_isposted + " = 0 AND " +
 				GpsSQLiteHelper.CL_MAINCUSTINFO_AddedBy + " = " + Helper.variables.getGlobalVar_currentUserID(activity);
@@ -286,6 +303,7 @@ public class GpsDB_Query {
 			while (cur.moveToNext()) {
 				String  mci_lname = cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_LastName)).replaceAll("'", "\\'");
 				String  mci_fname = cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_FirstName)).replaceAll("'", "\\'");
+
 				String  mci_mname = cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_MiddleName)).replaceAll("'", "\\'"),
 						mci_farmid = cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_FarmId)).replaceAll("'", "\\'"),
 						mci_housenumber = cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_HouseNumber)).replaceAll("'", "\\'"),
@@ -308,7 +326,7 @@ public class GpsDB_Query {
 						mci_longitude =  cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_Longitude)).replaceAll("'", "\\'"),
 						mci_dateadded =  cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_DateAdded)).replaceAll("'", "\\'"),
 						mci_addedby =  cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_AddedBy)).replaceAll("'", "\\'"),
-						mci_lid = "";
+						mci_type = cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_type)).replaceAll("'", "\\'");
 
 				sqlString = sqlString +
 						"( '"+cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_AddedBy))+"-"+cur.getInt(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_ID))+"',  " +
@@ -336,11 +354,42 @@ public class GpsDB_Query {
 						"'"+mci_longitude+"',  " +
 						"'"+mci_dateadded+"',  " +
 						"'"+mci_addedby+"', " +
-						"'"+cur.getInt(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_ID))+"' ),";
+						"'"+cur.getInt(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_ID))+"', " +
+						"'"+mci_type+"' ),";
 			}
 		}
 
-		return sqlString.substring(0, sqlString.length()-1);
+		String strSql = sqlString.substring(0, sqlString.length() - 1);
+		strSql = strSql + " " +
+				"ON DUPLICATE KEY UPDATE " +
+				" 	 mci_lname = VALUES(mci_lname), " +
+				"    mci_fname = VALUES(mci_fname), " +
+				"    mci_mname = VALUES(mci_mname), " +
+				"    mci_farmid = VALUES(mci_farmid), " +
+				"    mci_housenumber = VALUES(mci_housenumber), " +
+				"    mci_street = VALUES(mci_street), " +
+				"    mci_subdivision = VALUES(mci_subdivision), " +
+				"    mci_barangay = VALUES(mci_barangay), " +
+				"    mci_city = VALUES(mci_city), " +
+				"    mci_province = VALUES(mci_province), " +
+				"    mci_customerbirthday = VALUES(mci_customerbirthday), " +
+				"    mci_birthplace = VALUES(mci_birthplace), " +
+				"    mci_telephone = VALUES(mci_telephone), " +
+				"    mci_cellphone = VALUES(mci_cellphone), " +
+				"    mci_civilstatus = VALUES(mci_civilstatus), " +
+				"    mci_s_fname = VALUES(mci_s_fname), " +
+				"    mci_s_lname = VALUES(mci_s_lname), " +
+				"    mci_s_mname = VALUES(mci_s_mname), " +
+				"    mci_s_birthday = VALUES(mci_s_birthday), " +
+				"    mci_housestatus = VALUES(mci_housestatus), " +
+				"    mci_latitude = VALUES(mci_latitude), " +
+				"    mci_longitude = VALUES(mci_longitude), " +
+				"    mci_dateadded = VALUES(mci_dateadded), " +
+				"    mci_addedby = VALUES(mci_addedby), " +
+				"    mci_lid = VALUES(mci_lid), " +
+				"    mci_type = VALUES(mci_type)";
+
+		return strSql;
 	}
 
 
@@ -406,7 +455,23 @@ public class GpsDB_Query {
 			}
 		}
 
-		return sqlString.substring(0, sqlString.length() - 1);
+
+		String strSql = sqlString.substring(0, sqlString.length() - 1);
+		strSql = strSql + " " +
+				"ON DUPLICATE KEY UPDATE " +
+				" 	 pondid = VALUES(pondid), " +
+				"    specie = VALUES(specie), " +
+				"    sizeofStock = VALUES(sizeofStock), " +
+				"    survivalrate = VALUES(survivalrate), " +
+				"    dateStocked = VALUES(dateStocked), " +
+				"    quantity = VALUES(quantity), " +
+				"    area = (area), " +
+				"    culturesystem = VALUES(culturesystem), " +
+				"    remarks = VALUES(remarks), " +
+				"    customerId = VALUES(customerId), " +
+				"    p_lid = VALUES(p_lid)";
+
+		return strSql;
 	}
 
 
@@ -438,7 +503,19 @@ public class GpsDB_Query {
 						"'" +wu_lid+ "' ),";
 			}
 		}
-		return sqlString.substring(0, sqlString.length() - 1);
+
+		String strSql = sqlString.substring(0, sqlString.length() - 1);
+		strSql = strSql + " " +
+				"ON DUPLICATE KEY UPDATE " +
+				" 	 wu_id = VALUES(wu_id), " +
+				"    wu_currentabw = VALUES(wu_currentabw), " +
+				"    wu_survivalRate = VALUES(wu_survivalRate), " +
+				"    wu_remakrs = VALUES(wu_remakrs), " +
+				"    wu_pondid = VALUES(wu_pondid), " +
+				"    wu_dateAdded = VALUES(wu_dateAdded), " +
+				"    wu_lid = VALUES(wu_lid)";
+
+		return strSql;
 	}
 
 
@@ -783,7 +860,7 @@ public class GpsDB_Query {
 
 	public int updateCustomerInfo(String id, String firstname, String lastname, String middleName, String farmID, String houseNumber, String street, String subdivision, String barangay,
 								  String city, String province, String birthday, String birthPlace, String spouseBirthday, String telephone, String cellphone, String civilStatus, String spouseFirstName,
-								  String spouseMiddleName, String spouseLastName){
+								  String spouseMiddleName, String spouseLastName, String custType){
 		String where = GpsSQLiteHelper.CL_MAINCUSTINFO_ID + " = " + id;
 		ContentValues newValues = new ContentValues();
 		newValues.put(GpsSQLiteHelper.CL_MAINCUSTINFO_FirstName, firstname );
@@ -805,6 +882,7 @@ public class GpsDB_Query {
 		newValues.put(GpsSQLiteHelper.CL_MAINCUSTINFO_S_MiddleName, spouseMiddleName );
 		newValues.put(GpsSQLiteHelper.CL_MAINCUSTINFO_S_LastName, spouseLastName );
 		newValues.put(GpsSQLiteHelper.CL_MAINCUSTINFO_S_BirthDay, spouseBirthday );
+		newValues.put(GpsSQLiteHelper.CL_MAINCUSTINFO_type, custType );
 
 		return 	db.update(GpsSQLiteHelper.TBLMAINCUSTOMERINFO, newValues, where, null);
 	}

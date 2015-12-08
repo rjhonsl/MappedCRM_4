@@ -332,7 +332,7 @@ public class Activity_FarmInfo_Edit extends Activity{
             if (intent.hasExtra("watertype")){watertype = intent.getStringExtra("watertype");}
             if (intent.hasExtra("isposted")){isposted = intent.getIntExtra("isposted", 3);}
 
-            Helper.toastShort(activity, isposted+"");
+//            Helper.toastShort(activity, isposted+"");
         }
     }
 

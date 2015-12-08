@@ -82,11 +82,12 @@
                       android:layout_height="wrap_content"
                       android:textSize="14sp"
                       android:textColor="@color/gray_600"
-                      android:text="Farm ID: " />
+                      android:text="Customer Code: " />
 
             <TextView android:layout_width="fill_parent"
                       android:layout_height="wrap_content"
-                      android:textSize="14sp"
+                      android:textSize="15sp"
+                      android:textStyle="bold"
                       android:id="@+id/txt_farmid"
                       android:textColor="@color/darkgreen_800"
                       android:text="FFF-0124" />
