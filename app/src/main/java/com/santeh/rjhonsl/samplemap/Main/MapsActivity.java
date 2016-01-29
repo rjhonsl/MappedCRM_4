@@ -151,7 +151,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         btn_cancelAddmarker = (ImageButton) findViewById(R.id.btnCloseAddMarker);
         nav_growout = (TextView) findViewById(R.id.txt_Nav_growOut);
         nav_logout = (TextView) findViewById(R.id.txt_Nav_logout);
-        txtViewTop = (TextView) findViewById(R.id.latLong);
+        txtViewTop = (TextView) findViewById(R.id.txtTopTextView);
         nav_usermonitoring = (TextView) findViewById(R.id.txt_Nav_UserMonitoring);
         txtusername = (TextView) findViewById(R.id.username);
 
@@ -194,13 +194,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                             Helper.map_addMarker(((Var) this.getApplication()).getGoogleMap(), latLng, R.drawable.ic_place_red_24dp,
                                     extras.getString("contactName"), extras.getString("address"), extras.getInt("id")+"",null, null);
-
                         PD.dismiss();
                         }
                         else{//google map not ready
                             Helper.toastShort(activity, "Can't find current location. Please try again later.");
                         }
-
                     }
                 }else{//if not from view Customer Info
                     showAllRelatedMarkers();
@@ -259,7 +257,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         d.hide();
                     }
                 });
-
                 btnSync.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -277,13 +274,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         initListeners(map);
         fusedLocation.connectToApiClient();
 
-
         params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
 
         layout.setOrientation(LinearLayout.VERTICAL);
         btn_cancelAddmarker.setVisibility(View.GONE);
-
 
         tvBottomPopUp.setBackgroundColor(ContextCompat.getColor(context, R.color.white_200));
         tvBottomPopUp.setText("Owner Location");
@@ -319,8 +314,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 //                            + " "+ splitted.length + " " + splitted[0] + " " + splitted[1] + " " + splitted[2] + " " + splitted[3] + " " + splitted[4] + " " + splitted[5] + " " + splitted[6] + " "
                             , "OK", R.color.blue);
                 }
-
-
             }
         });
 
@@ -347,8 +340,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         popUp.dismiss();
                     }
                 }
-
-
                 return false;
             }
         });
@@ -467,7 +458,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 closeDrawer();
 
                 String[] maptypes = {"Normal", "Satellite", "Terrain", "Hybrid"};
-                final Dialog dd = Helper.createCustomListDialog(activity, maptypes, "Map Types");
+                final Dialog dd = Helper.createCustomThemedListDialog(activity, maptypes, "Map Types", R.color.green_400);
                 ListView lstMapType = (ListView) dd.findViewById(R.id.dialog_list_listview);
                 dd.show();
 
@@ -1546,7 +1537,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
                     params.put("sql", db.getSQLStringForInsert_UNPOSTED_FARMINFO(activity) + "");
-
                     return params;
                 }
             };

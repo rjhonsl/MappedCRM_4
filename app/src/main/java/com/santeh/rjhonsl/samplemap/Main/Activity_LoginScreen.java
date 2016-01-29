@@ -138,7 +138,6 @@ public class Activity_LoginScreen extends Activity{
                         "update: " + versionCode + "    V." + versionName + db.getUser_Count()
         );
 
-
         txtshowpassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

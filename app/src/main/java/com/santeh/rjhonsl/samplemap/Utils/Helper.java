@@ -128,8 +128,9 @@ public class Helper {
         public static String URL_INSERT_POND_REPORT                     = sourceAddress_goDaddy + "insertPondReport.php";
         public static String URL_INSERT_MAIN_CUSTOMERINFO               = sourceAddress_goDaddy + "insertMainCustomerInfo.php";
         public static String URL_INSERT_FARM_INFO                       = sourceAddress_goDaddy + "insertFarmInformation.php";
-        public static String URL_PHP_RAW_QUERY_POST_INSERT = sourceAddress_goDaddy + "insertSyncFarmInfo.php";
-        public static String URL_PHP_RAW_QUERY_POST_SELECT = sourceAddress_goDaddy + "selectquery.php";
+        public static String URL_PHP_RAW_QUERY_POST_INSERT              = sourceAddress_goDaddy + "insertSyncFarmInfo.php";
+        public static String URL_PHP_RAW_QUERY_POST_SELECT              = sourceAddress_goDaddy + "selectquery.php";
+        public static String URL_PHP_RAW_QUERY_POST_SELECT_CUSTOMER     = sourceAddress_goDaddy + "selectQuery_customer.php";
 
         public static String URL_UPDATE_PONDINFO_BY_ID                  = sourceAddress_goDaddy + "updatePondInformationByID.php";
         public static String URL_UPDATE_CUSTOMERINFORMATION_BY_ID       = sourceAddress_goDaddy + "updateCustomerInformationByID.php";

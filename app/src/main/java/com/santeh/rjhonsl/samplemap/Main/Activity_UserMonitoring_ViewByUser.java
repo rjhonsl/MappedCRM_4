@@ -185,7 +185,6 @@ public class Activity_UserMonitoring_ViewByUser extends Activity {
                     return params;
                 }
             };
-
             // Adding request to request queue
             MyVolleyAPI api = new MyVolleyAPI();
             api.addToReqQueue(postRequest, context);

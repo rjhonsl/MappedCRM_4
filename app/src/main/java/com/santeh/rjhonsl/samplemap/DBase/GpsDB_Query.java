@@ -55,9 +55,7 @@ public class GpsDB_Query {
 	}
 
 	public long insertUserActivityData(int userid, String actiondone, String lat, String lng, String dateTime, String actionType){
-
 		ContentValues values = new ContentValues();
-//		values.put(GpsSQLiteHelper.CL_USER_ACTIVITY_ID, null);
 		values.put(GpsSQLiteHelper.CL_USER_ACTIVITY_USERID, userid);
 		values.put(GpsSQLiteHelper.CL_USER_ACTIVITY_ACTIONDONE, actiondone);
 		values.put(GpsSQLiteHelper.CL_USER_ACTIVITY_LAT, lat);
@@ -65,7 +63,6 @@ public class GpsDB_Query {
 		values.put(GpsSQLiteHelper.CL_USER_ACTIVITY_DATETIME, dateTime);
 		values.put(GpsSQLiteHelper.CL_USER_ACTIVITY_ACTIONTYPE, actionType);
 		values.put(GpsSQLiteHelper.CL_USER_ACTIVITY_isPosted, "0");
-
 		return  db.insert(GpsSQLiteHelper.TBLUSER_ACTIVITY, null, values);
 	}
 
@@ -148,6 +145,53 @@ public class GpsDB_Query {
 
 
 
+
+	public long insertMainCustomerInformation_RESTORE(int userid, String lname, String mname, String fname, String farmid, String housenumber, String street,
+											  String subdivision, String barangay, String city, String province, String birthday, String birthplace, String telephone,
+											  String cellphone, String civilstatus, String s_fname, String s_lname, String s_mname, String s_birthday, String housestat,
+											  String lat, String lng, String custtype, int mciID){
+		ContentValues values = new ContentValues();
+
+		int customerType = 0;
+		if (custtype.equalsIgnoreCase("distributor")){
+			customerType = 1;
+		}else{
+			customerType = 0;
+		}
+
+		values.put(GpsSQLiteHelper.CL_MAINCUSTINFO_AddedBy, userid);
+		values.put(GpsSQLiteHelper.CL_MAINCUSTINFO_LastName, lname);
+		values.put(GpsSQLiteHelper.CL_MAINCUSTINFO_FirstName, fname);
+		values.put(GpsSQLiteHelper.CL_MAINCUSTINFO_MiddleName, mname);
+		values.put(GpsSQLiteHelper.CL_MAINCUSTINFO_FarmId, farmid);
+		values.put(GpsSQLiteHelper.CL_MAINCUSTINFO_HouseNumber, housenumber);
+		values.put(GpsSQLiteHelper.CL_MAINCUSTINFO_Street, street);
+		values.put(GpsSQLiteHelper.CL_MAINCUSTINFO_Subdivision, subdivision);
+		values.put(GpsSQLiteHelper.CL_MAINCUSTINFO_Barangay, barangay);
+		values.put(GpsSQLiteHelper.CL_MAINCUSTINFO_City, city);
+		values.put(GpsSQLiteHelper.CL_MAINCUSTINFO_Province, province);
+		values.put(GpsSQLiteHelper.CL_MAINCUSTINFO_CBirthday, birthday);
+		values.put(GpsSQLiteHelper.CL_MAINCUSTINFO_CBirthPlace, birthplace);
+		values.put(GpsSQLiteHelper.CL_MAINCUSTINFO_Telephone, telephone);
+		values.put(GpsSQLiteHelper.CL_MAINCUSTINFO_Cellphone, cellphone);
+		values.put(GpsSQLiteHelper.CL_MAINCUSTINFO_CivilStatus, civilstatus);
+		values.put(GpsSQLiteHelper.CL_MAINCUSTINFO_S_FirstName, s_fname);
+		values.put(GpsSQLiteHelper.CL_MAINCUSTINFO_S_LastName, s_lname);
+		values.put(GpsSQLiteHelper.CL_MAINCUSTINFO_S_MiddleName, s_mname);
+		values.put(GpsSQLiteHelper.CL_MAINCUSTINFO_S_BirthDay, s_birthday);
+		values.put(GpsSQLiteHelper.CL_MAINCUSTINFO_HouseStatus, housestat);
+		values.put(GpsSQLiteHelper.CL_MAINCUSTINFO_DateAdded, Helper.getDateDBformat());
+		values.put(GpsSQLiteHelper.CL_MAINCUSTINFO_Latitude, lat);
+		values.put(GpsSQLiteHelper.CL_MAINCUSTINFO_Longitude, lng);
+		values.put(GpsSQLiteHelper.CL_MAINCUSTINFO_type, customerType);
+		values.put(GpsSQLiteHelper.CL_MAINCUSTINFO_isposted, 0);
+		values.put(GpsSQLiteHelper.CL_MAINCUSTINFO_ID, mciID);
+
+		return  db.insert(GpsSQLiteHelper.TBLMAINCUSTOMERINFO, null, values);
+	}
+
+
+
 	public long insertFarmInformation(String latitude, String longitude, String contactName, String company, String address,
 									  String farmname, String farmid, String contactnumber, String cultureType, String cultureLevel, String waterType, String dateAdded,
 									  String userID){
@@ -224,6 +268,7 @@ public class GpsDB_Query {
 		String[] params = new String[] {username, password, deviceid };
 		return db.rawQuery(query, params);
 	}
+
 
 	public String getSQLStringForInsert_UNPOSTED_FARMINFO(Activity activity) {
 		String sqlString = "" +

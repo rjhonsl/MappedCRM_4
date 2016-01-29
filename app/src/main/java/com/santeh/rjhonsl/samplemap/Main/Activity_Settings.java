@@ -91,7 +91,8 @@ public class Activity_Settings extends Activity{
         txtRestoreFromDB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startRestore();
+//                startRestore();
+                startRestore_customerInfo();
                 PD.setMessage("Restoring... ");
                 PD.show();
 
@@ -163,6 +164,86 @@ public class Activity_Settings extends Activity{
                 params.put("sql", query_farminfo + "");
 
                 Log.d("SQL_RESTORE", query_farminfo);
+
+//
+                return params;
+            }
+        };
+
+        MyVolleyAPI api = new MyVolleyAPI();
+        api.addToReqQueue(postRequest, this);
+    }
+
+
+    private void startRestore_customerInfo(){
+
+        final String query_customerInfo   = "SELECT * FROM `tblmaincustomerinfo` WHERE `tblmaincustomerinfo`.`mci_addedby` = "+Helper.variables.getGlobalVar_currentUserID(activity);
+        StringRequest postRequest = new StringRequest(Request.Method.POST, Helper.variables.URL_PHP_RAW_QUERY_POST_SELECT_CUSTOMER,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(final String response) {
+                        PD.dismiss();
+                        if (!response.substring(1, 2).equalsIgnoreCase("0")) {
+                            custInfoObjectList =  CustAndPondParser.parseFeed(response);
+                            if (custInfoObjectList != null) {
+                                if (custInfoObjectList.size() > 0) {
+
+
+                                    db.delete_ALL_ITEM_ON_TABLE(GpsSQLiteHelper.TBLMAINCUSTOMERINFO);
+                                    Log.d("RESTORE", "TABLE CLEARED");
+                                    for (int i = 0; i < custInfoObjectList.size() ; i++) {
+                                        db.insertMainCustomerInformation_RESTORE(
+                                                Helper.variables.getGlobalVar_currentUserID(activity),
+                                                custInfoObjectList.get(i).getLastname(),
+                                                custInfoObjectList.get(i).getMiddleName(),
+                                                custInfoObjectList.get(i).getFirstname(),
+                                                custInfoObjectList.get(i).getFarmID(),
+                                                custInfoObjectList.get(i).getHouseNumber()+"",
+                                                custInfoObjectList.get(i).getStreet(),
+                                                custInfoObjectList.get(i).getSubdivision(),
+                                                custInfoObjectList.get(i).getBarangay(),
+                                                custInfoObjectList.get(i).getCity(),
+                                                custInfoObjectList.get(i).getProvince(),
+                                                custInfoObjectList.get(i).getBirthday(),
+                                                custInfoObjectList.get(i).getBirthPlace(),
+                                                custInfoObjectList.get(i).getTelephone(),
+                                                custInfoObjectList.get(i).getCellphone(),
+                                                custInfoObjectList.get(i).getCivilStatus(),
+                                                custInfoObjectList.get(i).getSpouse_fname(),
+                                                custInfoObjectList.get(i).getSpouse_lname(),
+                                                custInfoObjectList.get(i).getSpouse_mname(),
+                                                custInfoObjectList.get(i).getSpouse_birthday(),
+                                                custInfoObjectList.get(i).getHouseStatus(),
+                                                custInfoObjectList.get(i).getCust_latitude(),
+                                                custInfoObjectList.get(i).getCust_longtitude(),
+                                                custInfoObjectList.get(i).getCustomerType(),
+                                                Integer.parseInt(custInfoObjectList.get(i).getMainCustomerId())
+                                        );
+                                    }
+                                    Helper.toastShort(activity, "Restore Successful.");
+                                }
+                            }
+                        } else {
+                            Log.d("RESTORE", "RESTORE failed - farminfo");
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        PD.dismiss();
+                        Helper.toastShort(activity, "RESTORE FAILED. Please try syncing again.");
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("username", Helper.variables.getGlobalVar_currentUserName(activity));
+                params.put("password", Helper.variables.getGlobalVar_currentUserPassword(activity));
+                params.put("deviceid", Helper.getMacAddress(context));
+                params.put("userid", Helper.variables.getGlobalVar_currentUserID(activity)+"");
+                params.put("userlvl", Helper.variables.getGlobalVar_currentLevel(activity)+"");
+                params.put("sql", query_customerInfo + "");
 
 //
                 return params;

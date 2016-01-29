@@ -273,7 +273,7 @@ public class Activity_Add_CustomerInformation_Summary extends FragmentActivity{
 //                                    startActivity(intent);
 //                                    finish(); // call this to finish the current activity
 //
-//                                    //ugygff
+//
 //                                }
 //                            });
 //

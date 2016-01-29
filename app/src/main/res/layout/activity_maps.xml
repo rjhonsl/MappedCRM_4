@@ -31,7 +31,7 @@
             android:layout_marginTop="14dp"
             android:layout_alignParentTop="true"
             android:padding="10dp"
-            android:id="@+id/latLong"
+            android:id="@+id/txtTopTextView"
             android:textSize="12sp"
             android:textColor="#FFFFFF"
             android:background="@drawable/bg_red_box_shadowed"
@@ -41,7 +41,7 @@
 
         <TextView
             android:layout_centerHorizontal="true"
-            android:layout_below="@id/latLong"
+            android:layout_below="@id/txtTopTextView"
             android:id="@+id/address"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
