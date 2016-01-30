@@ -1411,6 +1411,20 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         if(activeFilter==0){
             activeFilter = 0;
         }
+
+        if (Helper.nullcheck.isGlobalUserIDNull(activity)) {
+            Dialog d = Helper.createCustomThemedDialogOKOnly(activity, "Session Expired",
+                    "It seems that you have been inactive for too long. Please log in again, ", "OK", R.color.red);
+            d.setCancelable(false);
+            Button ok = (Button) d.findViewById(R.id.btn_dialog_okonly_OK);
+            ok.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Helper.activityChooser.startActivityClearStack(activity, Activity_LoginScreen.class);
+                }
+            });
+        }
+
     }
 
     @Override

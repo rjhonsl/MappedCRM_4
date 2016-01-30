@@ -142,7 +142,6 @@ public class Activity_LoginScreen extends Activity{
             @Override
             public void onClick(View v) {
 
-
                 if (chkshowpasword.isChecked()) {
                     chkshowpasword.setChecked(false);
                 } else {
