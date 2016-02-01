@@ -149,6 +149,7 @@ public class Activity_LoginScreen extends Activity{
                 }
 
                 toggle_showpassword();
+
             }
         });
 
@@ -318,17 +319,23 @@ public class Activity_LoginScreen extends Activity{
             txtprogressdialog_message.setText("Logging in...");
 
         }else{//if there was no network
+
             if ( db.getUser_Count()  <=  0 ) { //if user db was null
+                Log.d("DEBUG", "if current user count is less than 0");
                 //require user to connect to internet
                 if(!Helper.isNetworkAvailable(activity)) { Helper.toastShort(activity, "Internet connection is needed to start using the app."); }
                 else{
                     txtprogressdialog_message.setText("Preparing app please wait...");
-                    updatingUserDB(); }
+                    updatingUserDB();
+                }
+
             }else { //if there is an existing account in local db
+                Log.d("DEBUG", "if current user count greater than 0");
                 txtprogressdialog_message.setText("Logging in...");
                 PD.show();
                 Cursor cur =  db.getUserIdByLogin(txtusername.getText().toString(), txtpassword.getText().toString(), Helper.getMacAddress(context));
                 if (cur.getCount() > 0 ){
+                    Log.d("DEBUG", "if account is valid");
                     for (int i = 0; i < cur.getCount() ; i++) {
                         while (cur.moveToNext()) {
                             Helper.variables.setGlobalVar_currentlevel(cur.getInt(cur.getColumnIndex(GpsSQLiteHelper.CL_USERS_userlvl)), activity);
@@ -342,13 +349,15 @@ public class Activity_LoginScreen extends Activity{
                             Helper.variables.setGlobalVar_currentIsActive(cur.getInt(cur.getColumnIndex(GpsSQLiteHelper.CL_USERS_isactive)), activity);
                         }
 
-                        if (Helper.variables.getGlobalVar_currentisActive(activity) == 1){
+                        if (Helper.variables.getGlobalVar_currentisActive(activity) == 1) {
+
+                            Log.d("DEBUG", "if current user is active");
 
                             final Intent intent = new Intent(Activity_LoginScreen.this, MapsActivity.class);
                             intent.putExtra("userid", Helper.variables.getGlobalVar_currentUserID(activity));
                             intent.putExtra("userlevel", Helper.variables.getGlobalVar_currentLevel(activity));
                             intent.putExtra("username", Helper.variables.getGlobalVar_currentUserName(activity));
-                            intent.putExtra("firstname",Helper.variables.getGlobalVar_currentUserFirstname(activity));
+                            intent.putExtra("firstname", Helper.variables.getGlobalVar_currentUserFirstname(activity));
                             intent.putExtra("lastname", Helper.variables.getGlobalVar_currentUserLastname(activity));
                             intent.putExtra("userdescription", Helper.variables.getGlobalVar_currentAssignedArea(activity));
                             intent.putExtra("fromActivity", "login");
@@ -364,12 +373,14 @@ public class Activity_LoginScreen extends Activity{
                                 }
                             }, 800);
                         }else{
+                            Log.d("DEBUG", "if current user is not active");
+                            PD.hide();
                             Helper.toastShort(activity, "Wrong accout credentials please try again");
                         }
-
-
-
                     }
+                }else{
+                    PD.hide();
+                    Helper.toastShort(activity, "Wrong accout credentials please try again");
                 }
             }
 
