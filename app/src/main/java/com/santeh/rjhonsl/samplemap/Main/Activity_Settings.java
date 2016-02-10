@@ -31,7 +31,7 @@ import java.util.Map;
  */
 public class Activity_Settings extends Activity{
 
-    TextView txtTitle, txtSettings_custinfo, txtAbout, txtChangeLog, txtRestoreFromDB;
+    TextView txtTitle, txtSettings_custinfo, txtAbout, txtChangeLog, txtRestoreFromServer, txtRestoreLocal, txtBackupLocal;
     Context context; Activity activity;
 
     List<CustInfoObject> custInfoObjectList;
@@ -56,7 +56,9 @@ public class Activity_Settings extends Activity{
 
         txtTitle = (TextView) findViewById(R.id.txt_settings_title);
         txtAbout = (TextView) findViewById(R.id.txt_settings_about);
-        txtRestoreFromDB = (TextView) findViewById(R.id.txt_settings_restore);
+        txtRestoreLocal = (TextView) findViewById(R.id.txt_settings_restore_local);
+        txtBackupLocal = (TextView) findViewById(R.id.txt_settings_backup_local);
+        txtRestoreFromServer = (TextView) findViewById(R.id.txt_settings_restore);
         txtSettings_custinfo = (TextView) findViewById(R.id.txt_settings_farmInfo);
         txtChangeLog = (TextView) findViewById(R.id.txt_settings_changelog);
 
@@ -88,7 +90,22 @@ public class Activity_Settings extends Activity{
             }
         });
 
-        txtRestoreFromDB.setOnClickListener(new View.OnClickListener() {
+
+        txtBackupLocal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        txtRestoreLocal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        txtRestoreFromServer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 //                startRestore();

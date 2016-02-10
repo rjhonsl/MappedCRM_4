@@ -282,6 +282,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         tvBottomPopUp.setBackgroundColor(ContextCompat.getColor(context, R.color.white_200));
         tvBottomPopUp.setText("Owner Location");
+        tvBottomPopUp.setPadding(5, 5, 5, 5);
+
         layout.addView(tvBottomPopUp, params);
         layout.setBackgroundColor(ContextCompat.getColor(context, R.color.white_200));
         popUp.setContentView(layout);

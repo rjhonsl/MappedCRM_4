@@ -162,7 +162,7 @@ public class Activity_ManagePonds extends AppCompatActivity {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position1, long id1) {
                 String[] options = {"View and Edit Pond Details", "View Weekly Reports", "Delete Pond"};
-                final Dialog d = Helper.createCustomThemedListDialog(activity, options, "Systems", R.color.deepteal_500);
+                final Dialog d = Helper.createCustomThemedListDialog(activity, options, "Options", R.color.deepteal_500);
                 d.show();
 
                 ListView lv = (ListView) d.findViewById(R.id.dialog_list_listview);

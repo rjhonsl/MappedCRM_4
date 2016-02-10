@@ -123,12 +123,12 @@
                         <TextView
                             android:paddingLeft="5dp"
                             android:textColor="#004D40"
-                            android:text="Contact Name/OIC"
+                            android:text="Farm Manager/Contact"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
 
                         <EditText
-                            android:text="Juan Dela Cruz"
+                            android:text=""
                             android:paddingTop="5dp"
                             android:paddingLeft="5dp"
                             android:paddingRight="5dp"
@@ -227,7 +227,7 @@
                             android:paddingLeft="5dp"
                             android:paddingRight="5dp"
                             android:textSize="17sp"
-                            android:text="Balucluc, Pulilan, Bulacan"
+                            android:text=""
                             android:id="@+id/txt_markerdetails_address"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
@@ -267,7 +267,7 @@
                             android:paddingLeft="5dp"
                             android:paddingRight="5dp"
                             android:textSize="17sp"
-                            android:text="Juan Dela Cruz's Fish Farm"
+                            android:text=""
                             android:id="@+id/txt_markerdetails_farmname"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
@@ -296,7 +296,7 @@
                         <TextView
                             android:paddingLeft="5dp"
                             android:textColor="#004D40"
-                            android:text="Farm ID"
+                            android:text="Customer Code"
                             android:labelFor="@+id/txt_markerdetails_farmID"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
@@ -307,7 +307,7 @@
                             android:paddingLeft="5dp"
                             android:paddingRight="5dp"
                             android:textSize="17sp"
-                            android:text="FF0001"
+                            android:text=""
                             android:id="@+id/txt_markerdetails_farmID"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
@@ -343,7 +343,7 @@
 
                         <EditText
                             android:paddingTop="5dp"
-                            android:text="09159231467"
+                            android:text=""
                             android:textSize="17sp"
                             android:paddingBottom="5dp"
                             android:paddingLeft="5dp"
@@ -403,7 +403,7 @@
 
                         <EditText
                             android:paddingTop="5dp"
-                            android:text="Cage"
+                            android:text="Pond"
                             android:textSize="17sp"
                             android:paddingBottom="5dp"
                             android:paddingLeft="5dp"

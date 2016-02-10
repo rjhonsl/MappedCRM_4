@@ -87,7 +87,7 @@ public class Helper {
     public static class variables{
         public static String sourceAddress_bizNF                    = "http://santeh.co.nf/phpsql/";
         public static String sourceAddress_goDaddy                  = "http://santeh-webservice.com/php/android_json_post/";
-        public static String sourceAddress_bizNF_downloadable       = "http://santeh.co.nf/downloadable/";
+        public static String sourceAddress_goDaddy_downloadable     = "http://santeh.co.nf/downloadable/";
         public static String sourceAddress_downloadable_downloadable       = "http://santeh-webservice.com/downloadables/";
         public static String sourceAddress_000webhost               = "http://mysanteh.site50.net/santehweb/";
 

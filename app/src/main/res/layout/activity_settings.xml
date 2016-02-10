@@ -26,6 +26,7 @@
             android:layout_height="2dp"
             android:background="#328d90"/>
     </LinearLayout>
+
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
@@ -35,11 +36,12 @@
             android:orientation="vertical">
 
             <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/bg_white_box_curvebottom">
+                android:visibility="gone"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/bg_white_box_curvebottom">
 
             <TextView
                 android:textSize="13sp"
@@ -54,12 +56,14 @@
                 />
 
             <LinearLayout
+
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:orientation="vertical"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content">
                 <TextView
+                    android:visibility="gone"
                     android:padding="17dp"
                     android:textSize="18sp"
                     android:textColor="#a3002a24"
@@ -125,13 +129,13 @@
                     android:orientation="vertical"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content">
+
                     <TextView
-                        android:padding="17dp"
-                        android:textSize="18sp"
+                        android:padding="15dp"
+                        android:textSize="15sp"
                         android:textColor="#a3002a24"
                         android:textStyle="normal"
                         android:id="@+id/txt_settings_restore"
-                        android:background="@drawable/bg_white_box_noshadow"
                         android:drawableLeft="@drawable/ic_restore_darkteal_24dp"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
@@ -139,7 +143,33 @@
                         />
 
 
-                </LinearLayout> </LinearLayout>
+                    <TextView
+                        android:padding="15dp"
+                        android:textSize="15sp"
+                        android:textColor="#a3002a24"
+                        android:textStyle="normal"
+                        android:id="@+id/txt_settings_backup_local"
+                        android:drawableLeft="@drawable/ic_up_arrow_darkteal_24dp"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="    Backup (Local)"
+                        />
+
+                    <TextView
+                        android:padding="15dp"
+                        android:textSize="15sp"
+                        android:textColor="#a3002a24"
+                        android:textStyle="normal"
+                        android:id="@+id/txt_settings_restore_local"
+                        android:drawableLeft="@drawable/ic_down_arrow_darkteal_24dp"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="    Restore (Local)"
+                        />
+
+
+                </LinearLayout>
+            </LinearLayout>
 
 
             <LinearLayout
@@ -168,12 +198,11 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content">
                     <TextView
-                        android:padding="17dp"
-                        android:textSize="18sp"
+                        android:padding="15dp"
+                        android:textSize="15sp"
                         android:textColor="#a3002a24"
                         android:textStyle="normal"
                         android:id="@+id/txt_settings_changelog"
-                        android:background="@drawable/bg_white_box_noshadow"
                         android:drawableLeft="@drawable/ic_code_darkteal_24dp"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
@@ -181,12 +210,11 @@
                         />
 
                     <TextView
-                        android:padding="17dp"
-                        android:textSize="18sp"
+                        android:padding="15dp"
+                        android:textSize="15sp"
                         android:textColor="#a3002a24"
                         android:textStyle="normal"
                         android:id="@+id/txt_settings_about"
-                        android:background="@drawable/bg_white_box_noshadow"
                         android:drawableLeft="@drawable/ic_phone_android_darkteal_24dp"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"

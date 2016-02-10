@@ -296,8 +296,8 @@ public class Activity_LoginScreen extends Activity{
         txtusername.getBackground().setColorFilter(getResources().getColor(R.color.yellow), PorterDuff.Mode.SRC_IN);
         txtpassword.getBackground().setColorFilter(getResources().getColor(R.color.yellow), PorterDuff.Mode.SRC_IN);
 
-        txtusername.setText("tsr");
-        txtpassword.setText("tsr");
+        txtusername.setText("tsraqua");
+        txtpassword.setText("tsraqua");
 
     }
 
@@ -482,9 +482,12 @@ public class Activity_LoginScreen extends Activity{
     @Override
     protected void onResume() {
         super.onResume();
+
         Helper.isLocationAvailablePrompt(context, activity);
         fusedLocation.connectToApiClient();
         db.open();
+        checkVersionUpdates();
+
     }
 
     @Override
@@ -558,7 +561,7 @@ public class Activity_LoginScreen extends Activity{
 
                                     // execute this when the downloader must be fired
                                     final DownloadTask downloadTask = new DownloadTask(context);
-                                    downloadTask.execute(Helper.variables.sourceAddress_bizNF_downloadable+versionFile+".apk");
+                                    downloadTask.execute(Helper.variables.sourceAddress_goDaddy_downloadable +versionFile+".apk");
 
                                     mProgressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
                                         @Override

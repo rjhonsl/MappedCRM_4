@@ -44,7 +44,6 @@ import java.util.Map;
  */
 public class Activity_PondWeeklyConsumption extends Activity {
 
-
     Adapter_Growouts_PondWeekLyConsumption adapterPondWeeklyReport;
 
     String farmName;
