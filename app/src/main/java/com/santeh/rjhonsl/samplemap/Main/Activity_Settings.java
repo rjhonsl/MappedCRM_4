@@ -1,13 +1,18 @@
 package com.santeh.rjhonsl.samplemap.Main;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -20,8 +25,17 @@ import com.santeh.rjhonsl.samplemap.Obj.CustInfoObject;
 import com.santeh.rjhonsl.samplemap.Parsers.CustAndPondParser;
 import com.santeh.rjhonsl.samplemap.R;
 import com.santeh.rjhonsl.samplemap.Utils.Helper;
+import com.santeh.rjhonsl.samplemap.Utils.SimpleFileDialog;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -94,14 +108,14 @@ public class Activity_Settings extends Activity{
         txtBackupLocal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                backupLocal();
             }
         });
 
         txtRestoreLocal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                restoreLocal();
             }
         });
 
@@ -238,6 +252,7 @@ public class Activity_Settings extends Activity{
                                         );
                                     }
                                     Helper.toastShort(activity, "Restore Successful.");
+
                                 }
                             }
                         } else {
@@ -262,7 +277,6 @@ public class Activity_Settings extends Activity{
                 params.put("userlvl", Helper.variables.getGlobalVar_currentLevel(activity)+"");
                 params.put("sql", query_customerInfo + "");
 
-//
                 return params;
             }
         };
@@ -271,6 +285,157 @@ public class Activity_Settings extends Activity{
         api.addToReqQueue(postRequest, this);
     }
 
+
+
+    private void restoreLocal(){
+        final Dialog d = Helper.createCustomDialogThemedYesNO(activity,
+                "All data will be restored to the state of when the backup was done. All existing data after the date will not be restored.\n\nAre you sure you want to retore db? ",
+                "Restore", "NO", "YES", R.color.red_material_600);
+        Button btnyes = (Button) d.findViewById(R.id.btn_dialog_yesno_opt2);
+        Button btnno  = (Button) d.findViewById(R.id.btn_dialog_yesno_opt1);
+
+        btnno.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                d.hide();
+            }
+        });
+
+        btnyes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                d.hide();
+                if (Helper.random.checkSD(activity)) {
+                    /////////////////////////////////////////////////////////////////////////////////////////////////
+                    //Create FileOpenDialog and register a callback
+                    /////////////////////////////////////////////////////////////////////////////////////////////////
+                    SimpleFileDialog FileOpenDialog = new SimpleFileDialog(activity, ".db",
+                            new SimpleFileDialog.SimpleFileDialogListener() {
+                                String m_chosen;
+
+                                @Override
+                                public void onChosenDir(String chosenDir) {
+                                    // The code in this function will be executed when the dialog OK button is pushed
+                                    m_chosen = chosenDir;
+                                    try {
+                                        File sd = Environment.getExternalStorageDirectory();//gets external Directory/address
+                                        if (sd.canWrite()) {
+                                            String backupDBPath = "/data/data/com.santeh.rjhonsl.samplemap/databases/local.db";//database internal storage path
+                                            File currentDB = new File(backupDBPath);
+                                            File backupDB = new File(m_chosen);
+
+                                            if (currentDB.exists()) {
+                                                FileChannel src = new FileInputStream(backupDB).getChannel();
+                                                FileChannel dst = new FileOutputStream(currentDB).getChannel();
+                                                dst.transferFrom(src, 0, src.size());
+                                                src.close();
+                                                dst.close();
+                                                Toast.makeText(getApplicationContext(), "Restore was successful", Toast.LENGTH_LONG).show();
+                                                Intent i = getBaseContext().getPackageManager()
+                                                        .getLaunchIntentForPackage(getBaseContext().getPackageName());
+                                                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                                startActivity(i);
+                                            }
+                                        }
+                                    } catch (Exception e) {
+                                        Helper.toastLong(activity, "Failed to Restore: " + String.valueOf(e));
+                                    }
+
+                                }
+                            });
+
+                    //You can change the default filename using the public variable "Default_File_Name"
+                    FileOpenDialog.Default_File_Name = "";
+                    FileOpenDialog.chooseFile_or_Dir();
+                    /////////////////////////////////////////////////////////////////////////////////////////////////
+                } else {
+                    Helper.toastLong(activity, "External storage not available");
+                }
+            }
+        });
+
+    }
+
+    private void backupLocal(){
+        final Dialog d = Helper.createCustomDialogThemedYesNO(activity,
+                "Create local backup? ",
+                "Backup", "NO", "YES", R.color.red_material_600);
+        Button btnyes = (Button) d.findViewById(R.id.btn_dialog_yesno_opt2);
+        Button btnno  = (Button) d.findViewById(R.id.btn_dialog_yesno_opt1);
+
+        btnno.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                d.hide();
+            }
+        });
+
+        btnyes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                d.hide();
+
+                if(Helper.random.checkSD(activity)){
+                    final String inFileName = "/data/data/com.santeh.rjhonsl.samplemap/databases/local.db";//current database to be exported
+                    File dbFile = new File(inFileName);
+                    FileInputStream fis = null;
+                    try {
+                        fis = new FileInputStream(dbFile);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+
+                    //gets time for naming sequence
+                    Date d = new Date();
+                    CharSequence s  = DateFormat.format("MMM-dd-yyyy hhmmAA", d.getTime());
+                    String curDate = String.valueOf(s);
+
+                    String outFileName = Environment.getExternalStorageDirectory()+"/.aq/local/" + curDate+".db";//output file name
+
+                    // Open the empty db as the output stream
+                    OutputStream output = null;
+                    try {
+                        output = new FileOutputStream(outFileName);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+
+                    // Transfer bytes from the inputfile to the outputfile
+                    byte[] buffer = new byte[1024];
+                    int length;
+                    try {
+                        while ((length = fis.read(buffer))>0){
+                            output.write(buffer, 0, length);
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    // Close the streams
+                    try {
+                        output.flush();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        output.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        fis.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    Helper.toastLong(activity, "Back up Successfull: \n" + curDate);
+                }
+                else{
+                    Helper.toastLong(activity, "External Storage not available!");
+                }
+
+            }
+        });
+    }
 
 
     @Override

@@ -345,6 +345,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 return false;
             }
         });
+
         if (Helper.variables.getGlobalVar_currentLevel(activity) > 1){
             nav_usermonitoring.setVisibility(View.GONE);
         }else{
@@ -362,9 +363,19 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                 if (checkIfLocationAvailable()) {
 
-                    moveCameraAnimate(map, fusedLocation.getLastKnowLocation(), 8);
-                    insertloginlocation();
-                    initMarkers();
+                    if (fusedLocation.getLastKnowLocation().latitude == 0 && fusedLocation.getLastKnowLocation().longitude == 0.0) {
+
+                        LatLng latLng = new LatLng(14.651347, 121.029381); //santeh feeds west office.
+                        moveCameraAnimate(map, latLng, 9);
+                        insertloginlocation();
+                        initMarkers();
+                    }else{
+                        moveCameraAnimate(map, fusedLocation.getLastKnowLocation(), 8);
+                        insertloginlocation();
+                        initMarkers();
+                    }
+
+
                 } else {
                     PD.hide();
                     curlat = 11.867145;
@@ -500,93 +511,105 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 if (Helper.isLocationEnabled(context)) {
 
                     fusedLocation.connectToApiClient();
-                    final Handler handler = new Handler();
-                    final Handler handler1 = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            curLatlng = fusedLocation.getLastKnowLocation();
-
-                            moveCameraAnimate(map, new LatLng(curLatlng.latitude, curLatlng.longitude), 17);
-                            handler1.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (mapcircle == null || !mapcircle.isVisible()) {
-                                        circleOptions_addLocation = Helper.addCircle(activity, curLatlng, 1, R.color.skyblue_20,
-                                                R.color.skyblue_20, 1000);
-                                        mapcircle = maps.addCircle(circleOptions_addLocation);
-                                    }
-                                    btn_cancelAddmarker.setVisibility(View.VISIBLE);
-                                    Helper.createCustomThemedDialogOKOnly(activity, "Add Marker", "Long press any location within 1000 meters of your current location to Add a Marker.", "OK", R.color.blue);
-                                }
-                            }, 1200);
-
-                        }
-                    }, 280);
 
 
-                    if (btn_add_marker.isEnabled()) {
-                        btn_add_marker.setEnabled(false);
-                    }
+                    if (fusedLocation.getLastKnowLocation().latitude == 0 && fusedLocation.getLastKnowLocation().longitude == 0.0) {
 
+                        LatLng latLng = new LatLng(14.651347, 121.029381); //santeh feeds west office.
+                        moveCameraAnimate(map, latLng, 9);
+                        Helper.toastShort(activity, "Current location is not available. Please try again later.");
+                    } else {
 
-                    maps.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
-                        @Override
-                        public void onMapLongClick(LatLng latLng) {
+                        final Handler handler = new Handler();
+                        final Handler handler1 = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                curLatlng = fusedLocation.getLastKnowLocation();
 
-                            final LatLng touchLocation = latLng;
-                            LatLng center = fusedLocation.getLastKnowLocation();
-
-                            float[] results = new float[1];
-                            Location.distanceBetween(center.latitude, center.longitude,
-                                    touchLocation.latitude, touchLocation.longitude, results);
-//                        Helper.toastLong(activity, results[0]+"");
-
-                            if (results[0] > 1000) {
-                                final Dialog d = Helper.createCustomThemedDialogOKOnly(activity, "Out of range", "Selection is out of 1km range from your location", "OK", R.color.red);
-                                d.show();
-
-                                Button ok = (Button) d.findViewById(R.id.btn_dialog_okonly_OK);
-                                ok.setOnClickListener(new View.OnClickListener() {
+                                moveCameraAnimate(map, new LatLng(curLatlng.latitude, curLatlng.longitude), 17);
+                                handler1.postDelayed(new Runnable() {
                                     @Override
-                                    public void onClick(View v) {
-                                        d.hide();
-                                    }
-                                });
-                            } else {
-
-                                String[] options = {"Farm Information", "Customer Information"};
-                                final Dialog d1 = Helper.createCustomThemedListDialogWithPrompt(activity, options, "Add Marker",
-                                        "Select the type of marker you want to add on this location.", R.color.blue);
-                                ListView lvoptions = (ListView) d1.findViewById(R.id.dialog_list_listview);
-                                lvoptions.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                    @Override
-                                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                        if (position == 0) {
-                                            cancelMarkerAdding();
-                                            d1.hide();
-                                            final Intent intent = new Intent(MapsActivity.this, Activity_Add_FarmInformation.class);
-                                            intent.putExtra("latitude", touchLocation.latitude);
-                                            intent.putExtra("longtitude", touchLocation.longitude);
-                                            startActivity(intent);
-                                            overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                                    public void run() {
+                                        if (mapcircle == null || !mapcircle.isVisible()) {
+                                            circleOptions_addLocation = Helper.addCircle(activity, curLatlng, 1, R.color.skyblue_20,
+                                                    R.color.skyblue_20, 1000);
+                                            mapcircle = maps.addCircle(circleOptions_addLocation);
                                         }
-
-                                        if (position == 1) {
-                                            d1.hide();
-                                            cancelMarkerAdding();
-                                            final Intent intent = new Intent(MapsActivity.this, Activity_Add_CustomerInformation_Basic.class);
-                                            intent.putExtra("latitude", touchLocation.latitude);
-                                            intent.putExtra("longtitude", touchLocation.longitude);
-                                            startActivity(intent);
-                                            overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
-                                        }
+                                        btn_cancelAddmarker.setVisibility(View.VISIBLE);
+                                        Helper.createCustomThemedDialogOKOnly(activity, "Add Marker", "Long press any location within 1000 meters of your current location to Add a Marker.", "OK", R.color.blue);
                                     }
-                                });
+                                }, 1200);
 
                             }
+                        }, 280);
+
+
+                        if (btn_add_marker.isEnabled()) {
+                            btn_add_marker.setEnabled(false);
                         }
-                    });
+
+
+                        maps.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+                            @Override
+                            public void onMapLongClick(LatLng latLng) {
+
+                                final LatLng touchLocation = latLng;
+                                LatLng center = fusedLocation.getLastKnowLocation();
+
+                                float[] results = new float[1];
+                                Location.distanceBetween(center.latitude, center.longitude,
+                                        touchLocation.latitude, touchLocation.longitude, results);
+//                        Helper.toastLong(activity, results[0]+"");
+
+                                if (results[0] > 1000) {
+                                    final Dialog d = Helper.createCustomThemedDialogOKOnly(activity, "Out of range", "Selection is out of 1km range from your location", "OK", R.color.red);
+                                    d.show();
+
+                                    Button ok = (Button) d.findViewById(R.id.btn_dialog_okonly_OK);
+                                    ok.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            d.hide();
+                                        }
+                                    });
+                                } else {
+
+                                    String[] options = {"Farm Information", "Customer Information"};
+                                    final Dialog d1 = Helper.createCustomThemedListDialogWithPrompt(activity, options, "Add Marker",
+                                            "Select the type of marker you want to add on this location.", R.color.blue);
+                                    ListView lvoptions = (ListView) d1.findViewById(R.id.dialog_list_listview);
+                                    lvoptions.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                        @Override
+                                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                            if (position == 0) {
+                                                cancelMarkerAdding();
+                                                d1.hide();
+                                                final Intent intent = new Intent(MapsActivity.this, Activity_Add_FarmInformation.class);
+                                                intent.putExtra("latitude", touchLocation.latitude);
+                                                intent.putExtra("longtitude", touchLocation.longitude);
+                                                startActivity(intent);
+                                                overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                                            }
+
+                                            if (position == 1) {
+                                                d1.hide();
+                                                cancelMarkerAdding();
+                                                final Intent intent = new Intent(MapsActivity.this, Activity_Add_CustomerInformation_Basic.class);
+                                                intent.putExtra("latitude", touchLocation.latitude);
+                                                intent.putExtra("longtitude", touchLocation.longitude);
+                                                startActivity(intent);
+                                                overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                                            }
+                                        }
+                                    });
+
+                                }
+                            }
+                        });
+
+                    }
+
 
                 } else {
                     Helper.isLocationAvailablePrompt(context, activity);

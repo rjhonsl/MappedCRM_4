@@ -1336,6 +1336,45 @@ public class Helper {
     }
 
 
+    public static class random {
+
+        public static Dialog initProgressDialog(Activity activity){
+            Dialog PD = new Dialog(activity);
+            PD.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            PD.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+            PD.setCancelable(false);
+            PD.setContentView(R.layout.progressdialog);
+            return  PD;
+        }
+
+        public static String trimFirstAndLast(String string){
+            String trimmed = "";
+
+            trimmed = string.substring(1,string.length() );
+            return  trimmed = trimmed.substring(0, trimmed.length() - 1);
+        }
+
+        public static String[] splitter(String splitter, String strToSplit){
+            return strToSplit.split(splitter);
+        }
+
+
+        public static boolean checkSD(Activity activity) {
+            Boolean isSDPresent = android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED);
+            if(isSDPresent) {
+                Log.d("CheckExternalStorage", "External available");
+            }
+            else
+            {
+                Log.d("CheckExternalStorage", "External NOT available");
+            }
+            return isSDPresent;
+        }
+
+
+    }
+
+
 
 
 }//end of class

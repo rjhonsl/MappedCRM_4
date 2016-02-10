@@ -16,6 +16,7 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.text.method.PasswordTransformationMethod;
@@ -487,6 +488,26 @@ public class Activity_LoginScreen extends Activity{
         fusedLocation.connectToApiClient();
         db.open();
         checkVersionUpdates();
+
+        //creates new folder
+        File folder = new File(Environment.getExternalStorageDirectory() + "/.aq/local");
+        boolean success = true;
+        boolean check = Helper.random.checkSD(activity);
+        if (check) {
+            if (!folder.exists()) {
+                success = folder.mkdirs();
+            }
+            else
+            {
+                Log.d("mkDirs", "exist");
+            }
+
+            if (success) {
+                Log.d("mkDirs", "SUCCESS");
+            } else {
+                Log.d("mkDirs", "FAIL");
+            }
+        }
 
     }
 
