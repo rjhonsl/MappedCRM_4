@@ -289,6 +289,14 @@ public class CustAndPondParser {
 				}
 
 
+				try {
+					if (obj.has("p_lid"))
+						custInfoObject.setPondLocalIndex(obj.getString("p_lid"));
+				}catch (Exception e){
+					custInfoObject.setPondLocalIndex("n/a");
+				}
+
+
 				//CUSTOMER ADDRESS INFO
 				if (obj.has("mci_id")){
 					if (!obj.isNull("mci_id")){
@@ -424,6 +432,13 @@ public class CustAndPondParser {
 				if (obj.has("mci_type")){
 					if (!obj.isNull("mci_type")) {
 						custInfoObject.setCustomerType(obj.getString("mci_type"));
+					}
+				}
+
+
+				if (obj.has("mci_lid")){
+					if (!obj.isNull("mci_lid")) {
+						custInfoObject.setMainCustomer_localid(obj.getString("mci_lid"));
 					}
 				}
 

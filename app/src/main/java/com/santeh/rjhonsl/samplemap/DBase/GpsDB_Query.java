@@ -184,10 +184,30 @@ public class GpsDB_Query {
 		values.put(GpsSQLiteHelper.CL_MAINCUSTINFO_Latitude, lat);
 		values.put(GpsSQLiteHelper.CL_MAINCUSTINFO_Longitude, lng);
 		values.put(GpsSQLiteHelper.CL_MAINCUSTINFO_type, customerType);
-		values.put(GpsSQLiteHelper.CL_MAINCUSTINFO_isposted, 0);
+		values.put(GpsSQLiteHelper.CL_MAINCUSTINFO_isposted, 1);
 		values.put(GpsSQLiteHelper.CL_MAINCUSTINFO_ID, mciID);
 
 		return  db.insert(GpsSQLiteHelper.TBLMAINCUSTOMERINFO, null, values);
+	}
+
+
+	public long insertPondData_RESTORE(String localid, String pondid, String specie, String sizeofStock, String survivalRate, String dateStocked, String quantity, String area, String culturesystem, String remarks, String customerid) {
+
+		ContentValues values = new ContentValues();
+		values.put(GpsSQLiteHelper.CL_POND_INDEX, localid );
+		values.put(GpsSQLiteHelper.CL_POND_PID, pondid);
+		values.put(GpsSQLiteHelper.CL_POND_specie, specie);
+		values.put(GpsSQLiteHelper.CL_POND_sizeofStock, sizeofStock);
+		values.put(GpsSQLiteHelper.CL_POND_survivalrate, survivalRate);
+		values.put(GpsSQLiteHelper.CL_POND_dateStocked, dateStocked);
+		values.put(GpsSQLiteHelper.CL_POND_quantity, quantity);
+		values.put(GpsSQLiteHelper.CL_POND_area, area);
+		values.put(GpsSQLiteHelper.CL_POND_culturesystem, culturesystem);
+		values.put(GpsSQLiteHelper.CL_POND_remarks, remarks);
+		values.put(GpsSQLiteHelper.CL_POND_customerId, customerid);
+		values.put(GpsSQLiteHelper.CL_POND_isPosted, 1);
+
+		return db.insert(GpsSQLiteHelper.TBLPOND, null, values);
 	}
 
 
@@ -215,6 +235,7 @@ public class GpsDB_Query {
 
 		return  db.insert(GpsSQLiteHelper.TBLFARMiNFO, null, values);
 	}
+
 
 	public long insertFarmInformation_RESTORE(String latitude, String longitude, String contactName, String company, String address,
 									  String farmname, String farmid, String contactnumber, String cultureType, String cultureLevel, String waterType, String dateAdded,

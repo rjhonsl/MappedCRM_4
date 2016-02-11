@@ -122,14 +122,18 @@ public class Activity_Settings extends Activity{
         txtRestoreFromServer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                startRestore();
+
+                startRestore();
                 startRestore_customerInfo();
+                startRestore_pondInfo();
+
                 PD.setMessage("Restoring... ");
                 PD.show();
 
 //                String query_custinfo = "SELECT * FROM `tblmaincustomerinfo` where mci_addedby = 9";
 //                String query_pondInfo = "SELECT * FROM `tblPond` WHERE tblPond.customerId = '9-1' OR XX = XX";
 //                String query_weekly = "SELECT * FROM `tblpond_weeklyupdates` WHERE wu_pondid = '9-12' OR XX = XX";
+
             }
         });
     }
@@ -219,7 +223,6 @@ public class Activity_Settings extends Activity{
                             if (custInfoObjectList != null) {
                                 if (custInfoObjectList.size() > 0) {
 
-
                                     db.delete_ALL_ITEM_ON_TABLE(GpsSQLiteHelper.TBLMAINCUSTOMERINFO);
                                     Log.d("RESTORE", "TABLE CLEARED");
                                     for (int i = 0; i < custInfoObjectList.size() ; i++) {
@@ -248,7 +251,7 @@ public class Activity_Settings extends Activity{
                                                 custInfoObjectList.get(i).getCust_latitude(),
                                                 custInfoObjectList.get(i).getCust_longtitude(),
                                                 custInfoObjectList.get(i).getCustomerType(),
-                                                Integer.parseInt(custInfoObjectList.get(i).getMainCustomerId())
+                                                Integer.parseInt(custInfoObjectList.get(i).getMainCustomer_localid())
                                         );
                                     }
                                     Helper.toastShort(activity, "Restore Successful.");
@@ -256,7 +259,8 @@ public class Activity_Settings extends Activity{
                                 }
                             }
                         } else {
-                            Log.d("RESTORE", "RESTORE failed - farminfo");
+                            Helper.toastShort(activity, "RESTORE FAILED. Nothing to restore.");
+                            Log.d("RESTORE", "RESTORE failed - farminfo: " + response);
                         }
                     }
                 },
@@ -287,9 +291,85 @@ public class Activity_Settings extends Activity{
 
 
 
+
+    private void startRestore_pondInfo(){
+
+        final String query_PondsOfCustomer   =
+                "SELECT * FROM `tblPond` " +
+                "WHERE customerId IN " +
+                "(SELECT `tblCustomerInfo`.`ci_customerId` FROM tblCustomerInfo WHERE `tblCustomerInfo`.`addedby` = "+Helper.variables.getGlobalVar_currentUserID(activity)+" ) = ";
+
+        StringRequest postRequest = new StringRequest(Request.Method.POST, Helper.variables.URL_PHP_RAW_QUERY_POST_SELECT_CUSTOMER,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(final String response) {
+                        PD.dismiss();
+                        if (!response.substring(1, 2).equalsIgnoreCase("0")) {
+                            custInfoObjectList =  CustAndPondParser.parseFeed(response);
+                            if (custInfoObjectList != null) {
+                                if (custInfoObjectList.size() > 0) {
+
+                                    db.delete_ALL_ITEM_ON_TABLE(GpsSQLiteHelper.TBLPOND);
+
+                                    Log.d("RESTORE", "TABLE CLEARED - pond info");
+
+                                    for (int i = 0; i < custInfoObjectList.size() ; i++) {
+
+                                        Log.d("ERROR CHECK", "" + custInfoObjectList.get(i).getCustomerID());
+                                        db.insertPondData_RESTORE(
+                                                custInfoObjectList.get(i).getPondLocalIndex(),
+                                                custInfoObjectList.get(i).getPondID() + "",
+                                                custInfoObjectList.get(i).getSpecie(),
+                                                custInfoObjectList.get(i).getSizeofStock() + "",
+                                                custInfoObjectList.get(i).getSurvivalrate_per_pond(),
+                                                custInfoObjectList.get(i).getDateStocked(),
+                                                custInfoObjectList.get(i).getQuantity() + "",
+                                                custInfoObjectList.get(i).getArea() + "",
+                                                custInfoObjectList.get(i).getCulturesystem(),
+                                                custInfoObjectList.get(i).getRemarks(),
+                                                Helper.splitter(custInfoObjectList.get(i).getCustomerID(), "-")[1]
+                                        );
+                                    }
+                                    Helper.toastShort(activity, "Restore Successful.");
+
+                                }
+                            }
+                        } else {
+                            Helper.toastShort(activity, "RESTORE FAILED. Nothing to restore.");
+                            Log.d("RESTORE", "RESTORE failed - pondinfo: " + response);
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        PD.dismiss();
+                        Helper.toastShort(activity, "RESTORE FAILED. Please try syncing again. pondinfo");
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("username", Helper.variables.getGlobalVar_currentUserName(activity));
+                params.put("password", Helper.variables.getGlobalVar_currentUserPassword(activity));
+                params.put("deviceid", Helper.getMacAddress(context));
+                params.put("userid", Helper.variables.getGlobalVar_currentUserID(activity)+"");
+                params.put("userlvl", Helper.variables.getGlobalVar_currentLevel(activity)+"");
+                params.put("sql", query_PondsOfCustomer + "");
+
+                return params;
+            }
+        };
+
+        MyVolleyAPI api = new MyVolleyAPI();
+        api.addToReqQueue(postRequest, this);
+    }
+
+
     private void restoreLocal(){
         final Dialog d = Helper.createCustomDialogThemedYesNO(activity,
-                "All data will be restored to the state of when the backup was done. All existing data after the date will not be restored.\n\nAre you sure you want to retore db? ",
+                "All data will be restored to the state of when the backup was done. All existing data after the date will not be restored." +
+                        "\n\nAre you sure you want to retore db? ",
                 "Restore", "NO", "YES", R.color.red_material_600);
         Button btnyes = (Button) d.findViewById(R.id.btn_dialog_yesno_opt2);
         Button btnno  = (Button) d.findViewById(R.id.btn_dialog_yesno_opt1);

@@ -59,6 +59,7 @@ public class CustInfoObject {
 	private int sizeofStock;
 	private int totalStockOfFarm;
     private int pondIndex;
+    private String pondLocalIndex;
 	private int currentweekofStock;
 	private int startweekofStock;
 	private int week;
@@ -75,6 +76,7 @@ public class CustInfoObject {
 
 	private String customerID;
 	private String mainCustomerId;
+	private String mainCustomer_localid;
 	private String specie;
 	private String culturesystem;
 	private String dateStocked;
@@ -832,5 +834,21 @@ public class CustInfoObject {
 
 	public void setCustomerType(String customerType) {
 		this.customerType = customerType;
+	}
+
+	public String getMainCustomer_localid() {
+		return mainCustomer_localid;
+	}
+
+	public void setMainCustomer_localid(String mainCustomer_localid) {
+		this.mainCustomer_localid = mainCustomer_localid;
+	}
+
+	public String getPondLocalIndex() {
+		return pondLocalIndex;
+	}
+
+	public void setPondLocalIndex(String pondLocalIndex) {
+		this.pondLocalIndex = pondLocalIndex;
 	}
 }

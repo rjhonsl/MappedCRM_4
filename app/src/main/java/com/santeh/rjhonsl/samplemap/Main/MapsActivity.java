@@ -221,27 +221,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         map.setMapType(GoogleMap.MAP_TYPE_HYBRID);
         maps = map;
 
-        if(Helper.variables.getGlobalVar_currentLevel(activity) == 4){
-            int farmIsPostedCount =  db.getFarmInfo_notPosted_Count(activity),
-                    custPostedCount = db.getCustInfo_notPosted_Count(activity),
-                    pondPostedCount = db.getPond_notPosted_Count(activity),
-                    weeklyPostedCount = db.getWeeklyPosted_notPosted_Count(activity),
-                    sum = farmIsPostedCount + custPostedCount + pondPostedCount + weeklyPostedCount;
-            if (farmIsPostedCount > 0  || custPostedCount > 0 || pondPostedCount > 0  || weeklyPostedCount > 0 ){
-                txtViewTop.setText("You have (" + sum + ") unsynced data!");
-                txtViewTop.setVisibility(View.VISIBLE);
-                Animation anim = new AlphaAnimation(0.7f, 1.0f);
-                anim.setDuration(800); //You can manage the blinking time with this parameter
-                anim.setStartOffset(20);
-                anim.setRepeatMode(Animation.REVERSE);
-                anim.setRepeatCount(Animation.INFINITE);
-                txtViewTop.startAnimation(anim);
-            }else{
-                txtViewTop.setVisibility(View.GONE);
-            }
-        }else{
-            txtViewTop.setVisibility(View.GONE);
-        }
+        getunsynchedData();
 
         txtViewTop.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -390,7 +370,29 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }, 500);
     }
 
-
+    private void getunsynchedData() {
+        if(Helper.variables.getGlobalVar_currentLevel(activity) == 4){
+            int farmIsPostedCount =  db.getFarmInfo_notPosted_Count(activity),
+                    custPostedCount = db.getCustInfo_notPosted_Count(activity),
+                    pondPostedCount = db.getPond_notPosted_Count(activity),
+                    weeklyPostedCount = db.getWeeklyPosted_notPosted_Count(activity),
+                    sum = farmIsPostedCount + custPostedCount + pondPostedCount + weeklyPostedCount;
+            if (farmIsPostedCount > 0  || custPostedCount > 0 || pondPostedCount > 0  || weeklyPostedCount > 0 ){
+                txtViewTop.setText("You have (" + sum + ") unsynced data!");
+                txtViewTop.setVisibility(View.VISIBLE);
+                Animation anim = new AlphaAnimation(0.7f, 1.0f);
+                anim.setDuration(800); //You can manage the blinking time with this parameter
+                anim.setStartOffset(20);
+                anim.setRepeatMode(Animation.REVERSE);
+                anim.setRepeatCount(Animation.INFINITE);
+                txtViewTop.startAnimation(anim);
+            }else{
+                txtViewTop.setVisibility(View.GONE);
+            }
+        }else{
+            txtViewTop.setVisibility(View.GONE);
+        }
+    }
 
 
     private void initListeners(final GoogleMap map) {
@@ -1454,6 +1456,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             });
         }
 
+        getunsynchedData();
+
     }
 
     @Override
@@ -1590,6 +1594,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             startSynchingDB_CUSTINFO();
         }
 
+
     }
 
 
@@ -1633,6 +1638,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             MyVolleyAPI api = new MyVolleyAPI();
             api.addToReqQueue(postRequest, context);
+
         }else {
             startSynchingDB_PondInfo();
         }

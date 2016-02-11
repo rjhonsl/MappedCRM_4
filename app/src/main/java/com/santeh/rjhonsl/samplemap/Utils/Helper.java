@@ -1285,6 +1285,10 @@ public class Helper {
         return splitted[1].substring(0,1);
     }
 
+    public static String[] splitter(String string, String splitter) {
+        return  string.split(splitter);
+    }
+
     public static String getStringResource(Activity activity, int resID) {
         return activity.getResources().getString(resID);
     }
