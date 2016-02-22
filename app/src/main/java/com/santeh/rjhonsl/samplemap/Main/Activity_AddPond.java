@@ -62,7 +62,7 @@ public class Activity_AddPond extends FragmentActivity  implements DatePickerDia
         db = new GpsDB_Query(this);
         db.open();
 
-       userlvl =  Helper.variables.getGlobalVar_currentLevel(activity);
+        userlvl =  Helper.variables.getGlobalVar_currentLevel(activity);
 
         passedintentt =  getIntent();
         if (passedintentt != null) {
@@ -180,6 +180,7 @@ public class Activity_AddPond extends FragmentActivity  implements DatePickerDia
                             }else if (edtArea.getText().toString().equalsIgnoreCase("")) {
                                 edtArea.requestFocus();
                             }
+
                         }
 
                     });

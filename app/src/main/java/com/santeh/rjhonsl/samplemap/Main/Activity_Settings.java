@@ -330,6 +330,8 @@ public class Activity_Settings extends Activity{
                                                 Helper.splitter(custInfoObjectList.get(i).getCustomerID(), "-")[1]
                                         );
                                     }
+
+
                                     Helper.toastShort(activity, "Restore Successful.");
 
                                 }

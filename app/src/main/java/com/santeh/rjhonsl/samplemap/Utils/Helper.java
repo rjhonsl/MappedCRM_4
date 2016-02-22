@@ -146,7 +146,7 @@ public class Helper {
 //                "Pangasius",//5
 //                "Pompano",  //6
 //                "Prawns",   //7
-//                "Rabbit Fish",//8
+                "Rabbit Fish",//8
 //                "Seabass",  //9
 //                "Snapper",  //10
                 "Tilapia",  //12
