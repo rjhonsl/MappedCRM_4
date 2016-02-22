@@ -442,6 +442,66 @@ public class CustAndPondParser {
 					}
 				}
 
+
+
+
+				/** WEEKLY UPDATES*/
+				if (obj.has("wu_dateAdded")){
+					if (!obj.isNull("wu_dateAdded")) {
+						custInfoObject.setW_update_dateAdded(obj.getString("wu_dateAdded"));
+					}else{
+						custInfoObject.setW_update_dateAdded(obj.getString("null"));
+					}
+				}
+				if (obj.has("wu_lid")){
+					if (!obj.isNull("wu_lid")) {
+						custInfoObject.setW_update_localid(obj.getString("wu_lid"));
+					}else{
+						custInfoObject.setW_update_localid(obj.getString("null"));
+					}
+				}
+
+				if (obj.has("wu_pondid")){
+					if (!obj.isNull("wu_pondid")) {
+						custInfoObject.setW_update_pondid(obj.getString("wu_pondid"));
+					}else{
+						custInfoObject.setW_update_pondid(obj.getString("null"));
+					}
+				}
+
+				if (obj.has("wu_id")){
+					if (!obj.isNull("wu_id")) {
+						custInfoObject.setW_update_id(obj.getString("wu_id"));
+					}else{
+						custInfoObject.setW_update_id(obj.getString("null"));
+					}
+				}
+
+				if (obj.has("wu_currentabw")){
+					if (!obj.isNull("wu_currentabw")) {
+						custInfoObject.setW_update_currentabw(obj.getString("wu_currentabw"));
+					}else{
+						custInfoObject.setW_update_currentabw(obj.getString("null"));
+					}
+				}
+
+				if (obj.has("wu_survivalRate")){
+					if (!obj.isNull("wu_survivalRate")) {
+						custInfoObject.setW_update_survivalrate(obj.getString("wu_survivalRate"));
+					}else{
+						custInfoObject.setW_update_survivalrate(obj.getString("null"));
+					}
+				}
+
+
+				if (obj.has("wu_remakrs")){
+					if (!obj.isNull("wu_remakrs")) {
+						custInfoObject.setW_update_remarks(obj.getString("wu_remakrs"));
+					}else{
+						custInfoObject.setW_update_remarks(obj.getString("null"));
+					}
+				}
+
 				custInfoObjectList.add(custInfoObject);
 
 			}

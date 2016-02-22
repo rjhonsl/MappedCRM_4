@@ -74,6 +74,7 @@ public class AdapterPonds extends ArrayAdapter<CustInfoObject> {
 		holder.quantity.setText("Quantity: "+ItemList.get(position).getQuantity()+"");
 		holder.datestocked.setText("Date Stocked: "+ItemList.get(position).getDateStocked()+"");
 		holder.pondid.setText(ItemList.get(position).getPondID()+"");
+
 		return view;
 	}
 

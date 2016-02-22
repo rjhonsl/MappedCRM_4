@@ -123,9 +123,11 @@ public class Activity_Settings extends Activity{
             @Override
             public void onClick(View v) {
 
-                startRestore();
+                startRestore_farminfo();
                 startRestore_customerInfo();
                 startRestore_pondInfo();
+                startRestore_weeklyUpdates();
+
 
                 PD.setMessage("Restoring... ");
                 PD.show();
@@ -140,7 +142,7 @@ public class Activity_Settings extends Activity{
 
 
 
-    private void startRestore(){
+    private void startRestore_farminfo(){
 
         final String query_farminfo   = "SELECT * FROM `tblCustomerInfo` WHERE `tblCustomerInfo`.`addedby` = "+Helper.variables.getGlobalVar_currentUserID(activity);
         StringRequest postRequest = new StringRequest(Request.Method.POST, Helper.variables.URL_PHP_RAW_QUERY_POST_SELECT,
@@ -291,15 +293,14 @@ public class Activity_Settings extends Activity{
 
 
 
-
     private void startRestore_pondInfo(){
 
         final String query_PondsOfCustomer   =
                 "SELECT * FROM `tblPond` " +
                 "WHERE customerId IN " +
-                "(SELECT `tblCustomerInfo`.`ci_customerId` FROM tblCustomerInfo WHERE `tblCustomerInfo`.`addedby` = "+Helper.variables.getGlobalVar_currentUserID(activity)+" ) = ";
+                "(SELECT `tblCustomerInfo`.`ci_customerId` FROM tblCustomerInfo WHERE `tblCustomerInfo`.`addedby` = "+Helper.variables.getGlobalVar_currentUserID(activity)+" ) ";
 
-        StringRequest postRequest = new StringRequest(Request.Method.POST, Helper.variables.URL_PHP_RAW_QUERY_POST_SELECT_CUSTOMER,
+        StringRequest postRequest = new StringRequest(Request.Method.POST, Helper.variables.URL_SELECT_POND_BY_ADDEDBY_USER,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(final String response) {
@@ -313,9 +314,15 @@ public class Activity_Settings extends Activity{
 
                                     Log.d("RESTORE", "TABLE CLEARED - pond info");
 
+
+//                                    String[] ponds = new String[custInfoObjectList.size()];
                                     for (int i = 0; i < custInfoObjectList.size() ; i++) {
 
                                         Log.d("ERROR CHECK", "" + custInfoObjectList.get(i).getCustomerID());
+//                                        Helper.createCustomThemedDialogOKOnly(activity, "Response", response, "OK", R.color.red_700);
+//                                        ponds[i] = Helper.variables.getGlobalVar_currentUserID(activity) + "-" + custInfoObjectList.get(i).getPondLocalIndex();
+
+
                                         db.insertPondData_RESTORE(
                                                 custInfoObjectList.get(i).getPondLocalIndex(),
                                                 custInfoObjectList.get(i).getPondID() + "",
@@ -337,7 +344,7 @@ public class Activity_Settings extends Activity{
                                 }
                             }
                         } else {
-                            Helper.toastShort(activity, "RESTORE FAILED. Nothing to restore.");
+                            Helper.toastShort(activity, "RESTORE FAILED. Nothing to restore. " + response);
                             Log.d("RESTORE", "RESTORE failed - pondinfo: " + response);
                         }
                     }
@@ -358,6 +365,76 @@ public class Activity_Settings extends Activity{
                 params.put("userid", Helper.variables.getGlobalVar_currentUserID(activity)+"");
                 params.put("userlvl", Helper.variables.getGlobalVar_currentLevel(activity)+"");
                 params.put("sql", query_PondsOfCustomer + "");
+
+                return params;
+            }
+        };
+
+        MyVolleyAPI api = new MyVolleyAPI();
+        api.addToReqQueue(postRequest, this);
+    }
+
+
+
+    private void startRestore_weeklyUpdates(){
+
+        StringRequest postRequest = new StringRequest(Request.Method.POST, Helper.variables.URL_SELECT_WEEKLYUPDATES_BY_USER,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(final String response) {
+                        PD.dismiss();
+                        if (!response.substring(1, 2).equalsIgnoreCase("0")) {
+                            custInfoObjectList =  CustAndPondParser.parseFeed(response);
+                            if (custInfoObjectList != null) {
+                                if (custInfoObjectList.size() > 0) {
+
+                                    db.delete_ALL_ITEM_ON_TABLE(GpsSQLiteHelper.TBLPOND_WeeklyUpdates);
+
+                                    Log.d("RESTORE", "TABLE CLEARED - weekly");
+
+
+                                    for (int i = 0; i < custInfoObjectList.size() ; i++) {
+
+//                                        Helper.createCustomThemedDialogOKOnly(activity, "Response", response + " - weekly", "OK", R.color.red_700);
+
+
+                                        db.insertWeeklyUpdates_RESTORE(
+                                                custInfoObjectList.get(i).getW_update_localid(),
+                                                custInfoObjectList.get(i).getW_update_currentabw(),
+                                                custInfoObjectList.get(i).getW_update_remarks(),
+                                                Helper.splitter(custInfoObjectList.get(i).getW_update_pondid(), "-")[1],
+                                                custInfoObjectList.get(i).getW_update_dateAdded(),
+                                                custInfoObjectList.get(i).getW_update_survivalrate()
+                                        );
+                                    }
+
+
+                                    Helper.toastShort(activity, "Restore Successful. Weekly");
+
+                                }
+                            }
+                        } else {
+                            Helper.toastShort(activity, "RESTORE FAILED weekly. Nothing to restore. " + response);
+                            Helper.createCustomThemedDialogOKOnly(activity, "Response", response + " - weekly", "OK", R.color.red_700);
+                            Log.d("RESTORE", "RESTORE failed - weekly: " + response);
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        PD.dismiss();
+                        Helper.toastShort(activity, "RESTORE FAILED. Please try syncing again. weekly");
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("username", Helper.variables.getGlobalVar_currentUserName(activity));
+                params.put("password", Helper.variables.getGlobalVar_currentUserPassword(activity));
+                params.put("deviceid", Helper.getMacAddress(context));
+                params.put("userid", Helper.variables.getGlobalVar_currentUserID(activity)+"");
+                params.put("userlvl", Helper.variables.getGlobalVar_currentLevel(activity)+"");
 
                 return params;
             }

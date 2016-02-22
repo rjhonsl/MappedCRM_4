@@ -97,6 +97,14 @@ public class CustInfoObject {
 	private String addedBy_pond;
 	private String addedBy_weekly;
 	private String customerType;
+	private String w_update_id;
+	private String w_update_currentabw;
+	private String w_update_survivalrate;
+	private String w_update_remarks;
+	private String w_update_pondid;
+	private String w_update_dateAdded;
+	private String w_update_localid;
+
 
 
 
@@ -850,5 +858,61 @@ public class CustInfoObject {
 
 	public void setPondLocalIndex(String pondLocalIndex) {
 		this.pondLocalIndex = pondLocalIndex;
+	}
+
+	public String getW_update_id() {
+		return w_update_id;
+	}
+
+	public void setW_update_id(String w_update_id) {
+		this.w_update_id = w_update_id;
+	}
+
+	public String getW_update_localid() {
+		return w_update_localid;
+	}
+
+	public void setW_update_localid(String w_update_localid) {
+		this.w_update_localid = w_update_localid;
+	}
+
+	public String getW_update_currentabw() {
+		return w_update_currentabw;
+	}
+
+	public void setW_update_currentabw(String w_update_currentabw) {
+		this.w_update_currentabw = w_update_currentabw;
+	}
+
+	public String getW_update_survivalrate() {
+		return w_update_survivalrate;
+	}
+
+	public void setW_update_survivalrate(String w_update_survivalrate) {
+		this.w_update_survivalrate = w_update_survivalrate;
+	}
+
+	public String getW_update_remarks() {
+		return w_update_remarks;
+	}
+
+	public void setW_update_remarks(String w_update_remarks) {
+		this.w_update_remarks = w_update_remarks;
+	}
+
+	public String getW_update_pondid() {
+		return w_update_pondid;
+	}
+
+	public void setW_update_pondid(String w_update_pondid) {
+		this.w_update_pondid = w_update_pondid;
+	}
+
+	public String getW_update_dateAdded() {
+		return w_update_dateAdded;
+	}
+
+	public void setW_update_dateAdded(String w_update_dateAdded) {
+		this.w_update_dateAdded = w_update_dateAdded;
 	}
 }

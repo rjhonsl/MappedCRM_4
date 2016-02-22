@@ -191,6 +191,21 @@ public class GpsDB_Query {
 	}
 
 
+
+	public long insertWeeklyUpdates_RESTORE(String localid, String abw, String remakrs, String pondid, String dateAdded, String survivalRate){
+
+		ContentValues values = new ContentValues();
+		values.put(GpsSQLiteHelper.CL_WEEKLY_UPDATES_ID, localid);
+		values.put(GpsSQLiteHelper.CL_WEEKLY_UPDATES_CURRENT_ABW, abw);
+		values.put(GpsSQLiteHelper.CL_WEEKLY_UPDATES_REMARKS, remakrs);
+		values.put(GpsSQLiteHelper.CL_WEEKLY_UPDATES_PONDID, pondid);
+		values.put(GpsSQLiteHelper.CL_WEEKLY_UPDATES_CURRENT_SURVIVALRATE, survivalRate);
+		values.put(GpsSQLiteHelper.CL_WEEKLY_UPDATES_DATEADDED, dateAdded);
+		values.put(GpsSQLiteHelper.CL_WEEKLY_UPDATES_isposted, 1);
+
+		return  db.insert(GpsSQLiteHelper.TBLPOND_WeeklyUpdates, null, values);
+	}
+
 	public long insertPondData_RESTORE(String localid, String pondid, String specie, String sizeofStock, String survivalRate, String dateStocked, String quantity, String area, String culturesystem, String remarks, String customerid) {
 
 		ContentValues values = new ContentValues();
@@ -773,10 +788,10 @@ public class GpsDB_Query {
 	public Cursor getLocal_PondsByFarmIndex(String farmid){
 		dbhelper.getWritableDatabase();
 		String query =
-		"SELECT *  FROM `tblPond`\n" +
-				"INNER JOIN tblpond_weeklyupdates ON tblPond.id = tblpond_weeklyupdates.wu_pondid\n" +
-				"WHERE `customerId`= ?\n" +
-				"GROUP BY tblPond.id\n" +
+		"SELECT *  FROM `tblPond` " +
+				"INNER JOIN tblpond_weeklyupdates ON tblPond.id = tblpond_weeklyupdates.wu_pondid " +
+				"WHERE `customerId`= ? " +
+				"GROUP BY tblPond.id " +
 				"ORDER BY CAST(`tblPond`.`pondid` AS SIGNED)  ASC";
 
 //		"SELECT * FROM `tblPond` WHERE `customerId`= ?\n" +
