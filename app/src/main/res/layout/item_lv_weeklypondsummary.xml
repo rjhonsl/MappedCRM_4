@@ -31,7 +31,7 @@
                       android:textSize="12sp"
                       android:paddingBottom="2dp"
                       android:textColor="#FFFFFF"
-                      android:text="Week No"
+                      android:text="Visit"
                 />
 
             <View android:layout_width="fill_parent" android:layout_height="2dp"
@@ -79,6 +79,7 @@
                 <TextView
                     android:id="@+id/itemlv_weeklyreport_pondsummary_recommended"
                     android:textColor="@color/actionbarBackground"
+                    android:visibility="gone"
                     android:text="Recommended:  12.5 kg"
                     android:textSize="14sp"
                     android:layout_width="wrap_content"

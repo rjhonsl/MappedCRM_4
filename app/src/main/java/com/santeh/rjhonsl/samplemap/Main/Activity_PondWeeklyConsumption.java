@@ -49,7 +49,7 @@ public class Activity_PondWeeklyConsumption extends Activity {
     String farmName;
     int id;
 
-    Activity activity;
+    static Activity activity;
     Context context;
 
     ProgressDialog PD;
@@ -197,7 +197,7 @@ public class Activity_PondWeeklyConsumption extends Activity {
 
                         if (results[0] > 1000) {
                             final Dialog d = Helper.createCustomThemedDialogOKOnly(activity, "Out of range", "You must be near the farm to Add a new pond.", "OK", R.color.red);
-                        }else{
+                        } else {
                             final Dialog d = new Dialog(activity);//
                             d.requestWindowFeature(Window.FEATURE_NO_TITLE); //notitle
                             d.setContentView(R.layout.dialog_material_themed_addpondreport);//Set the xml view of the dialog
@@ -248,17 +248,20 @@ public class Activity_PondWeeklyConsumption extends Activity {
         });
 
 
+
         lvPonds.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 //                pondweeklyList
                 Helper.createCustomThemedDialogOKOnly(activity, "Details",
                         "ABW: "+pondweeklyList.get(position).getSizeofStock()+"g\n\n" +
-                        "Survival Rate: " + pondweeklyList.get(position).getSurvivalrate_per_pond()+"%\n\n"+
-                        "Date reported: " + pondweeklyList.get(position).getDateAddedToDB()+""
+                                "Survival Rate: " + pondweeklyList.get(position).getSurvivalrate_per_pond()+"%\n\n"+
+                                "Date reported: \n" + pondweeklyList.get(position).getDateAddedToDB()+""
                         , "OK", R.color.blue);
             }
         });
+
+
 
 
         lvPonds.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -518,12 +521,6 @@ public class Activity_PondWeeklyConsumption extends Activity {
     private void AddReport(final String abw2, String url, final String remarks2, String survivalRate){
         PD.setMessage("Saving Report. Please wait... ");
         PD.show();
-//        params.put("username", Helper.variables.getGlobalVar_currentUserName(activity));
-//                params.put("password", Helper.variables.getGlobalVar_currentUserPassword(activity));
-//                params.put("deviceid", Helper.getMacAddress(context));
-//                params.put("abw", abw2);
-//                params.put("remarks", remarks2);
-//                params.put("pondindex", id+"");
 
         final long result = db.insertWeeklyUpdates(abw2, remarks2, id+"", Helper.getDateDBformat(), survivalRate);
 
@@ -665,7 +662,6 @@ public class Activity_PondWeeklyConsumption extends Activity {
         super.onPause();
         db.close();
     }
-
 
 
 

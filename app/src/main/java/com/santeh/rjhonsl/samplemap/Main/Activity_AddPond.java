@@ -15,20 +15,13 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.fourmob.datetimepicker.date.DatePickerDialog;
-import com.santeh.rjhonsl.samplemap.APIs.MyVolleyAPI;
 import com.santeh.rjhonsl.samplemap.DBase.GpsDB_Query;
 import com.santeh.rjhonsl.samplemap.R;
 import com.santeh.rjhonsl.samplemap.Utils.Helper;
 import com.santeh.rjhonsl.samplemap.Utils.Logging;
 
 import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by rjhonsl on 9/28/2015.
@@ -263,107 +256,108 @@ public class Activity_AddPond extends FragmentActivity  implements DatePickerDia
                     }
                 });
             }
-        }else{
-            StringRequest postRequest = new StringRequest(Request.Method.POST, url,
-                    new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-
-                            String responseCode = Helper.extractResponseCode(response);
-                            String title, prompt;
-                            PD.dismiss();
-//                            Dialog d = Helper.createCustomThemedDialogOKOnly(activity, "inserted id", response, "ok", R.color.red);
-
-                            if (responseCode.equalsIgnoreCase("0")){
-                                oopsprompt(response);
-                            }else if (responseCode.equalsIgnoreCase("1")) {
-
-                                Logging.logUserAction(activity, activity.getBaseContext(), Helper.userActions.TSR.Edit_POND, Helper.variables.ACTIVITY_LOG_TYPE_TSR_MONITORING);
-                                title = "SUCCESS";
-                                prompt = "You have successfully updated database.";
-
-
-                                final Dialog d = Helper.createCustomThemedDialogOKOnly(Activity_AddPond.this, title,
-                                        prompt, "OK", R.color.skyblue_500);
-
-                                TextView ok = (TextView) d.findViewById(R.id.btn_dialog_okonly_OK);
-                                d.show();
-                                ok.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        d.hide();
-                                        finish();
-                                    }
-                                });
-                            }
-                            else {
-                                oopsprompt(response);
-                                //sample upload
-                            }
-
-                        }
-
-                        private void oopsprompt(String rp) {
-                            String title="OOPS";
-                            String prompt = "Something went wrong. Please try again later."+rp;
-                            PD.dismiss();
-
-                            final Dialog d = Helper.createCustomDialogOKOnly(Activity_AddPond.this, title,
-                                    prompt, "OK");
-                            TextView ok = (TextView) d.findViewById(R.id.btn_dialog_okonly_OK);
-                            d.setCancelable(false);
-                            d.show();
-                            ok.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    d.hide();
-                                }
-                            });
-                        }
-                    }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    PD.dismiss();
-
-                    final Dialog d = Helper.createCustomDialogOKOnly(Activity_AddPond.this, "OOPS",
-                            "Something went wrong. error( "+ error +" )", "OK");
-                    TextView ok = (TextView) d.findViewById(R.id.btn_dialog_okonly_OK);
-                    d.setCancelable(false);
-                    d.show();
-                    ok.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-//                                    finish();
-                            d.hide();
-                        }
-                    });
-                }
-            }) {
-                @Override
-                protected Map<String, String> getParams() {
-                    Map<String, String> params = new HashMap<String, String>();
-
-
-                    params.put("specie", String.valueOf(edtSpecie.getText()));
-                    params.put("pondid", String.valueOf(edtPondNumber.getText()));
-                    params.put("dateStocked", String.valueOf(edtDateStocked.getText()));
-                    params.put("quantity", String.valueOf(edtQuantity.getText()));
-                    params.put("area", String.valueOf(edtArea.getText()));
-                    params.put("culturesystem", String.valueOf(edtCultureSystem.getText()));
-                    params.put("remarks", String.valueOf(edtRemarks.getText()));
-//                    params.put("id", String.valueOf(ed));
-                    params.put("customerId", String.valueOf(customerID));
-                    params.put("sizeofStock", String.valueOf(edtABW.getText()));
-                    params.put("survivalrate", String.valueOf(edtSurvivalRate.getText()));
-
-                    return params;
-                }
-            };
-
-            // Adding request to request queue
-            MyVolleyAPI api = new MyVolleyAPI();
-            api.addToReqQueue(postRequest, context);
         }
+//        else{
+//            StringRequest postRequest = new StringRequest(Request.Method.POST, url,
+//                    new Response.Listener<String>() {
+//                        @Override
+//                        public void onResponse(String response) {
+//
+//                            String responseCode = Helper.extractResponseCode(response);
+//                            String title, prompt;
+//                            PD.dismiss();
+////                            Dialog d = Helper.createCustomThemedDialogOKOnly(activity, "inserted id", response, "ok", R.color.red);
+//
+//                            if (responseCode.equalsIgnoreCase("0")){
+//                                oopsprompt(response);
+//                            }else if (responseCode.equalsIgnoreCase("1")) {
+//
+//                                Logging.logUserAction(activity, activity.getBaseContext(), Helper.userActions.TSR.Edit_POND, Helper.variables.ACTIVITY_LOG_TYPE_TSR_MONITORING);
+//                                title = "SUCCESS";
+//                                prompt = "You have successfully updated database.";
+//
+//
+//                                final Dialog d = Helper.createCustomThemedDialogOKOnly(Activity_AddPond.this, title,
+//                                        prompt, "OK", R.color.skyblue_500);
+//
+//                                TextView ok = (TextView) d.findViewById(R.id.btn_dialog_okonly_OK);
+//                                d.show();
+//                                ok.setOnClickListener(new View.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(View v) {
+//                                        d.hide();
+//                                        finish();
+//                                    }
+//                                });
+//                            }
+//                            else {
+//                                oopsprompt(response);
+//                                //sample upload
+//                            }
+//
+//                        }
+//
+//                        private void oopsprompt(String rp) {
+//                            String title="OOPS";
+//                            String prompt = "Something went wrong. Please try again later."+rp;
+//                            PD.dismiss();
+//
+//                            final Dialog d = Helper.createCustomDialogOKOnly(Activity_AddPond.this, title,
+//                                    prompt, "OK");
+//                            TextView ok = (TextView) d.findViewById(R.id.btn_dialog_okonly_OK);
+//                            d.setCancelable(false);
+//                            d.show();
+//                            ok.setOnClickListener(new View.OnClickListener() {
+//                                @Override
+//                                public void onClick(View v) {
+//                                    d.hide();
+//                                }
+//                            });
+//                        }
+//                    }, new Response.ErrorListener() {
+//                @Override
+//                public void onErrorResponse(VolleyError error) {
+//                    PD.dismiss();
+//
+//                    final Dialog d = Helper.createCustomDialogOKOnly(Activity_AddPond.this, "OOPS",
+//                            "Something went wrong. error( "+ error +" )", "OK");
+//                    TextView ok = (TextView) d.findViewById(R.id.btn_dialog_okonly_OK);
+//                    d.setCancelable(false);
+//                    d.show();
+//                    ok.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+////                                    finish();
+//                            d.hide();
+//                        }
+//                    });
+//                }
+//            }) {
+//                @Override
+//                protected Map<String, String> getParams() {
+//                    Map<String, String> params = new HashMap<String, String>();
+//
+//
+//                    params.put("specie", String.valueOf(edtSpecie.getText()));
+//                    params.put("pondid", String.valueOf(edtPondNumber.getText()));
+//                    params.put("dateStocked", String.valueOf(edtDateStocked.getText()));
+//                    params.put("quantity", String.valueOf(edtQuantity.getText()));
+//                    params.put("area", String.valueOf(edtArea.getText()));
+//                    params.put("culturesystem", String.valueOf(edtCultureSystem.getText()));
+//                    params.put("remarks", String.valueOf(edtRemarks.getText()));
+////                    params.put("id", String.valueOf(ed));
+//                    params.put("customerId", String.valueOf(customerID));
+//                    params.put("sizeofStock", String.valueOf(edtABW.getText()));
+//                    params.put("survivalrate", String.valueOf(edtSurvivalRate.getText()));
+//
+//                    return params;
+//                }
+//            };
+//
+//            // Adding request to request queue
+//            MyVolleyAPI api = new MyVolleyAPI();
+//            api.addToReqQueue(postRequest, context);
+//        }
 
 //
     }

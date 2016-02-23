@@ -6,6 +6,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.santeh.rjhonsl.samplemap.Utils.Helper;
 
@@ -66,14 +67,14 @@ public class GpsDB_Query {
 		return  db.insert(GpsSQLiteHelper.TBLUSER_ACTIVITY, null, values);
 	}
 
-	public long insertWeeklyUpdates(String abw, String remakrs, String pondid, String dateAdded, String survivalRate){
+	public long insertWeeklyUpdates(String abw, String remakrs, String pondid, String dateAddedToDB, String survivalRate){
 
 		ContentValues values = new ContentValues();
 		values.put(GpsSQLiteHelper.CL_WEEKLY_UPDATES_CURRENT_ABW, abw);
 		values.put(GpsSQLiteHelper.CL_WEEKLY_UPDATES_REMARKS, remakrs);
 		values.put(GpsSQLiteHelper.CL_WEEKLY_UPDATES_PONDID, pondid);
 		values.put(GpsSQLiteHelper.CL_WEEKLY_UPDATES_CURRENT_SURVIVALRATE, survivalRate);
-		values.put(GpsSQLiteHelper.CL_WEEKLY_UPDATES_DATEADDED, dateAdded);
+		values.put(GpsSQLiteHelper.CL_WEEKLY_UPDATES_DATEADDED, dateAddedToDB);
 		values.put(GpsSQLiteHelper.CL_WEEKLY_UPDATES_isposted, 0);
 
 		return  db.insert(GpsSQLiteHelper.TBLPOND_WeeklyUpdates, null, values);
@@ -158,6 +159,7 @@ public class GpsDB_Query {
 		}else{
 			customerType = 0;
 		}
+
 
 		values.put(GpsSQLiteHelper.CL_MAINCUSTINFO_AddedBy, userid);
 		values.put(GpsSQLiteHelper.CL_MAINCUSTINFO_LastName, lname);
@@ -556,6 +558,8 @@ public class GpsDB_Query {
 	}
 
 
+
+
 	public String getSQLStringForInsert_UNPOSTED_WEEKLY() {
 		String sqlString = "" +
 				"INSERT INTO `tblpond_weeklyupdates` (`wu_id`, `wu_currentabw`,`wu_survivalRate`, `wu_remakrs`, `wu_pondid`, `wu_dateAdded`, `wu_lid`) VALUES ";
@@ -658,6 +662,7 @@ public class GpsDB_Query {
 		Cursor cur = db.rawQuery(query, params);
 		return cur.getCount();
 	}
+
 
 	public int getPond_notPosted_Count(Activity activity){
 		String query = "SELECT * FROM "+GpsSQLiteHelper.TBLPOND+" WHERE "
@@ -876,6 +881,23 @@ public class GpsDB_Query {
 	}
 
 
+	public String[] getcolumnNames(String tableName){
+		String query = "SELECT * FROM "+tableName;
+
+		String[] params = new String[] {};
+		Cursor cur = db.rawQuery(query, params);
+		if (cur.getCount() > 0){
+			 while (cur.moveToNext()){
+
+			 }
+		}
+
+
+		return params;
+
+	}
+
+
 	/********************************************
 	 * 				UPDATES						*
 	 * updates return the number of rows affectd*
@@ -1002,6 +1024,40 @@ public class GpsDB_Query {
 		ContentValues newValues = new ContentValues();
 		newValues.put(GpsSQLiteHelper.CL_USER_ACTIVITY_isPosted, 1);
 		return 	db.update(GpsSQLiteHelper.TBLUSER_ACTIVITY, newValues, where, null);
+	}
+
+
+
+	public void trasferOldTableToTEMPTable(String oldtable, String newTable){
+		String sql = "INSERT INTO "+newTable+" SELECT * FROM "+oldtable+";";
+		Log.d("COPY TABLE", sql);
+		db.execSQL(sql);
+	}
+
+	public void trasferTEMPTableToNewTable(String TEMPtable, String newTable, String[]tempColumnNames, String[] newColumnNames){
+
+		String tempcols = "";
+		for (int i = 0; i < tempColumnNames.length; i++) {
+			tempcols = tempcols + " " + tempColumnNames[i]+",";
+		}
+		tempcols = tempcols.substring(0, tempcols.length() - 1);
+
+
+
+		String sql = "insert into "+newTable+" ("+tempcols+") " +
+				"select "+tempcols+" " +
+				"from "+TEMPtable+"; ";
+		Log.d("COPY TABLE", sql);
+		db.execSQL(sql);
+	}
+
+
+	public void createTableExute(String sqlCreate){
+		db.execSQL(sqlCreate);
+	}
+
+	public void dropTable(String tableName){
+		db.execSQL("DROP TABLE IF EXISTS " + tableName);
 	}
 
 

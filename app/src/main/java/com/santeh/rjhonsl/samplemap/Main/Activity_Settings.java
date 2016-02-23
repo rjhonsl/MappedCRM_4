@@ -123,39 +123,53 @@ public class Activity_Settings extends Activity{
             @Override
             public void onClick(View v) {
 
-                startRestore_farminfo();
-                startRestore_customerInfo();
-                startRestore_pondInfo();
-                startRestore_weeklyUpdates();
+                String prompt = "Are you sure you want to restore data from web server?" +
+                        "\n\n" +
+                        "(NOTE) Current data will be wiped out and replaced with data from web server. This process is irreversible.";
+                final Dialog d = Helper.createCustomDialogThemedYesNO(activity, prompt, "Restore", "NO", "YES", R.color.red_700);
+                Button no = (Button) d.findViewById(R.id.btn_dialog_yesno_opt1);
+                Button yes = (Button) d.findViewById(R.id.btn_dialog_yesno_opt2);
 
+                no.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        d.hide();
+                    }
+                });
 
-                PD.setMessage("Restoring... ");
-                PD.show();
+                yes.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        d.hide();
+                        startRestore_farmInfo();
 
-//                String query_custinfo = "SELECT * FROM `tblmaincustomerinfo` where mci_addedby = 9";
-//                String query_pondInfo = "SELECT * FROM `tblPond` WHERE tblPond.customerId = '9-1' OR XX = XX";
-//                String query_weekly = "SELECT * FROM `tblpond_weeklyupdates` WHERE wu_pondid = '9-12' OR XX = XX";
+//                        startRestore_customerInfo();
+//                        startRestore_pondInfo();
+//                        startRestore_weeklyUpdates();
+                        PD.setMessage("Restoring... ");
+                        PD.show();
 
+                    }
+                });
             }
         });
     }
 
 
 
-    private void startRestore_farminfo(){
+    private void startRestore_farmInfo(){
 
         final String query_farminfo   = "SELECT * FROM `tblCustomerInfo` WHERE `tblCustomerInfo`.`addedby` = "+Helper.variables.getGlobalVar_currentUserID(activity);
         StringRequest postRequest = new StringRequest(Request.Method.POST, Helper.variables.URL_PHP_RAW_QUERY_POST_SELECT,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(final String response) {
-                        PD.dismiss();
                         if (!response.substring(1, 2).equalsIgnoreCase("0")) {
                             custInfoObjectList =  CustAndPondParser.parseFeed(response);
                             if (custInfoObjectList != null) {
                                 if (custInfoObjectList.size() > 0) {
                                     db.delete_ALL_ITEM_ON_TABLE(GpsSQLiteHelper.TBLFARMiNFO);
-                                    Log.d("RESTORE", "TABLE CLEARED");
+                                    Log.d("RESTORE", "TABLE CLEARED - " + GpsSQLiteHelper.TBLFARMiNFO);
                                     for (int i = 0; i < custInfoObjectList.size() ; i++) {
                                         db.insertFarmInformation_RESTORE(
                                                 custInfoObjectList.get(i).getLatitude(),
@@ -174,12 +188,19 @@ public class Activity_Settings extends Activity{
                                                 custInfoObjectList.get(i).getFarmLocalID()
                                         );
                                     }
-                                    Helper.toastShort(activity, "Restore Successful.");
                                     Log.d("RESTORE", "RESTORE SUCCESSFUL - farminfo");
+                                    startRestore_customerInfo();
+                                }else{
+                                    Log.d("RESTORE", "NOTHING RESTORED - farminfo");
+                                    startRestore_customerInfo();
                                 }
+                            }else{ Log.d("RESTORE", "NOTHING RESTORED - farminfo");
+                                startRestore_customerInfo();
                             }
                         } else {
-                            Log.d("RESTORE", "RESTORE failed - farminfo");
+                            PD.dismiss();
+                            Helper.toastShort(activity, "RESTORE FAILED. Please try syncing again.");
+                            Log.d("RESTORE", "RESTORE FAILED - farminfo");
                         }
                     }
                 },
@@ -187,7 +208,8 @@ public class Activity_Settings extends Activity{
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         PD.dismiss();
-                        Helper.toastShort(activity, "RESTORE FAILED. Please try syncing again.");
+                        Helper.toastShort(activity, "RESTORE FAILED. Please try syncing again.\n"+error.toString());
+                                Log.d("RESTORE", "RESTORE FAILED - farminfo");
                     }
                 }) {
             @Override
@@ -200,9 +222,6 @@ public class Activity_Settings extends Activity{
                 params.put("userlvl", Helper.variables.getGlobalVar_currentLevel(activity)+"");
                 params.put("sql", query_farminfo + "");
 
-                Log.d("SQL_RESTORE", query_farminfo);
-
-//
                 return params;
             }
         };
@@ -224,9 +243,9 @@ public class Activity_Settings extends Activity{
                             custInfoObjectList =  CustAndPondParser.parseFeed(response);
                             if (custInfoObjectList != null) {
                                 if (custInfoObjectList.size() > 0) {
-
                                     db.delete_ALL_ITEM_ON_TABLE(GpsSQLiteHelper.TBLMAINCUSTOMERINFO);
-                                    Log.d("RESTORE", "TABLE CLEARED");
+                                    Log.d("RESTORE", "TABLE CLEARED - " + GpsSQLiteHelper.TBLMAINCUSTOMERINFO);
+
                                     for (int i = 0; i < custInfoObjectList.size() ; i++) {
                                         db.insertMainCustomerInformation_RESTORE(
                                                 Helper.variables.getGlobalVar_currentUserID(activity),
@@ -256,13 +275,20 @@ public class Activity_Settings extends Activity{
                                                 Integer.parseInt(custInfoObjectList.get(i).getMainCustomer_localid())
                                         );
                                     }
-                                    Helper.toastShort(activity, "Restore Successful.");
+                                    Log.d("RESTORE", "RESTORE SUCCESSFUL - custinfo");
+                                    startRestore_pondInfo();
 
+                                }else{
+                                    Log.d("RESTORE", "NOTHING RESTORED - custinfo");
+                                    startRestore_pondInfo();
                                 }
+                            }else{ Log.d("RESTORE", "NOTHING RESTORED - custinfo");
+                                startRestore_pondInfo();
                             }
                         } else {
-                            Helper.toastShort(activity, "RESTORE FAILED. Nothing to restore.");
-                            Log.d("RESTORE", "RESTORE failed - farminfo: " + response);
+                            Helper.toastShort(activity, "RESTORE FAILED. Please try again later.");
+                            PD.dismiss();
+                            Log.d("RESTORE", "RESTORE failed - custinfo" + response);
                         }
                     }
                 },
@@ -270,7 +296,7 @@ public class Activity_Settings extends Activity{
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         PD.dismiss();
-                        Helper.toastShort(activity, "RESTORE FAILED. Please try syncing again.");
+                        Helper.toastShort(activity, "RESTORE FAILED. Please try syncing again.\n"+error.toString());
                     }
                 }) {
             @Override
@@ -309,20 +335,10 @@ public class Activity_Settings extends Activity{
                             custInfoObjectList =  CustAndPondParser.parseFeed(response);
                             if (custInfoObjectList != null) {
                                 if (custInfoObjectList.size() > 0) {
-
                                     db.delete_ALL_ITEM_ON_TABLE(GpsSQLiteHelper.TBLPOND);
-
                                     Log.d("RESTORE", "TABLE CLEARED - pond info");
 
-
-//                                    String[] ponds = new String[custInfoObjectList.size()];
                                     for (int i = 0; i < custInfoObjectList.size() ; i++) {
-
-                                        Log.d("ERROR CHECK", "" + custInfoObjectList.get(i).getCustomerID());
-//                                        Helper.createCustomThemedDialogOKOnly(activity, "Response", response, "OK", R.color.red_700);
-//                                        ponds[i] = Helper.variables.getGlobalVar_currentUserID(activity) + "-" + custInfoObjectList.get(i).getPondLocalIndex();
-
-
                                         db.insertPondData_RESTORE(
                                                 custInfoObjectList.get(i).getPondLocalIndex(),
                                                 custInfoObjectList.get(i).getPondID() + "",
@@ -340,11 +356,18 @@ public class Activity_Settings extends Activity{
 
 
                                     Helper.toastShort(activity, "Restore Successful.");
-
+                                    startRestore_weeklyUpdates();
+                                }else{
+                                    Log.d("RESTORE", "NOTHING RESTORED - pondinfo");
+                                    startRestore_weeklyUpdates();
                                 }
+                            }else{
+                                Log.d("RESTORE", "NOTHING RESTORED - custinpondinfofo");
+                                startRestore_weeklyUpdates();
                             }
                         } else {
-                            Helper.toastShort(activity, "RESTORE FAILED. Nothing to restore. " + response);
+                            Helper.toastShort(activity, "RESTORE FAILED. Nothing to restore. ");
+                            PD.dismiss();
                             Log.d("RESTORE", "RESTORE failed - pondinfo: " + response);
                         }
                     }
@@ -353,7 +376,7 @@ public class Activity_Settings extends Activity{
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         PD.dismiss();
-                        Helper.toastShort(activity, "RESTORE FAILED. Please try syncing again. pondinfo");
+                        Helper.toastShort(activity, "RESTORE FAILED. Please try syncing again. \n"+error.toString());
                     }
                 }) {
             @Override
@@ -387,16 +410,10 @@ public class Activity_Settings extends Activity{
                             custInfoObjectList =  CustAndPondParser.parseFeed(response);
                             if (custInfoObjectList != null) {
                                 if (custInfoObjectList.size() > 0) {
-
                                     db.delete_ALL_ITEM_ON_TABLE(GpsSQLiteHelper.TBLPOND_WeeklyUpdates);
-
                                     Log.d("RESTORE", "TABLE CLEARED - weekly");
 
-
                                     for (int i = 0; i < custInfoObjectList.size() ; i++) {
-
-//                                        Helper.createCustomThemedDialogOKOnly(activity, "Response", response + " - weekly", "OK", R.color.red_700);
-
 
                                         db.insertWeeklyUpdates_RESTORE(
                                                 custInfoObjectList.get(i).getW_update_localid(),
@@ -409,13 +426,19 @@ public class Activity_Settings extends Activity{
                                     }
 
 
-                                    Helper.toastShort(activity, "Restore Successful. Weekly");
+                                    finishRestore();
 
+                                }else{
+                                    Log.d("RESTORE", "NOTHING RESTORED - weekly");
+                                    finishRestore();
                                 }
+                            }else{
+                                Log.d("RESTORE", "NOTHING RESTORED - weekly");
+                                finishRestore();
                             }
                         } else {
-                            Helper.toastShort(activity, "RESTORE FAILED weekly. Nothing to restore. " + response);
-                            Helper.createCustomThemedDialogOKOnly(activity, "Response", response + " - weekly", "OK", R.color.red_700);
+                            PD.dismiss();
+                            Helper.toastShort(activity, "RESTORE FAILED weekly. Nothing to restore. ");
                             Log.d("RESTORE", "RESTORE failed - weekly: " + response);
                         }
                     }
@@ -424,7 +447,7 @@ public class Activity_Settings extends Activity{
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         PD.dismiss();
-                        Helper.toastShort(activity, "RESTORE FAILED. Please try syncing again. weekly");
+                        Helper.toastShort(activity, "RESTORE FAILED. Please try syncing again\n"+error.toString());
                     }
                 }) {
             @Override
@@ -442,6 +465,14 @@ public class Activity_Settings extends Activity{
 
         MyVolleyAPI api = new MyVolleyAPI();
         api.addToReqQueue(postRequest, this);
+    }
+
+    private void finishRestore() {
+        PD.dismiss();
+        Helper.toastShort(activity, "Restore Successful. Weekly");
+        Intent intent = new Intent(Activity_Settings.this, Activity_LoginScreen.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_HISTORY);
+        startActivity(intent);
     }
 
 

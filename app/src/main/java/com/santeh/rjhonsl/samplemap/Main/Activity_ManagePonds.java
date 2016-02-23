@@ -161,7 +161,7 @@ public class Activity_ManagePonds extends AppCompatActivity {
         lvPonds.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position1, long id1) {
-                String[] options = {"View and Edit Pond Details", "View Weekly Reports", "Delete Pond"};
+                String[] options = {"View and Edit Pond Details", "View Weekly Reports", "Delete Pond", "Mark as Harvested" };
                 final Dialog d = Helper.createCustomThemedListDialog(activity, options, "Options", R.color.deepteal_500);
                 d.show();
 
@@ -202,12 +202,12 @@ public class Activity_ManagePonds extends AppCompatActivity {
                                 } else {
                                     Helper.createCustomThemedDialogOKOnly(activity, "Oops", "You have no permission delete this record", "OK", R.color.red);
                                 }
-
                             } else {
                                 Helper.createCustomThemedDialogOKOnly(activity, "Oops", "Record is already finalized/posted on server. Contact admin for further changes", "OK", R.color.red);
                             }
 
-
+                        }else{
+                            Helper.toastShort(activity, "Harvested");
                         }
                     }
                 });

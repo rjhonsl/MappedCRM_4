@@ -235,13 +235,49 @@ public class Activity_LoginScreen extends Activity{
         txtrequestaccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                db.dropTable(GpsSQLiteHelper.TBLUSERS+GpsSQLiteHelper.TEMP);
             }
         });
 
         txtforgot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                final String tmptable = GpsSQLiteHelper.TBLUSERS + GpsSQLiteHelper.TEMP;
+                final String newtable = GpsSQLiteHelper.TBLUSERS;
+
+                final Dialog d = Helper.createCustomThemedDialogOKOnly(activity, "Warning", "Function currently disabled", "OK", R.color.red_700);
+                Button ok = (Button) d.findViewById(R.id.btn_dialog_okonly_OK);
+                ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+
+                        d.hide();
+
+//                        final String sql = GpsSQLiteHelper.CreateTableString(  tmptable,GpsSQLiteHelper.ALL_KEY_USERS, GpsSQLiteHelper.ALL_KEY_USERS_DATAPROP );
+//                        Log.d("UPGRADE", "create temp table");
+//                        db.createTableExute(sql);
+//
+//                        final String sqlNew = GpsSQLiteHelper.CreateTableString(  newtable,  GpsSQLiteHelper.ALL_KEY_USERS, GpsSQLiteHelper.ALL_KEY_USERS_DATAPROP);
+//
+//                        Log.d("UPGRADE", "transfer old table to new table");
+//                        db.trasferOldTableToTEMPTable(GpsSQLiteHelper.TBLUSERS, tmptable);
+//
+//                        Log.d("UPGRADE", "DROP OLD TABLE");
+//                        db.dropTable(GpsSQLiteHelper.TBLUSERS);
+//
+//                        Log.d("UPGRADE", "Create new table");
+//                        db.createTableExute(sqlNew);
+//
+//                        Log.d("UPGRADE", "Tranfer temp table to new table");
+//                        db.trasferTEMPTableToNewTable(tmptable, GpsSQLiteHelper.TBLUSERS, GpsSQLiteHelper.ALL_KEY_USERS, GpsSQLiteHelper.ALL_KEY_USERS);
+//
+//                        Log.d("UPGRADE", "DROP OLD TABLE");
+//                        db.dropTable(tmptable);
+//
+//                        Log.d("UPGRADE", "SUCESS");
+                    }
+                });
 
             }
         });
