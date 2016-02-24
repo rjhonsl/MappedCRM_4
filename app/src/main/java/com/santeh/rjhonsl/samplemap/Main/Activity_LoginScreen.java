@@ -213,7 +213,6 @@ public class Activity_LoginScreen extends Activity{
                                     txtpassword.setHint("");
                                 }
                             });
-
                 }
                 else{
                     lblpassword.animate()
@@ -242,19 +241,27 @@ public class Activity_LoginScreen extends Activity{
         txtforgot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String tmptable = GpsSQLiteHelper.TBLUSERS + GpsSQLiteHelper.TEMP;
-                final String newtable = GpsSQLiteHelper.TBLUSERS;
+//                final String tmptable = GpsSQLiteHelper.TBLUSERS + GpsSQLiteHelper.TEMP;
+//                final String newtable = GpsSQLiteHelper.TBLUSERS;
+//
+//                final String[] tmpcolumnNames = db.getcolumnNames(GpsSQLiteHelper.TBLMAINCUSTOMERINFO);
+//                final String[] tmpcolumnTypes = db.getcolumnDataTypes(GpsSQLiteHelper.TBLUSERS);
+//                String colnames = "|x|";
+//                for (int i = 0; i < tmpcolumnTypes.length; i++) {
+//                    colnames = colnames + " | " + tmpcolumnTypes[i];
+//                }
+//                colnames = colnames + " |x| " + tmpcolumnTypes.length + " - " + db.getColumnCount(GpsSQLiteHelper.TBLUSERS);
 
-                final Dialog d = Helper.createCustomThemedDialogOKOnly(activity, "Warning", "Function currently disabled", "OK", R.color.red_700);
+                final Dialog d = Helper.createCustomThemedDialogOKOnly(activity, "Warning",
+                        "Function currently disabled: ",
+                        "OK", R.color.red_700);
                 Button ok = (Button) d.findViewById(R.id.btn_dialog_okonly_OK);
                 ok.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
-
                         d.hide();
-
-//                        final String sql = GpsSQLiteHelper.CreateTableString(  tmptable,GpsSQLiteHelper.ALL_KEY_USERS, GpsSQLiteHelper.ALL_KEY_USERS_DATAPROP );
+//
+//                        final String sql = GpsSQLiteHelper.CreateTableString(  tmptable , tmpcolumnNames, GpsSQLiteHelper.ALL_KEY_USERS_DATAPROP );
 //                        Log.d("UPGRADE", "create temp table");
 //                        db.createTableExute(sql);
 //

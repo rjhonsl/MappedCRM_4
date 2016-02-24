@@ -656,7 +656,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             if (position == 0) {
 
                                 d.hide();
-                                Intent intent = new Intent(MapsActivity.this, Activity_ManagePonds.class);
+//                                Intent intent = new Intent(MapsActivity.this, Activity_ManagePonds.class);
+                                Intent intent = new Intent(MapsActivity.this, Activity_FarmViewOptions.class);
                                 intent.putExtra("id", Integer.parseInt(details[0]));
                                 intent.putExtra("farmname", "" + details[1]);
                                 intent.putExtra("latitude", location.latitude + "");

@@ -882,18 +882,63 @@ public class GpsDB_Query {
 
 
 	public String[] getcolumnNames(String tableName){
+		open();
+		Log.d("UPGRADE", "afteropen create temp table");
 		String query = "SELECT * FROM "+tableName;
 
 		String[] params = new String[] {};
+		String[] colnames = new String[0];
 		Cursor cur = db.rawQuery(query, params);
 		if (cur.getCount() > 0){
-			 while (cur.moveToNext()){
+			colnames = new String[cur.getColumnCount()];
+			for (int i = 0; i < cur.getColumnCount() ; i++) {
+				colnames[i] = cur.getColumnName(i);
+			}
+		}
+		Log.d("UPGRADE", "afterclose create temp table");
+		close();
+		return colnames;
+	}
 
-			 }
+	public String[] getcolumnDataTypes(String tableName){
+		String query = "PRAGMA table_info("+tableName+"); ";
+
+		String[] params = new String[] {};
+		String[] colTypes = new String[0];
+
+		Cursor cur = db.rawQuery(query, params);
+		if (cur.getCount() > 0){
+			colTypes = new String[cur.getCount()];
+
+			int counter = 0;
+			while (cur.moveToNext()) {
+				colTypes[counter] =
+//						cur.getPosition()+"";
+						cur.getString(2)+"";
+				counter ++;
+			}
+
 		}
 
+		return colTypes;
+	}
 
-		return params;
+
+
+	public String getColumnCount(String tableName){
+		String query = "SELECT * FROM "+tableName;
+
+		String[] params = new String[] {};
+		String[] colnames;
+		Cursor cur = db.rawQuery(query, params);
+		if (cur.getCount() > 0){
+			colnames = new String[cur.getColumnCount()];
+			for (int i = 0; i < cur.getColumnCount()-1 ; i++) {
+				colnames[i] = cur.getColumnName(i);
+			}
+		}
+
+		return cur.getColumnCount()+" ";
 
 	}
 
@@ -1034,19 +1079,18 @@ public class GpsDB_Query {
 		db.execSQL(sql);
 	}
 
-	public void trasferTEMPTableToNewTable(String TEMPtable, String newTable, String[]tempColumnNames, String[] newColumnNames){
+	public void trasferTEMPTableToNewTable(String fromTable, String toTable, String[]tempColumnNames){
 
-		String tempcols = "";
+		String fromTableCols = "";
 		for (int i = 0; i < tempColumnNames.length; i++) {
-			tempcols = tempcols + " " + tempColumnNames[i]+",";
+			fromTableCols = fromTableCols + " " + tempColumnNames[i]+",";
 		}
-		tempcols = tempcols.substring(0, tempcols.length() - 1);
 
+		fromTableCols = fromTableCols.substring(0, fromTableCols.length() - 1);
 
-
-		String sql = "insert into "+newTable+" ("+tempcols+") " +
-				"select "+tempcols+" " +
-				"from "+TEMPtable+"; ";
+		String sql = "insert into "+toTable+" ("+fromTableCols+") " +
+				"select "+fromTableCols+" " +
+				"from "+fromTable+"; ";
 		Log.d("COPY TABLE", sql);
 		db.execSQL(sql);
 	}
