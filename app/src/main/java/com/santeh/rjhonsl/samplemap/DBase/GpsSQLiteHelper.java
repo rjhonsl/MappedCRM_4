@@ -372,28 +372,26 @@ public class GpsSQLiteHelper extends SQLiteOpenHelper {
 	//on update version renew tb
 	public void onUpgrade(SQLiteDatabase _db, int oldVersion, int newVersion) {
 
-		Log.d("UPGRADE", "START ON UPGRADE: "+oldVersion +" " + newVersion);
+		Log.d("UPGRADE", "START ON UPGRADE: from "+oldVersion +" to " + newVersion);
 //		_db.execSQL("DROP TABLE IF EXISTS " + TBLAREA);
 //		_db.execSQL("DROP TABLE IF EXISTS " + TBLAREA_ASSIGNED);
 //		_db.execSQL("DROP TABLE IF EXISTS " + TBLAREA_MUNICIPALITY);
 
 
-		if(newVersion == 19)
+		if(oldVersion < 19)
 		{
 			// Version 18 added isHarvested COLUMN on TBLPOND
 			_db.execSQL("ALTER TABLE " + TBLPOND + " ADD COLUMN "
 					+ CL_POND_isHarvested + " TEXT");
 			Log.d("UPGRADE", "ALTER TABLE: " + newVersion);
 		}
-		else if(newVersion == 21){
+
+		if(oldVersion < 21){
 			// Version 20 UPDATE VALUES
 			_db.execSQL("DELETE FROM "+TBLPOND+" " +
 					"WHERE "+CL_POND_isHarvested+"= 0;");
 			_db.execSQL("UPDATE "+TBLPOND+" SET "+CL_POND_isHarvested+" = 0;");
 			Log.d("UPGRADE", "INSERT VALUES: " + newVersion);
-		}
-		else{
-
 		}
 
 

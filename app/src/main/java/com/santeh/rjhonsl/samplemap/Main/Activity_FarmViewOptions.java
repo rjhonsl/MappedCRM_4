@@ -65,12 +65,12 @@ public class Activity_FarmViewOptions extends Activity{
             public void onClick(View v) {
 
 //            int converted = Integer.parseInt(customerID.trim());
-            Intent intent = new Intent(Activity_FarmViewOptions.this, Activity_ManagePonds.class);
-            intent.putExtra("id", id);
-            intent.putExtra("farmname", "" + farmName);
-            intent.putExtra("latitude", lat);
-            intent.putExtra("longitude", lng );
-            startActivity(intent);
+                Intent intent = new Intent(Activity_FarmViewOptions.this, Activity_ManagePonds.class);
+                intent.putExtra("id", id);
+                intent.putExtra("farmname", "" + farmName);
+                intent.putExtra("latitude", lat);
+                intent.putExtra("longitude", lng );
+                startActivity(intent);
 
             }
         });
@@ -79,11 +79,12 @@ public class Activity_FarmViewOptions extends Activity{
             @Override
             public void onClick(View v) {
 
-//                int converted = Integer.parseInt(customerID.trim());
-//                Intent intent = new Intent(Activity_FarmViewOptions.this, Activity_PondWeeklyConsumption.class);
-//                intent.putExtra("id", converted );
-//                intent.putExtra("farmname", farmname);
-//                startActivity(intent);
+                Intent intent = new Intent(Activity_FarmViewOptions.this, Activity_AddtoHarvest.class);
+                intent.putExtra("id", id);
+                intent.putExtra("farmname", "" + farmName);
+                intent.putExtra("latitude", lat);
+                intent.putExtra("longitude", lng );
+                startActivity(intent);
             }
         });
     }

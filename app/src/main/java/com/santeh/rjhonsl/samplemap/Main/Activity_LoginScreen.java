@@ -316,7 +316,7 @@ public class Activity_LoginScreen extends Activity{
             }
         });
 
-        checkVersionUpdates();
+//        checkVersionUpdates();
 
     }
 

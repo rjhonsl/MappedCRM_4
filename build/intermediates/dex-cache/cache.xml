@@ -2,11 +2,242 @@
 <items version="2" >
 
     <item
+        jar="C:\Android Studio Projects\SampleMap_withTextBackCoordinates\SampleMap\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-wearable\7.5.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="69dd177337ead693c408c8dddc9546bb6f1244fa">
+        <dex dex="C:\Android Studio Projects\SampleMap_withTextBackCoordinates\SampleMap\app\build\intermediates\pre-dexed\debug\classes-db756ef060822f25231b72a5832f98c3310c7a3d.jar" />
+    </item>
+    <item
+        jar="C:\Android Studio Projects\SampleMap_withTextBackCoordinates\SampleMap\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-analytics\7.5.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="e7b35244f50663b3f8d150714bca9ecd7a290da1">
+        <dex dex="C:\Android Studio Projects\SampleMap_withTextBackCoordinates\SampleMap\app\build\intermediates\pre-dexed\debug\classes-f56ba768cfd9caf07c10b18d67fbf20cd19f30c7.jar" />
+    </item>
+    <item
+        jar="C:\Android Studio Projects\SampleMap_withTextBackCoordinates\SampleMap\app\libs\volley.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="0b59a1d65db47ffa9c79abc472b447952592621a">
+        <dex dex="C:\Android Studio Projects\SampleMap_withTextBackCoordinates\SampleMap\app\build\intermediates\pre-dexed\debug\volley-f11322b85b3e994c78ab8ef1e17938032a9dcaa0.jar" />
+    </item>
+    <item
+        jar="C:\Android Studio Projects\SampleMap_withTextBackCoordinates\SampleMap\app\build\intermediates\exploded-aar\com.android.support\design\23.1.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="19026d31f5d3ae868db81319671a642be5fbba08">
+        <dex dex="C:\Android Studio Projects\SampleMap_withTextBackCoordinates\SampleMap\app\build\intermediates\pre-dexed\debug\classes-573e1524bc08252ac5e08cc6ce8b741771ba4f78.jar" />
+    </item>
+    <item
+        jar="C:\Android Studio Projects\SampleMap_withTextBackCoordinates\SampleMap\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-wallet\7.5.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="6836d188602ec5382d1967c58b00960eb8ff8773">
+        <dex dex="C:\Android Studio Projects\SampleMap_withTextBackCoordinates\SampleMap\app\build\intermediates\pre-dexed\debug\classes-e95df6c4a36f5ed3a180dff1c64448f754951a96.jar" />
+    </item>
+    <item
+        jar="C:\Android Studio Projects\SampleMap_withTextBackCoordinates\SampleMap\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-drive\7.5.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="f44d03c138cb6488fdbaa65e3a7e5878861a56d8">
+        <dex dex="C:\Android Studio Projects\SampleMap_withTextBackCoordinates\SampleMap\app\build\intermediates\pre-dexed\debug\classes-62bafe70067c4625b3bc3cb12759ac57a8102a23.jar" />
+    </item>
+    <item
+        jar="C:\Android Studio Projects\SampleMap_withTextBackCoordinates\SampleMap\app\build\intermediates\exploded-aar\com.android.support\mediarouter-v7\22.0.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="a1372c17fccacca753d3951d3ad820571cbce075">
+        <dex dex="C:\Android Studio Projects\SampleMap_withTextBackCoordinates\SampleMap\app\build\intermediates\pre-dexed\debug\classes-b58ceb8d94b0d0eae85601131ce41d456fbcfeaa.jar" />
+    </item>
+    <item
+        jar="C:\Android Studio Projects\SampleMap_withTextBackCoordinates\SampleMap\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-location\7.5.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="1e98ef3f124bb7a11f8575f9ff5dfea330b61b6f">
+        <dex dex="C:\Android Studio Projects\SampleMap_withTextBackCoordinates\SampleMap\app\build\intermediates\pre-dexed\debug\classes-068a687093881874941a4557def9ad1809659f6d.jar" />
+    </item>
+    <item
+        jar="C:\Android Studio Projects\SampleMap_withTextBackCoordinates\SampleMap\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-identity\7.5.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="d405025c600055237c171a0bbabaa49d69696573">
+        <dex dex="C:\Android Studio Projects\SampleMap_withTextBackCoordinates\SampleMap\app\build\intermediates\pre-dexed\debug\classes-52fb22dee02a6b203944e645b30dc7b86733eb07.jar" />
+    </item>
+    <item
+        jar="C:\Android Studio Projects\SampleMap_withTextBackCoordinates\SampleMap\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-games\7.5.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="02bac2dc792d78241077861566f2c82da955e7fa">
+        <dex dex="C:\Android Studio Projects\SampleMap_withTextBackCoordinates\SampleMap\app\build\intermediates\pre-dexed\debug\classes-31c5cce179604f99046080abbb57e2cb86f3723b.jar" />
+    </item>
+    <item
+        jar="C:\Android Studio Projects\SampleMap_withTextBackCoordinates\SampleMap\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-maps\7.5.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="06a42becc33232ec0ee125161da68c1829c9f8fd">
+        <dex dex="C:\Android Studio Projects\SampleMap_withTextBackCoordinates\SampleMap\app\build\intermediates\pre-dexed\debug\classes-251a2a224a1366c8e0028b5fafa95b2cefdf27ec.jar" />
+    </item>
+    <item
+        jar="C:\Android Studio Projects\SampleMap_withTextBackCoordinates\SampleMap\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-nearby\7.5.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="6440e5e5cfe368f9bff3c537fb8988048069cb33">
+        <dex dex="C:\Android Studio Projects\SampleMap_withTextBackCoordinates\SampleMap\app\build\intermediates\pre-dexed\debug\classes-5a03f57963c4609f770b241a38ebdda0d90d6c30.jar" />
+    </item>
+    <item
+        jar="C:\Android Studio Projects\SampleMap_withTextBackCoordinates\SampleMap\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-safetynet\7.5.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="1a6411087ab88ce5542f593e63a2752b6b0d6f1a">
+        <dex dex="C:\Android Studio Projects\SampleMap_withTextBackCoordinates\SampleMap\app\build\intermediates\pre-dexed\debug\classes-fb41b1ba491e13514499363152b840b37d4322db.jar" />
+    </item>
+    <item
+        jar="C:\Android Studio Projects\SampleMap_withTextBackCoordinates\SampleMap\app\libs\joda-time-2.8.2.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="d27c24204c5e507b16fec01006b3d0f1ec42aed4">
+        <dex dex="C:\Android Studio Projects\SampleMap_withTextBackCoordinates\SampleMap\app\build\intermediates\pre-dexed\debug\joda-time-2.8.2-6b8bdca2751b4628af334ade833ce6fc989f8632.jar" />
+    </item>
+    <item
+        jar="C:\Android Studio Projects\SampleMap_withTextBackCoordinates\SampleMap\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-gcm\7.5.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="8d736fefa22d896e84a268354b3ed48a42663150">
+        <dex dex="C:\Android Studio Projects\SampleMap_withTextBackCoordinates\SampleMap\app\build\intermediates\pre-dexed\debug\classes-e25645b2bbced963b5cb1032b4fe2a98c787bab6.jar" />
+    </item>
+    <item
         jar="C:\Android Studio Projects\SampleMap_withTextBackCoordinates\SampleMap\app\libs\AndroidSwipeLayout-v1.1.8.jar"
         jumboMode="false"
         revision="23.0.1"
         sha1="c092dd2f2bdea6c04c5bf4122db66cb3495a3c35">
         <dex dex="C:\Android Studio Projects\SampleMap_withTextBackCoordinates\SampleMap\app\build\intermediates\pre-dexed\debug\AndroidSwipeLayout-v1.1.8-a572b252cb02fe1f0b614ddb5036e04103187915.jar" />
+    </item>
+    <item
+        jar="C:\Android Studio Projects\SampleMap_withTextBackCoordinates\SampleMap\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-appindexing\7.5.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="f02127a85abd52a2cd526d4c2409f21969f80ee8">
+        <dex dex="C:\Android Studio Projects\SampleMap_withTextBackCoordinates\SampleMap\app\build\intermediates\pre-dexed\debug\classes-c8f958e830d4829f098367677e91faa14300aefa.jar" />
+    </item>
+    <item
+        jar="C:\Android Studio Projects\SampleMap_withTextBackCoordinates\SampleMap\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.1.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="ddde541c289c8b816a8f8fd6c325d80788c522a6">
+        <dex dex="C:\Android Studio Projects\SampleMap_withTextBackCoordinates\SampleMap\app\build\intermediates\pre-dexed\debug\classes-db1a3e32131a55a26991272bd18157cb002cd60f.jar" />
+    </item>
+    <item
+        jar="C:\Android Studio Projects\SampleMap_withTextBackCoordinates\SampleMap\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-ads\7.5.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="29ebc7e04d877062317c8cc0e68b20f0c1fcda66">
+        <dex dex="C:\Android Studio Projects\SampleMap_withTextBackCoordinates\SampleMap\app\build\intermediates\pre-dexed\debug\classes-b33756c4c5d8c256103bbacf299f0fe8b2383d41.jar" />
+    </item>
+    <item
+        jar="C:\Android Studio Projects\SampleMap_withTextBackCoordinates\SampleMap\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.1.0\jars\libs\internal_impl-23.1.0.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="8716243bf04bae8d6c9ca94d27b9a9be7236f0a3">
+        <dex dex="C:\Android Studio Projects\SampleMap_withTextBackCoordinates\SampleMap\app\build\intermediates\pre-dexed\debug\internal_impl-23.1.0-adafc72bc3911c02c882fd89fae6c6cdaaaa3886.jar" />
+    </item>
+    <item
+        jar="C:\Android Studio Projects\SampleMap_withTextBackCoordinates\SampleMap\app\build\intermediates\exploded-aar\com.google.maps.android\android-maps-utils\0.4.2\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="152d1de4d18361aabd69adeefe3dee15e4fd238f">
+        <dex dex="C:\Android Studio Projects\SampleMap_withTextBackCoordinates\SampleMap\app\build\intermediates\pre-dexed\debug\classes-a1dd4263ff911121e1e0bc0f9b50a8dd0e387be9.jar" />
+    </item>
+    <item
+        jar="C:\Android Studio Projects\SampleMap_withTextBackCoordinates\SampleMap\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-cast\7.5.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="8e3a972f28b8bae817e382257ba177a31bcadbbc">
+        <dex dex="C:\Android Studio Projects\SampleMap_withTextBackCoordinates\SampleMap\app\build\intermediates\pre-dexed\debug\classes-f1f1dbfe23110020600e573d29816957b4b25f4f.jar" />
+    </item>
+    <item
+        jar="C:\Android Studio Projects\SampleMap_withTextBackCoordinates\SampleMap\app\build\intermediates\exploded-aar\com.android.support\recyclerview-v7\23.1.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="3f151e49c316a5ab2c065969a3b3b55ef9b393fc">
+        <dex dex="C:\Android Studio Projects\SampleMap_withTextBackCoordinates\SampleMap\app\build\intermediates\pre-dexed\debug\classes-628b43e9d45f39015083d2261f9c10cd951bad02.jar" />
+    </item>
+    <item
+        jar="C:\Android Studio Projects\SampleMap_withTextBackCoordinates\SampleMap\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-appinvite\7.5.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="63ec6e9f4fe5482a7447d0f3091b8e543a02554c">
+        <dex dex="C:\Android Studio Projects\SampleMap_withTextBackCoordinates\SampleMap\app\build\intermediates\pre-dexed\debug\classes-c0eea3710dc7b6ba50481b5847ed4001c16819b0.jar" />
+    </item>
+    <item
+        jar="C:\Android Studio Projects\SampleMap_withTextBackCoordinates\SampleMap\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-fitness\7.5.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="a172852a35ff919e85b9b7f14bbc15c5bee25520">
+        <dex dex="C:\Android Studio Projects\SampleMap_withTextBackCoordinates\SampleMap\app\build\intermediates\pre-dexed\debug\classes-d74c42ac5abe82fdfb3111b162478a8b28e15968.jar" />
+    </item>
+    <item
+        jar="D:\Backup\Android SDK\extras\android\m2repository\com\android\support\support-annotations\23.1.0\support-annotations-23.1.0.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="92e3fc113ec3ee36b64603a38857b95700025633">
+        <dex dex="C:\Android Studio Projects\SampleMap_withTextBackCoordinates\SampleMap\app\build\intermediates\pre-dexed\debug\support-annotations-23.1.0-71a27419018983399dc472972d1fc67a13afa755.jar" />
+    </item>
+    <item
+        jar="C:\Users\rjhonsl.SANTEH\.gradle\caches\modules-2\files-2.1\com.nineoldandroids\library\2.4.0\e9b63380f3a242dbdbf103a2355ad7e43bad17cb\library-2.4.0.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="e9b63380f3a242dbdbf103a2355ad7e43bad17cb">
+        <dex dex="C:\Android Studio Projects\SampleMap_withTextBackCoordinates\SampleMap\app\build\intermediates\pre-dexed\debug\library-2.4.0-f75c89a52cd3754861bc05defb11a03b6e442fcf.jar" />
+    </item>
+    <item
+        jar="C:\Android Studio Projects\SampleMap_withTextBackCoordinates\SampleMap\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-panorama\7.5.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="ba207be21987c11b37d9f8faa08ed6e722569f30">
+        <dex dex="C:\Android Studio Projects\SampleMap_withTextBackCoordinates\SampleMap\app\build\intermediates\pre-dexed\debug\classes-3aeb7e85e41765a0724ad05756b46cb5f5a2c6cb.jar" />
+    </item>
+    <item
+        jar="C:\Android Studio Projects\SampleMap_withTextBackCoordinates\SampleMap\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-base\7.5.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="a78183f30e769a98ab4820794f597763088d3065">
+        <dex dex="C:\Android Studio Projects\SampleMap_withTextBackCoordinates\SampleMap\app\build\intermediates\pre-dexed\debug\classes-16f0f5a9675153027b818575326e7fa9c77f7d63.jar" />
+    </item>
+    <item
+        jar="C:\Android Studio Projects\SampleMap_withTextBackCoordinates\SampleMap\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-plus\7.5.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="272bc5d7063f24bc3a33ea1d318cde8f31f5ec4c">
+        <dex dex="C:\Android Studio Projects\SampleMap_withTextBackCoordinates\SampleMap\app\build\intermediates\pre-dexed\debug\classes-2b9776f29b02e2caa210c8e0f39418bbdec4a7e7.jar" />
+    </item>
+    <item
+        jar="C:\Android Studio Projects\SampleMap_withTextBackCoordinates\SampleMap\app\build\intermediates\exploded-aar\com.github.flavienlaurent.datetimepicker\library\0.0.2\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="2fc859b7abb78d29169f6a582b45cbe1f3f1a4cc">
+        <dex dex="C:\Android Studio Projects\SampleMap_withTextBackCoordinates\SampleMap\app\build\intermediates\pre-dexed\debug\classes-20c9f8efaec6a41a45b999e63cfbbdf84033b621.jar" />
+    </item>
+    <item
+        jar="C:\Android Studio Projects\SampleMap_withTextBackCoordinates\SampleMap\app\build\intermediates\exploded-aar\com.google.android.gms\play-services-appstate\7.5.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="68c140702c7242d914655bcb3164d9e8c45b84cb">
+        <dex dex="C:\Android Studio Projects\SampleMap_withTextBackCoordinates\SampleMap\app\build\intermediates\pre-dexed\debug\classes-123e2ddc1d3655eae11bf4bb0947ef54ff4cf5f0.jar" />
+    </item>
+    <item
+        jar="C:\Android Studio Projects\SampleMap_withTextBackCoordinates\SampleMap\app\build\intermediates\exploded-aar\com.android.support\mediarouter-v7\22.0.0\jars\libs\internal_impl-22.0.0.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="ba3df4eb0a630d7de294f0e48d3f9267d279b784">
+        <dex dex="C:\Android Studio Projects\SampleMap_withTextBackCoordinates\SampleMap\app\build\intermediates\pre-dexed\debug\internal_impl-22.0.0-b39303ac2a58f45ca4fc4df9dd3d321048839ef6.jar" />
+    </item>
+    <item
+        jar="C:\Android Studio Projects\SampleMap_withTextBackCoordinates\SampleMap\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\23.1.0\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="57ae0d750ff83f0c738d21720224ac7ea866a094">
+        <dex dex="C:\Android Studio Projects\SampleMap_withTextBackCoordinates\SampleMap\app\build\intermediates\pre-dexed\debug\classes-1a3fc0814cc2f59b783f88fd1d1ccdc5cb3b3b29.jar" />
     </item>
 
 </items>

@@ -28,6 +28,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -871,6 +872,22 @@ public class Helper {
         return d;
     }
 
+
+
+    public static Dialog createNumberPickerdDialog(Activity activity, int initialValue){
+        final Dialog d = new Dialog(activity);//
+        d.requestWindowFeature(Window.FEATURE_NO_TITLE); //notitle
+        d.setContentView(R.layout.dialog_numberpicker);
+        final NumberPicker nbp = (NumberPicker) d.findViewById(R.id.dialog_numberpicker);
+        Button set = (Button) d.findViewById(R.id.btn_numberpicker_set);
+        nbp.setMaxValue(initialValue);
+        nbp.setMaxValue(9999);
+        nbp.setMinValue(0);
+
+
+        d.show();
+        return d;
+    }
 
 
 
