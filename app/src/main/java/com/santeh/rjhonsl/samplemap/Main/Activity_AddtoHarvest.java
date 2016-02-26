@@ -22,7 +22,7 @@ public class Activity_AddtoHarvest extends FragmentActivity{
     Context context;
 
 
-    EditText edtFinalAbw;
+    EditText edtFinalAbw, edtTotalFeedinKilos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +36,9 @@ public class Activity_AddtoHarvest extends FragmentActivity{
 
 
         edtFinalAbw = (EditText) findViewById(R.id.edt_finalabw);
+        edtTotalFeedinKilos = (EditText) findViewById(R.id.edt_totalKiloOfFeedsConsumed);
+
+
         edtFinalAbw.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -51,15 +54,38 @@ public class Activity_AddtoHarvest extends FragmentActivity{
                     }
                 }
 
-                final Dialog d = Helper.createNumberPickerdDialog(activity, initialValue);
+                final Dialog d = Helper.createNumberPickerdDialog(activity,"Final ABW", 1, 9999);
                 Button set = (Button) d.findViewById(R.id.btn_numberpicker_set);
                 final NumberPicker nbp = (NumberPicker) d.findViewById(R.id.dialog_numberpicker);
+                nbp.setValue(initialValue);
 
                 set.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         nbp.clearFocus();
                         edtFinalAbw.setText(nbp.getValue()+"g");
+                        d.dismiss();
+                    }
+                });
+            }
+        });
+
+
+        edtTotalFeedinKilos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int kilos = Helper.removeUnits(edtTotalFeedinKilos.getText().toString(), "kg");
+
+                final Dialog d = Helper.createNumberPickerdDialog(activity, "Total Feed Consumed(kg)", 1, 99999);
+                Button set = (Button) d.findViewById(R.id.btn_numberpicker_set);
+                final NumberPicker nbp = (NumberPicker) d.findViewById(R.id.dialog_numberpicker);
+                nbp.setValue(kilos);
+
+                set.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        nbp.clearFocus();
+                        edtTotalFeedinKilos.setText(nbp.getValue()+"kg");
                         d.dismiss();
                     }
                 });

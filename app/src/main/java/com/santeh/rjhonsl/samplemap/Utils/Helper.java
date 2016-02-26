@@ -874,16 +874,19 @@ public class Helper {
 
 
 
-    public static Dialog createNumberPickerdDialog(Activity activity, int initialValue){
+    public static Dialog createNumberPickerdDialog(Activity activity, String dialogTitle, int minVal, int maxValue){
         final Dialog d = new Dialog(activity);//
-        d.requestWindowFeature(Window.FEATURE_NO_TITLE); //notitle
+//        d.requestWindowFeature(Window.FEATURE_NO_TITLE); //notitle
         d.setContentView(R.layout.dialog_numberpicker);
+        d.setTitle(dialogTitle);
         final NumberPicker nbp = (NumberPicker) d.findViewById(R.id.dialog_numberpicker);
         Button set = (Button) d.findViewById(R.id.btn_numberpicker_set);
-        nbp.setMaxValue(initialValue);
-        nbp.setMaxValue(9999);
-        nbp.setMinValue(0);
+        nbp.setMaxValue(maxValue);
+        nbp.setMinValue(minVal);
 
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(d.getWindow().getAttributes());
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
 
         d.show();
         return d;
@@ -912,6 +915,22 @@ public class Helper {
         return d;
     }
 
+
+    public static int removeUnits(String wholeValue, String unitsToRemove){
+        int initialValue;
+
+        if (wholeValue.equalsIgnoreCase("") || wholeValue.equalsIgnoreCase(null)) {
+            initialValue = 1;
+        }else {
+            if (wholeValue.substring(wholeValue.length() - unitsToRemove.length(), wholeValue.length()) .equalsIgnoreCase(unitsToRemove)){
+                initialValue = Integer.parseInt(wholeValue.substring(0, wholeValue.length() - unitsToRemove.length()));
+            }else{
+                initialValue = Integer.parseInt(wholeValue.toString());
+            }
+        }
+
+        return  initialValue;
+    }
 
     public static Dialog createCustomThemedDialogOKOnly(Activity activity, String title, String prompt, String button, int resIdColor){
         final Dialog d = new Dialog(activity);//
