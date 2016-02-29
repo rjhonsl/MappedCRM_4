@@ -30,10 +30,6 @@ public class Activity_FarmViewOptions extends Activity{
         Bundle extras = getIntent().getExtras();
 
 
-//        intent.putExtra("id", Integer.parseInt(details[0]));
-//        intent.putExtra("farmname", "" + details[1]);
-//        intent.putExtra("latitude", location.latitude + "");
-//        intent.putExtra("longitude", location.longitude + "");
         if (intentt.hasExtra("id")) {
             id = intentt.getIntExtra("id", 0);
         }

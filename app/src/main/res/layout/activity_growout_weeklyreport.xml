@@ -10,7 +10,7 @@
         android:gravity="center"
         android:orientation="horizontal"
         android:id="@+id/ll_titlebar"
-        android:background="@color/accent_material_light">
+        android:background="@color/blue">
 
         <ImageButton android:layout_width="wrap_content"
                      android:padding="5dp"

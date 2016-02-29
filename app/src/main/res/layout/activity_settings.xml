@@ -9,7 +9,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="@color/accent_material_light">
+        android:background="@color/blue">
 
         <TextView
         android:text="Settings"
@@ -117,7 +117,7 @@
                     android:layout_marginBottom="10dp"
                     android:paddingLeft="15dp"
                     android:textStyle="bold"
-                    android:textColor="#00665a"
+                    android:textColor="@color/gray_800"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:text="BACKUP AND RESTORE"
@@ -133,7 +133,7 @@
                     <TextView
                         android:padding="15dp"
                         android:textSize="15sp"
-                        android:textColor="#a3002a24"
+                        android:textColor="@color/gray_600"
                         android:textStyle="normal"
                         android:id="@+id/txt_settings_restore"
                         android:background="@drawable/bg_white_box_noshadow"
@@ -147,7 +147,7 @@
                     <TextView
                         android:padding="15dp"
                         android:textSize="15sp"
-                        android:textColor="#a3002a24"
+                        android:textColor="@color/gray_600"
                         android:textStyle="normal"
                         android:id="@+id/txt_settings_backup_local"
                         android:background="@drawable/bg_white_box_noshadow"
@@ -160,7 +160,7 @@
                     <TextView
                         android:padding="15dp"
                         android:textSize="15sp"
-                        android:textColor="#a3002a24"
+                        android:textColor="@color/gray_600"
                         android:textStyle="normal"
                         android:id="@+id/txt_settings_restore_local"
                         android:background="@drawable/bg_white_box_noshadow"
@@ -187,7 +187,7 @@
                     android:layout_marginBottom="10dp"
                     android:paddingLeft="15dp"
                     android:textStyle="bold"
-                    android:textColor="#00665a"
+                    android:textColor="@color/gray_800"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:text="OTHER SETTINGS"
@@ -201,7 +201,7 @@
                     <TextView
                         android:padding="15dp"
                         android:textSize="15sp"
-                        android:textColor="#a3002a24"
+                        android:textColor="@color/gray_600"
                         android:textStyle="normal"
                         android:id="@+id/txt_settings_changelog"
                         android:background="@drawable/bg_white_box_noshadow"
@@ -214,7 +214,7 @@
                     <TextView
                         android:padding="15dp"
                         android:textSize="15sp"
-                        android:textColor="#a3002a24"
+                        android:textColor="@color/gray_600"
                         android:textStyle="normal"
                         android:id="@+id/txt_settings_about"
                         android:background="@drawable/bg_white_box_noshadow"
