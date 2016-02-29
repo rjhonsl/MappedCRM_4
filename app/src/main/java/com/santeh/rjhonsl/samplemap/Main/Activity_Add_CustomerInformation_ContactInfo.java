@@ -67,7 +67,7 @@ public class Activity_Add_CustomerInformation_ContactInfo extends FragmentActivi
             @Override
             public void onClick(View v) {
                 final String[] options = {"Owned","Rented"};
-                final Dialog d = Helper.createCustomThemedListDialog(activity, options, "Status", R.color.deepteal_500);
+                final Dialog d = Helper.createCustomThemedListDialog(activity, options, "House Status", R.color.deepteal_500);
                 ListView lv = (ListView) d.findViewById(R.id.dialog_list_listview);
                 lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
@@ -138,7 +138,7 @@ public class Activity_Add_CustomerInformation_ContactInfo extends FragmentActivi
                     startActivity(intent);
                     overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
                 }else{
-                    Helper.createCustomThemedDialogOKOnly(activity, "Warning", "You must complete fields with '*' to continue.", "OK", R.color.red);
+                    Helper.createCustomThemedDialogOKOnly(activity, "Warning", "Complete fields with '*' to continue.", "OK", R.color.red);
                 }
             }
         });

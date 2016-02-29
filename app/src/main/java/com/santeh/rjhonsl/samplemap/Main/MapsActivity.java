@@ -227,7 +227,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             @Override
             public void onClick(View v) {
 
-                final Dialog d = Helper.createCustomDialogThemedYesNO(activity, "Do you want to sync data to our server?", "Sync", "NO", "SYNC NOW", R.color.skyblue_500);
+                final Dialog d = Helper.createCustomDialogThemedYesNO(activity, "Sync data to our server?", "Sync", "NO", "SYNC NOW", R.color.skyblue_500);
                 final Button btnNo = (Button) d.findViewById(R.id.btn_dialog_yesno_opt1);
                 Button btnSync = (Button) d.findViewById(R.id.btn_dialog_yesno_opt2);
 
@@ -539,7 +539,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                                             mapcircle = maps.addCircle(circleOptions_addLocation);
                                         }
                                         btn_cancelAddmarker.setVisibility(View.VISIBLE);
-                                        Helper.createCustomThemedDialogOKOnly(activity, "Add Marker", "Long press any location within 1000 meters of your current location to Add a Marker.", "OK", R.color.blue);
+                                        Helper.createCustomThemedDialogOKOnly(activity, "Add Marker", "Long press any location within the blue circle.r.", "OK", R.color.blue);
                                     }
                                 }, 1200);
 
@@ -565,7 +565,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 //                        Helper.toastLong(activity, results[0]+"");
 
                                 if (results[0] > 1000) {
-                                    final Dialog d = Helper.createCustomThemedDialogOKOnly(activity, "Out of range", "Selection is out of 1km range from your location", "OK", R.color.red);
+                                    final Dialog d = Helper.createCustomThemedDialogOKOnly(activity, "Out of range", "Selection is out of 1km range", "OK", R.color.red);
                                     d.show();
 
                                     Button ok = (Button) d.findViewById(R.id.btn_dialog_okonly_OK);
@@ -579,7 +579,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                                     String[] options = {"Farm Information", "Customer Information"};
                                     final Dialog d1 = Helper.createCustomThemedListDialogWithPrompt(activity, options, "Add Marker",
-                                            "Select the type of marker you want to add on this location.", R.color.blue);
+                                            "Select the type of marker you want to add.", R.color.blue);
                                     ListView lvoptions = (ListView) d1.findViewById(R.id.dialog_list_listview);
                                     lvoptions.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                         @Override
@@ -1446,7 +1446,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         if (Helper.nullcheck.isGlobalUserIDNull(activity)) {
             Dialog d = Helper.createCustomThemedDialogOKOnly(activity, "Session Expired",
-                    "It seems that you have been inactive for too long. Please log in again, ", "OK", R.color.red);
+                    "It seems that you have been inactive for too long. Please log in again", "OK", R.color.red);
             d.setCancelable(false);
             Button ok = (Button) d.findViewById(R.id.btn_dialog_okonly_OK);
             ok.setOnClickListener(new View.OnClickListener() {
@@ -1467,7 +1467,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     private void exitApp() {
-        final Dialog d = Helper.createCustomDialogThemedYesNO(activity, "Do you wish to wish to exit the app? You will have to login next time.", "EXIT", "YES", "NO", R.color.blue);
+        final Dialog d = Helper.createCustomDialogThemedYesNO(activity, "Close the app? You will have to login next time.", "Close", "YES", "NO", R.color.blue);
         d.show();
         Button yes = (Button) d.findViewById(R.id.btn_dialog_yesno_opt1);
         Button no = (Button) d.findViewById(R.id.btn_dialog_yesno_opt2);
@@ -1494,7 +1494,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
     private void logout() {
-        final Dialog d = Helper.createCustomDialogThemedYesNO(activity, "Do you wish to wish to return to Login Screen?", "Log Out", "YES", "NO", R.color.blue);
+        final Dialog d = Helper.createCustomDialogThemedYesNO(activity, "Logout this account?", "Log Out", "YES", "NO", R.color.blue);
         d.show();
         Button yes = (Button) d.findViewById(R.id.btn_dialog_yesno_opt1);
         Button no = (Button) d.findViewById(R.id.btn_dialog_yesno_opt2);

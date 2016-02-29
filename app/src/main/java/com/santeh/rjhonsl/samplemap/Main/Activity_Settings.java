@@ -123,7 +123,7 @@ public class Activity_Settings extends Activity{
             @Override
             public void onClick(View v) {
 
-                String prompt = "Are you sure you want to restore data from web server?" +
+                String prompt = "Restore data from web server?" +
                         "\n\n" +
                         "(NOTE) Current data will be wiped out and replaced with data from web server. This process is irreversible.";
                 final Dialog d = Helper.createCustomDialogThemedYesNO(activity, prompt, "Restore", "NO", "YES", R.color.red_700);
@@ -479,7 +479,7 @@ public class Activity_Settings extends Activity{
     private void restoreLocal(){
         final Dialog d = Helper.createCustomDialogThemedYesNO(activity,
                 "All data will be restored to the state of when the backup was done. All existing data after the date will not be restored." +
-                        "\n\nAre you sure you want to retore db? ",
+                        "\n\nRestore backup? ",
                 "Restore", "NO", "YES", R.color.red_material_600);
         Button btnyes = (Button) d.findViewById(R.id.btn_dialog_yesno_opt2);
         Button btnno  = (Button) d.findViewById(R.id.btn_dialog_yesno_opt1);

@@ -76,7 +76,7 @@ public class Activity_AddtoHarvest extends FragmentActivity{
             public void onClick(View v) {
                 int kilos = Helper.removeUnits(edtTotalFeedinKilos.getText().toString(), "kg");
 
-                final Dialog d = Helper.createNumberPickerdDialog(activity, "Total Feed Consumed(kg)", 1, 99999);
+                final Dialog d = Helper.createNumberPickerdDialog(activity, "Total Feed Consumed(kg)", 1, 999999);
                 Button set = (Button) d.findViewById(R.id.btn_numberpicker_set);
                 final NumberPicker nbp = (NumberPicker) d.findViewById(R.id.dialog_numberpicker);
                 nbp.setValue(kilos);

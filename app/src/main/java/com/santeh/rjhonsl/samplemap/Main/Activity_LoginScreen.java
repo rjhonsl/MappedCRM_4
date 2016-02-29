@@ -639,7 +639,7 @@ public class Activity_LoginScreen extends Activity{
                                     Helper.toastShort(activity, "Your application is up to date!");
                                 }
                             } else {
-                                Helper.createCustomThemedDialogOKOnly(activity, "Error", "Update Failed. Please try again later. \n"
+                                Helper.createCustomThemedDialogOKOnly(activity, "Error", "Update Failed. Please try again later."
                                         , "OK", R.color.red);
                             }
 

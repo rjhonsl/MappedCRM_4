@@ -85,7 +85,7 @@ public class Activity_ViewCustomerInfo extends Activity {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
 
-                String [] options = {"See in Map","View and Edit Delails", "Delete"};
+                String [] options = {"See in Map","View and Edit Details", "Delete"};
                 final Dialog d = Helper.createCustomListDialog(Activity_ViewCustomerInfo.this, options,"OPTIONS" );
 
                 ListView list = (ListView) d.findViewById(R.id.dialog_list_listview);
@@ -124,7 +124,7 @@ public class Activity_ViewCustomerInfo extends Activity {
                             startActivity(intent);
                         }else if(index ==2) {
                             final Dialog yn = Helper.createCustomDialogYesNO(Activity_ViewCustomerInfo.this, R.layout.dialog_material_yesno,
-                                    "Changes you are going to do is permanent and irreversible. \n\nAre you sure you want to delete *"
+                                    "Changes you are going to do is permanent and irreversible. \n\nDelete *"
                                             + searchedList.get(position).getContact_name() + "* from list?",
                                     "DELETE", "YES", "NO");
                             Button yes = (Button) yn.findViewById(R.id.btn_dialog_yesno_opt1);

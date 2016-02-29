@@ -110,7 +110,7 @@ public class Activity_FarmInfo_Edit extends Activity{
                 if (isposted == 1) {
                     Helper.createCustomThemedDialogOKOnly(activity, "Oops", "Item is alrady posted on our servers. Please contact admin for further changes.", "OK", R.color.red);
                 }else{
-                    final Dialog d = Helper.createCustomDialogThemedYesNO(activity, "Are you sure you want to delete this record? ", "Delete", "NO", "YES", R.color.red);
+                    final Dialog d = Helper.createCustomDialogThemedYesNO(activity, "Delete this record? ", "Delete", "NO", "YES", R.color.red);
                     Button no = (Button) d.findViewById(R.id.btn_dialog_yesno_opt1);
                     Button yes = (Button) d.findViewById(R.id.btn_dialog_yesno_opt2);
                     d.show();
@@ -339,7 +339,7 @@ public class Activity_FarmInfo_Edit extends Activity{
 
     public void updateCustomerInformation() {
         if (isposted == 1) {
-            Helper.createCustomThemedDialogOKOnly(activity, "Oops", "Item is alrady posted on our servers. Please contact admin for further changes.", "OK", R.color.red);
+            Helper.createCustomThemedDialogOKOnly(activity, "Oops", "Item already posted on our servers. Please contact admin for further changes.", "OK", R.color.red);
         }else{
             latitude = txtlat.getText().toString();
             longitude = txtlong.getText().toString();

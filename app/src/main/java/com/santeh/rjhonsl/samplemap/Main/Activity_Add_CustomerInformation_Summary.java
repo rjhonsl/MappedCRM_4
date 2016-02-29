@@ -186,7 +186,7 @@ public class Activity_Add_CustomerInformation_Summary extends FragmentActivity{
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Dialog d = Helper.createCustomDialogThemedYesNO(activity, "Add " + fname + " " + lname + " to customer information?",
+                final Dialog d = Helper.createCustomDialogThemedYesNO(activity, "Add " + fname + " " + lname + "?",
                         "Save", "YES", "NO", R.color.blue);
                 d.show();
 
@@ -246,7 +246,7 @@ public class Activity_Add_CustomerInformation_Summary extends FragmentActivity{
 
         }else {
             PD.dismiss();
-            Helper.createCustomThemedDialogOKOnly(activity, "Error", "Saving of Customer Information Failed. Please Try again.", "OK", R.color.red);
+            Helper.createCustomThemedDialogOKOnly(activity, "Error", "Something happened. Please Try again.", "OK", R.color.red);
         }
 
 //

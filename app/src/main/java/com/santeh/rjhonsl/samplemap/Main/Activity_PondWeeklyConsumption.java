@@ -273,7 +273,7 @@ public class Activity_PondWeeklyConsumption extends Activity {
                         Helper.createCustomThemedDialogOKOnly(activity, "Warning", "You cannot Edit or Delete Initial Stocking Data", "OK", R.color.red);
                     }else {
                        if (pondweeklyList.get(position).getIsPosted_weekly() == 1) {
-                           Helper.createCustomThemedDialogOKOnly(activity, "Oops", "Item is already posted on our server. Please contact admin for changes.", "OK", R.color.red);
+                           Helper.createCustomThemedDialogOKOnly(activity, "Oops", "Item is already posted on server. Please contact admin for further changes.", "OK", R.color.red);
                        }else{
                            String[] options = {"Edit ABW and Remarks", "Delete"};
                            final Dialog d = Helper.createCustomThemedListDialog(activity, options, "Options ", R.color.deepteal_400);
@@ -322,7 +322,7 @@ public class Activity_PondWeeklyConsumption extends Activity {
 
                                    }else if (position1 == 1){
                                        d.hide();
-                                       final Dialog del = Helper.createCustomDialogThemedYesNO(activity, "Are you sure you want to delete selected week?", "Delete", "NO", "DELETE", R.color.red);
+                                       final Dialog del = Helper.createCustomDialogThemedYesNO(activity, "Delete selected visit?", "Delete", "NO", "DELETE", R.color.red);
                                        del.show();
 
                                        Button cancel = (Button) del.findViewById(R.id.btn_dialog_yesno_opt1);

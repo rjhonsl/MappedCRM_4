@@ -179,7 +179,7 @@ public class Activity_ManagePonds extends AppCompatActivity {
                         }else if (position == 2) {
                             if (pondInfoList.get(position1).getIsPosted() == 0) {
                                 if (Helper.variables.getGlobalVar_currentLevel(activity) == 4) {
-                                    final Dialog dd = Helper.createCustomDialogThemedYesNO(activity, "Changes cannot be undone once implemented. \n\nAre you sure you want to delete this pond?"
+                                    final Dialog dd = Helper.createCustomDialogThemedYesNO(activity, "Changes cannot be undone. \n\nDelete this pond?"
                                             , "Delete", "NO", "YES", R.color.red);
                                     dd.show();
                                     Button yes = (Button) dd.findViewById(R.id.btn_dialog_yesno_opt2);
@@ -306,7 +306,7 @@ public class Activity_ManagePonds extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         final Dialog d = Helper.createCustomDialogOKOnly(Activity_ManagePonds.this, "OOPS",
-                                "Something went wrong. Please try again later.", "OK");
+                                "Something happened. Please try again.", "OK");
                         TextView ok = (TextView) d.findViewById(R.id.btn_dialog_okonly_OK);
                         d.setCancelable(false);
                         d.show();

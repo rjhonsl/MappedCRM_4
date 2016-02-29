@@ -175,9 +175,9 @@ public class Activity_CustomerDetails extends FragmentActivity implements DatePi
             @Override
             public void onClick(View v) {
                 if (isPosted == 1 && Helper.variables.getGlobalVar_currentLevel(activity) == 4) {
-                    Helper.createCustomThemedDialogOKOnly(activity, "Oops", "This Data is uploaded in the internet. You have to contact admin to make changes on this post.", "OK", R.color.skyblue_500);
+                    Helper.createCustomThemedDialogOKOnly(activity, "Warning", "This data is uploaded in the internet. Contact admin for further changes.", "OK", R.color.skyblue_500);
                 }else{
-                    final Dialog d = Helper.createCustomDialogThemedYesNO(activity, "Are you sure you want to delete this record?", "Delete", "NO", "YES", R.color.red);
+                    final Dialog d = Helper.createCustomDialogThemedYesNO(activity, "Delete this record?", "Details", "NO", "YES", R.color.red);
                     Button yes = (Button) d.findViewById(R.id.btn_dialog_yesno_opt2);
                     Button no = (Button) d.findViewById(R.id.btn_dialog_yesno_opt1);
                     d.show();
@@ -238,13 +238,13 @@ public class Activity_CustomerDetails extends FragmentActivity implements DatePi
             public void onClick(View v) {
                     if (custInfoObject.getIsPosted() == 0) {
                         if (!isEditPressed) {
-                            Helper.createCustomThemedDialogOKOnly(activity, "Edit", "You can start editing by long pressing the details (smaller texts under the label) that you want to change. \n\nNOTE: Spouse information cannot be modified.", "OK", R.color.skyblue_500);
+                            Helper.createCustomThemedDialogOKOnly(activity, "Edit", "Start editing by long pressing the details (smaller texts under the label) that you want to change. \n\nNOTE: Spouse information cannot be modified.", "OK", R.color.skyblue_500);
                             isEditPressed = true;
                             toggleEditPressed();
                         } else {
 
 
-                            final Dialog d = Helper.createCustomDialogThemedYesNO(activity, "Save Changes of Customer information?", "Save", "NO", "YES", R.color.skyblue_400);
+                            final Dialog d = Helper.createCustomDialogThemedYesNO(activity, "Save Changes on Customer information?", "Details", "NO", "YES", R.color.skyblue_400);
                             Button yes = (Button) d.findViewById(R.id.btn_dialog_yesno_opt2);
                             Button no = (Button) d.findViewById(R.id.btn_dialog_yesno_opt1);
                             d.show();
@@ -275,7 +275,7 @@ public class Activity_CustomerDetails extends FragmentActivity implements DatePi
                                         Helper.createCustomThemedDialogOKOnly(activity, "Warning", "House number is required to continue", "OK", R.color.red);
                                     }else if(txtCellphone.getText().toString().equalsIgnoreCase("")){
                                         Helper.createCustomThemedDialogOKOnly(activity, "Warning", "Cellphone number is required to continue", "OK", R.color.red);
-                                        txtCellphone.setText("091501234565");
+                                        txtCellphone.setText("09151234565");
                                     }else{
                                         isEditPressed = false;
                                         toggleEditPressed();
@@ -307,7 +307,7 @@ public class Activity_CustomerDetails extends FragmentActivity implements DatePi
                                                 txtBirthPlace.getText().toString(), strSpouseBirthday, txttelePhone.getText().toString(), txtCellphone.getText().toString(),
                                                 txtCivilStatus.getText().toString(), strSpouseFname, strSpouseMname, strSpouseLname, custType);
                                         if (id1 != -1) {
-                                            Dialog d = Helper.createCustomThemedDialogOKOnly(activity, "Success", "Changes has been saved successfully", "OK", R.color.blue);
+                                            Dialog d = Helper.createCustomThemedDialogOKOnly(activity, "Success", "Changes has been saved.", "OK", R.color.blue);
                                             Button ok = (Button) d.findViewById(R.id.btn_dialog_okonly_OK);
                                             ok.setOnClickListener(new View.OnClickListener() {
                                                 @Override
@@ -336,7 +336,7 @@ public class Activity_CustomerDetails extends FragmentActivity implements DatePi
                             });
                         }
                     } else {
-                        Helper.createCustomThemedDialogOKOnly(activity, "Oops", "This data is already uploaded to our servers. Please contact admin to make changes.", "OK", R.color.skyblue_500);
+                        Helper.createCustomThemedDialogOKOnly(activity, "Oops", "Data is already uploaded to our servers. Please contact admin for further changes.", "OK", R.color.skyblue_500);
                     }
             }
         });
@@ -924,7 +924,7 @@ public class Activity_CustomerDetails extends FragmentActivity implements DatePi
                                 showCustomerDetails();
                             } else {
                                 Log.d("DEBUG", "if not local" + id + " null obj" + response);
-                                Helper.createCustomThemedDialogOKOnly(activity, "Error", "No details details available. Please report this to admin.", "OK", R.color.red);
+                                Helper.createCustomThemedDialogOKOnly(activity, "Error", "No details available. Please report to admin for bug fixes.", "OK", R.color.red);
                             }
                         }
                     },
@@ -932,8 +932,8 @@ public class Activity_CustomerDetails extends FragmentActivity implements DatePi
                         @Override
                         public void onErrorResponse(VolleyError error) {
                             PD.dismiss();
-                            Log.d("DEBUG", "if not local" + id + " Voley error");
-                            Helper.toastShort(activity,"Something happened. Please try again later.  \n\nERROR: " + error.toString());
+                            Log.d("DEBUG", "if not local" + id + " Volley error");
+                            Helper.toastShort(activity,"Something happened. Please try again later.  \nERROR: " + error.toString());
                         }
                     }) {
                 @Override
@@ -1077,7 +1077,7 @@ public class Activity_CustomerDetails extends FragmentActivity implements DatePi
 
     private void unsaveChanges() {
         if (isEditPressed) {
-            final Dialog d = Helper.createCustomDialogThemedYesNO(activity, "You are in the middle of editing this customer information. \n\nAre you sure you want to return?", "Save", "NO", "YES", R.color.red);
+            final Dialog d = Helper.createCustomDialogThemedYesNO(activity, "Are you sure you want to return?", "Save", "NO", "YES", R.color.red);
             Button no = (Button) d.findViewById(R.id.btn_dialog_yesno_opt1);
             Button yes = (Button) d.findViewById(R.id.btn_dialog_yesno_opt2);
             d.show();

@@ -158,8 +158,8 @@ public class Activity_Add_FarmInformation extends Activity {
                 txtCultureLevel.getText().toString().equalsIgnoreCase("") ||
                 txtWaterType.getText().toString().equalsIgnoreCase(""))
         {
-            final Dialog d = Helper.createCustomDialogOKOnly(Activity_Add_FarmInformation.this, "OOPS",
-                    "There seems to be field(s) that you have left behind... Please check then try again.", "OK");
+            final Dialog d = Helper.createCustomDialogOKOnly(Activity_Add_FarmInformation.this, "Warning",
+                    "Complete fields with (*) to continue", "OK");
             TextView ok = (TextView) d.findViewById(R.id.btn_dialog_okonly_OK);
             d.show();
             ok.setOnClickListener(new View.OnClickListener() {
@@ -170,7 +170,7 @@ public class Activity_Add_FarmInformation extends Activity {
             });
         }
         else{
-            PD.setMessage("Saving farm information...");
+            PD.setMessage("Saving info...");
             PD.show();
 
 
@@ -191,7 +191,7 @@ public class Activity_Add_FarmInformation extends Activity {
             if (id != -1){
                 PD.dismiss();
                 Dialog d = Helper.createCustomThemedDialogOKOnly(Activity_Add_FarmInformation.this, "SUCCESS",
-                        "You have successfully added " + txtContactName.getText().toString() + " to database", "OK", R.color.blue);
+                        "Saving successful", "OK", R.color.blue);
                 TextView ok = (TextView) d.findViewById(R.id.btn_dialog_okonly_OK);
                 d.setCancelable(false);
                 d.show();
@@ -212,7 +212,7 @@ public class Activity_Add_FarmInformation extends Activity {
                 });
             }else{
                 PD.dismiss();
-                Helper.createCustomThemedDialogOKOnly(activity, "Error", "Saving Failed! Please try again.", "OK", R.color.red);
+                Helper.createCustomThemedDialogOKOnly(activity, "Error", "Saving Failed. Please try again.", "OK", R.color.red);
             }
 
 //
@@ -300,10 +300,6 @@ public class Activity_Add_FarmInformation extends Activity {
 
 
 
-
-
-
-
     private void initOnClickListeners() {
 
         titleback.setOnClickListener(new View.OnClickListener() {
@@ -325,8 +321,8 @@ public class Activity_Add_FarmInformation extends Activity {
             @Override
             public void onClick(View v) {
                 final Dialog d = Helper.createCustomDialogThemedYesNO(activity,
-                        "Are you sure you want to save this information to our database?",
-                        "Save", "YES", "NO", R.color.deepteal_500);
+                        "Save farm location and related data?",
+                        "Farm information", "YES", "NO", R.color.deepteal_500);
                 Button yes = (Button) d.findViewById(R.id.btn_dialog_yesno_opt1);
                 Button no = (Button) d.findViewById(R.id.btn_dialog_yesno_opt2);
                 no.setOnClickListener(new View.OnClickListener() {
