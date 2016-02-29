@@ -9,8 +9,7 @@
         android:background="@color/blue"
         android:orientation="horizontal"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
+        android:layout_height="56dp"
         >
 
         <ImageButton
@@ -19,7 +18,7 @@
             android:src="@drawable/ic_keyboard_arrow_left_white_24dp"
             android:layout_width="0dp"
             android:id="@+id/btn_title_left"
-            android:layout_height="wrap_content"/>
+            android:layout_height="match_parent"/>
 
         <TextView
             android:text="ADD CASE"
@@ -29,14 +28,14 @@
             android:layout_weight="12"
             android:textColor="@color/background_material_light"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"/>
+            android:layout_height="match_parent"/>
 
         <ImageButton
             android:layout_weight="1"
             android:background="@drawable/bg_material_transparent"
             android:src="@drawable/ic_filler24dp"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"/>
+            android:layout_height="match_parent"/>
 
     </LinearLayout>
 

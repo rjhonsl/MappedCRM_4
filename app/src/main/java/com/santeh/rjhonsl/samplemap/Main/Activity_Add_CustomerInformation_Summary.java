@@ -97,8 +97,8 @@ public class Activity_Add_CustomerInformation_Summary extends FragmentActivity{
         txtFname = (TextView) findViewById(R.id.txt_fname);
         txtMname = (TextView) findViewById(R.id.txt_mname);
         txtLname = (TextView) findViewById(R.id.txt_lname);
-        txtBirthday = (TextView) findViewById(R.id.txt_birthday);
         txtBirthPlace = (TextView) findViewById(R.id.txt_birthPlace);
+        txtBirthday = (TextView) findViewById(R.id.txt_birthday);
         txtHouseNumber = (TextView) findViewById(R.id.txt_houseNumber);
         txtStreet = (TextView) findViewById(R.id.txt_street);
         txtSubdivision = (TextView) findViewById(R.id.txt_subdivision);

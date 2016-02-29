@@ -4,22 +4,23 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:gravity="center_horizontal"
+              android:paddingLeft="24dp"
+              android:paddingTop="24dp"
               android:weightSum="1">
 
     <LinearLayout
         android:layout_weight="1"
-        android:layout_marginBottom="5dp"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_gravity="left"
+        android:paddingRight="24dp"
         >
         <TextView
             android:gravity="center_vertical|left"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:padding="13dp"
-            android:textSize="16sp"
+            android:textSize="17sp"
             android:textStyle="bold"
             android:textColor="@color/gray_900"
             android:text="SAMPLE TITLE"
@@ -31,12 +32,13 @@
     <LinearLayout
         android:layout_weight="1"
         android:layout_width="match_parent"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="10dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="20dp"
+        android:paddingRight="24dp"
         android:layout_gravity="center_horizontal">
+
         <!--<TextView-->
             <!--android:layout_width="wrap_content"-->
             <!--android:layout_height="wrap_content"-->
@@ -44,13 +46,13 @@
             <!--android:textColor="#7e829e"-->
             <!--android:text="emaol"-->
             <!--/>-->
-        <TextView
+          <TextView
             android:id="@+id/dialog_okonly_prompt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="15sp"
             android:textColor="@color/gray_600"
-            android:text="Do you want to want to answer?"
+            android:text="Do you want to answer the questions that relates to the life and death of whole mankind?"
             />
 
     </LinearLayout>
@@ -60,11 +62,15 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="right"
-        android:layout_gravity="right">
+        android:paddingBottom="16dp"
+        android:paddingRight="16dp"
+        android:foregroundGravity="right|center_vertical"
+        android:layout_gravity="right|center_vertical">
+
 
         <Button
             android:textColor="@color/material_deep_teal_500"
-            android:textSize="13sp"
+            android:textSize="15sp"
             android:layout_width="70dp"
             android:layout_height="35dp"
             android:background="@drawable/bg_material_transparent"

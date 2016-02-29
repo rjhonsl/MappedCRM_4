@@ -842,7 +842,7 @@ public class Helper {
 
         txtprompt.setText(prompt);
         txttitle.setText(title);
-        txttitle.setBackground(activity.getResources().getDrawable(resIdColor));
+//        txttitle.setBackground(activity.getResources().getDrawable(resIdColor));
         btn1.setText(strButton1);
         btn2.setText(strButton2);
         d.show();
@@ -945,7 +945,7 @@ public class Helper {
                 d.hide();
             }
         });
-        txttitle.setBackground(activity.getResources().getDrawable(resIdColor));
+//        txttitle.setBackground(activity.getResources().getDrawable(resIdColor));
         txtok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
