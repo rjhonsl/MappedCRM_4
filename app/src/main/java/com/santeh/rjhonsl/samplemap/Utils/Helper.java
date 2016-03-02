@@ -893,6 +893,29 @@ public class Helper {
     }
 
 
+    public static Dialog createDecimaldDialog(Activity activity, String dialogTitle, int minVal, int maxValue){
+        final Dialog d = new Dialog(activity);//
+//        d.requestWindowFeature(Window.FEATURE_NO_TITLE); //notitle
+        d.setContentView(R.layout.dialog_decimalpicker);
+        d.setTitle(dialogTitle);
+        NumberPicker wholeNum = (NumberPicker) d.findViewById(R.id.dialog_decipicker_whole);
+        wholeNum.setMaxValue(maxValue);
+        wholeNum.setMinValue(0);
+
+        NumberPicker decimal = (NumberPicker) d.findViewById(R.id.dialog_decipicker_deci);
+        decimal.setMaxValue(maxValue);
+        decimal.setMinValue(0);
+
+
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(d.getWindow().getAttributes());
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+
+        d.show();
+        return d;
+    }
+
+
 
     public static Dialog createCustomDialogOKOnly(Activity activity, String title, String prompt, String button){
         final Dialog d = new Dialog(activity);//

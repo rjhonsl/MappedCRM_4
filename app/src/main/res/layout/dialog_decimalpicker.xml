@@ -10,6 +10,7 @@
                   android:id="@+id/ll_decipickerHolder"
                 android:orientation="horizontal">
         <NumberPicker
+            android:padding="6dp"
             android:id="@+id/dialog_decipicker_whole"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -25,6 +26,7 @@
                   android:gravity="center"
                 android:text="."/>
         <NumberPicker
+            android:padding="6dp"
             android:id="@+id/dialog_decipicker_deci"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -45,7 +47,7 @@
         <Button android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="set"
-                android:id="@+id/btn_numberpicker_set"
+                android:id="@+id/btn_decimalpicker_set"
                 android:background="@drawable/bg_material_transparent"
             />
 

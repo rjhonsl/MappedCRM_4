@@ -34,7 +34,7 @@ public class Activity_AddtoHarvest extends FragmentActivity implements  DatePick
     String species = "", datestocked = "";
 
     DatePickerDialog datePickerDialog;
-    EditText edtFinalAbw, edtTotalFeedinKilos, edtCaseNumber, edtSpecies, edtDateofHarvest, edtDaysOfCulture, edtDateOfStocking;
+    EditText edtFinalAbw, edtTotalFeedinKilos, edtCaseNumber, edtSpecies, edtDateofHarvest, edtDaysOfCulture, edtDateOfStocking, edtFCR;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,10 +77,46 @@ public class Activity_AddtoHarvest extends FragmentActivity implements  DatePick
         edtDateofHarvest = (EditText) findViewById(R.id.edt_dateOfHarvest);
         edtDaysOfCulture = (EditText) findViewById(R.id.edt_daysofculture);
         edtDateOfStocking = (EditText) findViewById(R.id.edt_dateOfStocking);
+        edtFCR = (EditText) findViewById(R.id.edt_fcr);
 
         edtCaseNumber.setText(casenum+"");
         edtSpecies.setText(species+"");
         edtDateOfStocking.setText(datestocked);
+
+
+        edtFCR.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String strwhole, strdeci;
+                if (edtFCR.getText().toString().equalsIgnoreCase("")){
+                    strwhole = "1";
+                    strdeci = "0";
+                }else {
+                    strwhole = Helper.splitter(edtFCR.getText().toString(), ".")[0];
+                    strdeci = Helper.splitter(edtFCR.getText().toString(), ".")[1];
+                }
+
+
+                final Dialog d = Helper.createDecimaldDialog(activity, "FCR", 1, 999);
+                d.show();
+                Button set = (Button) d.findViewById(R.id.btn_decimalpicker_set);
+                final NumberPicker nbpwhole = (NumberPicker) d.findViewById(R.id.dialog_decipicker_whole);
+                final NumberPicker nbpdecimal= (NumberPicker) d.findViewById(R.id.dialog_decipicker_deci);
+
+                nbpdecimal.setValue(Integer.parseInt(strdeci));
+                nbpwhole.setValue(Integer.parseInt(strwhole));
+
+                set.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        d.hide();
+                        edtFCR.setText(nbpwhole.getValue()+"."+nbpdecimal.getValue());
+                    }
+                });
+
+
+            }
+        });
 
         edtDateofHarvest.setOnClickListener(new View.OnClickListener() {
             @Override
