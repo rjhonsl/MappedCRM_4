@@ -16,7 +16,7 @@ public class Activity_FarmViewOptions extends Activity{
     String customerID="", farmname="";
     Activity activity;
 
-    TextView txtManagePonds, txtWeeklyReports;
+    TextView txtManagePonds, txtHarvestInfo;
     String farmName, lat, lng;
     int id;
 
@@ -53,7 +53,7 @@ public class Activity_FarmViewOptions extends Activity{
 
 //        Helper.toastLong(activity, "id"+customerID);
         txtManagePonds = (TextView) findViewById(R.id.txt_farmoptions_managePonds);
-        txtWeeklyReports = (TextView) findViewById(R.id.txt_farmoptions_harvest_history);
+        txtHarvestInfo = (TextView) findViewById(R.id.txt_farmoptions_harvest_history);
 
 
         txtManagePonds.setOnClickListener(new View.OnClickListener() {
@@ -71,16 +71,16 @@ public class Activity_FarmViewOptions extends Activity{
             }
         });
 
-        txtWeeklyReports.setOnClickListener(new View.OnClickListener() {
+        txtHarvestInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent(Activity_FarmViewOptions.this, Activity_AddtoHarvest.class);
-                intent.putExtra("id", id);
-                intent.putExtra("farmname", "" + farmName);
-                intent.putExtra("latitude", lat);
-                intent.putExtra("longitude", lng );
-                startActivity(intent);
+//                Intent intent = new Intent(Activity_FarmViewOptions.this, Activity_AddtoHarvest.class);
+//                intent.putExtra("id", id);
+//                intent.putExtra("farmname", "" + farmName);
+//                intent.putExtra("latitude", lat);
+//                intent.putExtra("longitude", lng);
+//                startActivity(intent);
             }
         });
     }

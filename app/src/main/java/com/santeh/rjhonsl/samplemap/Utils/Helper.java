@@ -1083,6 +1083,20 @@ public class Helper {
         return startDate;
     }
 
+
+    public static long convertDateToMilis_DB_Format(String yyyymmdd){
+        long startDate=000000;
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Date date = sdf.parse(yyyymmdd);
+            startDate = date.getTime();
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return startDate;
+    }
+
     public static String convertLongtoDateString(long dateInMillis){
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         Calendar calendar = Calendar.getInstance();
@@ -1141,6 +1155,15 @@ public class Helper {
 
     public static String getDateDBformat(){
         return Helper.convertLongtoDate_DB_Format(System.currentTimeMillis());
+    }
+
+    public static long getDateDifference(long date1, long date2){
+
+        long diff = date1 - date2; //result in millis
+        long days = diff / (24 * 60 * 60 * 1000);
+
+        Log.d("DIFF", "days: "+days+"");
+        return days;
     }
 
 
@@ -1303,6 +1326,8 @@ public class Helper {
     }
 
 
+
+
     public static boolean isIntentKeywordNotNull(String keyword, Intent extras){
         if (extras != null){
             if (extras.hasExtra(keyword)) {
@@ -1315,8 +1340,8 @@ public class Helper {
         }else {
             return false;
         }
-
     }
+
 
     public static String extractResponseCodeBySplit(String response) {
         String[] splitted = response.split(":");

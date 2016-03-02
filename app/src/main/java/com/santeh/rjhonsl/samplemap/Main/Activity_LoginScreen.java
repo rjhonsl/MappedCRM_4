@@ -261,11 +261,11 @@ public class Activity_LoginScreen extends Activity{
                     public void onClick(View v) {
                         d.hide();
 //
-//                        final String sql = GpsSQLiteHelper.CreateTableString(  tmptable , tmpcolumnNames, GpsSQLiteHelper.ALL_KEY_USERS_DATAPROP );
+//                        final String sql = GpsSQLiteHelper.createTableString(  tmptable , tmpcolumnNames, GpsSQLiteHelper.ALL_KEY_USERS_DATAPROP );
 //                        Log.d("UPGRADE", "create temp table");
 //                        db.createTableExute(sql);
 //
-//                        final String sqlNew = GpsSQLiteHelper.CreateTableString(  newtable,  GpsSQLiteHelper.ALL_KEY_USERS, GpsSQLiteHelper.ALL_KEY_USERS_DATAPROP);
+//                        final String sqlNew = GpsSQLiteHelper.createTableString(  newtable,  GpsSQLiteHelper.ALL_KEY_USERS, GpsSQLiteHelper.ALL_KEY_USERS_DATAPROP);
 //
 //                        Log.d("UPGRADE", "transfer old table to new table");
 //                        db.trasferOldTableToTEMPTable(GpsSQLiteHelper.TBLUSERS, tmptable);

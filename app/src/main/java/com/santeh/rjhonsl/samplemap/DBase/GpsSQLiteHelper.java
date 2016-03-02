@@ -10,7 +10,7 @@ public class GpsSQLiteHelper extends SQLiteOpenHelper {
 	private static final String LOGTAG = "DB_GPS";
 	private static final String DATABASE_NAME = "local.db";
 	//each time you change data structure, you must increment this by 1
-	private static final int DATABASE_VERSION = 21;
+	private static final int DATABASE_VERSION = 22;
 	Context context;
 
 
@@ -167,7 +167,7 @@ public class GpsSQLiteHelper extends SQLiteOpenHelper {
 			INTEGER + " " + PRIMARY_AUTOINCRE, INTEGER, TEXT, TEXT, TEXT, TEXT, TEXT, TEXT, TEXT
 	};
 
-	//reference for tblarea
+	//reference for tbluseractivity
 	public static final String TBLUSER_ACTIVITY 				= "tbluser_activity";
 
 	public static final String CL_USER_ACTIVITY_ID			= "user_act_id";
@@ -184,6 +184,25 @@ public class GpsSQLiteHelper extends SQLiteOpenHelper {
 	public static final String[] ALL_KEY_USERACTIVITY_DATAPROP = new String[]{
 			INTEGER + " " + PRIMARY_AUTOINCRE, TEXT, TEXT, TEXT, TEXT, TEXT, TEXT, TEXT
 	};
+
+	public static final String TBL_HARVESTINFO 				= "tblharvest_info";
+
+	public static final String CL_HRV_ID 					= "hrv_id";
+	public static final String CL_HRV_PONDID 				= "hrv_pondid";
+	public static final String CL_HRV_CASENUM 				= "hrv_casenum";
+	public static final String CL_HRV_SPECIES 				= "hrv_species";
+	public static final String CL_HRV_DATEOFHARVESTED		= "hrv_dateofharvest";
+	public static final String CL_HRV_FINALABW				= "hrv_finalabw";
+	public static final String CL_HRV_TOTAL_CONSUMPTION	 	= "hrv_totalconsumption";
+	public static final String CL_HRV_FCR	 				= "hrv_fcr";
+	public static final String CL_HRV_PRICEPERKILO	 		= "hrv_priceperkilo";
+	public static final String CL_HRV_TOTALHARVEST		 	= "hrv_totalharvested";
+	public static final String CL_HRV_ISPOSTED		 		= "hrv_isposted";
+	public static final String[] ALL_KEY_HARVESTINFO = new String[]{
+			CL_HRV_ID, CL_HRV_PONDID, CL_HRV_CASENUM, CL_HRV_SPECIES, CL_HRV_DATEOFHARVESTED, CL_HRV_FINALABW, CL_HRV_TOTAL_CONSUMPTION, CL_HRV_FCR, CL_HRV_PRICEPERKILO, CL_HRV_TOTALHARVEST, CL_HRV_ISPOSTED};
+
+	public static final String[] ALL_KEY_HARVESTEDINFO_DATAPROP = new String[]{INTEGER + " " + PRIMARY_AUTOINCRE, TEXT, TEXT, TEXT,TEXT,TEXT,TEXT,TEXT,TEXT,TEXT,TEXT};
+
 
 	//////////////////////////////////////////////////////////////////
 	///////////// STRINGS FOR CREATING AND UPDATING TABLE ////////////
@@ -330,7 +349,7 @@ public class GpsSQLiteHelper extends SQLiteOpenHelper {
 					")";
 
 
-	public static final String CreateTableString(String tableName, String[] columns, String[] dataProperty){
+	public static final String createTableString(String tableName, String[] columns, String[] dataProperty){
 
 		String sqlCreate = "CREATE TABLE " + tableName +
 				" (";
@@ -394,17 +413,12 @@ public class GpsSQLiteHelper extends SQLiteOpenHelper {
 			Log.d("UPGRADE", "INSERT VALUES: " + newVersion);
 		}
 
+		if (oldVersion < 22) {
+			// Version 22 Create Harvest Info
+				String createHarvestInfo = createTableString(TBL_HARVESTINFO, ALL_KEY_HARVESTINFO, ALL_KEY_MAINCUSTOMERINFO_DATAPROP);
+			_db.execSQL(createHarvestInfo);
+		}
 
-//		_db.execSQL("DROP TABLE IF EXISTS " + TBLMAINCUSTOMERINFO);
-//		_db.execSQL("DROP TABLE IF EXISTS " + TBLFARMiNFO);
-//		_db.execSQL("DROP TABLE IF EXISTS " + TBLPOND);
-//		_db.execSQL("DROP TABLE IF EXISTS " + TBLPOND_WeeklyUpdates);
-//		_db.execSQL("DROP TABLE IF EXISTS " + TBLUSERS);
-//		_db.execSQL("DROP TABLE IF EXISTS " + TBLUSER_ACTIVITY);
-
-
-
-//		onCreate(_db);
 	}
 
 
@@ -420,7 +434,7 @@ public class GpsSQLiteHelper extends SQLiteOpenHelper {
 		String[] newTBLcolumnNames_DP = ALL_KEY_MAINCUSTOMERINFO_DATAPROP;
 
 		Log.d("UPGRADE", "before create temp table");
-		final String sql = GpsSQLiteHelper.CreateTableString(tmptable, db.getcolumnNames(newtable),db.getcolumnDataTypes(newtable));
+		final String sql = GpsSQLiteHelper.createTableString(tmptable, db.getcolumnNames(newtable), db.getcolumnDataTypes(newtable));
 		Log.d("UPGRADE", "create temp table");
 		db.createTableExute(sql);
 
@@ -430,7 +444,7 @@ public class GpsSQLiteHelper extends SQLiteOpenHelper {
 		Log.d("UPGRADE", "DROP OLD TABLE");
 		db.dropTable(newtable);
 
-		final String sqlNew = GpsSQLiteHelper.CreateTableString(newtable, newTBLcolumnNames, newTBLcolumnNames_DP);
+		final String sqlNew = GpsSQLiteHelper.createTableString(newtable, newTBLcolumnNames, newTBLcolumnNames_DP);
 		Log.d("UPGRADE", "Create new table");
 		db.createTableExute(sqlNew);
 
@@ -454,7 +468,7 @@ public class GpsSQLiteHelper extends SQLiteOpenHelper {
 		String[] newTBLcolumnNames = ALL_KEY_fARM;
 		String[] newTBLcolumnNames_DP = ALL_KEY_FARM_DATAPROP;
 
-		final String sql = GpsSQLiteHelper.CreateTableString(tmptable, db.getcolumnNames(newtable),db.getcolumnDataTypes(newtable));
+		final String sql = GpsSQLiteHelper.createTableString(tmptable, db.getcolumnNames(newtable), db.getcolumnDataTypes(newtable));
 		Log.d("UPGRADE", "create temp table");
 		db.createTableExute(sql);
 
@@ -464,7 +478,7 @@ public class GpsSQLiteHelper extends SQLiteOpenHelper {
 		Log.d("UPGRADE", "DROP OLD TABLE");
 		db.dropTable(newtable);
 
-		final String sqlNew = GpsSQLiteHelper.CreateTableString(newtable, newTBLcolumnNames, newTBLcolumnNames_DP);
+		final String sqlNew = GpsSQLiteHelper.createTableString(newtable, newTBLcolumnNames, newTBLcolumnNames_DP);
 		Log.d("UPGRADE", "Create new table");
 		db.createTableExute(sqlNew);
 
@@ -488,7 +502,7 @@ public class GpsSQLiteHelper extends SQLiteOpenHelper {
 		String[] newTBLcolumnNames = ALL_KEY_POND;
 		String[] newTBLcolumnNames_DP = ALL_KEY_POND_DATAPROP;
 
-		final String sql = GpsSQLiteHelper.CreateTableString(tmptable, db.getcolumnNames(newtable),db.getcolumnDataTypes(newtable));
+		final String sql = GpsSQLiteHelper.createTableString(tmptable, db.getcolumnNames(newtable), db.getcolumnDataTypes(newtable));
 		Log.d("UPGRADE", "create temp table");
 		db.createTableExute(sql);
 
@@ -498,7 +512,7 @@ public class GpsSQLiteHelper extends SQLiteOpenHelper {
 		Log.d("UPGRADE", "DROP OLD TABLE");
 		db.dropTable(newtable);
 
-		final String sqlNew = GpsSQLiteHelper.CreateTableString(newtable, newTBLcolumnNames, newTBLcolumnNames_DP);
+		final String sqlNew = GpsSQLiteHelper.createTableString(newtable, newTBLcolumnNames, newTBLcolumnNames_DP);
 		Log.d("UPGRADE", "Create new table");
 		db.createTableExute(sqlNew);
 
@@ -522,7 +536,7 @@ public class GpsSQLiteHelper extends SQLiteOpenHelper {
 		String[] newTBLcolumnNames = ALL_KEY_WEEKLY_UPDATES;
 		String[] newTBLcolumnNames_DP = ALL_KEY_WEEKLY_UPDATES_DATAPROP;
 
-		final String sql = GpsSQLiteHelper.CreateTableString(tmptable, db.getcolumnNames(newtable),db.getcolumnDataTypes(newtable));
+		final String sql = GpsSQLiteHelper.createTableString(tmptable, db.getcolumnNames(newtable), db.getcolumnDataTypes(newtable));
 		Log.d("UPGRADE", "create temp table");
 		db.createTableExute(sql);
 
@@ -532,7 +546,7 @@ public class GpsSQLiteHelper extends SQLiteOpenHelper {
 		Log.d("UPGRADE", "DROP OLD TABLE");
 		db.dropTable(newtable);
 
-		final String sqlNew = GpsSQLiteHelper.CreateTableString(newtable, newTBLcolumnNames, newTBLcolumnNames_DP);
+		final String sqlNew = GpsSQLiteHelper.createTableString(newtable, newTBLcolumnNames, newTBLcolumnNames_DP);
 		Log.d("UPGRADE", "Create new table");
 		db.createTableExute(sqlNew);
 
@@ -556,7 +570,7 @@ public class GpsSQLiteHelper extends SQLiteOpenHelper {
 		String[] newTBLcolumnNames = ALL_KEY_USERS;
 		String[] newTBLcolumnNames_DP = ALL_KEY_USERS_DATAPROP;
 
-		final String sql = GpsSQLiteHelper.CreateTableString(tmptable, db.getcolumnNames(newtable),db.getcolumnDataTypes(newtable));
+		final String sql = GpsSQLiteHelper.createTableString(tmptable, db.getcolumnNames(newtable), db.getcolumnDataTypes(newtable));
 		Log.d("UPGRADE", "create temp table");
 		db.createTableExute(sql);
 
@@ -566,7 +580,7 @@ public class GpsSQLiteHelper extends SQLiteOpenHelper {
 		Log.d("UPGRADE", "DROP OLD TABLE");
 		db.dropTable(newtable);
 
-		final String sqlNew = GpsSQLiteHelper.CreateTableString(newtable, newTBLcolumnNames, newTBLcolumnNames_DP);
+		final String sqlNew = GpsSQLiteHelper.createTableString(newtable, newTBLcolumnNames, newTBLcolumnNames_DP);
 		Log.d("UPGRADE", "Create new table");
 		db.createTableExute(sqlNew);
 

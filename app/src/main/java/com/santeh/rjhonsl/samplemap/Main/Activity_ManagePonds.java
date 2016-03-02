@@ -206,8 +206,13 @@ public class Activity_ManagePonds extends AppCompatActivity {
                                 Helper.createCustomThemedDialogOKOnly(activity, "Oops", "Record is already finalized/posted on server. Contact admin for further changes", "OK", R.color.red);
                             }
 
-                        }else{
-                            Helper.toastShort(activity, "Harvested");
+                        }else if (position == 3){
+                            Intent intent = new Intent(context, Activity_AddtoHarvest.class);
+                            intent.putExtra("id", pondInfoList.get(position1).getId());
+                            intent.putExtra("casenum", pondInfoList.get(position1).getPondID());
+                            intent.putExtra("species", pondInfoList.get(position1).getSpecie());
+                            intent.putExtra("datestocked", pondInfoList.get(position1).getDateStocked());
+                            startActivity(intent);
                         }
                     }
                 });
