@@ -215,7 +215,7 @@ public class Activity_ViewCustomerInfo extends Activity {
                             }else {
                                 searchedList = beforesearchedList;
                                 final Dialog d = Helper.createCustomThemedDialogOKOnly(Activity_ViewCustomerInfo.this,
-                                        "OOPS!", response, "OK", R.color.blue);
+                                        "OOPS!", response, "OK");
 
                                 TextView ok = (TextView) d.findViewById(R.id.btn_dialog_okonly_OK);
                                 ok.setOnClickListener(new View.OnClickListener() {
@@ -229,7 +229,7 @@ public class Activity_ViewCustomerInfo extends Activity {
                         }else{
                             searchedList = beforesearchedList;
                             final Dialog d = Helper.createCustomThemedDialogOKOnly(Activity_ViewCustomerInfo.this,
-                                    "OOPS!", response, "OK", R.color.blue);
+                                    "OOPS!", response, "OK");
 
                             TextView ok = (TextView) d.findViewById(R.id.btn_dialog_okonly_OK);
                             ok.setOnClickListener(new View.OnClickListener() {

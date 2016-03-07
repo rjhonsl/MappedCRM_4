@@ -91,7 +91,7 @@ public class Activity_Add_CustomerInformation_Address extends FragmentActivity{
                     startActivity(intent);
                     overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
                 }else{
-                    Helper.createCustomThemedDialogOKOnly(activity, "Warning", "Field with (*) is required to continue.", "OK", R.color.red);
+                    Helper.createCustomThemedDialogOKOnly(activity, "Warning", "Field with (*) is required to continue.", "OK");
                 }
             }
         });

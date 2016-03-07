@@ -146,7 +146,7 @@ public class Activity_AddPond extends FragmentActivity  implements DatePickerDia
                         || edtCultureSystem.getText().toString().equalsIgnoreCase("")
                         || edtRemarks.getText().toString().equalsIgnoreCase("")
                         ) {
-                    final Dialog d = Helper.createCustomThemedDialogOKOnly(activity, "Oops", "You have to complete all the following fields to continue.", "OK", R.color.red);
+                    final Dialog d = Helper.createCustomThemedDialogOKOnly(activity, "Oops", "You have to complete all the following fields to continue.", "OK");
                     d.show();
                     Button ok = (Button) d.findViewById(R.id.btn_dialog_okonly_OK);
                     ok.setOnClickListener(new View.OnClickListener() {
@@ -228,7 +228,7 @@ public class Activity_AddPond extends FragmentActivity  implements DatePickerDia
             if (result != -1){
                 PD.dismiss();
                 final Dialog d = Helper.createCustomThemedDialogOKOnly(Activity_AddPond.this, "Success",
-                        "Saving successful", "OK", R.color.skyblue_500);
+                        "Saving successful", "OK");
                 TextView ok = (TextView) d.findViewById(R.id.btn_dialog_okonly_OK);
                 d.show();
                 ok.setOnClickListener(new View.OnClickListener() {
@@ -245,7 +245,7 @@ public class Activity_AddPond extends FragmentActivity  implements DatePickerDia
                 });
             }else{
                 final Dialog d = Helper.createCustomThemedDialogOKOnly(Activity_AddPond.this, "Error",
-                        "Adding failed. Please Try Again. ", "OK", R.color.red);
+                        "Adding failed. Please Try Again. ", "OK");
                 TextView ok = (TextView) d.findViewById(R.id.btn_dialog_okonly_OK);
                 d.show();
                 ok.setOnClickListener(new View.OnClickListener() {

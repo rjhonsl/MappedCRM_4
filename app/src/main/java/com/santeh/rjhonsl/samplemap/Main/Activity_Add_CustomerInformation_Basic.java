@@ -95,7 +95,7 @@ public class Activity_Add_CustomerInformation_Basic extends FragmentActivity imp
                         !edtBirhday.getText().toString().equalsIgnoreCase("") && !edtBirthPlace.getText().toString().equalsIgnoreCase("")){
                      boolean isExisting = db.isFarmIDexisting(edtFarmId.getText().toString());
                      if (isExisting) {
-                         Helper.createCustomThemedDialogOKOnly(activity, "Sorry", "Farm ID is already taken. \n", "OK", R.color.darkgreen_800);
+                         Helper.createCustomThemedDialogOKOnly(activity, "Sorry", "Farm ID is already taken. \n", "OK");
                      }else{
                          final Intent intent = new Intent(Activity_Add_CustomerInformation_Basic.this, Activity_Add_CustomerInformation_Address.class);
                          intent.putExtra("latitude", lat);
@@ -110,7 +110,7 @@ public class Activity_Add_CustomerInformation_Basic extends FragmentActivity imp
                          overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
                      }
                 } else {
-                    Helper.createCustomThemedDialogOKOnly(activity, "Warning", "Complete fields with (*) to continue.", "OK", R.color.red);
+                    Helper.createCustomThemedDialogOKOnly(activity, "Warning", "Complete fields with (*) to continue.", "OK");
                 }
             }
         });

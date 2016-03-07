@@ -138,7 +138,7 @@ public class Activity_Add_CustomerInformation_ContactInfo extends FragmentActivi
                     startActivity(intent);
                     overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
                 }else{
-                    Helper.createCustomThemedDialogOKOnly(activity, "Warning", "Complete fields with '*' to continue.", "OK", R.color.red);
+                    Helper.createCustomThemedDialogOKOnly(activity, "Warning", "Complete fields with '*' to continue.", "OK");
                 }
             }
         });

@@ -191,7 +191,7 @@ public class Activity_Add_FarmInformation extends Activity {
             if (id != -1){
                 PD.dismiss();
                 Dialog d = Helper.createCustomThemedDialogOKOnly(Activity_Add_FarmInformation.this, "SUCCESS",
-                        "Saving successful", "OK", R.color.blue);
+                        "Saving successful", "OK");
                 TextView ok = (TextView) d.findViewById(R.id.btn_dialog_okonly_OK);
                 d.setCancelable(false);
                 d.show();
@@ -212,7 +212,7 @@ public class Activity_Add_FarmInformation extends Activity {
                 });
             }else{
                 PD.dismiss();
-                Helper.createCustomThemedDialogOKOnly(activity, "Error", "Saving Failed. Please try again.", "OK", R.color.red);
+                Helper.createCustomThemedDialogOKOnly(activity, "Error", "Saving Failed. Please try again.", "OK");
             }
 
 //

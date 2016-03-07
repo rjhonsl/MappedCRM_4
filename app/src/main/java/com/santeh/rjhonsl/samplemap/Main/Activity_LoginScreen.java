@@ -92,6 +92,7 @@ public class Activity_LoginScreen extends Activity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loginscreen);
+        Log.d("ONRESUME", "OnCreate");
         activity = this;
         context = Activity_LoginScreen.this;
 
@@ -253,8 +254,7 @@ public class Activity_LoginScreen extends Activity{
 //                colnames = colnames + " |x| " + tmpcolumnTypes.length + " - " + db.getColumnCount(GpsSQLiteHelper.TBLUSERS);
 
                 final Dialog d = Helper.createCustomThemedDialogOKOnly(activity, "Warning",
-                        "Function currently disabled: ",
-                        "OK", R.color.red_700);
+                        "Function currently disabled: ", "OK");
                 Button ok = (Button) d.findViewById(R.id.btn_dialog_okonly_OK);
                 ok.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -502,7 +502,7 @@ public class Activity_LoginScreen extends Activity{
             @Override
             public void onErrorResponse(VolleyError error) {
                 PD.dismiss();
-                Helper.createCustomThemedDialogOKOnly(activity, "Error", error.toString(), "OK", R.color.red);
+                Helper.createCustomThemedDialogOKOnly(activity, "Error", error.toString(), "OK");
             }
         }) {
             @Override
@@ -526,8 +526,7 @@ public class Activity_LoginScreen extends Activity{
     @Override
     protected void onResume() {
         super.onResume();
-
-        Helper.isLocationAvailablePrompt(context, activity);
+        Helper.isLocationAvailablePrompt(Activity_LoginScreen.this, Activity_LoginScreen.this);
         fusedLocation.connectToApiClient();
         db.open();
         checkVersionUpdates();
@@ -640,7 +639,7 @@ public class Activity_LoginScreen extends Activity{
                                 }
                             } else {
                                 Helper.createCustomThemedDialogOKOnly(activity, "Error", "Update Failed. Please try again later."
-                                        , "OK", R.color.red);
+                                        , "OK");
                             }
 
                         }
@@ -648,7 +647,7 @@ public class Activity_LoginScreen extends Activity{
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     PD.dismiss();
-                    Helper.createCustomThemedDialogOKOnly(activity, "Error", error.toString(), "OK", R.color.red);
+                    Helper.createCustomThemedDialogOKOnly(activity, "Error", error.toString(), "OK");
                 }
             }) {
                 @Override

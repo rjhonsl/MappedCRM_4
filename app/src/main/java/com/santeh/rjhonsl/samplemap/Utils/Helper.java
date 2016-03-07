@@ -1,5 +1,7 @@
 package com.santeh.rjhonsl.samplemap.Utils;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
@@ -24,6 +26,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -845,8 +849,17 @@ public class Helper {
 //        txttitle.setBackground(activity.getResources().getDrawable(resIdColor));
         btn1.setText(strButton1);
         btn2.setText(strButton2);
-        d.show();
 
+
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        Window window = d.getWindow();
+        lp.copyFrom(window.getAttributes());
+//This makes the dialog take up the full width
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        window.setAttributes(lp);
+
+        d.show();
         return d;
     }
 
@@ -896,6 +909,7 @@ public class Helper {
     public static Dialog createDecimaldDialog(Activity activity, String dialogTitle, int minVal, int maxValue){
         final Dialog d = new Dialog(activity);//
 //        d.requestWindowFeature(Window.FEATURE_NO_TITLE); //notitle
+
         d.setContentView(R.layout.dialog_decimalpicker);
         d.setTitle(dialogTitle);
         NumberPicker wholeNum = (NumberPicker) d.findViewById(R.id.dialog_decipicker_whole);
@@ -905,7 +919,6 @@ public class Helper {
         NumberPicker decimal = (NumberPicker) d.findViewById(R.id.dialog_decipicker_deci);
         decimal.setMaxValue(maxValue);
         decimal.setMinValue(0);
-
 
         WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
         lp.copyFrom(d.getWindow().getAttributes());
@@ -955,7 +968,7 @@ public class Helper {
         return  initialValue;
     }
 
-    public static Dialog createCustomThemedDialogOKOnly(Activity activity, String title, String prompt, String button, int resIdColor){
+    public static Dialog createCustomThemedDialogOKOnly(Activity activity, String title, String prompt, String button){
         final Dialog d = new Dialog(activity);//
         d.requestWindowFeature(Window.FEATURE_NO_TITLE); //notitle
         d.setContentView(R.layout.dialog_material_themed_okonly);//Set the xml view of the dialog
@@ -978,6 +991,15 @@ public class Helper {
         txtprompt.setText(prompt);
         txttitle.setText(title);
         txtok.setText(button);
+
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        Window window = d.getWindow();
+        lp.copyFrom(window.getAttributes());
+//This makes the dialog take up the full width
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        window.setAttributes(lp);
+
         d.show();
         return d;
     }
@@ -1263,25 +1285,21 @@ public class Helper {
     }
 
 
-    public static void isLocationAvailablePrompt(final Context context, Activity activity){
+    public static void isLocationAvailablePrompt(final Context context, final Activity activity){
         LocationManager lm = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
         boolean gps_enabled = false;
         boolean network_enabled = false;
-
         try {
             gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
         } catch(Exception ex) {}
-
         try {
             network_enabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
         } catch(Exception ex) {}
 
         if(!gps_enabled) {
-            final Dialog d = createCustomDialogYesNO(activity, R.layout.dialog_material_yesno, "Location services is needed to use this application. Please turn on Location in settings", "GPS Service", "OK", "No");
-            Button b1 = (Button) d.findViewById(R.id.btn_dialog_yesno_opt1);
-            Button b2 = (Button) d.findViewById(R.id.btn_dialog_yesno_opt2);
+            final Dialog d = createCustomThemedDialogOKOnly(activity, "GPS Service", "Location services is needed to use this application. Please turn on Location in settings", "OK");
+            Button b1 = (Button) d.findViewById(R.id.btn_dialog_okonly_OK);
 
-            b2.setVisibility(View.GONE);
             d.setCancelable(false);
             d.show();
 
@@ -1291,7 +1309,6 @@ public class Helper {
                     d.hide();
                     Intent gpsOptionsIntent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                     context.startActivity(gpsOptionsIntent);
-
                 }
             });
 
@@ -1462,6 +1479,91 @@ public class Helper {
         }
 
 
+    }
+
+    public static class animate{
+
+        // To animate view slide out from left to right
+        public static void slideToRight(View view){
+            TranslateAnimation animate = new TranslateAnimation(0,view.getWidth(),0,0);
+            animate.setDuration(500);
+            animate.setFillAfter(true);
+            view.startAnimation(animate);
+            view.setVisibility(View.GONE);
+        }
+
+        // To animate view slide out from right to left
+        public static void slideToLeft(View view){
+            TranslateAnimation animate = new TranslateAnimation(0,-view.getWidth(),0,0);
+            animate.setDuration(500);
+            animate.setFillAfter(true);
+            view.startAnimation(animate);
+            view.setVisibility(View.GONE);
+        }
+
+        // To animate view slide out from top to bottom
+        public static void slideToBottom(final View view, float height , final float alpha,final int vis){
+            TranslateAnimation animate = new TranslateAnimation(0,0,0,view.getHeight());
+            animate.setDuration(500);
+            animate.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+                    view.animate()
+                            .alpha(alpha)
+                            .setDuration(300)
+                            .setListener(new AnimatorListenerAdapter() {
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    super.onAnimationEnd(animation);
+                                }
+                            });
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    view.setVisibility(vis);
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            });
+            view.startAnimation(animate);
+        }
+
+        // To animate view slide out from bottom to top
+        public static void slideToTop(final View view, float height , final float alpha,final int vis){
+            final TranslateAnimation animate = new TranslateAnimation(0,0,0,-height);
+            animate.setDuration(500);
+            animate.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+                    view.animate()
+                            .alpha(alpha)
+                            .setDuration(200)
+                            .setListener(new AnimatorListenerAdapter() {
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    super.onAnimationEnd(animation);
+                                }
+                            });
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    view.setVisibility(vis);
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            });
+            view.startAnimation(animate);
+
+        }
     }
 
 

@@ -108,7 +108,7 @@ public class Activity_FarmInfo_Edit extends Activity{
             public void onClick(View v) {
 
                 if (isposted == 1) {
-                    Helper.createCustomThemedDialogOKOnly(activity, "Oops", "Item is alrady posted on our servers. Please contact admin for further changes.", "OK", R.color.red);
+                    Helper.createCustomThemedDialogOKOnly(activity, "Oops", "Item is alrady posted on our servers. Please contact admin for further changes.", "OK");
                 }else{
                     final Dialog d = Helper.createCustomDialogThemedYesNO(activity, "Delete this record? ", "Delete", "NO", "YES", R.color.red);
                     Button no = (Button) d.findViewById(R.id.btn_dialog_yesno_opt1);
@@ -339,7 +339,7 @@ public class Activity_FarmInfo_Edit extends Activity{
 
     public void updateCustomerInformation() {
         if (isposted == 1) {
-            Helper.createCustomThemedDialogOKOnly(activity, "Oops", "Item already posted on our servers. Please contact admin for further changes.", "OK", R.color.red);
+            Helper.createCustomThemedDialogOKOnly(activity, "Oops", "Item already posted on our servers. Please contact admin for further changes.", "OK");
         }else{
             latitude = txtlat.getText().toString();
             longitude = txtlong.getText().toString();
@@ -424,7 +424,7 @@ public class Activity_FarmInfo_Edit extends Activity{
 
                     if (rowsAffectedCount > 0) {
                         PD.dismiss();
-                        Helper.createCustomThemedDialogOKOnly(activity, "Success", "Changes was successfully saved.", "OK", R.color.blue);
+                        Helper.createCustomThemedDialogOKOnly(activity, "Success", "Changes was successfully saved.", "OK");
                         Intent intent = new Intent(activity, MapsActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                         intent.putExtra("fromActivity", "addfarminfo");
@@ -436,7 +436,7 @@ public class Activity_FarmInfo_Edit extends Activity{
                         startActivity(intent);
                         finish(); // call this to finish the current activity
                     }else{
-                        Helper.createCustomThemedDialogOKOnly(activity, "Error", "Something happened. Please try again.", "OK", R.color.red);
+                        Helper.createCustomThemedDialogOKOnly(activity, "Error", "Something happened. Please try again.", "OK");
                     }
                 }
             }

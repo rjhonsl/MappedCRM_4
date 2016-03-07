@@ -1,17 +1,26 @@
 package com.santeh.rjhonsl.samplemap.Main;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 
 import com.fourmob.datetimepicker.date.DatePickerDialog;
+import com.santeh.rjhonsl.samplemap.DBase.GpsDB_Query;
 import com.santeh.rjhonsl.samplemap.R;
 import com.santeh.rjhonsl.samplemap.Utils.Helper;
 
@@ -25,6 +34,8 @@ public class Activity_AddtoHarvest extends FragmentActivity implements  DatePick
     Activity activity;
     Context context;
 
+    GpsDB_Query db;
+
     public static final String DATEPICKER_TAG = "datepicker";
 
     Intent intent;
@@ -34,18 +45,25 @@ public class Activity_AddtoHarvest extends FragmentActivity implements  DatePick
     String species = "", datestocked = "";
 
     DatePickerDialog datePickerDialog;
-    EditText edtFinalAbw, edtTotalFeedinKilos, edtCaseNumber, edtSpecies, edtDateofHarvest, edtDaysOfCulture, edtDateOfStocking, edtFCR;
+    EditText edtFinalAbw, edtTotalFeedinKilos, edtCaseNumber, edtSpecies, edtDateofHarvest, edtDaysOfCulture, edtDateOfStocking, edtFCR, edtPricePerkilo, edtTotalWeightHarvested;
+    LinearLayout llHarvestInfo, llbottomButton, llNoHarvestInfo;
+    CheckBox chkNoHarvestInfo;
+    ImageButton btnAddToHarvest, btnTitleLeft;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_addtoharvest);
 
+        db = new GpsDB_Query(this);
+        db.open();
+
         activity = this;
         context = Activity_AddtoHarvest.this;
 
         intent = getIntent();
         Helper.hideKeyboardOnLoad(activity);
+
 
 
         if (intent.hasExtra("id")) {
@@ -78,22 +96,142 @@ public class Activity_AddtoHarvest extends FragmentActivity implements  DatePick
         edtDaysOfCulture = (EditText) findViewById(R.id.edt_daysofculture);
         edtDateOfStocking = (EditText) findViewById(R.id.edt_dateOfStocking);
         edtFCR = (EditText) findViewById(R.id.edt_fcr);
+        edtPricePerkilo = (EditText) findViewById(R.id.edt_priceperkilo);
+        edtTotalWeightHarvested = (EditText) findViewById(R.id.edt_totalWeightOnPond);
+        llHarvestInfo = (LinearLayout) findViewById(R.id.ll_harvestInfo);
+        chkNoHarvestInfo = (CheckBox) findViewById(R.id.chk_noHarvestInfo);
+        llbottomButton = (LinearLayout) findViewById(R.id.ll_bottombutton);
+        btnAddToHarvest = (ImageButton) findViewById(R.id.btn_ok_addtoharvest);
+        llNoHarvestInfo = (LinearLayout) findViewById(R.id.ll_noharvestinfo);
+        btnTitleLeft = (ImageButton) findViewById(R.id.btn_title_left);
 
         edtCaseNumber.setText(casenum+"");
         edtSpecies.setText(species+"");
         edtDateOfStocking.setText(datestocked);
 
 
+        chkNoHarvestInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (chkNoHarvestInfo.isChecked()) {
+                    Helper.animate.slideToTop(llHarvestInfo, llHarvestInfo.getHeight(), 0.0f, View.GONE);
+                } else {
+
+                    TranslateAnimation animate = new TranslateAnimation(0,0,-llHarvestInfo.getHeight(),0);
+                    animate.setDuration(300);
+                    animate.setAnimationListener(new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {
+                            llHarvestInfo.setVisibility(View.VISIBLE);
+                            llHarvestInfo.animate()
+                                    .alpha(0.2f)
+                                    .setStartDelay(100)
+                                    .setDuration(200)
+                                    .setListener(new AnimatorListenerAdapter() {
+                                        @Override
+                                        public void onAnimationEnd(Animator animation) {
+                                            super.onAnimationEnd(animation);
+                                        }
+                                    });
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+                            llHarvestInfo.setAlpha(1.0f);
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {
+
+                        }
+                    });
+                    llHarvestInfo.startAnimation(animate);
+                }
+            }
+        });
+
+        btnTitleLeft.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        edtPricePerkilo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String strwhole = null, strdeci = null;
+                if (edtPricePerkilo.getText().toString().equalsIgnoreCase("")) {
+                    strwhole = "1";
+                    strdeci = "0";
+                } else {
+
+                    String[] holder = Helper.splitter(edtPricePerkilo.getText().toString(), "\\.");
+
+                    Log.d("Float", "before: whole");
+                    strwhole = holder[0];
+                    Log.d("Float", "before decimal");
+                    strdeci = holder[1];
+                }
+
+
+                final Dialog d = Helper.createDecimaldDialog(activity, "Price", 1, 999);
+                d.show();
+                Button set = (Button) d.findViewById(R.id.btn_decimalpicker_set);
+                final NumberPicker nbpwhole = (NumberPicker) d.findViewById(R.id.dialog_decipicker_whole);
+                final NumberPicker nbpdecimal = (NumberPicker) d.findViewById(R.id.dialog_decipicker_deci);
+
+                nbpdecimal.setValue(Integer.parseInt(strdeci));
+                nbpwhole.setValue(Integer.parseInt(strwhole));
+
+                set.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        d.hide();
+                        nbpwhole.clearFocus();
+                        nbpdecimal.clearFocus();
+                        edtPricePerkilo.setText(nbpwhole.getValue() + "." + nbpdecimal.getValue());
+                    }
+                });
+
+            }
+        });
+
+        btnAddToHarvest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (chkNoHarvestInfo.isChecked()) {
+                    if (edtDateofHarvest.getText().toString().equalsIgnoreCase("")) {
+                        Helper.toastShort(activity, "Incomplete fields");
+                    }else{
+                        saveHarvestinfo();
+                    }
+                }else {
+                    if (edtFinalAbw.getText().toString().equalsIgnoreCase("") || edtTotalFeedinKilos.getText().toString().equalsIgnoreCase("")||
+                            edtFCR.getText().toString().equalsIgnoreCase("") || edtPricePerkilo.getText().toString().equalsIgnoreCase("") || edtTotalWeightHarvested.getText().toString().equalsIgnoreCase("")) {
+                        Helper.toastShort(activity, "Incomplete fields");
+                    }else{
+                        saveHarvestinfo();
+                    }
+                }
+            }
+        });
+
         edtFCR.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String strwhole, strdeci;
+                String strwhole = null, strdeci = null;
                 if (edtFCR.getText().toString().equalsIgnoreCase("")){
                     strwhole = "1";
                     strdeci = "0";
                 }else {
-                    strwhole = Helper.splitter(edtFCR.getText().toString(), ".")[0];
-                    strdeci = Helper.splitter(edtFCR.getText().toString(), ".")[1];
+
+                    String[] holder = Helper.splitter(edtFCR.getText().toString(), "\\.");
+
+                    Log.d("Float", "before: whole");
+                    strwhole = holder[0];
+                    Log.d("Float", "before decimal");
+                    strdeci = holder[1];
                 }
 
 
@@ -110,6 +248,8 @@ public class Activity_AddtoHarvest extends FragmentActivity implements  DatePick
                     @Override
                     public void onClick(View v) {
                         d.hide();
+                        nbpwhole.clearFocus();
+                        nbpdecimal.clearFocus();
                         edtFCR.setText(nbpwhole.getValue()+"."+nbpdecimal.getValue());
                     }
                 });
@@ -151,7 +291,7 @@ public class Activity_AddtoHarvest extends FragmentActivity implements  DatePick
                     @Override
                     public void onClick(View v) {
                         nbp.clearFocus();
-                        edtFinalAbw.setText(nbp.getValue()+"g");
+                        edtFinalAbw.setText(nbp.getValue() + "g");
                         d.dismiss();
                     }
                 });
@@ -179,6 +319,68 @@ public class Activity_AddtoHarvest extends FragmentActivity implements  DatePick
                 });
             }
         });
+
+        edtTotalWeightHarvested.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int kilos = Helper.removeUnits(edtTotalWeightHarvested.getText().toString(), "kg");
+
+                final Dialog d = Helper.createNumberPickerdDialog(activity, "Weight Harvested(kg)", 1, 999999);
+                Button set = (Button) d.findViewById(R.id.btn_numberpicker_set);
+                final NumberPicker nbp = (NumberPicker) d.findViewById(R.id.dialog_numberpicker);
+                nbp.setValue(kilos);
+
+                set.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        nbp.clearFocus();
+                        edtTotalWeightHarvested.setText(nbp.getValue()+"kg");
+                        d.dismiss();
+                    }
+                });
+            }
+        });
+    }
+
+    private void saveHarvestinfo() {
+        final boolean isNoHarvestInfoChecked = chkNoHarvestInfo.isChecked();
+        final Dialog d = Helper.createCustomDialogThemedYesNO(activity, "Mark Case# " + casenum + " as harvested?", "Harvest", "NO", "YES", R.color.red);
+        Button yes = (Button) d.findViewById(R.id.btn_dialog_yesno_opt2);
+        Button no = (Button) d.findViewById(R.id.btn_dialog_yesno_opt1);
+
+
+        yes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String nullval = "null"; long result;
+                if (isNoHarvestInfoChecked) {
+                    result = db.insertHarvestInfo(id + "", edtCaseNumber.getText().toString(), edtSpecies.getText().toString(), edtDateofHarvest.getText().toString(),
+                            nullval, nullval, nullval, nullval, nullval);
+
+                } else {
+                    result = db.insertHarvestInfo(id + "", edtCaseNumber.getText().toString(), edtSpecies.getText().toString(), edtDateofHarvest.getText().toString(),
+                            edtFinalAbw.getText().toString(), edtTotalFeedinKilos.getText().toString(), edtFCR.getText().toString(), edtPricePerkilo.getText().toString(), edtTotalWeightHarvested.getText().toString());
+                }
+
+                if (result > 0){
+                    db.updatePondAsHarvested(id + "");
+                    Helper.toastShort(activity, "Success");
+                    finish();
+
+                }else{
+                    Helper.toastShort(activity, "Saving Failed. Please try again");
+                }
+
+                d.hide();
+            }
+        });
+
+        no.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                d.hide();
+            }
+        });
     }
 
     @Override
@@ -202,6 +404,18 @@ public class Activity_AddtoHarvest extends FragmentActivity implements  DatePick
         d = day;
     }
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        db.open();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        db.close();
+    }
 }
 
 

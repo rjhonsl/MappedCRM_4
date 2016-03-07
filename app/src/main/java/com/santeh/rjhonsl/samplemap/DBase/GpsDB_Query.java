@@ -281,6 +281,26 @@ public class GpsDB_Query {
 
 
 
+	public long insertHarvestInfo(String pondid, String casenum, String species, String dateofharvest,
+								  String finalabw, String totalconsumption, String fcr, String priceperkilo, String totalharvested){
+
+		ContentValues values = new ContentValues();
+		values.put(GpsSQLiteHelper.CL_HRV_PONDID, pondid);
+		values.put(GpsSQLiteHelper.CL_HRV_CASENUM, casenum);
+		values.put(GpsSQLiteHelper.CL_HRV_SPECIES, species);
+		values.put(GpsSQLiteHelper.CL_HRV_DATEOFHARVESTED, dateofharvest);
+		values.put(GpsSQLiteHelper.CL_HRV_FINALABW, finalabw);
+		values.put(GpsSQLiteHelper.CL_HRV_TOTAL_CONSUMPTION, totalconsumption);
+		values.put(GpsSQLiteHelper.CL_HRV_FCR, fcr);
+		values.put(GpsSQLiteHelper.CL_HRV_PRICEPERKILO, priceperkilo);
+		values.put(GpsSQLiteHelper.CL_HRV_TOTALHARVEST, totalharvested);
+		values.put(GpsSQLiteHelper.CL_HRV_DATE_INSERTED, Helper.convertLongtoDateTime_DB_Format(System.currentTimeMillis()));
+		values.put(GpsSQLiteHelper.CL_HRV_ISPOSTED, 0);
+
+		return  db.insert(GpsSQLiteHelper.TBL_HARVESTINFO, null, values);
+	}
+
+
 
 	/********************************************
 	 * 				VALIDATIONS					*
@@ -1053,6 +1073,13 @@ public class GpsDB_Query {
 		String where = GpsSQLiteHelper.CL_POND_isPosted + " = 0";
 		ContentValues newValues = new ContentValues();
 		newValues.put(GpsSQLiteHelper.CL_POND_isPosted, 1);
+		return 	db.update(GpsSQLiteHelper.TBLPOND, newValues, where, null);
+	}
+
+	public int updatePondAsHarvested(String pondIndex) {
+		String where = GpsSQLiteHelper.CL_POND_INDEX + " = '"+pondIndex+"'";
+		ContentValues newValues = new ContentValues();
+		newValues.put(GpsSQLiteHelper.CL_POND_isHarvested, 1);
 		return 	db.update(GpsSQLiteHelper.TBLPOND, newValues, where, null);
 	}
 

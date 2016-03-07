@@ -196,7 +196,7 @@ public class Activity_PondWeeklyConsumption extends Activity {
 //                        Helper.toastLong(activity, results[0]+"");
 
                         if (results[0] > 1000) {
-                            final Dialog d = Helper.createCustomThemedDialogOKOnly(activity, "Out of range", "You must be near the farm to Add a new pond.", "OK", R.color.red);
+                            final Dialog d = Helper.createCustomThemedDialogOKOnly(activity, "Out of range", "You must be near the farm to Add a new pond.", "OK");
                         } else {
                             final Dialog d = new Dialog(activity);//
                             d.requestWindowFeature(Window.FEATURE_NO_TITLE); //notitle
@@ -257,7 +257,7 @@ public class Activity_PondWeeklyConsumption extends Activity {
                         "ABW: "+pondweeklyList.get(position).getSizeofStock()+"g\n\n" +
                                 "Survival Rate: " + pondweeklyList.get(position).getSurvivalrate_per_pond()+"%\n\n"+
                                 "Date reported: \n" + pondweeklyList.get(position).getDateAddedToDB()+""
-                        , "OK", R.color.blue);
+                        , "OK");
             }
         });
 
@@ -269,11 +269,11 @@ public class Activity_PondWeeklyConsumption extends Activity {
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
 
                 if (Helper.variables.getGlobalVar_currentLevel(activity) == 4){
-                    if (position==0) {
-                        Helper.createCustomThemedDialogOKOnly(activity, "Warning", "You cannot Edit or Delete Initial Stocking Data", "OK", R.color.red);
+                    if (position==pondweeklyList.size()-1) {
+                        Helper.createCustomThemedDialogOKOnly(activity, "Warning", "You cannot Edit or Delete Initial Stocking Data", "OK");
                     }else {
                        if (pondweeklyList.get(position).getIsPosted_weekly() == 1) {
-                           Helper.createCustomThemedDialogOKOnly(activity, "Oops", "Item is already posted on server. Please contact admin for further changes.", "OK", R.color.red);
+                           Helper.createCustomThemedDialogOKOnly(activity, "Oops", "Item is already posted on server. Please contact admin for further changes.", "OK");
                        }else{
                            String[] options = {"Edit ABW and Remarks", "Delete"};
                            final Dialog d = Helper.createCustomThemedListDialog(activity, options, "Options ", R.color.deepteal_400);
@@ -445,7 +445,7 @@ public class Activity_PondWeeklyConsumption extends Activity {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     PD.dismiss();
-                    Dialog d = Helper.createCustomThemedDialogOKOnly(activity, "Error", "Something unexpected happened: " + error.toString(), "OK", R.color.red);
+                    Dialog d = Helper.createCustomThemedDialogOKOnly(activity, "Error", "Something unexpected happened: " + error.toString(), "OK");
                     d.show();
                 }
             }) {
@@ -527,7 +527,7 @@ public class Activity_PondWeeklyConsumption extends Activity {
         if (result != -1){
             PD.dismiss();
             final Dialog d = Helper.createCustomThemedDialogOKOnly(Activity_PondWeeklyConsumption.this,
-                    "Success", "Saving successful", "OK", R.color.skyblue_500);
+                    "Success", "Saving successful", "OK");
             TextView ok = (TextView) d.findViewById(R.id.btn_dialog_okonly_OK);
             d.show();
             ok.setOnClickListener(new View.OnClickListener() {
@@ -546,7 +546,7 @@ public class Activity_PondWeeklyConsumption extends Activity {
         }else{
             PD.dismiss();
             final Dialog d = Helper.createCustomThemedDialogOKOnly(Activity_PondWeeklyConsumption.this,
-                    "Error", "Reporting failed. Please Try Again. ", "OK", R.color.red);
+                    "Error", "Reporting failed. Please Try Again. ", "OK");
             TextView ok = (TextView) d.findViewById(R.id.btn_dialog_okonly_OK);
             d.show();
             ok.setOnClickListener(new View.OnClickListener() {
@@ -606,11 +606,11 @@ public class Activity_PondWeeklyConsumption extends Activity {
         int res = db.updateRowWeeklyUpdates(idToBeDeleted, abw1, remarks1);
         if (res > 0) {
             PD.dismiss();
-            Helper.createCustomThemedDialogOKOnly(activity, "Success", "You have successfully updated the record", "OK", R.color.blue);
+            Helper.createCustomThemedDialogOKOnly(activity, "Success", "You have successfully updated the record", "OK");
             getpondData(id, "");
         }else{
             PD.dismiss();
-            Helper.createCustomThemedDialogOKOnly(activity, "Error", "Updating failed. Please try again.", "OK", R.color.red);
+            Helper.createCustomThemedDialogOKOnly(activity, "Error", "Updating failed. Please try again.", "OK");
         }
 
 //        StringRequest postRequest = new StringRequest(Request.Method.POST, url2,

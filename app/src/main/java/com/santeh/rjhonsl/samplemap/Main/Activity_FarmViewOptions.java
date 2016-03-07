@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.santeh.rjhonsl.samplemap.R;
@@ -18,6 +19,7 @@ public class Activity_FarmViewOptions extends Activity{
 
     TextView txtManagePonds, txtHarvestInfo;
     String farmName, lat, lng;
+    ImageButton btntitleLeft;
     int id;
 
     @Override
@@ -54,6 +56,14 @@ public class Activity_FarmViewOptions extends Activity{
 //        Helper.toastLong(activity, "id"+customerID);
         txtManagePonds = (TextView) findViewById(R.id.txt_farmoptions_managePonds);
         txtHarvestInfo = (TextView) findViewById(R.id.txt_farmoptions_harvest_history);
+        btntitleLeft = (ImageButton) findViewById(R.id.btn_title_left);
+
+        btntitleLeft.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
 
         txtManagePonds.setOnClickListener(new View.OnClickListener() {

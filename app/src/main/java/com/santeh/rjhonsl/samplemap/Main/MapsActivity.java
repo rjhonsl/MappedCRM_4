@@ -294,7 +294,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 }else{
                     Helper.createCustomThemedDialogOKOnly(activity, "Oops", "Address of farm owner is currently not available. \n\nFarm ID: " + farmidd
 //                            + " "+ splitted.length + " " + splitted[0] + " " + splitted[1] + " " + splitted[2] + " " + splitted[3] + " " + splitted[4] + " " + splitted[5] + " " + splitted[6] + " "
-                            , "OK", R.color.blue);
+                            , "OK");
                 }
             }
         });
@@ -539,7 +539,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                                             mapcircle = maps.addCircle(circleOptions_addLocation);
                                         }
                                         btn_cancelAddmarker.setVisibility(View.VISIBLE);
-                                        Helper.createCustomThemedDialogOKOnly(activity, "Add Marker", "Long press any location within the blue circle.r.", "OK", R.color.blue);
+                                        Helper.createCustomThemedDialogOKOnly(activity, "Add Marker", "Long press desired location within the blue circle.", "OK");
                                     }
                                 }, 1200);
 
@@ -565,7 +565,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 //                        Helper.toastLong(activity, results[0]+"");
 
                                 if (results[0] > 1000) {
-                                    final Dialog d = Helper.createCustomThemedDialogOKOnly(activity, "Out of range", "Selection is out of 1km range", "OK", R.color.red);
+                                    final Dialog d = Helper.createCustomThemedDialogOKOnly(activity, "Out of range", "Selection is out of 1km range", "OK");
                                     d.show();
 
                                     Button ok = (Button) d.findViewById(R.id.btn_dialog_okonly_OK);
@@ -1221,7 +1221,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     private void prompt_noCustomerLocation() {
-        Helper.createCustomThemedDialogOKOnly(activity, "Warning", "You have not added any customer address", "OK", R.color.red);
+        Helper.createCustomThemedDialogOKOnly(activity, "Warning", "You have not added any customer address", "OK");
     }
 
     public void getListOfFarms(final String farmid){
@@ -1237,7 +1237,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             if (!response.substring(1, 2).equalsIgnoreCase("0")) {
                                 custInfoObjectList = CustAndPondParser.parseFeed(response);
                                 showAllCustomerFarmByFarmID();
-                            } else {Helper.createCustomThemedDialogOKOnly(activity, "Warning", "No farm related to selected customer. Please check Farm ID", "OK", R.color.red);}
+                            } else {Helper.createCustomThemedDialogOKOnly(activity, "Warning", "No farm related to selected customer. Please check Farm ID", "OK");}
                         }
                     },
                     new Response.ErrorListener() {
@@ -1308,8 +1308,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         d.hide();
                     }
                 });
-            }else{Helper.createCustomThemedDialogOKOnly(activity, "Warning", "No farm related to selected customer. Please check Farm ID", "OK", R.color.red);}
-        }else{ Helper.createCustomThemedDialogOKOnly(activity, "Warning", "No farm related to selected customer. Please check Farm ID", "OK", R.color.red);}
+            }else{Helper.createCustomThemedDialogOKOnly(activity, "Warning", "No farm related to selected customer. Please check Farm ID", "OK");}
+        }else{ Helper.createCustomThemedDialogOKOnly(activity, "Warning", "No farm related to selected customer. Please check Farm ID", "OK");}
     }
 
 
@@ -1355,7 +1355,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     private void prompt_noFarm() {
-        final Dialog d = Helper.createCustomThemedDialogOKOnly(activity, "MAP", "You have not added a farm yet. \n You can start by pressing the  plus '+' on the upper right side of the screen.", "OK", R.color.skyblue_400);
+        final Dialog d = Helper.createCustomThemedDialogOKOnly(activity, "MAP", "You have not added a farm yet. \nStart by pressing the  plus '+' on the upper right side of the screen.", "OK");
         Button ok = (Button) d.findViewById(R.id.btn_dialog_okonly_OK);
         d.show();
         ok.setOnClickListener(new View.OnClickListener() {
@@ -1446,7 +1446,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         if (Helper.nullcheck.isGlobalUserIDNull(activity)) {
             Dialog d = Helper.createCustomThemedDialogOKOnly(activity, "Session Expired",
-                    "It seems that you have been inactive for too long. Please log in again", "OK", R.color.red);
+                    "It seems that you have been inactive for too long. Please log in again", "OK");
             d.setCancelable(false);
             Button ok = (Button) d.findViewById(R.id.btn_dialog_okonly_OK);
             ok.setOnClickListener(new View.OnClickListener() {

@@ -10,7 +10,7 @@ public class GpsSQLiteHelper extends SQLiteOpenHelper {
 	private static final String LOGTAG = "DB_GPS";
 	private static final String DATABASE_NAME = "local.db";
 	//each time you change data structure, you must increment this by 1
-	private static final int DATABASE_VERSION = 22;
+	private static final int DATABASE_VERSION = 23;
 	Context context;
 
 
@@ -198,10 +198,11 @@ public class GpsSQLiteHelper extends SQLiteOpenHelper {
 	public static final String CL_HRV_PRICEPERKILO	 		= "hrv_priceperkilo";
 	public static final String CL_HRV_TOTALHARVEST		 	= "hrv_totalharvested";
 	public static final String CL_HRV_ISPOSTED		 		= "hrv_isposted";
+	public static final String CL_HRV_DATE_INSERTED		 	= "hrv_date_inserted";
 	public static final String[] ALL_KEY_HARVESTINFO = new String[]{
-			CL_HRV_ID, CL_HRV_PONDID, CL_HRV_CASENUM, CL_HRV_SPECIES, CL_HRV_DATEOFHARVESTED, CL_HRV_FINALABW, CL_HRV_TOTAL_CONSUMPTION, CL_HRV_FCR, CL_HRV_PRICEPERKILO, CL_HRV_TOTALHARVEST, CL_HRV_ISPOSTED};
+			CL_HRV_ID, CL_HRV_PONDID, CL_HRV_CASENUM, CL_HRV_SPECIES, CL_HRV_DATEOFHARVESTED, CL_HRV_FINALABW, CL_HRV_TOTAL_CONSUMPTION, CL_HRV_FCR, CL_HRV_PRICEPERKILO, CL_HRV_TOTALHARVEST, CL_HRV_ISPOSTED, CL_HRV_DATE_INSERTED};
 
-	public static final String[] ALL_KEY_HARVESTEDINFO_DATAPROP = new String[]{INTEGER + " " + PRIMARY_AUTOINCRE, TEXT, TEXT, TEXT,TEXT,TEXT,TEXT,TEXT,TEXT,TEXT,TEXT};
+	public static final String[] ALL_KEY_HARVESTEDINFO_DATAPROP = new String[]{INTEGER + " " + PRIMARY_AUTOINCRE, TEXT, TEXT, TEXT,TEXT,TEXT,TEXT,TEXT,TEXT,TEXT,TEXT,TEXT};
 
 
 	//////////////////////////////////////////////////////////////////
@@ -402,21 +403,24 @@ public class GpsSQLiteHelper extends SQLiteOpenHelper {
 			// Version 18 added isHarvested COLUMN on TBLPOND
 			_db.execSQL("ALTER TABLE " + TBLPOND + " ADD COLUMN "
 					+ CL_POND_isHarvested + " TEXT");
-			Log.d("UPGRADE", "ALTER TABLE: " + newVersion);
 		}
 
 		if(oldVersion < 21){
 			// Version 20 UPDATE VALUES
 			_db.execSQL("DELETE FROM "+TBLPOND+" " +
 					"WHERE "+CL_POND_isHarvested+"= 0;");
-			_db.execSQL("UPDATE "+TBLPOND+" SET "+CL_POND_isHarvested+" = 0;");
-			Log.d("UPGRADE", "INSERT VALUES: " + newVersion);
+			_db.execSQL("UPDATE " + TBLPOND + " SET " + CL_POND_isHarvested + " = 0;");
 		}
 
 		if (oldVersion < 22) {
 			// Version 22 Create Harvest Info
 				String createHarvestInfo = createTableString(TBL_HARVESTINFO, ALL_KEY_HARVESTINFO, ALL_KEY_MAINCUSTOMERINFO_DATAPROP);
 			_db.execSQL(createHarvestInfo);
+		}
+
+		if (oldVersion < 23) {
+			_db.execSQL("ALTER TABLE " + TBL_HARVESTINFO + " ADD COLUMN "
+					+ CL_HRV_DATE_INSERTED + " TEXT");
 		}
 
 	}

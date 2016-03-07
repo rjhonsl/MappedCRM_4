@@ -137,7 +137,7 @@ public class Activity_ManagePonds extends AppCompatActivity {
 //                        Helper.toastLong(activity, results[0]+"");
 
                         if (results[0] > 1000) {
-                            final Dialog d = Helper.createCustomThemedDialogOKOnly(activity, "Out of range", "You must be near the farm to Add a new pond.", "OK", R.color.red);
+                            final Dialog d = Helper.createCustomThemedDialogOKOnly(activity, "Out of range", "You must be near the farm to Add a new pond.", "OK");
                         } else {
                             Intent intent = new Intent(Activity_ManagePonds.this, Activity_AddPond.class);
                             intent.putExtra("custid", id);
@@ -200,10 +200,10 @@ public class Activity_ManagePonds extends AppCompatActivity {
                                         }
                                     });
                                 } else {
-                                    Helper.createCustomThemedDialogOKOnly(activity, "Oops", "You have no permission delete this record", "OK", R.color.red);
+                                    Helper.createCustomThemedDialogOKOnly(activity, "Oops", "You have no permission delete this record", "OK");
                                 }
                             } else {
-                                Helper.createCustomThemedDialogOKOnly(activity, "Oops", "Record is already finalized/posted on server. Contact admin for further changes", "OK", R.color.red);
+                                Helper.createCustomThemedDialogOKOnly(activity, "Oops", "Record is already finalized/posted on server. Contact admin for further changes", "OK");
                             }
 
                         }else if (position == 3){
