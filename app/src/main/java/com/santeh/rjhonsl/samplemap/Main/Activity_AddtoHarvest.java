@@ -364,6 +364,7 @@ public class Activity_AddtoHarvest extends FragmentActivity implements  DatePick
 
                 if (result > 0){
                     db.updatePondAsHarvested(id + "");
+
                     Helper.toastShort(activity, "Success");
                     finish();
 
