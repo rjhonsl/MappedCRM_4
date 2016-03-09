@@ -365,7 +365,7 @@ public class Activity_AddtoHarvest extends FragmentActivity implements  DatePick
                 if (result > 0){
                     db.updatePondAsHarvested(id + "");
 
-                    Helper.toastShort(activity, "Success");
+                    Helper.toastShort(activity, "Pond has been moved to Harvested");
                     finish();
 
                 }else{
@@ -399,7 +399,6 @@ public class Activity_AddtoHarvest extends FragmentActivity implements  DatePick
             edtDaysOfCulture.setText(String.valueOf(difference)+" day");
         }
 
-
         y = year;
         m = month + 1;
         d = day;
@@ -417,6 +416,7 @@ public class Activity_AddtoHarvest extends FragmentActivity implements  DatePick
         super.onPause();
         db.close();
     }
+
 }
 
 

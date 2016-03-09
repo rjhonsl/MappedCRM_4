@@ -85,12 +85,12 @@ public class Activity_FarmViewOptions extends Activity{
             @Override
             public void onClick(View v) {
 
-//                Intent intent = new Intent(Activity_FarmViewOptions.this, Activity_AddtoHarvest.class);
-//                intent.putExtra("id", id);
-//                intent.putExtra("farmname", "" + farmName);
-//                intent.putExtra("latitude", lat);
-//                intent.putExtra("longitude", lng);
-//                startActivity(intent);
+                Intent intent = new Intent(Activity_FarmViewOptions.this, Activity_Harvested.class);
+                intent.putExtra("id", id);
+                intent.putExtra("farmname", "" + farmName);
+                intent.putExtra("latitude", lat);
+                intent.putExtra("longitude", lng );
+                startActivity(intent);
             }
         });
     }

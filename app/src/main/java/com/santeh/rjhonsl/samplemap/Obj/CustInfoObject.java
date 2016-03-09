@@ -66,6 +66,7 @@ public class CustInfoObject {
 	private int currentABW;
 	private int farmLocalID;
 
+
 	private int isVisited;
 	private int isactive;
 	private int isPosted;
@@ -73,6 +74,22 @@ public class CustInfoObject {
 	private int isPosted_pond;
 	private int isPosted_cust;
 	private int isPosted_weekly;
+
+
+	private String hrv_id;
+	private String hrv_pondid;
+	private String hrv_casenum;
+	private String hrv_specie;
+	private String hrv_dateOfHarvest;
+	private String hrv_finalABW;
+	private String hrv_totalConsumption;
+	private String hrv_fcr;
+	private String hrv_pricePerKilo;
+	private String hrv_totalHarvested;
+	private String hrv_isPosted;
+	private String hrv_dateRecorded;
+
+
 
 	private String customerID;
 	private String mainCustomerId;
@@ -914,5 +931,101 @@ public class CustInfoObject {
 
 	public void setW_update_dateAdded(String w_update_dateAdded) {
 		this.w_update_dateAdded = w_update_dateAdded;
+	}
+
+	public String getHrv_id() {
+		return hrv_id;
+	}
+
+	public void setHrv_id(String hrv_id) {
+		this.hrv_id = hrv_id;
+	}
+
+	public String getHrv_pondid() {
+		return hrv_pondid;
+	}
+
+	public void setHrv_pondid(String hrv_pondid) {
+		this.hrv_pondid = hrv_pondid;
+	}
+
+	public String getHrv_casenum() {
+		return hrv_casenum;
+	}
+
+	public void setHrv_casenum(String hrv_casenum) {
+		this.hrv_casenum = hrv_casenum;
+	}
+
+	public String getHrv_specie() {
+		return hrv_specie;
+	}
+
+	public void setHrv_specie(String hrv_specie) {
+		this.hrv_specie = hrv_specie;
+	}
+
+	public String getHrv_dateOfHarvest() {
+		return hrv_dateOfHarvest;
+	}
+
+	public void setHrv_dateOfHarvest(String hrv_dateOfHarvest) {
+		this.hrv_dateOfHarvest = hrv_dateOfHarvest;
+	}
+
+	public String getHrv_finalABW() {
+		return hrv_finalABW;
+	}
+
+	public void setHrv_finalABW(String hrv_finalABW) {
+		this.hrv_finalABW = hrv_finalABW;
+	}
+
+	public String getHrv_totalConsumption() {
+		return hrv_totalConsumption;
+	}
+
+	public void setHrv_totalConsumption(String hrv_totalConsumption) {
+		this.hrv_totalConsumption = hrv_totalConsumption;
+	}
+
+	public String getHrv_fcr() {
+		return hrv_fcr;
+	}
+
+	public void setHrv_fcr(String hrv_fcr) {
+		this.hrv_fcr = hrv_fcr;
+	}
+
+	public String getHrv_pricePerKilo() {
+		return hrv_pricePerKilo;
+	}
+
+	public void setHrv_pricePerKilo(String hrv_pricePerKilo) {
+		this.hrv_pricePerKilo = hrv_pricePerKilo;
+	}
+
+	public String getHrv_totalHarvested() {
+		return hrv_totalHarvested;
+	}
+
+	public void setHrv_totalHarvested(String hrv_totalHarvested) {
+		this.hrv_totalHarvested = hrv_totalHarvested;
+	}
+
+	public String getHrv_isPosted() {
+		return hrv_isPosted;
+	}
+
+	public void setHrv_isPosted(String hrv_isPosted) {
+		this.hrv_isPosted = hrv_isPosted;
+	}
+
+	public String getHrv_dateRecorded() {
+		return hrv_dateRecorded;
+	}
+
+	public void setHrv_dateRecorded(String hrv_dateRecorded) {
+		this.hrv_dateRecorded = hrv_dateRecorded;
 	}
 }

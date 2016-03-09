@@ -263,7 +263,7 @@ public class Activity_ManagePonds extends AppCompatActivity {
 
         if (userlevel == 4) {
             Log.d("DB", "");
-            Cursor cur = db.getLocal_PondsByFarmIndex(custID+"");
+            Cursor cur = db.getLocal_NotPondsByFarmIndex(custID+"");
             if (cur!= null){
                 if (cur.getCount() > 0) {
                     pondInfoList = new ArrayList<>();

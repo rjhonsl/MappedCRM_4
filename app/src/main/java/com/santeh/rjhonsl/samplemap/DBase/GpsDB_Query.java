@@ -825,6 +825,21 @@ public class GpsDB_Query {
 		return db.rawQuery(query, params);
 	}
 
+	public Cursor getLocal_NotPondsByFarmIndex(String farmid){
+		dbhelper.getWritableDatabase();
+		String query =
+				"SELECT *  FROM `tblPond` " +
+						"INNER JOIN tblpond_weeklyupdates ON tblPond.id = tblpond_weeklyupdates.wu_pondid " +
+						"WHERE `customerId`= ? AND "+GpsSQLiteHelper.CL_POND_isHarvested + " = 0 "+
+						"GROUP BY tblPond.id " +
+						"ORDER BY CAST(`tblPond`.`pondid` AS SIGNED)  ASC";
+
+//		"SELECT * FROM `tblPond` WHERE `customerId`= ?\n" +
+//				"ORDER BY CAST(`tblPond`.`pondid` AS SIGNED)  ASC";
+		String[] params = new String[] {farmid};
+		return db.rawQuery(query, params);
+	}
+
 
 	public int getUser_Count() {
 		String query = "SELECT * FROM "+GpsSQLiteHelper.TBLUSERS+";";
