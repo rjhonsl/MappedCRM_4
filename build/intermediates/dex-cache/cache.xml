@@ -8,5 +8,12 @@
         sha1="5e412e954a24c5310a459c09870e4e2081aceb03">
         <dex dex="C:\Android Studio Projects\SampleMap_withTextBackCoordinates\SampleMap\app\build\intermediates\pre-dexed\debug\classes-18865631ad855387e50b843e22bc9ecc04a97013.jar" />
     </item>
+    <item
+        jar="C:\Android Studio Projects\SampleMap_withTextBackCoordinates\SampleMap\app\build\intermediates\exploded-aar\com.github.aakira\expandable-layout\1.4.3\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="15b11aeef70c4a5f9027147c54a7b8803f365a11">
+        <dex dex="C:\Android Studio Projects\SampleMap_withTextBackCoordinates\SampleMap\app\build\intermediates\pre-dexed\debug\classes-ae9c8be256ca515013652c606422d0396c514b3a.jar" />
+    </item>
 
 </items>

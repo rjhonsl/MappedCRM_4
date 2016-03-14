@@ -711,6 +711,8 @@ public class GpsDB_Query {
 		return cur.getCount();
 	}
 
+
+
 	public Cursor getAll_FARMINFO_LEFTJOIN_PONDINFO_LEFTJOIN_CUSTOMERINFO(String userid){
 		String query = "SELECT \n" +
 				"tblCustomerInfo.*, \n" +
@@ -834,11 +836,10 @@ public class GpsDB_Query {
 						"GROUP BY tblPond.id " +
 						"ORDER BY CAST(`tblPond`.`pondid` AS SIGNED)  ASC";
 
-//		"SELECT * FROM `tblPond` WHERE `customerId`= ?\n" +
-//				"ORDER BY CAST(`tblPond`.`pondid` AS SIGNED)  ASC";
 		String[] params = new String[] {farmid};
 		return db.rawQuery(query, params);
 	}
+
 
 
 	public int getUser_Count() {
@@ -848,6 +849,17 @@ public class GpsDB_Query {
 		Cursor cur = db.rawQuery(query, params);
 		return cur.getCount();
 	}
+
+
+
+	public Cursor getAllHarvestInfo() {
+		String query = "SELECT * FROM "+GpsSQLiteHelper.TBL_HARVESTINFO+";";
+		String[] params = new String[] {};
+//		rawQuery("SELECT id, name FROM people WHERE name = ? AND id = ?", new String[] {"David", "2"});
+		Cursor cur = db.rawQuery(query, params);
+		return cur;
+	}
+
 
 
 
