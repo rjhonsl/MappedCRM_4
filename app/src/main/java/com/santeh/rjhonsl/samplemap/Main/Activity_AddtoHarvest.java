@@ -302,7 +302,7 @@ public class Activity_AddtoHarvest extends FragmentActivity implements  DatePick
         edtTotalFeedinKilos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int kilos = Helper.removeUnits(edtTotalFeedinKilos.getText().toString(), "kg");
+                int kilos = Helper.removeSuffix(edtTotalFeedinKilos.getText().toString(), "kg");
 
                 final Dialog d = Helper.createNumberPickerdDialog(activity, "Total Feed Consumed(kg)", 1, 999999);
                 Button set = (Button) d.findViewById(R.id.btn_numberpicker_set);
@@ -323,7 +323,7 @@ public class Activity_AddtoHarvest extends FragmentActivity implements  DatePick
         edtTotalWeightHarvested.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int kilos = Helper.removeUnits(edtTotalWeightHarvested.getText().toString(), "kg");
+                int kilos = Helper.removeSuffix(edtTotalWeightHarvested.getText().toString(), "kg");
 
                 final Dialog d = Helper.createNumberPickerdDialog(activity, "Weight Harvested(kg)", 1, 999999);
                 Button set = (Button) d.findViewById(R.id.btn_numberpicker_set);
@@ -358,8 +358,17 @@ public class Activity_AddtoHarvest extends FragmentActivity implements  DatePick
                             nullval, nullval, nullval, nullval, nullval);
 
                 } else {
-                    result = db.insertHarvestInfo(id + "", edtCaseNumber.getText().toString(), edtSpecies.getText().toString(), edtDateofHarvest.getText().toString(),
-                            edtFinalAbw.getText().toString(), edtTotalFeedinKilos.getText().toString(), edtFCR.getText().toString(), edtPricePerkilo.getText().toString(), edtTotalWeightHarvested.getText().toString());
+                    result = db.insertHarvestInfo(
+                            id + "",
+                            edtCaseNumber.getText().toString(),
+                            edtSpecies.getText().toString(),
+                            edtDateofHarvest.getText().toString(),
+                            Helper.removeSuffix(edtFinalAbw.getText().toString(), "g")+"",
+                            Helper.removeSuffix(edtTotalFeedinKilos.getText().toString(), "kg") + "",
+                            edtFCR.getText().toString(),
+                            edtPricePerkilo.getText().toString(),
+                            Helper.removeSuffix(edtTotalWeightHarvested.getText().toString(), "kg") + ""
+                    );
                 }
 
                 if (result > 0){

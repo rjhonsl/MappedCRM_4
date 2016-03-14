@@ -1169,6 +1169,11 @@ public class GpsDB_Query {
 		return db.delete(GpsSQLiteHelper.TBLMAINCUSTOMERINFO, where, null) != 0;
 	}
 
+	public boolean deleteRow_HarvestInfo(String rowId) {
+		String where = GpsSQLiteHelper.CL_HRV_ID + "=" + rowId;
+		return db.delete(GpsSQLiteHelper.TBL_HARVESTINFO, where, null) != 0;
+	}
+
 	public boolean deleteRow_FarmInfo(String rowId) {
 		String where = GpsSQLiteHelper.CL_FarmInfo_ID + "=" + rowId;
 		return db.delete(GpsSQLiteHelper.TBLFARMiNFO, where, null) != 0;

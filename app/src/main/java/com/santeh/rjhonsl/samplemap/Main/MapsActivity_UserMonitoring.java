@@ -376,7 +376,7 @@ public class MapsActivity_UserMonitoring extends AppCompatActivity implements On
         setYyyy(year);
         setDd(day);
         setMm(month + 1);
-        txtdate.setText(Helper.convertDatetoGregorain(year, month + 1, day));
+        txtdate.setText(Helper.convertDatetoGregorian(year, month + 1, day));
         getActivityInfoByUserIDandDate(year + "-" + (month + 1) + "-" + day, Helper.variables.URL_SELECT_USERS_ACTIVITY_BY_DATE_AND_ID);
     }
 

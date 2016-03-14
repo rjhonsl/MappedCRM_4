@@ -1,13 +1,15 @@
 package com.santeh.rjhonsl.samplemap.Main;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -18,6 +20,7 @@ import com.santeh.rjhonsl.samplemap.DBase.GpsDB_Query;
 import com.santeh.rjhonsl.samplemap.DBase.GpsSQLiteHelper;
 import com.santeh.rjhonsl.samplemap.Obj.CustInfoObject;
 import com.santeh.rjhonsl.samplemap.R;
+import com.santeh.rjhonsl.samplemap.Utils.Helper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,20 +64,87 @@ public class Activity_Harvested extends FragmentActivity {
 
 
         txtfarmname.setText(intent.getStringExtra("farmname"));
+        btnTitleLeft.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
 
+
+        lvHarvestInfo.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+
+                final String[] options = new String[]{"Edit", "Delete", "Update History"};
+                final Dialog d = Helper.createCustomThemedListDialog(activity, options, "Options", R.color.skyblue_500);
+                d.show();
+
+                final ListView lvoptions = (ListView) d.findViewById(R.id.dialog_list_listview);
+                lvoptions.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position2, long id) {
+                        if (position2 == 0){
+                            d.hide();
+                            if (harvestinfoList.get(position).getHrv_isPosted().equalsIgnoreCase("1")) {
+                                Helper.createCustomDialogOKOnly(activity, "Warning", "This harvest information was already uploaded.", "OK");
+                            }else{
+
+                            }
+                        }else if(position2 == 1){
+                            d.hide();
+                            if (harvestinfoList.get(position).getHrv_isPosted().equalsIgnoreCase("1")) {
+                                Helper.createCustomDialogOKOnly(activity, "Warning", "This harvest information was already uploaded.", "OK");
+                                d.hide();
+                            }else{
+                                final Dialog d1 =  Helper.createCustomDialogThemedYesNO(activity, "Delete this harvest info?", "Delete", "NO", "YES", R.color.red);
+                                Button no = (Button) d1.findViewById(R.id.btn_dialog_yesno_opt1);
+                                Button yes = (Button) d1.findViewById(R.id.btn_dialog_yesno_opt2);
+
+                                no.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        d1.hide();
+                                    }
+                                });
+
+                                yes.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        d1.hide();
+                                        db.deleteRow_HarvestInfo(harvestinfoList.get(position).getHrv_id());
+                                        Helper.toastShort(activity, "Harvest Information Deleted");
+                                        recreate();
+//                                        adapterHarvested.remove(harvestinfoList.get(position));
+////                                        adapterHarvested.clear();
+////                                        getHarvertInfo();
+//
+//
+//                                        harvestinfoList.remove(position);
+//                                        adapterHarvested.notifyDataSetChanged();
+                                    }
+                                });
+                            }
+
+                        }else if(position2 == 2){
+                            d.hide();
+                        }
+                    }
+                });
+
+                return false;
+            }
+        });
         getHarvertInfo();
 
     }
 
     private void getHarvertInfo() {
-        Log.d("DB", "");
         Cursor cur = db.getAllHarvestInfo();
         if (cur!= null){
             if (cur.getCount() > 0) {
                 harvestinfoList = new ArrayList<>();
-
-
 
                 while (cur.moveToNext()) {
                     CustInfoObject custInfoObject = new CustInfoObject();
@@ -101,6 +171,7 @@ public class Activity_Harvested extends FragmentActivity {
 
     private void populateListViewAdapter() {
         if (harvestinfoList != null){
+
             adapterHarvested = new AdapterHarvest(context, R.layout.item_lv_harvested, harvestinfoList);
             lvHarvestInfo.setAdapter(adapterHarvested);
             lvHarvestInfo.setVisibility(View.VISIBLE);

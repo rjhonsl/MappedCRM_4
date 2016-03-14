@@ -1,5 +1,6 @@
 package com.santeh.rjhonsl.samplemap.Adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 import android.util.SparseBooleanArray;
@@ -12,8 +13,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.github.aakira.expandablelayout.ExpandableLayout;
+import com.github.aakira.expandablelayout.ExpandableLayoutListener;
 import com.santeh.rjhonsl.samplemap.Obj.CustInfoObject;
 import com.santeh.rjhonsl.samplemap.R;
+import com.santeh.rjhonsl.samplemap.Utils.Helper;
 
 import java.util.List;
 
@@ -36,13 +39,13 @@ public class AdapterHarvest extends ArrayAdapter<CustInfoObject> {
 
 	private class ViewHolder {
 
-		TextView id, pondid, casenum, species, dateofharvest, finalabw, totalConsumption, fcr, priceperkilo, totalHarvested, isPosted, dateRecorded;
+		TextView id, pondid, casenum, updatehistory ,species, dateofharvest, finalabw, totalConsumption, fcr, priceperkilo, totalHarvested, isPosted, dateRecorded;
 		ExpandableLayout expandableLayout;
 		ImageView imgarrow;
 		LinearLayout llheader, llharvestedWrapper;
 	}
 
-	public View getView(int position, View view, ViewGroup parent) {
+	public View getView(final int position, View view, ViewGroup parent) {
 		final ViewHolder holder;
 		positions = position;
 
@@ -63,7 +66,113 @@ public class AdapterHarvest extends ArrayAdapter<CustInfoObject> {
 			holder.llheader = (LinearLayout) view.findViewById(R.id.titleHeader);
 			holder.llharvestedWrapper = (LinearLayout) view.findViewById(R.id.ll_item_harvestedwrapper);
 			holder.imgarrow = (ImageView) view.findViewById(R.id.item_btn_arrow);
+			holder.updatehistory = (TextView) view.findViewById(R.id.txt_updatehistory);
 
+
+			holder.updatehistory.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Helper.toastShort((Activity) context, ""+position);
+				}
+			});
+
+			holder.imgarrow.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					holder.expandableLayout.toggle();
+					holder.expandableLayout.setListener(new ExpandableLayoutListener() {
+						@Override
+						public void onAnimationStart() {
+
+						}
+
+						@Override
+						public void onAnimationEnd() {
+
+						}
+
+						@Override
+						public void onPreOpen() {
+
+						}
+
+						@Override
+						public void onPreClose() {
+
+						}
+
+						@Override
+						public void onOpened() {
+							holder.imgarrow.setImageResource(R.drawable.ic_arrow_drop_up_black_24dp);
+						}
+
+						@Override
+						public void onClosed() {
+							holder.imgarrow.setImageResource(R.drawable.ic_arrow_drop_down_black_24dp);
+						}
+					});
+				}
+			});
+
+
+
+			String[] splittedDate = ItemList.get(position).getHrv_dateOfHarvest().split("-");
+			String dateofharvestt = Helper.convertDatetoGregorian(Integer.parseInt(splittedDate[0]), (Integer.parseInt(splittedDate[1])), (Integer.parseInt(splittedDate[2])));
+
+			String species = ItemList.get(position).getHrv_specie();
+			String casenum = ItemList.get(position).getHrv_casenum();
+			String dateofharvest = dateofharvestt;
+			String finalabw = ItemList.get(position).getHrv_finalABW();
+			String totalConsumption = ItemList.get(position).getHrv_totalConsumption();
+			String fcr = ItemList.get(position).getHrv_fcr();
+			String priceperkilo = ItemList.get(position).getHrv_pricePerKilo();
+			String totalharvested = ItemList.get(position).getHrv_totalHarvested();
+			String dateRecorded = Helper.convertLongtoDate_Gregorian(Helper.convertDateTimeStringToMilis_DB_Format(ItemList.get(position).getHrv_dateRecorded()))+"";
+
+
+			if (priceperkilo.equalsIgnoreCase("null")) {
+				priceperkilo = "null";
+			}else{
+				priceperkilo = "P "+priceperkilo;
+			}
+
+			if (totalConsumption.equalsIgnoreCase("null")) {
+				totalConsumption = "null";
+			}else{
+				totalConsumption = totalConsumption+"kg";
+			}
+
+			if (totalharvested.equalsIgnoreCase("null")) {
+				totalharvested = "null";
+			}else{
+				totalharvested = totalharvested+"kg";
+			}
+
+			if (finalabw.equalsIgnoreCase("null")) {
+				finalabw = "null";
+			}else{
+				finalabw = finalabw+"g";
+			}
+			if (species.equalsIgnoreCase("null")) {
+				species = "null";
+			}
+			if (casenum.equalsIgnoreCase("null")) {
+				casenum = "null";
+			}else{
+				casenum = "Case #" + casenum;
+			}
+
+
+
+			holder.species.setText(species);
+			holder.casenum.setText(casenum);
+			holder.dateofharvest.setText(dateofharvestt);
+			holder.finalabw.setText(finalabw);
+			holder.totalConsumption.setText(totalConsumption);
+			holder.fcr.setText(fcr);
+			holder.priceperkilo.setText(priceperkilo);
+			holder.totalHarvested.setText(totalharvested);
+			holder.dateRecorded.setText(dateRecorded);
 
 			view.setTag(holder);
 		}
@@ -73,44 +182,7 @@ public class AdapterHarvest extends ArrayAdapter<CustInfoObject> {
 			holder = (ViewHolder) view.getTag();
 		}
 
-		holder.llheader.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				holder.expandableLayout.toggle();
-				if (holder.expandableLayout.isExpanded()) {
-					holder.imgarrow.setImageResource(R.drawable.ic_arrow_drop_down_black_24dp);
-				} else {
-					holder.imgarrow.setImageResource(R.drawable.ic_arrow_drop_up_black_24dp);
-				}
-			}
-		});
 
-
-		holder.species.setText(""+ItemList.get(position).getHrv_specie());
-		holder.casenum.setText("Case #"+ItemList.get(position).getHrv_casenum());
-		holder.dateofharvest.setText(ItemList.get(position).getHrv_dateOfHarvest());
-		holder.finalabw.setText(ItemList.get(position).getHrv_finalABW());
-		holder.totalConsumption.setText(ItemList.get(position).getHrv_totalConsumption());
-		holder.fcr.setText(ItemList.get(position).getHrv_fcr());
-		holder.priceperkilo.setText(ItemList.get(position).getHrv_pricePerKilo());
-		holder.totalHarvested.setText(ItemList.get(position).getHrv_totalHarvested());
-		holder.dateRecorded.setText(ItemList.get(position).getHrv_dateRecorded());
-
-//		if (ItemList.get(position).getSpecie().equalsIgnoreCase("bangus")) {
-//			holder.initialHolder.setBackground(context.getResources().getDrawable(R.drawable.bg_skyblue_oval));
-//		}else if (ItemList.get(position).getSpecie().equalsIgnoreCase("tilapia")){
-//			holder.initialHolder.setBackground(context.getResources().getDrawable(R.drawable.bg_amber_oval));
-//		}else if (ItemList.get(position).getSpecie().equalsIgnoreCase("vannamei")){
-//			holder.initialHolder.setBackground(context.getResources().getDrawable(R.drawable.bg_green_oval));
-//		}else if (ItemList.get(position).getSpecie().equalsIgnoreCase("prawns")){
-//			holder.initialHolder.setBackground(context.getResources().getDrawable(R.drawable.bg_red_oval));
-//		}
-
-
-//		holder.species.setText(ItemList.get(position).getSpecie()+" - "+ ItemList.get(position).getCurrentABW()+"g");
-//		holder.quantity.setText("Quantity: "+ItemList.get(position).getQuantity()+"");
-//		holder.datestocked.setText("Date Stocked: "+ItemList.get(position).getDateStocked()+"");
-//		holder.pondid.setText(ItemList.get(position).getPondID()+"");
 
 		return view;
 	}
@@ -120,6 +192,7 @@ public class AdapterHarvest extends ArrayAdapter<CustInfoObject> {
 		ItemList.remove(object);
 		notifyDataSetChanged();
 	}
+
 
 	public void toggleSelection(int position) {
 		selectView(position, !mSelectedItemsIds.get(position));

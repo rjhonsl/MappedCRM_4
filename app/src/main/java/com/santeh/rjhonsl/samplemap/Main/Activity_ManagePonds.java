@@ -161,7 +161,7 @@ public class Activity_ManagePonds extends AppCompatActivity {
         lvPonds.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position1, long id1) {
-                String[] options = {"View and Edit Pond Details", "View Weekly Reports", "Delete Pond", "Mark as Harvested" };
+                String[] options = {"View and Edit Pond Details", "View Weekly Reports", "Delete Pond", "Mark as Harvested"};
                 final Dialog d = Helper.createCustomThemedListDialog(activity, options, "Options", R.color.deepteal_500);
                 d.show();
 
@@ -342,7 +342,7 @@ public class Activity_ManagePonds extends AppCompatActivity {
     }
 
     private void populateListViewAdapter() {
-        if (pondInfoList != null){
+        if (pondInfoList.size() > 0){
             pondadapter = new AdapterPonds(context, R.layout.item_lv_manageponds, pondInfoList);
             lvPonds.setAdapter(pondadapter);
             lvPonds.setVisibility(View.VISIBLE);

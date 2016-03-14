@@ -952,7 +952,7 @@ public class Helper {
     }
 
 
-    public static int removeUnits(String wholeValue, String unitsToRemove){
+    public static int removeSuffix(String wholeValue, String unitsToRemove){
         int initialValue;
 
         if (wholeValue.equalsIgnoreCase("") || wholeValue.equalsIgnoreCase(null)) {
@@ -1100,7 +1100,7 @@ public class Helper {
         return startDate;
     }
 
-    public static String convertDatetoGregorain(int yyyy, int MM, int dd){
+    public static String convertDatetoGregorian(int yyyy, int MM, int dd){
         String dateString_gregorian="";
         try {
             String dateString = dd+"/"+MM+"/"+yyyy;

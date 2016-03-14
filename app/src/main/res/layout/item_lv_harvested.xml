@@ -10,7 +10,6 @@
                   android:layout_height="wrap_content"
                   android:elevation="5dp"
 
-                  android:layout_marginBottom="10dp"
                   android:orientation="vertical">
 
         <LinearLayout android:layout_width="match_parent"
@@ -20,7 +19,8 @@
                       android:paddingTop="9dp"
                       android:paddingBottom="8dp"
                       android:id="@+id/titleHeader"
-                      android:layout_height="wrap_content"
+                      android:layout_height="match_parent"
+                      android:gravity="center"
                       android:orientation="horizontal">
 
             <TextView android:layout_width="wrap_content"
@@ -52,9 +52,11 @@
                       android:textColor="@color/gray_800"
                       android:text="Harvested: Dec 14, 2015"/>
 
-            <ImageView android:layout_width="wrap_content"
-                       android:layout_height="match_parent"
+            <ImageView android:layout_width="28dp"
+                       android:layout_height="28dp"
+                       android:layout_marginLeft="5dp"
                        android:id="@+id/item_btn_arrow"
+                       android:background="@drawable/bg_material_transparent"
                        android:src="@drawable/ic_arrow_drop_down_black_24dp"/>
 
         </LinearLayout>
@@ -98,7 +100,7 @@
                 <TextView android:layout_width="wrap_content"
                           android:layout_height="wrap_content"
                           android:layout_weight="1"
-                          android:text="Bag consumed:"/>
+                          android:text="Feeds Consumed:"/>
 
 
                 <TextView
@@ -204,6 +206,7 @@
                     android:layout_below="@+id/ll_item_container6"
                     android:background="@drawable/bg_material_transparent"
                     android:textColor="@color/skyblue_400"
+                      android:id="@+id/txt_updatehistory"
                     android:text="UPDATE HISTORY"/>
 
 
