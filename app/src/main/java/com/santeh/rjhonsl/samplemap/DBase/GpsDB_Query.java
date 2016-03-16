@@ -94,6 +94,7 @@ public class GpsDB_Query {
 		values.put(GpsSQLiteHelper.CL_POND_remarks, remarks);
 		values.put(GpsSQLiteHelper.CL_POND_customerId, customerid);
 		values.put(GpsSQLiteHelper.CL_POND_isPosted, 0);
+		values.put(GpsSQLiteHelper.CL_POND_isHarvested, 0);
 		long id = db.insert(GpsSQLiteHelper.TBLPOND, null, values);
 		String currentTime = Helper.convertLongtoDateTime_DB_Format(System.currentTimeMillis());
 		insertWeeklyUpdates(sizeofStock, remarks, id + "", currentTime, survivalRate);

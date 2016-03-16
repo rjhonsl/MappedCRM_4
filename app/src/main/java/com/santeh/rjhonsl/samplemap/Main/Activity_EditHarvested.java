@@ -26,7 +26,7 @@ import java.util.Calendar;
 /**
  * Created by rjhonsl on 9/28/2015.
  */
-public class Activity_AddPond extends FragmentActivity  implements DatePickerDialog.OnDateSetListener{
+public class Activity_EditHarvested extends FragmentActivity  implements DatePickerDialog.OnDateSetListener{
 
     Intent passedintentt;
     int custid = 0;
@@ -51,7 +51,7 @@ public class Activity_AddPond extends FragmentActivity  implements DatePickerDia
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_addpond);
         activity = this;
-        context = Activity_AddPond.this;
+        context = Activity_EditHarvested.this;
         db = new GpsDB_Query(this);
         db.open();
 
@@ -228,7 +228,7 @@ public class Activity_AddPond extends FragmentActivity  implements DatePickerDia
 
             if (result != -1){
                 PD.dismiss();
-                final Dialog d = Helper.createCustomThemedDialogOKOnly(Activity_AddPond.this, "Success", "Saving successful", "OK");
+                final Dialog d = Helper.createCustomThemedDialogOKOnly(Activity_EditHarvested.this, "Success", "Saving successful", "OK");
                 TextView ok = (TextView) d.findViewById(R.id.btn_dialog_okonly_OK);
                 d.show();
                 ok.setOnClickListener(new View.OnClickListener() {
@@ -244,7 +244,7 @@ public class Activity_AddPond extends FragmentActivity  implements DatePickerDia
                     }
                 });
             }else{
-                final Dialog d = Helper.createCustomThemedDialogOKOnly(Activity_AddPond.this, "Error",
+                final Dialog d = Helper.createCustomThemedDialogOKOnly(Activity_EditHarvested.this, "Error",
                         "Adding failed. Please Try Again. ", "OK");
                 TextView ok = (TextView) d.findViewById(R.id.btn_dialog_okonly_OK);
                 d.show();

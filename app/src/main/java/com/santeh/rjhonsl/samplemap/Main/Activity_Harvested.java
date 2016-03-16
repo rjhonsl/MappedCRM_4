@@ -116,13 +116,6 @@ public class Activity_Harvested extends FragmentActivity {
                                         db.deleteRow_HarvestInfo(harvestinfoList.get(position).getHrv_id());
                                         Helper.toastShort(activity, "Harvest Information Deleted");
                                         recreate();
-//                                        adapterHarvested.remove(harvestinfoList.get(position));
-////                                        adapterHarvested.clear();
-////                                        getHarvertInfo();
-//
-//
-//                                        harvestinfoList.remove(position);
-//                                        adapterHarvested.notifyDataSetChanged();
                                     }
                                 });
                             }
@@ -171,13 +164,11 @@ public class Activity_Harvested extends FragmentActivity {
 
     private void populateListViewAdapter() {
         if (harvestinfoList != null){
-
             adapterHarvested = new AdapterHarvest(context, R.layout.item_lv_harvested, harvestinfoList);
             lvHarvestInfo.setAdapter(adapterHarvested);
             lvHarvestInfo.setVisibility(View.VISIBLE);
             llnopond.setVisibility(View.GONE);
-        }
-        else{
+        } else{
             lvHarvestInfo.setVisibility(View.GONE);
             llnopond.setVisibility(View.VISIBLE);
         }

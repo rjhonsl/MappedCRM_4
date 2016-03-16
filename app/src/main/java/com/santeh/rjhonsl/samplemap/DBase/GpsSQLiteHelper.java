@@ -385,6 +385,9 @@ public class GpsSQLiteHelper extends SQLiteOpenHelper {
 		db.execSQL(TBL_CREATE_WEEKLYUPDATES);
 		db.execSQL(TBL_CREATE_USERS);
 		db.execSQL(TBL_CREATE_USERS_ACTIVITY);
+		String createHarvestInfo = createTableString(TBL_HARVESTINFO, ALL_KEY_HARVESTINFO, ALL_KEY_HARVESTEDINFO_DATAPROP);
+		db.execSQL(createHarvestInfo);
+
 		Log.d(LOGTAG, "tables has been created: " + String.valueOf(db));
 	}
 
@@ -414,7 +417,7 @@ public class GpsSQLiteHelper extends SQLiteOpenHelper {
 
 		if (oldVersion < 22) {
 			// Version 22 Create Harvest Info
-				String createHarvestInfo = createTableString(TBL_HARVESTINFO, ALL_KEY_HARVESTINFO, ALL_KEY_MAINCUSTOMERINFO_DATAPROP);
+			String createHarvestInfo = createTableString(TBL_HARVESTINFO, ALL_KEY_HARVESTINFO, ALL_KEY_HARVESTEDINFO_DATAPROP);
 			_db.execSQL(createHarvestInfo);
 		}
 

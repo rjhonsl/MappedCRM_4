@@ -112,6 +112,9 @@
         <activity android:name=".Main.Activity_AddPond">
         </activity>
 
+        <activity android:name=".Main.Activity_EditHarvested">
+        </activity>
+
         <activity android:name=".Main.Activity_Harvested">
         </activity>
 
