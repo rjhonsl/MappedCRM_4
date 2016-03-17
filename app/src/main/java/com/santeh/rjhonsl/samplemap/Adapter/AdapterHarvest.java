@@ -68,6 +68,7 @@ public class AdapterHarvest extends ArrayAdapter<CustInfoObject> {
 			holder.imgarrow = (ImageView) view.findViewById(R.id.item_btn_arrow);
 			holder.updatehistory = (TextView) view.findViewById(R.id.txt_updatehistory);
 
+			holder.expandableLayout.collapse();
 
 			holder.updatehistory.setOnClickListener(new View.OnClickListener() {
 				@Override
@@ -159,7 +160,7 @@ public class AdapterHarvest extends ArrayAdapter<CustInfoObject> {
 			if (casenum.equalsIgnoreCase("null")) {
 				casenum = "null";
 			}else{
-				casenum = "Case #" + casenum;
+				casenum = "Cs. " + casenum;
 			}
 
 

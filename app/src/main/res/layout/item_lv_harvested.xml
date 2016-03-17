@@ -27,7 +27,9 @@
                       android:layout_height="wrap_content"
                       android:textSize="16sp"
                       android:id="@+id/item_txt_casenum"
-                      android:textColor="@color/gray_800"
+                      android:textColor="@color/gray_50"
+                      android:padding="3dp"
+                      android:background="@drawable/bg_blue_box_curvesides"
                       android:text="Case# 1"/>
 
             <TextView android:layout_width="wrap_content"
@@ -38,18 +40,18 @@
 
             <TextView android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
-                      android:textSize="16sp"
+                      android:textSize="15sp"
                       android:id="@+id/item_txt_specie"
-                      android:textColor="@color/gray_800"
+                      android:textColor="@color/gray_600"
                       android:text="Tilapia"/>
 
             <TextView android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
-                      android:textSize="16sp"
+                      android:textSize="13sp"
                       android:gravity="right"
                       android:layout_weight="1"
                       android:id="@+id/item_txt_dateofharvest"
-                      android:textColor="@color/gray_800"
+                      android:textColor="@color/gray_500"
                       android:text="Harvested: Dec 14, 2015"/>
 
             <ImageView android:layout_width="28dp"
@@ -79,6 +81,7 @@
 
                 <TextView android:layout_width="wrap_content"
                           android:layout_height="wrap_content"
+                          android:textSize="14sp"
                           android:text="Final ABW:"/>
 
                 <TextView
@@ -86,7 +89,7 @@
                     android:layout_weight="1"
                     android:gravity="right"
                     android:text=" 120g"
-                    android:textSize="15sp"
+                    android:textSize="14sp"
                     android:textColor="@color/gray_600"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
@@ -100,13 +103,14 @@
                 <TextView android:layout_width="wrap_content"
                           android:layout_height="wrap_content"
                           android:layout_weight="1"
+                          android:textSize="14sp"
                           android:text="Feeds Consumed:"/>
 
 
                 <TextView
                     android:id="@+id/item_txt_totalconsumed"
                     android:text=" 50bags"
-                    android:textSize="15sp"
+                    android:textSize="14sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 
@@ -119,13 +123,14 @@
                 <TextView android:layout_width="wrap_content"
                           android:layout_height="wrap_content"
                           android:layout_weight="1"
+                          android:textSize="14sp"
                           android:text="FCR:"/>
 
 
                 <TextView
                     android:id="@+id/item_txt_fcr"
                     android:text= "1.2"
-                    android:textSize="15sp"
+                    android:textSize="14sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 
@@ -140,13 +145,14 @@
                 <TextView android:layout_width="wrap_content"
                           android:layout_height="wrap_content"
                           android:layout_weight="1"
+                          android:textSize="14sp"
                           android:text="Price/kg:"/>
 
 
                 <TextView
                     android:id="@+id/item_txt_priceoperkilo"
                     android:text= "P400"
-                    android:textSize="15sp"
+                    android:textSize="14sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 
@@ -159,13 +165,14 @@
                 <TextView android:layout_width="wrap_content"
                           android:layout_height="wrap_content"
                           android:layout_weight="1"
+                          android:textSize="14sp"
                           android:text="Total Weight Harvested:"/>
 
 
                 <TextView
                     android:id="@+id/item_txt_totalHarvested"
                     android:text= "P400"
-                    android:textSize="15sp"
+                    android:textSize="14sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 
@@ -178,13 +185,14 @@
                 <TextView android:layout_width="wrap_content"
                           android:layout_height="wrap_content"
                           android:layout_weight="1"
+                          android:textSize="14sp"
                           android:text="Date Recorded:"/>
 
 
                 <TextView
                     android:id="@+id/item_txt_daterecorded"
                     android:text= "P400"
-                    android:textSize="15sp"
+                    android:textSize="14sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 

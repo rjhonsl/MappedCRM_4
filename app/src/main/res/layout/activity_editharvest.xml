@@ -22,7 +22,7 @@
             android:layout_height="match_parent"/>
 
         <TextView
-            android:text="Harvest Information"
+            android:text="Edit Harvest Information"
             android:gravity="center|center_vertical"
             android:id="@+id/title"
             android:textSize="19sp"
@@ -529,7 +529,7 @@
                      android:textColor="@color/teal_500"
                      android:padding="5dp"
                      android:background="@drawable/bg_material_transparent"
-                     android:src="@drawable/ic_check_black_24dp"
+                     android:src="@drawable/ic_save_black_24dp"
             />
     </LinearLayout>
 

@@ -396,9 +396,6 @@ public class GpsSQLiteHelper extends SQLiteOpenHelper {
 	public void onUpgrade(SQLiteDatabase _db, int oldVersion, int newVersion) {
 
 		Log.d("UPGRADE", "START ON UPGRADE: from "+oldVersion +" to " + newVersion);
-//		_db.execSQL("DROP TABLE IF EXISTS " + TBLAREA);
-//		_db.execSQL("DROP TABLE IF EXISTS " + TBLAREA_ASSIGNED);
-//		_db.execSQL("DROP TABLE IF EXISTS " + TBLAREA_MUNICIPALITY);
 
 
 		if(oldVersion < 19)

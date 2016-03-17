@@ -520,7 +520,7 @@ public class GpsDB_Query {
 	}
 
 	public String getSQLStringForInsert_UNPOSTED_POND(Activity activity) {
-		String sqlString = "" +
+		String sqlString = " " +
 				"INSERT INTO `tblPond` (`id`, `pondid`, `specie`, `sizeofStock`, `survivalrate`, `dateStocked`, `quantity`, `area`, `culturesystem`, `remarks`, `customerId`, `p_lid`) VALUES  ";
 		String query = "SELECT * FROM " + GpsSQLiteHelper.TBLPOND + " WHERE "
 				+ GpsSQLiteHelper.CL_POND_isPosted + " = 0 ";
@@ -562,7 +562,7 @@ public class GpsDB_Query {
 
 		String strSql = sqlString.substring(0, sqlString.length() - 1);
 		strSql = strSql + " " +
-				"ON DUPLICATE KEY UPDATE " +
+				" ON DUPLICATE KEY UPDATE " +
 				" 	 pondid = VALUES(pondid), " +
 				"    specie = VALUES(specie), " +
 				"    sizeofStock = VALUES(sizeofStock), " +
@@ -582,7 +582,7 @@ public class GpsDB_Query {
 
 
 	public String getSQLStringForInsert_UNPOSTED_WEEKLY() {
-		String sqlString = "" +
+		String sqlString = " " +
 				"INSERT INTO `tblpond_weeklyupdates` (`wu_id`, `wu_currentabw`,`wu_survivalRate`, `wu_remakrs`, `wu_pondid`, `wu_dateAdded`, `wu_lid`) VALUES ";
 		String query = "SELECT * FROM " + GpsSQLiteHelper.TBLPOND_WeeklyUpdates + " WHERE "
 				+ GpsSQLiteHelper.CL_WEEKLY_UPDATES_isposted+ " = 0 ";
@@ -612,7 +612,7 @@ public class GpsDB_Query {
 
 		String strSql = sqlString.substring(0, sqlString.length() - 1);
 		strSql = strSql + " " +
-				"ON DUPLICATE KEY UPDATE " +
+				" ON DUPLICATE KEY UPDATE " +
 				" 	 wu_id = VALUES(wu_id), " +
 				"    wu_currentabw = VALUES(wu_currentabw), " +
 				"    wu_survivalRate = VALUES(wu_survivalRate), " +
@@ -854,7 +854,8 @@ public class GpsDB_Query {
 
 
 	public Cursor getAllHarvestInfo() {
-		String query = "SELECT * FROM "+GpsSQLiteHelper.TBL_HARVESTINFO+";";
+		String query = "SELECT * FROM "+GpsSQLiteHelper.TBL_HARVESTINFO+" INNER JOIN " + GpsSQLiteHelper.TBLPOND +
+				" ON " + GpsSQLiteHelper.CL_HRV_PONDID + "="+GpsSQLiteHelper.CL_POND_INDEX;
 		String[] params = new String[] {};
 //		rawQuery("SELECT id, name FROM people WHERE name = ? AND id = ?", new String[] {"David", "2"});
 		Cursor cur = db.rawQuery(query, params);
@@ -877,6 +878,24 @@ public class GpsDB_Query {
 		String[] params = new String[] {};
 		Cursor cur = db.rawQuery(query, params);
 		return cur.getCount();
+	}
+
+
+	public String getSINGLE_ROWITEM(String tableName, String where, String columnName) {
+		String query = "SELECT * FROM " + tableName +" " +
+				"WHERE "+where+" " ;
+		String[] params = new String[] {};
+		Cursor cur = db.rawQuery(query, params);
+		Log.d("SINGLE QUERY", cur.getColumnCount() + " " + cur.getCount() );
+
+		String queriedItem = "";
+		if (cur.getCount() > 0) {
+			while (cur.moveToNext()) {
+				queriedItem = cur.getString(cur.getColumnIndex(columnName));
+				Log.d("SINGLE QUERY", queriedItem + " " + cur.getCount() );
+			}
+		}
+		return queriedItem;
 	}
 
 	public int getArea_Count(){
@@ -1052,6 +1071,28 @@ public class GpsDB_Query {
 		newValues.put(GpsSQLiteHelper.CL_WEEKLY_UPDATES_CURRENT_ABW, abw);
 		newValues.put(GpsSQLiteHelper.CL_WEEKLY_UPDATES_REMARKS, remarks);
 		return 	db.update(GpsSQLiteHelper.TBLPOND_WeeklyUpdates, newValues, where, null);
+	}
+
+
+	public int updateHarvestInfo( String casenum , String id, String pondid, String dateofharvest, String finalabw,
+								  String totalconsumption, String fcr, String priceperkilo,
+								  String totalharvested, String isposted, String dateinserted, String species) {
+
+		String where = GpsSQLiteHelper.CL_HRV_ID + " = " + id;
+		ContentValues newValues = new ContentValues();
+		newValues.put(GpsSQLiteHelper.CL_HRV_CASENUM, casenum);
+		newValues.put(GpsSQLiteHelper.CL_HRV_PONDID, pondid);
+		newValues.put(GpsSQLiteHelper.CL_HRV_DATEOFHARVESTED, dateofharvest);
+		newValues.put(GpsSQLiteHelper.CL_HRV_FINALABW, finalabw);
+		newValues.put(GpsSQLiteHelper.CL_HRV_TOTAL_CONSUMPTION, totalconsumption);
+		newValues.put(GpsSQLiteHelper.CL_HRV_FCR, fcr);
+		newValues.put(GpsSQLiteHelper.CL_HRV_PRICEPERKILO, priceperkilo);
+		newValues.put(GpsSQLiteHelper.CL_HRV_TOTALHARVEST, totalharvested);
+		newValues.put(GpsSQLiteHelper.CL_HRV_ISPOSTED, isposted);
+		newValues.put(GpsSQLiteHelper.CL_HRV_DATE_INSERTED, dateinserted);
+		newValues.put(GpsSQLiteHelper.CL_HRV_SPECIES, species);
+
+		return 	db.update(GpsSQLiteHelper.TBL_HARVESTINFO, newValues, where, null);
 	}
 
 	public int updateCustomerInfo(String id, String firstname, String lastname, String middleName, String farmID, String houseNumber, String street, String subdivision, String barangay,

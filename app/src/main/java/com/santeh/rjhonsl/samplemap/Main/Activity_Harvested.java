@@ -89,8 +89,23 @@ public class Activity_Harvested extends FragmentActivity {
                             d.hide();
                             if (harvestinfoList.get(position).getHrv_isPosted().equalsIgnoreCase("1")) {
                                 Helper.createCustomDialogOKOnly(activity, "Warning", "This harvest information was already uploaded.", "OK");
-                            }else{
+                            }else {
 
+                                Intent intent = new Intent(Activity_Harvested.this, Activity_EditHarvest.class);
+                                intent.putExtra("hrv_id", harvestinfoList.get(position).getHrv_id());
+                                intent.putExtra("hrv_pondid", harvestinfoList.get(position).getHrv_pondid());
+                                intent.putExtra("hrv_casenum", harvestinfoList.get(position).getHrv_casenum());
+                                intent.putExtra("hrv_species", harvestinfoList.get(position).getHrv_specie());
+                                intent.putExtra("hrv_dateofharvest", harvestinfoList.get(position).getHrv_dateOfHarvest());
+                                intent.putExtra("hrv_finalabw", harvestinfoList.get(position).getHrv_finalABW());
+                                intent.putExtra("hrv_totalconsumption", harvestinfoList.get(position).getHrv_totalConsumption());
+                                intent.putExtra("hrv_fcr", harvestinfoList.get(position).getHrv_fcr());
+                                intent.putExtra("hrv_priceperkilo", harvestinfoList.get(position).getHrv_pricePerKilo());
+                                intent.putExtra("hrv_totalHarvest", harvestinfoList.get(position).getHrv_totalHarvested());
+                                intent.putExtra("hrv_isposted", harvestinfoList.get(position).getHrv_isPosted());
+                                intent.putExtra("hrv_dateinserted", harvestinfoList.get(position).getHrv_dateRecorded());
+                                intent.putExtra("datestocked", harvestinfoList.get(position).getDateStocked());
+                                startActivity(intent);
                             }
                         }else if(position2 == 1){
                             d.hide();
@@ -115,7 +130,8 @@ public class Activity_Harvested extends FragmentActivity {
                                         d1.hide();
                                         db.deleteRow_HarvestInfo(harvestinfoList.get(position).getHrv_id());
                                         Helper.toastShort(activity, "Harvest Information Deleted");
-                                        recreate();
+                                        getHarvertInfo();
+
                                     }
                                 });
                             }
@@ -153,6 +169,7 @@ public class Activity_Harvested extends FragmentActivity {
                     custInfoObject.setHrv_totalHarvested(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_HRV_TOTALHARVEST)));
                     custInfoObject.setHrv_isPosted(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_HRV_ISPOSTED)));
                     custInfoObject.setHrv_dateRecorded(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_HRV_DATE_INSERTED)));
+                    custInfoObject.setDateStocked(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_dateStocked)));
 
                     harvestinfoList.add(custInfoObject);
                 }
@@ -178,6 +195,7 @@ public class Activity_Harvested extends FragmentActivity {
     protected void onResume() {
         super.onResume();
         db.open();
+        getHarvertInfo();
     }
 
     @Override

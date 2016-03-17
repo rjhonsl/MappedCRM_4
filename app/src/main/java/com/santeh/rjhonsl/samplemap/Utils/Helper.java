@@ -1106,6 +1106,21 @@ public class Helper {
             String dateString = dd+"/"+MM+"/"+yyyy;
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
             Date date = sdf.parse(dateString);
+            dateString_gregorian = convertLongShortGregorian(date.getTime());
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return dateString_gregorian;
+    }
+
+
+    public static String convertDateToShortGregorian(int yyyy, int MM, int dd){
+        String dateString_gregorian="";
+        try {
+            String dateString = dd+"/"+MM+"/"+yyyy;
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            Date date = sdf.parse(dateString);
             dateString_gregorian = convertLongtoDate_Gregorian(date.getTime());
 
         } catch (ParseException e) {
@@ -1113,6 +1128,7 @@ public class Helper {
         }
         return dateString_gregorian;
     }
+
 
 
     public static long convertDateTimeStringToMilis_DB_Format(String datetime){
@@ -1155,6 +1171,14 @@ public class Helper {
         calendar.setTimeInMillis(dateInMillis);
         return formatter.format(calendar.getTime());
     }
+
+    public static String convertLongShortGregorian(long dateInMillis){
+        SimpleDateFormat formatter = new SimpleDateFormat("MMM dd");
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(dateInMillis);
+        return formatter.format(calendar.getTime());
+    }
+
 
 
     public static String convertLongtoDate_Gregorian(long dateInMillis){
