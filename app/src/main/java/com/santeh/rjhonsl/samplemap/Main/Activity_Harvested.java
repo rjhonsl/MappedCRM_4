@@ -20,6 +20,7 @@ import com.santeh.rjhonsl.samplemap.DBase.GpsDB_Query;
 import com.santeh.rjhonsl.samplemap.DBase.GpsSQLiteHelper;
 import com.santeh.rjhonsl.samplemap.Obj.CustInfoObject;
 import com.santeh.rjhonsl.samplemap.R;
+import com.santeh.rjhonsl.samplemap.Utils.FusedLocation;
 import com.santeh.rjhonsl.samplemap.Utils.Helper;
 
 import java.util.ArrayList;
@@ -43,6 +44,9 @@ public class Activity_Harvested extends FragmentActivity {
     ListView lvHarvestInfo;
     LinearLayout llnopond;
     AdapterHarvest adapterHarvested;
+    String p_index, farmname;
+    FusedLocation fusedlocation;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +60,8 @@ public class Activity_Harvested extends FragmentActivity {
         context = Activity_Harvested.this;
 
         intent = getIntent();
+        fusedlocation = new FusedLocation(context, activity);
+        fusedlocation.connectToApiClient();
 
         btnTitleLeft = (ImageButton) findViewById(R.id.btn_title_left);
         txtfarmname = (TextView) findViewById(R.id.txt_farmname);
@@ -76,6 +82,8 @@ public class Activity_Harvested extends FragmentActivity {
         lvHarvestInfo.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+                fusedlocation.disconnectFromApiClient();
+                fusedlocation.connectToApiClient();
 
                 final String[] options = new String[]{"Edit", "Delete", "Update History"};
                 final Dialog d = Helper.createCustomThemedListDialog(activity, options, "Options", R.color.skyblue_500);
@@ -85,11 +93,11 @@ public class Activity_Harvested extends FragmentActivity {
                 lvoptions.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position2, long id) {
-                        if (position2 == 0){
+                        if (position2 == 0) {
                             d.hide();
                             if (harvestinfoList.get(position).getHrv_isPosted().equalsIgnoreCase("1")) {
                                 Helper.createCustomDialogOKOnly(activity, "Warning", "This harvest information was already uploaded.", "OK");
-                            }else {
+                            } else {
 
                                 Intent intent = new Intent(Activity_Harvested.this, Activity_EditHarvest.class);
                                 intent.putExtra("hrv_id", harvestinfoList.get(position).getHrv_id());
@@ -107,13 +115,13 @@ public class Activity_Harvested extends FragmentActivity {
                                 intent.putExtra("datestocked", harvestinfoList.get(position).getDateStocked());
                                 startActivity(intent);
                             }
-                        }else if(position2 == 1){
+                        } else if (position2 == 1) {
                             d.hide();
                             if (harvestinfoList.get(position).getHrv_isPosted().equalsIgnoreCase("1")) {
                                 Helper.createCustomDialogOKOnly(activity, "Warning", "This harvest information was already uploaded.", "OK");
                                 d.hide();
-                            }else{
-                                final Dialog d1 =  Helper.createCustomDialogThemedYesNO(activity, "Delete this harvest info?", "Delete", "NO", "YES", R.color.red);
+                            } else {
+                                final Dialog d1 = Helper.createCustomDialogThemedYesNO(activity, "Delete this harvest info?", "Delete", "NO", "YES", R.color.red);
                                 Button no = (Button) d1.findViewById(R.id.btn_dialog_yesno_opt1);
                                 Button yes = (Button) d1.findViewById(R.id.btn_dialog_yesno_opt2);
 
@@ -136,8 +144,9 @@ public class Activity_Harvested extends FragmentActivity {
                                 });
                             }
 
-                        }else if(position2 == 2){
+                        } else if (position2 == 2) {
                             d.hide();
+                            startPondUpdatesActivity(position);
                         }
                     }
                 });
@@ -147,6 +156,25 @@ public class Activity_Harvested extends FragmentActivity {
         });
         getHarvertInfo();
 
+    }
+
+    private void startPondUpdatesActivity(int position) {
+        Intent intent = new Intent(activity, Activity_PondWeeklyConsumption.class);
+        intent.putExtra("farmname", farmname);
+        intent.putExtra("pondid", harvestinfoList.get(position).getPondID());
+        intent.putExtra("id", harvestinfoList.get(position).getId());
+        intent.putExtra("specie", harvestinfoList.get(position).getSpecie());
+        intent.putExtra("abw", harvestinfoList.get(position).getSizeofStock());
+        intent.putExtra("survivalrate", harvestinfoList.get(position).getSurvivalrate_per_pond());
+        intent.putExtra("datestocked", harvestinfoList.get(position).getDateStocked());
+        intent.putExtra("quantity", harvestinfoList.get(position).getQuantity());
+        intent.putExtra("area", harvestinfoList.get(position).getArea());
+        intent.putExtra("culturesystem", harvestinfoList.get(position).getCulturesystem());
+        intent.putExtra("remarks", harvestinfoList.get(position).getRemarks());
+
+        intent.putExtra("latitude", fusedlocation.getLastKnowLocation().latitude);
+        intent.putExtra("longitude", fusedlocation.getLastKnowLocation().longitude);
+        startActivity(intent);
     }
 
     private void getHarvertInfo() {
@@ -169,9 +197,27 @@ public class Activity_Harvested extends FragmentActivity {
                     custInfoObject.setHrv_totalHarvested(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_HRV_TOTALHARVEST)));
                     custInfoObject.setHrv_isPosted(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_HRV_ISPOSTED)));
                     custInfoObject.setHrv_dateRecorded(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_HRV_DATE_INSERTED)));
-                    custInfoObject.setDateStocked(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_dateStocked)));
+
+                    custInfoObject.setDateStocked(  cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_dateStocked)));
+                    custInfoObject.setPondID(       cur.getInt(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_PID)));
+                    custInfoObject.setId(           cur.getInt(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_INDEX)));
+                    custInfoObject.setSpecie(       cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_specie)));
+                    custInfoObject.setSizeofStock(  cur.getInt(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_sizeofStock)));
+                    custInfoObject.setSurvivalrate_per_pond(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_survivalrate)));
+                    custInfoObject.setDateStocked(  cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_dateStocked)));
+                    custInfoObject.setQuantity(     cur.getInt(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_quantity)));
+                    custInfoObject.setArea(         cur.getInt(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_area)));
+                    custInfoObject.setCulturesystem(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_culturesystem)));
+                    custInfoObject.setRemarks(      cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_remarks)));
+                    custInfoObject.setLatitude(     fusedlocation.getLastKnowLocation().latitude+"");
+                    custInfoObject.setLongtitude(   fusedlocation.getLastKnowLocation().longitude+"");
+
+
+                    farmname = "Farm";
+                    p_index = cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_INDEX));
 
                     harvestinfoList.add(custInfoObject);
+
                 }
                 populateListViewAdapter();
             }

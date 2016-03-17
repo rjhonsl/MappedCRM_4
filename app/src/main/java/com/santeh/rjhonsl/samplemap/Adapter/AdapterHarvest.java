@@ -2,6 +2,7 @@ package com.santeh.rjhonsl.samplemap.Adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 
 import com.github.aakira.expandablelayout.ExpandableLayout;
 import com.github.aakira.expandablelayout.ExpandableLayoutListener;
+import com.santeh.rjhonsl.samplemap.Main.Activity_PondWeeklyConsumption;
 import com.santeh.rjhonsl.samplemap.Obj.CustInfoObject;
 import com.santeh.rjhonsl.samplemap.R;
 import com.santeh.rjhonsl.samplemap.Utils.Helper;
@@ -74,6 +76,8 @@ public class AdapterHarvest extends ArrayAdapter<CustInfoObject> {
 				@Override
 				public void onClick(View v) {
 					Helper.toastShort((Activity) context, ""+position);
+
+
 				}
 			});
 
@@ -186,6 +190,26 @@ public class AdapterHarvest extends ArrayAdapter<CustInfoObject> {
 
 
 		return view;
+	}
+
+
+	private void startPondUpdatesActivity(int position, List<CustInfoObject> infolist, String farmname, Activity activity) {
+		Intent intent = new Intent(activity, Activity_PondWeeklyConsumption.class);
+		intent.putExtra("farmname", farmname);
+		intent.putExtra("pondid", infolist.get(position).getPondID());
+		intent.putExtra("id", infolist.get(position).getId());
+		intent.putExtra("specie", infolist.get(position).getSpecie());
+		intent.putExtra("abw", infolist.get(position).getSizeofStock());
+		intent.putExtra("survivalrate", infolist.get(position).getSurvivalrate_per_pond());
+		intent.putExtra("datestocked", infolist.get(position).getDateStocked());
+		intent.putExtra("quantity", infolist.get(position).getQuantity());
+		intent.putExtra("area", infolist.get(position).getArea());
+		intent.putExtra("culturesystem", infolist.get(position).getCulturesystem());
+		intent.putExtra("remarks", infolist.get(position).getRemarks());
+
+		intent.putExtra("latitude", infolist.get(position).getLatitude());
+		intent.putExtra("longitude", infolist.get(position).getLongtitude());
+		activity.startActivity(intent);
 	}
 
 	@Override
