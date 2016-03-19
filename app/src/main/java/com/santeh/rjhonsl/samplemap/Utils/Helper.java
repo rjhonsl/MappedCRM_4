@@ -413,6 +413,19 @@ public class Helper {
 
 
 
+    public static class map {
+
+
+        public static float getDifference(LatLng center, LatLng touchLocation ){
+
+            float[] results = new float[1];
+            Location.distanceBetween(center.latitude, center.longitude,
+                    touchLocation.latitude, touchLocation.longitude, results);
+            return results[0];
+        }
+    }
+
+
     public class cipher{
 
         private  KeyPair javkey;

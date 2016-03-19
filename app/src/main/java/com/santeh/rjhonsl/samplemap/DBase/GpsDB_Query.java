@@ -329,6 +329,30 @@ public class GpsDB_Query {
 	}
 
 
+	public boolean isFarmnamePost(String clientID){
+		boolean isexisting = false;
+		String query = "SELECT * FROM "+ GpsSQLiteHelper.TBLFARMiNFO +" WHERE "
+				+ GpsSQLiteHelper.CL_FarmInfo_ID + " = ? "
+				+ " AND "
+				+ GpsSQLiteHelper.CL_FARMINFO_IsPosted + " = 1 "
+				;
+
+
+		String[] params = new String[] {clientID};
+		Cursor cur = db.rawQuery(query, params);
+		if (cur!=null){
+			if (cur.getCount() > 0){
+				isexisting = true;
+			}
+		}
+		Log.d("isPosted", "" + cur.getCount()+ " " + clientID);
+		return  isexisting;
+	}
+
+
+
+
+
 	public String getSQLStringForInsert_UNPOSTED_FARMINFO(Activity activity) {
 		String sqlString = "" +
 				"INSERT INTO `tblCustomerInfo` (`ci_customerId` , `latitude`, `longtitude`, `contact_name`, `company`, `address` , `farm_name` , `farmid` , `contact_number` , `culture_type` , `culture_level`, `water_type`, `dateAdded`, `addedby`, `lid`) VALUES ";
@@ -521,7 +545,7 @@ public class GpsDB_Query {
 
 	public String getSQLStringForInsert_UNPOSTED_POND(Activity activity) {
 		String sqlString = " " +
-				"INSERT INTO `tblPond` (`id`, `pondid`, `specie`, `sizeofStock`, `survivalrate`, `dateStocked`, `quantity`, `area`, `culturesystem`, `remarks`, `customerId`, `p_lid`) VALUES  ";
+				"INSERT INTO `tblPond` (`id`, `pondid`, `specie`, `sizeofStock`, `survivalrate`, `dateStocked`, `quantity`, `area`, `culturesystem`, `remarks`, `customerId`, `p_lid`, `isharvested`) VALUES  ";
 		String query = "SELECT * FROM " + GpsSQLiteHelper.TBLPOND + " WHERE "
 				+ GpsSQLiteHelper.CL_POND_isPosted + " = 0 ";
 		String[] params = new String[]{};
@@ -542,6 +566,7 @@ public class GpsDB_Query {
 				String remarks = cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_remarks)).replaceAll("'", "\\'");
 				String customerId = getUserIdOfPond( cur.getInt(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_INDEX))+"") + "-" + cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_customerId)).replaceAll("'", "\\'");
 				String plid = cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_INDEX)).replaceAll("'", "\\'");
+				String isHarvested = cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_isHarvested)).replaceAll("'", "\\'");
 
 				sqlString = sqlString +
 						"( '" + id + "',  " +
@@ -555,7 +580,8 @@ public class GpsDB_Query {
 						"'"+culturesystem+"', " +
 						"'"+remarks+"', " +
 						"'"+customerId+"', " +
-						"'" +plid+ "' ),";
+						"'"+plid+"', " +
+						"'" +isHarvested+ "' ),";
 			}
 		}
 
@@ -573,6 +599,7 @@ public class GpsDB_Query {
 				"    culturesystem = VALUES(culturesystem), " +
 				"    remarks = VALUES(remarks), " +
 				"    customerId = VALUES(customerId), " +
+				"    isharvested = VALUES(isharvested), " +
 				"    p_lid = VALUES(p_lid)";
 
 		return strSql;
@@ -1149,6 +1176,7 @@ public class GpsDB_Query {
 		String where = GpsSQLiteHelper.CL_POND_INDEX + " = '"+pondIndex+"'";
 		ContentValues newValues = new ContentValues();
 		newValues.put(GpsSQLiteHelper.CL_POND_isHarvested, 1);
+		newValues.put(GpsSQLiteHelper.CL_POND_isPosted, 0);
 		return 	db.update(GpsSQLiteHelper.TBLPOND, newValues, where, null);
 	}
 
@@ -1165,6 +1193,12 @@ public class GpsDB_Query {
 		ContentValues newValues = new ContentValues();
 		newValues.put(GpsSQLiteHelper.CL_USER_ACTIVITY_isPosted, 1);
 		return 	db.update(GpsSQLiteHelper.TBLUSER_ACTIVITY, newValues, where, null);
+	}
+
+	public int updateOneRow(String tableName, String column, String value, String whereCondition) {
+		ContentValues newValues = new ContentValues();
+		newValues.put(column, value);
+		return 	db.update(tableName, newValues, whereCondition, null);
 	}
 
 
@@ -1217,7 +1251,7 @@ public class GpsDB_Query {
 	}
 
 	public boolean deleteRow_FarmInfo(String rowId) {
-		String where = GpsSQLiteHelper.CL_FarmInfo_ID + "=" + rowId;
+		String where = GpsSQLiteHelper.CL_FarmInfo_ID + "='" + rowId+"'";
 		return db.delete(GpsSQLiteHelper.TBLFARMiNFO, where, null) != 0;
 	}
 	public boolean deleteRow_Weekly(String rowId) {
@@ -1234,6 +1268,7 @@ public class GpsDB_Query {
 			isdeleted = db.delete(GpsSQLiteHelper.TBLPOND_WeeklyUpdates, where1, null) != 0;
 		}
 		return isdeleted;
+
 	}
 
 
@@ -1242,5 +1277,8 @@ public class GpsDB_Query {
 			db.execSQL("delete from " + TABLE_NAME);
 		}
 	}
+
+
+
 
 }

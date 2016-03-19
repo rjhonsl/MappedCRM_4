@@ -24,12 +24,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -70,7 +70,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     ProgressDialog PD;
     boolean isDrawerOpen = false;
 
-    PopupWindow popUp;
     LinearLayout layout;
 
     ViewGroup.LayoutParams params;
@@ -104,9 +103,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     CircleOptions circleOptions_addLocation;
     Circle mapcircle;
 
+    boolean isMarkerSelected = false;
     FusedLocation fusedLocation;
     GpsDB_Query db;
     int userlvl;
+
+    String[] markerdetails;
+    ImageButton btnOwnerLocation, btnCasePond, btnFarmDetails, btnChangeLocation, btnDeleteMarker;
+
+    ViewGroup hiddenPanel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,7 +131,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         userlvl = Helper.variables.getGlobalVar_currentLevel(activity);
 
-        popUp = new PopupWindow(this);
         layout = new LinearLayout(this);
         mainLayout = new LinearLayout(this);
         tvBottomPopUp = new TextView(this);
@@ -156,6 +160,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         txtusername = (TextView) findViewById(R.id.username);
 
 
+        hiddenPanel = (ViewGroup)findViewById(R.id.ll_bottomedit);
+        btnOwnerLocation = (ImageButton) findViewById(R.id.btn_ownerLocation);
+        btnCasePond = (ImageButton) findViewById(R.id.btn_Cases);
+        btnChangeLocation = (ImageButton) findViewById(R.id.btn_changeMarkerLocation);
+        btnFarmDetails = (ImageButton) findViewById(R.id.btn_farminfo);
+        btnDeleteMarker = (ImageButton) findViewById(R.id.btn_deleteMarker);
 
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -168,6 +178,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         PD = new ProgressDialog(this);
         PD.setMessage("Getting data from server.\nPlease wait....");
         PD.setCancelable(false);
+
     }
 
 
@@ -266,45 +277,151 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         layout.addView(tvBottomPopUp, params);
         layout.setBackgroundColor(ContextCompat.getColor(context, R.color.white_200));
-        popUp.setContentView(layout);
 
-        tvBottomPopUp.setOnClickListener(new View.OnClickListener() {
+
+        btnOwnerLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                popUp.dismiss();
-//                Helper.toastShort(activity, clickedMarker.getTitle());
-                double lat = 0,lng = 0;
-                String farmidd;
-                String[] splitted = clickedMarker.getTitle().split("#-#");
-                if (!splitted[4].equalsIgnoreCase("") && !splitted[4].equalsIgnoreCase("null")){
-                    lat = Double.parseDouble(splitted[4]);
-                }
+                getOwnerLocation();
+                isMarkerSelected = false;
+                animateBottom();
+            }
+        });
 
-                if (!splitted[5].equalsIgnoreCase("") && !splitted[5].equalsIgnoreCase("null")){
-                    lng = Double.parseDouble(splitted[5]);
-                }
+        btnCasePond.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gotoCaseAndPond(clickedMarker.getPosition(), markerdetails);
+                animateBottom();
+            }
+        });
 
-                farmidd = splitted[6];
+        btnChangeLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (clickedMarker != null) {
+                    fusedLocation.disconnectFromApiClient();
+                    fusedLocation.connectToApiClient();
+                    final LatLng originalPosition = clickedMarker.getPosition();
 
-                if (lat != 0 && lng != 0){
-                    Helper.moveCameraAnimate(maps, new LatLng(lat, lng), 15);
-                    maps.clear();
+                    final LatLng center = fusedLocation.getLastKnowLocation();
+                    moveCameraAnimate(maps, center, 14);
 
-                    showAllCustomerLocation();
-                }else{
-                    Helper.createCustomThemedDialogOKOnly(activity, "Oops", "Address of farm owner is currently not available. \n\nFarm ID: " + farmidd
-//                            + " "+ splitted.length + " " + splitted[0] + " " + splitted[1] + " " + splitted[2] + " " + splitted[3] + " " + splitted[4] + " " + splitted[5] + " " + splitted[6] + " "
-                            , "OK");
+                    Helper.createCustomThemedDialogOKOnly(activity, "Change Location", "Long press marker until InfoWindow is gone then drag marker to desired location. \n\nNOTE: You should not exceed 1000m from your current location.", "OK");
+                    hiddenPanel.setVisibility(View.GONE);
+                    if (mapcircle == null || !mapcircle.isVisible()) {
+                        circleOptions_addLocation = Helper.addCircle(activity, center, 1, R.color.skyblue_20,
+                                R.color.skyblue_20, 1000);
+                        mapcircle = map.addCircle(circleOptions_addLocation);
+                    }
+
+                    clickedMarker.setDraggable(true);
+                    map.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
+                        @Override
+                        public void onMarkerDragStart(Marker marker) {
+                            hiddenPanel.setVisibility(View.GONE);
+                            marker.hideInfoWindow();
+                        }
+
+                        @Override
+                        public void onMarkerDrag(Marker marker) {
+                            hiddenPanel.setVisibility(View.GONE);
+                            marker.hideInfoWindow();
+                        }
+
+                        @Override
+                        public void onMarkerDragEnd(final Marker marker) {
+                            closeAddingMarker();
+                            if (Helper.map.getDifference(center, marker.getPosition()) > 1000) {
+                                Helper.createCustomThemedDialogOKOnly(activity, "Warning", "You can't place marker 1000m away from your current location", "OK");
+                                marker.setPosition(originalPosition);
+                                marker.showInfoWindow();
+                            }else{
+                                final Dialog d = Helper.createCustomDialogThemedYesNO(activity, "Move location of client's marker here?", "Change Location", "NO", "YES", R.color.red_material_600);
+                                Button yes = (Button) d.findViewById(R.id.btn_dialog_yesno_opt2);
+                                Button no = (Button) d.findViewById(R.id.btn_dialog_yesno_opt1);
+                                d.setCancelable(false);
+                                yes.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        d.hide();
+                                        marker.setDraggable(false);
+                                        clickedMarker.setDraggable(false);
+
+                                        hiddenPanel.setVisibility(View.VISIBLE);
+                                        marker.showInfoWindow();
+                                        db.updateOneRow(
+                                                GpsSQLiteHelper.TBLFARMiNFO,     //table name
+                                                GpsSQLiteHelper.CL_FARMINFO_LAT,  //column name
+                                                marker.getPosition().latitude + "",       //value
+                                                GpsSQLiteHelper.CL_FarmInfo_ID + " = " + markerdetails[0] //condition;
+                                        );
+                                        db.updateOneRow(
+                                                GpsSQLiteHelper.TBLFARMiNFO,     //table name
+                                                GpsSQLiteHelper.CL_FARMINFO_LNG,  //column name
+                                                marker.getPosition().longitude+"",       //value
+                                                GpsSQLiteHelper.CL_FarmInfo_ID +" = "+ markerdetails[0] //condition;
+                                        );
+                                    }
+                                });
+
+                                no.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        marker.setPosition(originalPosition);
+                                        d.hide();
+                                        marker.showInfoWindow();
+                                        isMarkerSelected= true;
+                                        animateBottom();
+
+                                    }
+                                });
+                            }
+                        }
+                    });
                 }
             }
         });
 
+        btnFarmDetails.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gotoFarmDetails(clickedMarker.getPosition(), markerdetails, clickedMarker);
+                animateBottom();
+            }
+        });
+
+        tvBottomPopUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getOwnerLocation();
+            }
+        });
+
+
         map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
-                if (popUp.isShowing()){
-                    popUp.dismiss();
+
+                if (isMarkerSelected) {
+                    isMarkerSelected = false;
                 }
+                animateBottom();
+                closeAddingMarker();
+
+            }
+        });
+
+
+        btnDeleteMarker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                db.deleteRow_FarmInfo(markerdetails[0]);
+                isMarkerSelected = false;
+                animateBottom();
+                closeAddingMarker();
+                clickedMarker.remove();
+
             }
         });
 
@@ -312,19 +429,31 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             @Override
             public boolean onMarkerClick(Marker marker) {
                 clickedMarker = marker;
-                if (activeSelection.equalsIgnoreCase("farm")) {
+                isMarkerSelected = true;
 
-                    if (!marker.isInfoWindowShown()) {
-                        popUp.showAtLocation(mainLayout, Gravity.BOTTOM, 0, 20);
-                        popUp.update(0, 30, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                    }
-                    else{
-                        popUp.dismiss();
+                final String[] details = marker.getTitle().split("#-#");
+                markerdetails = details;
+
+                if (activeSelection.equalsIgnoreCase("farm")) {
+                    animateBottom();
+                }
+
+
+                if (!markerdetails[0].equalsIgnoreCase("")){
+                    if (db.isFarmnamePost(markerdetails[0])) {
+                        btnChangeLocation.setEnabled(false);
+                        btnDeleteMarker.setEnabled(false);
+                    } else {
+                        btnChangeLocation.setEnabled(true);
+                        btnDeleteMarker.setEnabled(true);
                     }
                 }
+
+
                 return false;
             }
         });
+
 
         if (Helper.variables.getGlobalVar_currentLevel(activity) > 1){
             nav_usermonitoring.setVisibility(View.GONE);
@@ -370,6 +499,79 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }, 500);
     }
 
+
+    private void closeAddingMarker() {
+        if(mapcircle!=null){
+            mapcircle.remove();
+            mapcircle = null;
+        }
+
+        btn_cancelAddmarker.setVisibility(View.GONE);
+        btn_add_marker.setEnabled(true);
+        maps.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+            @Override
+            public void onMapLongClick(LatLng latLng) {
+
+            }
+        });
+    }
+
+    private void getOwnerLocation() {
+        double lat = 0, lng = 0;
+        String farmidd;
+        String[] splitted = clickedMarker.getTitle().split("#-#");
+        if (!splitted[4].equalsIgnoreCase("") && !splitted[4].equalsIgnoreCase("null")) {
+            lat = Double.parseDouble(splitted[4]);
+        }
+
+        if (!splitted[5].equalsIgnoreCase("") && !splitted[5].equalsIgnoreCase("null")) {
+            lng = Double.parseDouble(splitted[5]);
+        }
+
+        farmidd = splitted[6];
+
+        if (lat != 0 && lng != 0) {
+            Helper.moveCameraAnimate(maps, new LatLng(lat, lng), 15);
+            maps.clear();
+
+            showAllCustomerLocation();
+        } else {
+            Helper.createCustomThemedDialogOKOnly(activity, "Oops", "Address of farm owner is currently not available. \n\nFarm ID: " + farmidd
+                    , "OK");
+        }
+    }
+
+    private void animateBottom(){
+        Animation animatelayout;
+        int visibility;
+
+        if (isMarkerSelected){
+            animatelayout  = AnimationUtils.loadAnimation(context, R.anim.bottom_up);
+            animatelayout.setDuration(300);
+            visibility = View.VISIBLE;
+
+            btn_add_marker.setVisibility(View.GONE);
+
+            hiddenPanel.startAnimation(animatelayout);
+            hiddenPanel.setVisibility(visibility);
+
+        }else{
+            animatelayout  = AnimationUtils.loadAnimation(context, R.anim.bottom_down);
+            animatelayout.setDuration(300);
+
+            visibility = View.GONE;
+            btn_add_marker.setVisibility(View.VISIBLE);
+
+            if (hiddenPanel.getVisibility() == View.VISIBLE){
+                hiddenPanel.startAnimation(animatelayout);
+                hiddenPanel.setVisibility(visibility);
+            }
+
+        }
+
+
+    }
+
     private void getunsynchedData() {
         if(Helper.variables.getGlobalVar_currentLevel(activity) == 4){
             int farmIsPostedCount =  db.getFarmInfo_notPosted_Count(activity),
@@ -412,9 +614,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 showAllRelatedMarkers();
                 closeDrawer();
                 activeSelection = "farm";
-                if (popUp.isShowing()) {
-                    popUp.dismiss();
-                }
+//                if (popUp.isShowing()) {
+//                    popUp.dismiss();
+//                }
             }
         });
 
@@ -435,9 +637,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 closeDrawer();
                 activeSelection = "customer";
                 showAllCustomerLocation();
-                if (popUp.isShowing()) {
-                    popUp.dismiss();
-                }
+//                if (popUp.isShowing()) {
+//                    popUp.dismiss();
+//                }
             }
         });
 
@@ -635,60 +837,34 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             @Override
             public void onInfoWindowClick(final Marker marker) {
 
+                clickedMarker = marker;
                 final String[] details = marker.getTitle().split("#-#");
+                markerdetails = details;
+
                 if (activeSelection.equalsIgnoreCase("farm")) {
-                    String curId = "";
-                    for (int i = 0; i < marker.getTitle().length(); i++) {
-                        char c = marker.getTitle().charAt(i);
-                        if (c == '-') {
-                            break;
-                        }
-                        curId = curId + c;
-                    }
-
-                    String[] options = new String[]{"Case/Ponds", "Farm Details"};
-                    final Dialog d = Helper.createCustomThemedListDialog(activity, options, "Options", R.color.blue);
-                    ListView lv = (ListView) d.findViewById(R.id.dialog_list_listview);
-                    lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            LatLng location = marker.getPosition();
-                            if (position == 0) {
-
-                                d.hide();
-//                                Intent intent = new Intent(MapsActivity.this, Activity_ManagePonds.class);
-                                Intent intent = new Intent(MapsActivity.this, Activity_FarmViewOptions.class);
-                                intent.putExtra("id", Integer.parseInt(details[0]));
-                                intent.putExtra("farmname", "" + details[1]);
-                                intent.putExtra("latitude", location.latitude + "");
-                                intent.putExtra("longitude", location.longitude + "");
-                                startActivity(intent);
-
-                            } else if (position == 1) {
-
-                                d.hide();
-                                Intent intent = new Intent(MapsActivity.this, Activity_FarmInfo_Edit.class);
-                                intent.putExtra("lat", location.latitude + "");
-                                intent.putExtra("userid", Integer.parseInt(details[0]));
-                                intent.putExtra("long", location.longitude + "");
-                                intent.putExtra("contactName", details[7]);
-                                intent.putExtra("address", marker.getSnippet());
-                                intent.putExtra("farmname", details[1]);
-                                intent.putExtra("farmID", details[6]);
-                                intent.putExtra("contactnumber", details[8]);
-                                intent.putExtra("culturesystem", details[9]);
-                                intent.putExtra("levelofculture", details[10]);
-                                intent.putExtra("watertype", details[11]);
-                                intent.putExtra("isposted", Integer.parseInt(details[12]));
-
-                                intent.putExtra("fromActivity", "viewCustinfo");
-                                startActivity(intent);
-
-                            }
-                        }
-                    });
-
-
+//
+//                    String[] options = new String[]{"Case/Ponds", "Farm Details"};
+//                    final Dialog d = Helper.createCustomThemedListDialog(activity, options, "Options", R.color.blue);
+//                    ListView lv = (ListView) d.findViewById(R.id.dialog_list_listview);
+//                    lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//                        @Override
+//                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                            LatLng location = marker.getPosition();
+//                            if (position == 0) {
+//
+//                                d.hide();
+////                                Intent intent = new Intent(MapsActivity.this, Activity_ManagePonds.class);
+//                                gotoCaseAndPond(location, details);
+//
+//                            } else if (position == 1) {
+//
+//                                d.hide();
+//                                gotoFarmDetails(location, details, marker);
+//
+//                            }
+//                        }
+//                    });
+//
                 } else if (activeSelection.equalsIgnoreCase("customer")) {
 
                     String[] options = new String[]{"Customer Details", "Owned Farms"};
@@ -704,23 +880,18 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                                 handler.postDelayed(new Runnable() {
                                     @Override
                                     public void run() {
-                                        startActivity(intent);
-                                        overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
-                                    }
-                                }, 100);
+                                        startActivity(intent); overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                                    }}, 100);
                                 d.hide();
                             } else if (position == 1) {
-                                Log.d("SHOW MARKER", "getListOfFarms");
                                 getListOfFarms(details[0]);
                                 d.hide();
                             }
                         }
                     });
-
                 }
 
             }
-
         });
 
         nav_growout.setOnClickListener(new View.OnClickListener() {
@@ -741,6 +912,34 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
 
+    }
+
+    private void gotoFarmDetails(LatLng location, String[] details, Marker marker) {
+        Intent intent = new Intent(MapsActivity.this, Activity_FarmInfo_Edit.class);
+        intent.putExtra("lat", location.latitude + "");
+        intent.putExtra("userid", Integer.parseInt(details[0]));
+        intent.putExtra("long", location.longitude + "");
+        intent.putExtra("contactName", details[7]);
+        intent.putExtra("address", marker.getSnippet());
+        intent.putExtra("farmname", details[1]);
+        intent.putExtra("farmID", details[6]);
+        intent.putExtra("contactnumber", details[8]);
+        intent.putExtra("culturesystem", details[9]);
+        intent.putExtra("levelofculture", details[10]);
+        intent.putExtra("watertype", details[11]);
+        intent.putExtra("isposted", Integer.parseInt(details[12]));
+
+        intent.putExtra("fromActivity", "viewCustinfo");
+        startActivity(intent);
+    }
+
+    private void gotoCaseAndPond(LatLng location, String[] details) {
+        Intent intent = new Intent(MapsActivity.this, Activity_FarmViewOptions.class);
+        intent.putExtra("id", Integer.parseInt(details[0]));
+        intent.putExtra("farmname", "" + details[1]);
+        intent.putExtra("latitude", location.latitude + "");
+        intent.putExtra("longitude", location.longitude + "");
+        startActivity(intent);
     }
 
     private void cancelMarkerAdding() {
