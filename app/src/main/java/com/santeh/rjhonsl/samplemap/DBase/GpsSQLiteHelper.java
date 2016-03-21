@@ -191,7 +191,7 @@ public class GpsSQLiteHelper extends SQLiteOpenHelper {
 	public static final String CL_HRV_PONDID 				= "hrv_pondid";
 	public static final String CL_HRV_CASENUM 				= "hrv_casenum";
 	public static final String CL_HRV_SPECIES 				= "hrv_species";
-	public static final String CL_HRV_DATEOFHARVESTED		= "hrv_dateofharvest";
+	public static final String CL_HRV_DATEOFHARVEST = "hrv_dateofharvest";
 	public static final String CL_HRV_FINALABW				= "hrv_finalabw";
 	public static final String CL_HRV_TOTAL_CONSUMPTION	 	= "hrv_totalconsumption";
 	public static final String CL_HRV_FCR	 				= "hrv_fcr";
@@ -199,8 +199,10 @@ public class GpsSQLiteHelper extends SQLiteOpenHelper {
 	public static final String CL_HRV_TOTALHARVEST		 	= "hrv_totalharvested";
 	public static final String CL_HRV_ISPOSTED		 		= "hrv_isposted";
 	public static final String CL_HRV_DATE_INSERTED		 	= "hrv_date_inserted";
+	public static final String CL_HRV_LocalId	 			= "hrv_localid"; //only exist in web
+	public static final String CL_HRV_DateUploaded 			= "hrv_dateuploaded"; //only exist in web
 	public static final String[] ALL_KEY_HARVESTINFO = new String[]{
-			CL_HRV_ID, CL_HRV_PONDID, CL_HRV_CASENUM, CL_HRV_SPECIES, CL_HRV_DATEOFHARVESTED, CL_HRV_FINALABW, CL_HRV_TOTAL_CONSUMPTION, CL_HRV_FCR, CL_HRV_PRICEPERKILO, CL_HRV_TOTALHARVEST, CL_HRV_ISPOSTED, CL_HRV_DATE_INSERTED};
+			CL_HRV_ID, CL_HRV_PONDID, CL_HRV_CASENUM, CL_HRV_SPECIES, CL_HRV_DATEOFHARVEST, CL_HRV_FINALABW, CL_HRV_TOTAL_CONSUMPTION, CL_HRV_FCR, CL_HRV_PRICEPERKILO, CL_HRV_TOTALHARVEST, CL_HRV_ISPOSTED, CL_HRV_DATE_INSERTED};
 
 	public static final String[] ALL_KEY_HARVESTEDINFO_DATAPROP = new String[]{INTEGER + " " + PRIMARY_AUTOINCRE, TEXT, TEXT, TEXT,TEXT,TEXT,TEXT,TEXT,TEXT,TEXT,TEXT,TEXT};
 

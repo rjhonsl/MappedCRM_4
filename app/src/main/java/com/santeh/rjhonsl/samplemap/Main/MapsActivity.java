@@ -253,6 +253,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     public void onClick(View v) {
                         d.hide();
                         startSynchingDB_FARMINFO();
+//                        startSynchingDB_HarvestInfo();
                     }
                 });
             }
@@ -421,6 +422,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 animateBottom();
                 closeAddingMarker();
                 clickedMarker.remove();
+                getunsynchedData();
 
             }
         });
@@ -578,8 +580,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     custPostedCount = db.getCustInfo_notPosted_Count(activity),
                     pondPostedCount = db.getPond_notPosted_Count(activity),
                     weeklyPostedCount = db.getWeeklyPosted_notPosted_Count(activity),
-                    sum = farmIsPostedCount + custPostedCount + pondPostedCount + weeklyPostedCount;
-            if (farmIsPostedCount > 0  || custPostedCount > 0 || pondPostedCount > 0  || weeklyPostedCount > 0 ){
+                    harvestInfoCount = db.getHarvestPosted_notPosted_Count(activity),
+                    sum = farmIsPostedCount + custPostedCount + pondPostedCount + weeklyPostedCount + harvestInfoCount;
+            if (farmIsPostedCount > 0  || custPostedCount > 0 || pondPostedCount > 0  || weeklyPostedCount > 0 || harvestInfoCount > 0){
                 txtViewTop.setText("You have (" + sum + ") unsynced data!");
                 txtViewTop.setVisibility(View.VISIBLE);
                 Animation anim = new AlphaAnimation(0.7f, 1.0f);
@@ -1770,7 +1773,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            Helper.toastShort(activity, "ERROR");
+                            Helper.createCustomThemedDialogOKOnly(activity, "Error", error.toString(), "OK");
+                            getunsynchedData();
                         }
                     }) {
                 @Override
@@ -1818,7 +1822,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            Helper.toastShort(activity, "SYNC INTERRUPTED. Please try syncing again.");
+                            Helper.createCustomThemedDialogOKOnly(activity, "Error", error.toString(), "OK");
+                            getunsynchedData();
                         }
                     }) {
                 @Override
@@ -1865,7 +1870,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            Helper.toastShort(activity, "SYNC INTERRUPTED. Please try syncing again.");
+                            Helper.createCustomThemedDialogOKOnly(activity, "Error", error.toString(), "OK");
+                            getunsynchedData();
                         }
                     }) {
                 @Override
@@ -1901,11 +1907,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         public void onResponse(final String response) {
                             if (!response.substring(1, 2).equalsIgnoreCase("0")) {
                                 db.updateUnPostedToPosted_WEEKLY();
-                                txtViewTop.setVisibility(View.GONE);
-                                txtViewTop.clearAnimation();
-                                Log.d("SYNC", "SYNC OK - WEEK.");
-                                sync_userActivities1();
-                                Helper.toastShort(activity, "SYNC FINISHED.");
+                                startSynchingDB_HarvestInfo();
                             } else {
                                 strikes = strikes + 1;
                             }
@@ -1914,7 +1916,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            Helper.toastShort(activity, "SYNC INTERRUPTED. Please try syncing again.");
+                            Helper.createCustomThemedDialogOKOnly(activity, "Error", error.toString(), "OK");
+                            getunsynchedData();
                         }
                     }) {
                 @Override
@@ -1936,11 +1939,67 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             MyVolleyAPI api = new MyVolleyAPI();
             api.addToReqQueue(postRequest, context);
         }else{
-            Helper.toastShort(activity, "SYNC FINISHED.");
-            txtViewTop.setVisibility(View.GONE);
-            txtViewTop.clearAnimation();
-            sync_userActivities1();
+           startSynchingDB_HarvestInfo();
         }
+
+
+    }
+
+    private void finishSync() {
+        txtViewTop.setVisibility(View.GONE);
+        txtViewTop.clearAnimation();
+        Log.d("SYNC", "SYNC OK - WEEK.");
+        sync_userActivities1();
+        Helper.toastShort(activity, "SYNC FINISHED.");
+    }
+
+
+    private void startSynchingDB_HarvestInfo() {
+
+        if (db.getHarvestInfo_notPosted_Count(activity) > 0) {
+            StringRequest postRequest = new StringRequest(Request.Method.POST, Helper.variables.URL_PHP_RAW_QUERY_POST_INSERT,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(final String response) {
+                            if (!response.substring(1, 2).equalsIgnoreCase("0")) {
+                                db.updateUnPostedToPosted_HarvestInfo();
+                                finishSync();
+                            } else {
+                                strikes = strikes + 1;
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Helper.createCustomThemedDialogOKOnly(activity, "Error", error.toString(), "OK");
+                            getunsynchedData();
+                        }
+                    }) {
+                @Override
+                protected Map<String, String> getParams() {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("username", Helper.variables.getGlobalVar_currentUserName(activity));
+                    params.put("password", Helper.variables.getGlobalVar_currentUserPassword(activity));
+                    params.put("deviceid", Helper.getMacAddress(context));
+                    params.put("userid", Helper.variables.getGlobalVar_currentUserID(activity) + "");
+                    params.put("userlvl", Helper.variables.getGlobalVar_currentLevel(activity) + "");
+                    params.put("sql", db.getSQLStringForInsert_UNPOSTED_HARVESTINFO() + "");
+
+                    Log.d("SQL_STRING", db.getSQLStringForInsert_UNPOSTED_HARVESTINFO() + "");
+
+                    return params;
+                }
+            };
+
+            MyVolleyAPI api = new MyVolleyAPI();
+            api.addToReqQueue(postRequest, context);
+
+        }else{
+            finish();
+        }
+
+
     }
 
     private void sync_userActivities1() {
@@ -1969,7 +2028,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            Helper.toastShort(activity, "SYNC INTERRUPTED. Please try syncing again. USERS");
+                            Helper.createCustomThemedDialogOKOnly(activity, "Error", error.toString(), "OK");
+                            getunsynchedData();
                         }
                     }) {
                 @Override

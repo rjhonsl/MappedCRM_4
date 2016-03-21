@@ -11,6 +11,7 @@ import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +24,7 @@ import com.santeh.rjhonsl.samplemap.DBase.GpsDB_Query;
 import com.santeh.rjhonsl.samplemap.DBase.GpsSQLiteHelper;
 import com.santeh.rjhonsl.samplemap.Obj.CustInfoObject;
 import com.santeh.rjhonsl.samplemap.Parsers.CustAndPondParser;
+import com.santeh.rjhonsl.samplemap.Parsers.HarvestInfoParser;
 import com.santeh.rjhonsl.samplemap.R;
 import com.santeh.rjhonsl.samplemap.Utils.Helper;
 import com.santeh.rjhonsl.samplemap.Utils.SimpleFileDialog;
@@ -45,8 +47,10 @@ import java.util.Map;
  */
 public class Activity_Settings extends Activity{
 
-    TextView txtTitle, txtSettings_custinfo, txtAbout, txtChangeLog, txtRestoreFromServer, txtRestoreLocal, txtBackupLocal;
+    TextView txtSettings_custinfo, txtAbout, txtChangeLog, txtRestoreFromServer, txtRestoreLocal, txtBackupLocal;
     Context context; Activity activity;
+
+    ImageButton btnTitleLeft;
 
     List<CustInfoObject> custInfoObjectList;
     ProgressDialog PD;
@@ -68,15 +72,15 @@ public class Activity_Settings extends Activity{
 
         db.open();
 
-        txtTitle = (TextView) findViewById(R.id.txt_settings_title);
         txtAbout = (TextView) findViewById(R.id.txt_settings_about);
         txtRestoreLocal = (TextView) findViewById(R.id.txt_settings_restore_local);
         txtBackupLocal = (TextView) findViewById(R.id.txt_settings_backup_local);
         txtRestoreFromServer = (TextView) findViewById(R.id.txt_settings_restore);
         txtSettings_custinfo = (TextView) findViewById(R.id.txt_settings_farmInfo);
         txtChangeLog = (TextView) findViewById(R.id.txt_settings_changelog);
+        btnTitleLeft = (ImageButton) findViewById(R.id.btn_title_left);
 
-        txtTitle.setOnClickListener(new View.OnClickListener() {
+        btnTitleLeft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
@@ -141,12 +145,17 @@ public class Activity_Settings extends Activity{
                     @Override
                     public void onClick(View v) {
                         d.hide();
+
+                        PD.setMessage("Restoring... ");
+
                         startRestore_farmInfo();
 
-//                        startRestore_customerInfo();
-//                        startRestore_pondInfo();
-//                        startRestore_weeklyUpdates();
-                        PD.setMessage("Restoring... ");
+                        startRestore_customerInfo();
+                        startRestore_pondInfo();
+                        startRestore_weeklyUpdates();
+
+                        startRestore_HarvestInfo();
+
                         PD.show();
 
                     }
@@ -208,8 +217,8 @@ public class Activity_Settings extends Activity{
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         PD.dismiss();
-                        Helper.toastShort(activity, "RESTORE FAILED. Please try syncing again.\n"+error.toString());
-                                Log.d("RESTORE", "RESTORE FAILED - farminfo");
+                        Helper.toastShort(activity, "RESTORE FAILED. Please try syncing again. \n\n"+error.toString());
+                        Log.d("RESTORE", "RESTORE FAILED - farminfo");
                     }
                 }) {
             @Override
@@ -253,7 +262,7 @@ public class Activity_Settings extends Activity{
                                                 custInfoObjectList.get(i).getMiddleName(),
                                                 custInfoObjectList.get(i).getFirstname(),
                                                 custInfoObjectList.get(i).getFarmID(),
-                                                custInfoObjectList.get(i).getHouseNumber()+"",
+                                                custInfoObjectList.get(i).getHouseNumber() + "",
                                                 custInfoObjectList.get(i).getStreet(),
                                                 custInfoObjectList.get(i).getSubdivision(),
                                                 custInfoObjectList.get(i).getBarangay(),
@@ -296,7 +305,8 @@ public class Activity_Settings extends Activity{
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         PD.dismiss();
-                        Helper.toastShort(activity, "RESTORE FAILED. Please try syncing again.\n"+error.toString());
+                        Helper.toastShort(activity, "RESTORE FAILED. Please try syncing again. \n\n" + error.toString());
+                        Log.d("RESTORE", "RESTORE FAILED - cstinfo");
                     }
                 }) {
             @Override
@@ -350,7 +360,8 @@ public class Activity_Settings extends Activity{
                                                 custInfoObjectList.get(i).getArea() + "",
                                                 custInfoObjectList.get(i).getCulturesystem(),
                                                 custInfoObjectList.get(i).getRemarks(),
-                                                Helper.splitter(custInfoObjectList.get(i).getCustomerID(), "-")[1]
+                                                Helper.splitter(custInfoObjectList.get(i).getCustomerID(), "-")[1],
+                                                custInfoObjectList.get(i).getIsharvested()
                                         );
                                     }
 
@@ -376,7 +387,8 @@ public class Activity_Settings extends Activity{
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         PD.dismiss();
-                        Helper.toastShort(activity, "RESTORE FAILED. Please try syncing again. \n"+error.toString());
+                        Helper.toastShort(activity, "RESTORE FAILED. Please try syncing again. \n\n" + error.toString());
+                        Log.d("RESTORE", "RESTORE FAILED - pondinfo");
                     }
                 }) {
             @Override
@@ -426,15 +438,20 @@ public class Activity_Settings extends Activity{
                                     }
 
 
-                                    finishRestore();
+//                                    finishRestore();
+                                    startRestore_HarvestInfo();
+
 
                                 }else{
                                     Log.d("RESTORE", "NOTHING RESTORED - weekly");
-                                    finishRestore();
+                                    startRestore_HarvestInfo();
+
+//                                    finishRestore();
                                 }
                             }else{
                                 Log.d("RESTORE", "NOTHING RESTORED - weekly");
-                                finishRestore();
+                                startRestore_HarvestInfo();
+//                                finishRestore();
                             }
                         } else {
                             PD.dismiss();
@@ -447,7 +464,8 @@ public class Activity_Settings extends Activity{
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         PD.dismiss();
-                        Helper.toastShort(activity, "RESTORE FAILED. Please try syncing again\n"+error.toString());
+                        Helper.toastShort(activity, "RESTORE FAILED. Please try syncing again. \n\n" + error.toString());
+                        Log.d("RESTORE", "RESTORE FAILED - weekly");
                     }
                 }) {
             @Override
@@ -467,9 +485,89 @@ public class Activity_Settings extends Activity{
         api.addToReqQueue(postRequest, this);
     }
 
+
+
+
+    private void startRestore_HarvestInfo(){
+
+        StringRequest postRequest = new StringRequest(Request.Method.POST, Helper.variables.URL_SELECT_Harvestinfo_BY_USER,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(final String response) {
+                        PD.dismiss();
+                        if (!response.substring(1, 2).equalsIgnoreCase("0")) {
+                            custInfoObjectList =  HarvestInfoParser.parseFeed(response);
+                            if (custInfoObjectList != null) {
+                                if (custInfoObjectList.size() > 0) {
+
+
+                                    Helper.createCustomThemedDialogOKOnly(activity, "Restore", response, "OK");
+                                    db.delete_ALL_ITEM_ON_TABLE(GpsSQLiteHelper.TBL_HARVESTINFO);
+
+
+                                    for (int i = 0; i < custInfoObjectList.size() ; i++) {
+
+                                        db.insertHarvestInfo_RESTORE(
+                                                custInfoObjectList.get(i).getHrv_pondid(),
+                                                custInfoObjectList.get(i).getHrv_casenum(),
+                                                custInfoObjectList.get(i).getHrv_specie(),
+                                                custInfoObjectList.get(i).getHrv_dateOfHarvest(),
+                                                custInfoObjectList.get(i).getHrv_finalABW(),
+                                                custInfoObjectList.get(i).getHrv_totalConsumption(),
+                                                custInfoObjectList.get(i).getHrv_fcr(),
+                                                custInfoObjectList.get(i).getHrv_pricePerKilo(),
+                                                custInfoObjectList.get(i).getHrv_totalHarvested(),
+                                                custInfoObjectList.get(i).getHrv_localid(),
+                                                custInfoObjectList.get(i).getHrv_dateRecorded()
+                                        );
+                                    }
+
+
+                                    finishRestore();
+                                } else {
+                                    Log.d("RESTORE", "NOTHING RESTORED - harvest");
+                                    finishRestore();
+                                }
+                            } else{
+                                Log.d("RESTORE", "NOTHING RESTORED - harvest");
+                                finishRestore();
+                            }
+                        } else {
+                            PD.dismiss();
+                            Helper.toastShort(activity, "RESTORE FAILED weekly. Nothing to restore. ");
+                            Log.d("RESTORE", "RESTORE failed - harvest: " + response);
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        PD.dismiss();
+                        Helper.toastShort(activity, "RESTORE FAILED. Please try syncing again. \n\n" + error.toString());
+                        Log.d("RESTORE", "RESTORE FAILED - harvests");
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("username", Helper.variables.getGlobalVar_currentUserName(activity));
+                params.put("password", Helper.variables.getGlobalVar_currentUserPassword(activity));
+                params.put("deviceid", Helper.getMacAddress(context));
+                params.put("userid", Helper.variables.getGlobalVar_currentUserID(activity)+"");
+                params.put("userlvl", Helper.variables.getGlobalVar_currentLevel(activity)+"");
+
+                return params;
+            }
+        };
+
+        MyVolleyAPI api = new MyVolleyAPI();
+        api.addToReqQueue(postRequest, this);
+    }
+
+
     private void finishRestore() {
         PD.dismiss();
-        Helper.toastShort(activity, "Restore Successful. Weekly");
+
         Intent intent = new Intent(Activity_Settings.this, Activity_LoginScreen.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_HISTORY);
         startActivity(intent);

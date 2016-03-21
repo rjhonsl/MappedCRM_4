@@ -10,6 +10,7 @@
         android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:layout_height="56dp"
+        android:elevation="5dp"
         >
 
         <ImageButton
@@ -48,6 +49,8 @@
                       android:orientation="vertical"
                       android:paddingLeft="10dp"
                       android:paddingRight="10dp"
+                      android:elevation="3dp"
+                      android:background="@color/gray_50"
             >
             <TextView android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
@@ -181,7 +184,7 @@
                 android:id="@+id/btn_back"
                 android:layout_weight="1"
                 android:textColor="@color/deepteal_500"
-                     android:padding="5dp"
+                android:padding="5dp"
                 android:background="@drawable/bg_material_transparent"
                 android:src="@drawable/ic_keyboard_arrow_left_darkteal_24dp"
             />

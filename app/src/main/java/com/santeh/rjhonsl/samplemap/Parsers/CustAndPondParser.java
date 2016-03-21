@@ -297,6 +297,14 @@ public class CustAndPondParser {
 				}
 
 
+				try {
+					if (obj.has("isharvested"))
+						custInfoObject.setIsharvested(obj.getInt("isharvested"));
+				}catch (Exception e){
+					custInfoObject.setIsharvested(0);
+				}
+
+
 				//CUSTOMER ADDRESS INFO
 				if (obj.has("mci_id")){
 					if (!obj.isNull("mci_id")){

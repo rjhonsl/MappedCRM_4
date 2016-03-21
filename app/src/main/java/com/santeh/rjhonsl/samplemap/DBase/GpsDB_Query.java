@@ -209,7 +209,27 @@ public class GpsDB_Query {
 		return  db.insert(GpsSQLiteHelper.TBLPOND_WeeklyUpdates, null, values);
 	}
 
-	public long insertPondData_RESTORE(String localid, String pondid, String specie, String sizeofStock, String survivalRate, String dateStocked, String quantity, String area, String culturesystem, String remarks, String customerid) {
+
+	public long insertHarvestInfo_RESTORE(String pondid, String casenumber, String specie, String dateofharvest, String finalabw, String totalconsumption, String fcr, String priceperkilo
+			, String totalharvest, String localid, String dateinserted){
+
+		ContentValues values = new ContentValues();
+		values.put(GpsSQLiteHelper.CL_HRV_ID, localid);
+		values.put(GpsSQLiteHelper.CL_HRV_PONDID, pondid);
+		values.put(GpsSQLiteHelper.CL_HRV_CASENUM, casenumber);
+		values.put(GpsSQLiteHelper.CL_HRV_SPECIES, specie);
+		values.put(GpsSQLiteHelper.CL_HRV_DATEOFHARVEST, dateofharvest);
+		values.put(GpsSQLiteHelper.CL_HRV_FINALABW, finalabw);
+		values.put(GpsSQLiteHelper.CL_HRV_TOTAL_CONSUMPTION, totalconsumption);
+		values.put(GpsSQLiteHelper.CL_HRV_FCR, fcr);
+		values.put(GpsSQLiteHelper.CL_HRV_PRICEPERKILO, priceperkilo);
+		values.put(GpsSQLiteHelper.CL_HRV_TOTALHARVEST, totalharvest);
+		values.put(GpsSQLiteHelper.CL_HRV_DATE_INSERTED, dateinserted);
+
+		return  db.insert(GpsSQLiteHelper.TBL_HARVESTINFO, null, values);
+	}
+
+	public long insertPondData_RESTORE(String localid, String pondid, String specie, String sizeofStock, String survivalRate, String dateStocked, String quantity, String area, String culturesystem, String remarks, String customerid, int isHarvested) {
 
 		ContentValues values = new ContentValues();
 		values.put(GpsSQLiteHelper.CL_POND_INDEX, localid );
@@ -224,6 +244,7 @@ public class GpsDB_Query {
 		values.put(GpsSQLiteHelper.CL_POND_remarks, remarks);
 		values.put(GpsSQLiteHelper.CL_POND_customerId, customerid);
 		values.put(GpsSQLiteHelper.CL_POND_isPosted, 1);
+		values.put(GpsSQLiteHelper.CL_POND_isHarvested, isHarvested);
 
 		return db.insert(GpsSQLiteHelper.TBLPOND, null, values);
 	}
@@ -289,14 +310,14 @@ public class GpsDB_Query {
 		values.put(GpsSQLiteHelper.CL_HRV_PONDID, pondid);
 		values.put(GpsSQLiteHelper.CL_HRV_CASENUM, casenum);
 		values.put(GpsSQLiteHelper.CL_HRV_SPECIES, species);
-		values.put(GpsSQLiteHelper.CL_HRV_DATEOFHARVESTED, dateofharvest);
+		values.put(GpsSQLiteHelper.CL_HRV_DATEOFHARVEST, dateofharvest);
 		values.put(GpsSQLiteHelper.CL_HRV_FINALABW, finalabw);
 		values.put(GpsSQLiteHelper.CL_HRV_TOTAL_CONSUMPTION, totalconsumption);
 		values.put(GpsSQLiteHelper.CL_HRV_FCR, fcr);
 		values.put(GpsSQLiteHelper.CL_HRV_PRICEPERKILO, priceperkilo);
 		values.put(GpsSQLiteHelper.CL_HRV_TOTALHARVEST, totalharvested);
 		values.put(GpsSQLiteHelper.CL_HRV_DATE_INSERTED, Helper.convertLongtoDateTime_DB_Format(System.currentTimeMillis()));
-		values.put(GpsSQLiteHelper.CL_HRV_ISPOSTED, 0);
+		values.put(GpsSQLiteHelper.CL_HRV_ISPOSTED,"0");
 
 		return  db.insert(GpsSQLiteHelper.TBL_HARVESTINFO, null, values);
 	}
@@ -525,10 +546,8 @@ public class GpsDB_Query {
 	public String getUserIdOfPond(String pondid) {
 		String addedby = "";
 		String query =
-				"SELECT tblCustomerInfo.addedby FROm tblPond\n" +
-				"\n" +
-				"INNER JOIN tblCustomerInfo ON tblCustomerInfo.ci_customerid = tblPond.customerId\n" +
-				"\n" +
+				"SELECT tblCustomerInfo.addedby FROm tblPond \n" +
+				"INNER JOIN tblCustomerInfo ON tblCustomerInfo.ci_customerid = tblPond.customerId \n" +
 				"WHERE tblPond.id = ?;";
 
 		String[] params = new String[] {pondid};
@@ -653,6 +672,89 @@ public class GpsDB_Query {
 
 
 
+	public String getSQLStringForInsert_UNPOSTED_HARVESTINFO() {
+		String sqlString = " " +
+				"INSERT INTO `"+GpsSQLiteHelper.TBL_HARVESTINFO+"` " +
+				"(`"+GpsSQLiteHelper.CL_HRV_ID+"`, " +
+				"`"+GpsSQLiteHelper.CL_HRV_PONDID+"`," +
+				"`"+GpsSQLiteHelper.CL_HRV_CASENUM+"`," +
+				"`"+GpsSQLiteHelper.CL_HRV_SPECIES+"`," +
+				"`"+GpsSQLiteHelper.CL_HRV_DATEOFHARVEST +"`," +
+				"`"+GpsSQLiteHelper.CL_HRV_FINALABW+"`," +
+				"`"+GpsSQLiteHelper.CL_HRV_TOTAL_CONSUMPTION+"`," +
+				"`"+GpsSQLiteHelper.CL_HRV_FCR+"`," +
+				"`"+GpsSQLiteHelper.CL_HRV_PRICEPERKILO+"`," +
+				"`"+GpsSQLiteHelper.CL_HRV_TOTALHARVEST+"`," +
+				"`"+GpsSQLiteHelper.CL_HRV_LocalId+"`," +
+				"`"+GpsSQLiteHelper.CL_HRV_DATE_INSERTED+"`," +
+				"`"+GpsSQLiteHelper.CL_HRV_DateUploaded+"`) VALUES ";
+
+		String query = " SELECT * FROM "+GpsSQLiteHelper.TBL_HARVESTINFO+" INNER JOIN " + GpsSQLiteHelper.TBLPOND +
+				" ON " + GpsSQLiteHelper.CL_HRV_PONDID + " = "+GpsSQLiteHelper.CL_POND_INDEX+" " +
+				" WHERE " + GpsSQLiteHelper.CL_HRV_ISPOSTED+ " = '0' ";
+
+
+		String[] params = new String[]{};
+		Cursor cur = db.rawQuery(query, null);
+		Log.d("SQL_STRING", "after raw query " + query);
+
+		if (cur.getCount() > 0) {
+			while (cur.moveToNext()) {
+				Log.d("SQL_STRING", "on curmove next. " +cur.getCount());
+				String tempid = getUserIdOfPond(cur.getInt(cur.getColumnIndex(GpsSQLiteHelper.CL_HRV_PONDID)) + "") + "-" + cur.getInt(cur.getColumnIndex(GpsSQLiteHelper.CL_HRV_ID));
+				String hrv_id = tempid.replaceAll("'", "\\'");
+				String hrv_pondID = cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_HRV_PONDID)).replaceAll("'", "\\'");
+				String hrv_caseNumber = cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_HRV_CASENUM)).replaceAll("'", "\\'");
+				String hrv_species = cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_HRV_SPECIES)).replaceAll("'", "\\'");
+				String hrv_dateOfHarvest = cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_HRV_DATEOFHARVEST)).replaceAll("'", "\\'");
+				String hrv_finalabw = cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_HRV_FINALABW)).replaceAll("'", "\\'");
+				String hrv_totalConsumption = cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_HRV_TOTAL_CONSUMPTION)).replaceAll("'", "\\'");
+				String hrv_fcr = cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_HRV_FCR)).replaceAll("'", "\\'");
+				String hrv_pricePerKilo = cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_HRV_PRICEPERKILO)).replaceAll("'", "\\'");
+				String hrv_totalHarvested = cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_HRV_TOTALHARVEST)).replaceAll("'", "\\'");
+				String hrv_localid = cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_HRV_ID)).replaceAll("'", "\\'");
+				String hrv_dateInserted = cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_HRV_DATE_INSERTED)).replaceAll("'", "\\'");
+				String hrv_dateUploaded = Helper.convertLongtoDateTime_DB_Format(System.currentTimeMillis());
+
+
+				sqlString = sqlString +
+						"( '" + hrv_id + "',  " +
+						"'" + hrv_pondID + "', " +
+						"'" + hrv_caseNumber + "', " +
+						"'" + hrv_species + "', " +
+						"'" + hrv_dateOfHarvest + "', " +
+						"'" + hrv_finalabw + "', " +
+						"'" + hrv_totalConsumption + "', " +
+						"'" + hrv_fcr + "', " +
+						"'" + hrv_pricePerKilo + "', " +
+						"'" + hrv_totalHarvested + "', " +
+						"'" + hrv_localid + "', " +
+						"'" + hrv_dateInserted + "', " +
+						"'" + hrv_dateUploaded + "' ),";
+			}
+		}
+
+		String strSql = sqlString.substring(0, sqlString.length() - 1);
+		strSql = strSql + " " +
+				" ON DUPLICATE KEY UPDATE " +
+				" 	 "+GpsSQLiteHelper.CL_HRV_ID+" = VALUES("+GpsSQLiteHelper.CL_HRV_ID+"), " +
+				"    "+GpsSQLiteHelper.CL_HRV_PONDID+" = VALUES("+GpsSQLiteHelper.CL_HRV_PONDID+"), " +
+				"    "+GpsSQLiteHelper.CL_HRV_CASENUM+" = VALUES("+GpsSQLiteHelper.CL_HRV_CASENUM+"), " +
+				"    "+GpsSQLiteHelper.CL_HRV_SPECIES+" = VALUES("+GpsSQLiteHelper.CL_HRV_SPECIES+"), " +
+				"    "+GpsSQLiteHelper.CL_HRV_DATEOFHARVEST+" = VALUES("+GpsSQLiteHelper.CL_HRV_DATEOFHARVEST+"), " +
+				"    "+GpsSQLiteHelper.CL_HRV_FINALABW+" = VALUES("+GpsSQLiteHelper.CL_HRV_FINALABW+"), " +
+				"    "+GpsSQLiteHelper.CL_HRV_TOTAL_CONSUMPTION+" = VALUES("+GpsSQLiteHelper.CL_HRV_TOTAL_CONSUMPTION+"), " +
+				"    "+GpsSQLiteHelper.CL_HRV_FCR+" = VALUES("+GpsSQLiteHelper.CL_HRV_FCR+"), " +
+				"    "+GpsSQLiteHelper.CL_HRV_PRICEPERKILO+" = VALUES("+GpsSQLiteHelper.CL_HRV_PRICEPERKILO+"), " +
+				"    "+GpsSQLiteHelper.CL_HRV_TOTALHARVEST+" = VALUES("+GpsSQLiteHelper.CL_HRV_TOTALHARVEST+"), " +
+				"    "+GpsSQLiteHelper.CL_HRV_LocalId+" = VALUES("+GpsSQLiteHelper.CL_HRV_LocalId+"), " +
+				"    "+GpsSQLiteHelper.CL_HRV_DATE_INSERTED+" = VALUES("+GpsSQLiteHelper.CL_HRV_DATE_INSERTED+"), " +
+				"    "+GpsSQLiteHelper.CL_HRV_DateUploaded+" = VALUES("+GpsSQLiteHelper.CL_HRV_DateUploaded+")";
+
+		return strSql;
+	}
+
+
 	public String getSQLStringForInsert_UNPOSTED_USERACTIVITY() {
 		String sqlString = "" +
 				"INSERT INTO `tbluser_activity` (`user_act_id`, `user_act_userid`, `user_act_actiondone`, `user_act_latitude`, `user_act_longitude`, `user_act_datetime`, `user_act_actiontype`) VALUES ";
@@ -714,8 +816,7 @@ public class GpsDB_Query {
 
 	public int getPond_notPosted_Count(Activity activity){
 		String query = "SELECT * FROM "+GpsSQLiteHelper.TBLPOND+" WHERE "
-				+ GpsSQLiteHelper.CL_POND_isPosted+ " = 0 "
-				;
+				+ GpsSQLiteHelper.CL_POND_isPosted+ " = 0 ";
 		String[] params = new String[] {};
 		Cursor cur = db.rawQuery(query, params);
 		return cur.getCount();
@@ -723,8 +824,15 @@ public class GpsDB_Query {
 
 	public int getWeeklyPosted_notPosted_Count(Activity activity){
 		String query = "SELECT * FROM "+GpsSQLiteHelper.TBLPOND_WeeklyUpdates+" WHERE "
-				+ GpsSQLiteHelper.CL_WEEKLY_UPDATES_isposted+ " = 0 "
-				;
+				+ GpsSQLiteHelper.CL_WEEKLY_UPDATES_isposted+ " = 0 ";
+		String[] params = new String[] {};
+		Cursor cur = db.rawQuery(query, params);
+		return cur.getCount();
+	}
+
+	public int getHarvestPosted_notPosted_Count(Activity activity){
+		String query = "SELECT * FROM "+GpsSQLiteHelper.TBL_HARVESTINFO + " WHERE "
+				+ GpsSQLiteHelper.CL_HRV_ISPOSTED+ " = '0'";
 		String[] params = new String[] {};
 		Cursor cur = db.rawQuery(query, params);
 		return cur.getCount();
@@ -732,13 +840,22 @@ public class GpsDB_Query {
 
 	public int getUserActivity_notPosted_Count(Activity activity){
 		String query = "SELECT * FROM "+GpsSQLiteHelper.TBLUSER_ACTIVITY+" WHERE "
-				+ GpsSQLiteHelper.CL_USER_ACTIVITY_isPosted+ " = 0 "
-				;
+				+ GpsSQLiteHelper.CL_USER_ACTIVITY_isPosted+ " = 0 ";
 		String[] params = new String[] {};
 		Cursor cur = db.rawQuery(query, params);
 		return cur.getCount();
 	}
 
+
+
+	public int getHarvestInfo_notPosted_Count(Activity activity){
+		String query = "SELECT * FROM "+GpsSQLiteHelper.TBL_HARVESTINFO+" WHERE "
+				+ GpsSQLiteHelper.CL_HRV_ISPOSTED+ " = '0' "
+				;
+		String[] params = new String[] {};
+		Cursor cur = db.rawQuery(query, params);
+		return cur.getCount();
+	}
 
 
 	public Cursor getAll_FARMINFO_LEFTJOIN_PONDINFO_LEFTJOIN_CUSTOMERINFO(String userid){
@@ -1109,7 +1226,7 @@ public class GpsDB_Query {
 		ContentValues newValues = new ContentValues();
 		newValues.put(GpsSQLiteHelper.CL_HRV_CASENUM, casenum);
 		newValues.put(GpsSQLiteHelper.CL_HRV_PONDID, pondid);
-		newValues.put(GpsSQLiteHelper.CL_HRV_DATEOFHARVESTED, dateofharvest);
+		newValues.put(GpsSQLiteHelper.CL_HRV_DATEOFHARVEST, dateofharvest);
 		newValues.put(GpsSQLiteHelper.CL_HRV_FINALABW, finalabw);
 		newValues.put(GpsSQLiteHelper.CL_HRV_TOTAL_CONSUMPTION, totalconsumption);
 		newValues.put(GpsSQLiteHelper.CL_HRV_FCR, fcr);
@@ -1186,6 +1303,14 @@ public class GpsDB_Query {
 		ContentValues newValues = new ContentValues();
 		newValues.put(GpsSQLiteHelper.CL_WEEKLY_UPDATES_isposted, 1);
 		return 	db.update(GpsSQLiteHelper.TBLPOND_WeeklyUpdates, newValues, where, null);
+	}
+
+	public int updateUnPostedToPosted_HarvestInfo() {
+		String where = GpsSQLiteHelper.CL_HRV_ISPOSTED+ " = '0' ";
+		ContentValues newValues = new ContentValues();
+		newValues.put(GpsSQLiteHelper.CL_HRV_ISPOSTED, "1");
+		Log.d("Harvested", "update if posted");
+		return 	db.update(GpsSQLiteHelper.TBL_HARVESTINFO, newValues, where, null);
 	}
 
 	public int updateUnPostedToPosted_USERACTIVITY() {

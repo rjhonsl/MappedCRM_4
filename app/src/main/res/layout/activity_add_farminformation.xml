@@ -11,6 +11,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:elevation="5dp"
         android:layout_gravity="center">
 
 
@@ -90,17 +91,20 @@
 
 
             <LinearLayout
-                android:background="@drawable/bg_white_box_curvebottom"
                 android:padding="10dp"
                 android:orientation="vertical"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
+                android:elevation="3dp"
+                android:background="@color/gray_50"
+
                 >
+
                 <TextView
                     android:textStyle="bold"
                     android:text="BASIC INFORMATION"
-                    android:textColor="#00665a"
+                    android:textColor="@color/gray_800"
                     android:labelFor="@+id/txt_markerdetails_contactName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
@@ -124,7 +128,7 @@
                         android:layout_height="wrap_content">
                         <TextView
                             android:paddingLeft="5dp"
-                            android:textColor="#004D40"
+                            android:textColor="@color/gray_700"
                             android:text="Farm Manager/Contact"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
@@ -216,7 +220,7 @@
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content">
                         <TextView
-                            android:textColor="#004D40"
+                            android:textColor="@color/gray_700"
                             android:paddingLeft="5dp"
                             android:text="Address"
                             android:labelFor="@+id/txt_markerdetails_address"
@@ -258,7 +262,7 @@
                         <TextView
                             android:paddingLeft="5dp"
                             android:text="Farm Name"
-                            android:textColor="#004D40"
+                            android:textColor="@color/gray_700"
                             android:labelFor="@+id/txt_markerdetails_farmname"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
@@ -297,7 +301,7 @@
 
                         <TextView
                             android:paddingLeft="5dp"
-                            android:textColor="#004D40"
+                            android:textColor="@color/gray_700"
                             android:text="Customer Code"
                             android:labelFor="@+id/txt_markerdetails_farmID"
                             android:layout_width="wrap_content"
@@ -336,7 +340,7 @@
                         android:layout_height="wrap_content">
 
                         <TextView
-                            android:textColor="#004D40"
+                            android:textColor="@color/gray_700"
                             android:paddingLeft="5dp"
                             android:text="Contact Number"
                             android:labelFor="@+id/txt_markerdetails_contactNumber"
@@ -364,18 +368,19 @@
 
 
             <LinearLayout
-                android:background="@drawable/bg_white_box_curvebottom"
                 android:padding="10dp"
                 android:orientation="vertical"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
+                android:elevation="3dp"
+                android:background="@color/gray_50"
                 >
 
                 <TextView
                     android:textStyle="bold"
                     android:text="PRODUCT INFORMATION"
-                    android:textColor="#00665a"
+                    android:textColor="@color/gray_800"
                     android:labelFor="@+id/txt_markerdetails_contactName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
@@ -397,7 +402,7 @@
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content">
                         <TextView
-                            android:textColor="#004D40"
+                            android:textColor="@color/gray_700"
                             android:layout_marginLeft="5dp"
                             android:text="Culture Sytem"
                             android:labelFor="@+id/txt_markerdetails_cultureType"
@@ -439,7 +444,7 @@
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content">
                         <TextView
-                            android:textColor="#004D40"
+                            android:textColor="@color/gray_700"
                             android:layout_marginLeft="5dp"
                             android:text="Level Of Culture (Intesity)"
                             android:labelFor="@+id/txt_markerdetails_levelofCulture"
@@ -480,7 +485,7 @@
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content">
                     <TextView
-                        android:textColor="#004D40"
+                        android:textColor="@color/gray_700"
                         android:layout_marginLeft="5dp"
                         android:text="Water Type"
                         android:labelFor="@+id/txt_markerdetails_levelofCulture"

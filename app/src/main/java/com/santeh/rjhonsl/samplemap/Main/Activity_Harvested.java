@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -95,8 +96,9 @@ public class Activity_Harvested extends FragmentActivity {
                     public void onItemClick(AdapterView<?> parent, View view, int position2, long id) {
                         if (position2 == 0) {
                             d.hide();
+                            Log.d("Harvested", "position 2 - before if");
                             if (harvestinfoList.get(position).getHrv_isPosted().equalsIgnoreCase("1")) {
-                                Helper.createCustomDialogOKOnly(activity, "Warning", "This harvest information was already uploaded.", "OK");
+                                Helper.createCustomThemedDialogOKOnly(activity, "Warning", "This harvest information was already uploaded.", "OK");
                             } else {
 
                                 Intent intent = new Intent(Activity_Harvested.this, Activity_EditHarvest.class);
@@ -118,7 +120,8 @@ public class Activity_Harvested extends FragmentActivity {
                         } else if (position2 == 1) {
                             d.hide();
                             if (harvestinfoList.get(position).getHrv_isPosted().equalsIgnoreCase("1")) {
-                                Helper.createCustomDialogOKOnly(activity, "Warning", "This harvest information was already uploaded.", "OK");
+                                Log.d("Harvested", "position 2 - is posted");
+                                Helper.createCustomThemedDialogOKOnly(activity, "Warning", "This harvest information was already uploaded.", "OK");
                                 d.hide();
                             } else {
                                 final Dialog d1 = Helper.createCustomDialogThemedYesNO(activity, "Delete this harvest info?", "Delete", "NO", "YES", R.color.red);
@@ -189,13 +192,14 @@ public class Activity_Harvested extends FragmentActivity {
                     custInfoObject.setHrv_pondid(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_HRV_PONDID)));
                     custInfoObject.setHrv_casenum(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_HRV_CASENUM)));
                     custInfoObject.setHrv_specie(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_HRV_SPECIES)));
-                    custInfoObject.setHrv_dateOfHarvest(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_HRV_DATEOFHARVESTED)));
+                    custInfoObject.setHrv_dateOfHarvest(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_HRV_DATEOFHARVEST)));
                     custInfoObject.setHrv_finalABW(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_HRV_FINALABW)));
                     custInfoObject.setHrv_totalConsumption(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_HRV_TOTAL_CONSUMPTION)));
                     custInfoObject.setHrv_fcr(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_HRV_FCR)));
                     custInfoObject.setHrv_pricePerKilo(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_HRV_PRICEPERKILO)));
                     custInfoObject.setHrv_totalHarvested(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_HRV_TOTALHARVEST)));
                     custInfoObject.setHrv_isPosted(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_HRV_ISPOSTED)));
+                    Log.d("Harvest info", ""+cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_HRV_ISPOSTED)));
                     custInfoObject.setHrv_dateRecorded(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_HRV_DATE_INSERTED)));
 
                     custInfoObject.setDateStocked(  cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_dateStocked)));

@@ -70,6 +70,7 @@ public class CustInfoObject {
 	private int isVisited;
 	private int isactive;
 	private int isPosted;
+	private int isharvested;
 	private int isPosted_farm;
 	private int isPosted_pond;
 	private int isPosted_cust;
@@ -87,7 +88,9 @@ public class CustInfoObject {
 	private String hrv_pricePerKilo;
 	private String hrv_totalHarvested;
 	private String hrv_isPosted;
+	private String hrv_localid;
 	private String hrv_dateRecorded;
+	private String hrv_dateuploaded;
 
 
 
@@ -1027,5 +1030,29 @@ public class CustInfoObject {
 
 	public void setHrv_dateRecorded(String hrv_dateRecorded) {
 		this.hrv_dateRecorded = hrv_dateRecorded;
+	}
+
+	public int getIsharvested() {
+		return isharvested;
+	}
+
+	public void setIsharvested(int isharvested) {
+		this.isharvested = isharvested;
+	}
+
+	public String getHrv_localid() {
+		return hrv_localid;
+	}
+
+	public void setHrv_localid(String hrv_localid) {
+		this.hrv_localid = hrv_localid;
+	}
+
+	public String getHrv_dateuploaded() {
+		return hrv_dateuploaded;
+	}
+
+	public void setHrv_dateuploaded(String hrv_dateuploaded) {
+		this.hrv_dateuploaded = hrv_dateuploaded;
 	}
 }
