@@ -28,7 +28,15 @@ public class GpsDB_Query {
 
 	public void open(){
 		//Log.d("DBSource", "db open");
-		db = dbhelper.getWritableDatabase();
+		if (db==null){
+			db = dbhelper.getWritableDatabase();
+		}else{
+			if (!db.isOpen()){
+				db = dbhelper.getWritableDatabase();
+			}
+		}
+
+
 	}
 	public void close(){
 		//Log.d("DBSource", "db close");
@@ -230,7 +238,7 @@ public class GpsDB_Query {
 		return  db.insert(GpsSQLiteHelper.TBL_HARVESTINFO, null, values);
 	}
 
-	public long insertPondData_RESTORE(String localid, String pondid, String specie, String sizeofStock, String survivalRate, String dateStocked, String quantity, String area, String culturesystem, String remarks, String customerid, int isHarvested) {
+	public long insertPondData_RESTORE(String localid, String pondid, String specie, String sizeofStock, String survivalRate, String dateStocked, String quantity, String area, String culturesystem, String remarks, String customerid, int isHarvested, String dateInserted) {
 
 		ContentValues values = new ContentValues();
 		values.put(GpsSQLiteHelper.CL_POND_INDEX, localid );
@@ -246,6 +254,7 @@ public class GpsDB_Query {
 		values.put(GpsSQLiteHelper.CL_POND_customerId, customerid);
 		values.put(GpsSQLiteHelper.CL_POND_isPosted, 1);
 		values.put(GpsSQLiteHelper.CL_POND_isHarvested, isHarvested);
+		values.put(GpsSQLiteHelper.CL_POND_dateInserted, dateInserted);
 
 		return db.insert(GpsSQLiteHelper.TBLPOND, null, values);
 	}
@@ -1018,10 +1027,11 @@ public class GpsDB_Query {
 
 
 	public int getTableCount(String tableName) {
+
 		String query = "SELECT * FROM "+tableName+";";
 		String[] params = new String[] {};
-//		rawQuery("SELECT id, name FROM people WHERE name = ? AND id = ?", new String[] {"David", "2"});
 		Cursor cur = db.rawQuery(query, params);
+
 		return cur.getCount();
 	}
 

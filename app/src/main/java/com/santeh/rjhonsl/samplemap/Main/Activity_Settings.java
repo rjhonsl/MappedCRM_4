@@ -361,7 +361,8 @@ public class Activity_Settings extends Activity{
                                                 custInfoObjectList.get(i).getCulturesystem(),
                                                 custInfoObjectList.get(i).getRemarks(),
                                                 Helper.splitter(custInfoObjectList.get(i).getCustomerID(), "-")[1],
-                                                custInfoObjectList.get(i).getIsharvested()
+                                                custInfoObjectList.get(i).getIsharvested(),
+                                                custInfoObjectList.get(i).getPond_dateInserted()
                                         );
                                     }
 
@@ -503,7 +504,7 @@ public class Activity_Settings extends Activity{
 
                                     Helper.createCustomThemedDialogOKOnly(activity, "Restore", response, "OK");
                                     db.delete_ALL_ITEM_ON_TABLE(GpsSQLiteHelper.TBL_HARVESTINFO);
-
+                                    Log.d("RESTORE", "HARVEST INFO");
 
                                     for (int i = 0; i < custInfoObjectList.size() ; i++) {
 

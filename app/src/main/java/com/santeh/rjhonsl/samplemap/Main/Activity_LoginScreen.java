@@ -401,7 +401,9 @@ public class Activity_LoginScreen extends Activity{
                         String accountDetail="";
                         PD.dismiss();
                         if (response.substring(1, 2).equalsIgnoreCase("0")) {
-                            Helper.toastShort(activity, "Username and password does not seem to match");
+                            Helper.toastShort(activity, "Username and password does not seem to match"
+//                                    +response+":xx"+Helper.getMacAddress(activity)+"xx"
+                            );
                         } else {
                             listaccounts = AccountsParser.parseFeed(response);
 
@@ -570,7 +572,7 @@ public class Activity_LoginScreen extends Activity{
                                 versionFile = splitted[1];
 
                                 if (Integer.parseInt(versionNumber) > versionCode) {
-                                    //download updates
+                                    // download updates
                                     // declare the dialog as a member field of your activity
 
                                     // instantiate it within the onCreate method

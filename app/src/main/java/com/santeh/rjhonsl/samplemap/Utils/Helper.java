@@ -47,12 +47,14 @@ import com.santeh.rjhonsl.samplemap.R;
 import org.joda.time.DateTime;
 import org.joda.time.Weeks;
 
+import java.net.NetworkInterface;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -1335,9 +1337,39 @@ public class Helper {
     }
 
     public static String getMacAddress(Context context){
-        WifiManager manager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-        WifiInfo info = manager.getConnectionInfo();
-        return info.getMacAddress();
+        String macaddress = "";
+        if(Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1){
+            try {
+                String interfaceName = "wlan0";
+                List<NetworkInterface> interfaces = Collections.list(NetworkInterface.getNetworkInterfaces());
+                for (NetworkInterface intf : interfaces) {
+                    if (!intf.getName().equalsIgnoreCase(interfaceName)){
+                        continue;
+                    }
+
+                    byte[] mac = intf.getHardwareAddress();
+                    if (mac==null){
+                        macaddress = "";
+                    }
+
+                    StringBuilder buf = new StringBuilder();
+                    for (byte aMac : mac) {
+                        buf.append(String.format("%02X:", aMac));
+                    }
+                    if (buf.length()>0) {
+                        buf.deleteCharAt(buf.length() - 1);
+                    }
+                    macaddress = buf.toString();
+                }
+            } catch (Exception ex) { } // for now eat exceptions
+        }else{
+            WifiManager manager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+            WifiInfo info = manager.getConnectionInfo();
+            macaddress = info.getMacAddress();
+        }
+
+        return macaddress;
+
     }
 
     public static String getIMEI(Context context){

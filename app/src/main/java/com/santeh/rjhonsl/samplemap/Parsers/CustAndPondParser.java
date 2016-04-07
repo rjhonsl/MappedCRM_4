@@ -3,6 +3,7 @@ package com.santeh.rjhonsl.samplemap.Parsers;
 
 import android.util.Log;
 
+import com.santeh.rjhonsl.samplemap.DBase.GpsSQLiteHelper;
 import com.santeh.rjhonsl.samplemap.Obj.CustInfoObject;
 
 import org.json.JSONArray;
@@ -147,6 +148,14 @@ public class CustAndPondParser {
 				}catch (Exception e){
 					custInfoObject.setCulturelevel("None");
 				}
+
+				try {
+					if (obj.has(GpsSQLiteHelper.CL_POND_dateInserted))
+						custInfoObject.setPond_dateInserted(obj.getString(GpsSQLiteHelper.CL_POND_dateInserted));
+				}catch (Exception e){
+					custInfoObject.setPond_dateInserted("None");
+				}
+
 
 
 				Log.d("PARSING", "watertype");

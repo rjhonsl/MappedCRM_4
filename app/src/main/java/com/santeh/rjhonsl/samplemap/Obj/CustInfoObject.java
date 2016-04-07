@@ -60,6 +60,7 @@ public class CustInfoObject {
 	private int totalStockOfFarm;
     private int pondIndex;
     private String pondLocalIndex;
+    private String pond_dateInserted;
 	private int currentweekofStock;
 	private int startweekofStock;
 	private int week;
@@ -1054,5 +1055,13 @@ public class CustInfoObject {
 
 	public void setHrv_dateuploaded(String hrv_dateuploaded) {
 		this.hrv_dateuploaded = hrv_dateuploaded;
+	}
+
+	public String getPond_dateInserted() {
+		return pond_dateInserted;
+	}
+
+	public void setPond_dateInserted(String pond_dateInserted) {
+		this.pond_dateInserted = pond_dateInserted;
 	}
 }
