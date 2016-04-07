@@ -565,7 +565,8 @@ public class GpsDB_Query {
 
 	public String getSQLStringForInsert_UNPOSTED_POND(Activity activity) {
 		String sqlString = " " +
-				"INSERT INTO `tblPond` (`id`, `pondid`, `specie`, `sizeofStock`, `survivalrate`, `dateStocked`, `quantity`, `area`, `culturesystem`, `remarks`, `customerId`, `p_lid`, `isharvested`) VALUES  ";
+				"INSERT INTO `tblPond` (`id`, `pondid`, `specie`, `sizeofStock`, `survivalrate`, `dateStocked`, `quantity`, `area`, `culturesystem`, `remarks`, `customerId`, `p_lid`, `isharvested`, "+
+				GpsSQLiteHelper.CL_POND_dateInserted+", "+GpsSQLiteHelper.CL_POND_dateuploaded+") VALUES  ";
 		String query = "SELECT * FROM " + GpsSQLiteHelper.TBLPOND + " WHERE "
 				+ GpsSQLiteHelper.CL_POND_isPosted + " = 0 ";
 		String[] params = new String[]{};
@@ -587,6 +588,8 @@ public class GpsDB_Query {
 				String customerId = getUserIdOfPond( cur.getInt(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_INDEX))+"") + "-" + cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_customerId)).replaceAll("'", "\\'");
 				String plid = cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_INDEX)).replaceAll("'", "\\'");
 				String isHarvested = cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_isHarvested)).replaceAll("'", "\\'");
+				String dateInserted = cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_dateInserted)).replaceAll("'", "\\'");
+				String dateuploaded = Helper.convertLongtoDate_DB_Format(System.currentTimeMillis());
 
 				sqlString = sqlString +
 						"( '" + id + "',  " +
@@ -601,7 +604,9 @@ public class GpsDB_Query {
 						"'"+remarks+"', " +
 						"'"+customerId+"', " +
 						"'"+plid+"', " +
-						"'" +isHarvested+ "' ),";
+						"'"+isHarvested+"', " +
+						"'"+dateInserted+"', " +
+						"'" +dateuploaded+ "' ),";
 			}
 		}
 
@@ -620,6 +625,8 @@ public class GpsDB_Query {
 				"    remarks = VALUES(remarks), " +
 				"    customerId = VALUES(customerId), " +
 				"    isharvested = VALUES(isharvested), " +
+				"    "+GpsSQLiteHelper.CL_POND_dateInserted+" = VALUES("+GpsSQLiteHelper.CL_POND_dateInserted+"), " +
+				"    "+GpsSQLiteHelper.CL_POND_dateuploaded+" = VALUES("+GpsSQLiteHelper.CL_POND_dateuploaded+"), " +
 				"    p_lid = VALUES(p_lid)";
 
 		return strSql;

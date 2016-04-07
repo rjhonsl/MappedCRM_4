@@ -128,7 +128,7 @@ public class GpsSQLiteHelper extends SQLiteOpenHelper {
 	public static final String CL_POND_customerId		= "customerId";
 	public static final String CL_POND_isPosted			= "p_isposted";
 	public static final String CL_POND_isHarvested		= "p_isharvested";
-	public static final String CL_POND_dateInserted		= "p_dateInserted";
+	public static final String CL_POND_dateInserted		= "p_dateinserted";
 	public static final String CL_POND_dateuploaded 	= "p_uploaded";//only in web
 	public static final String CL_POND_localID			= "p_localid";//onlu in web
 	public static final String[] ALL_KEY_POND			= new String[]{CL_POND_INDEX, CL_POND_PID, CL_POND_specie, CL_POND_sizeofStock, CL_POND_survivalrate,
