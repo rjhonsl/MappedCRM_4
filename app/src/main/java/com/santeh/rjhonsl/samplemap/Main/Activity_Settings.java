@@ -127,9 +127,9 @@ public class Activity_Settings extends Activity{
             @Override
             public void onClick(View v) {
 
-                String prompt = "Restore data from web server?" +
+                String prompt = "(NOTE) Current data will be wiped out and replaced with data from web server. This process is irreversible." +
                         "\n\n" +
-                        "(NOTE) Current data will be wiped out and replaced with data from web server. This process is irreversible.";
+                        "Continue to restore data from web server?";
                 final Dialog d = Helper.createCustomDialogThemedYesNO(activity, prompt, "Restore", "NO", "YES", R.color.red_700);
                 Button no = (Button) d.findViewById(R.id.btn_dialog_yesno_opt1);
                 Button yes = (Button) d.findViewById(R.id.btn_dialog_yesno_opt2);

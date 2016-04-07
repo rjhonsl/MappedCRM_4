@@ -235,56 +235,14 @@ public class Activity_LoginScreen extends Activity{
         txtrequestaccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                db.dropTable(GpsSQLiteHelper.TBLUSERS+GpsSQLiteHelper.TEMP);
+                Helper.toastShort(activity, "Sorry, this function is currently unavailable");
             }
         });
 
         txtforgot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                final String tmptable = GpsSQLiteHelper.TBLUSERS + GpsSQLiteHelper.TEMP;
-//                final String newtable = GpsSQLiteHelper.TBLUSERS;
-//
-//                final String[] tmpcolumnNames = db.getcolumnNames(GpsSQLiteHelper.TBLMAINCUSTOMERINFO);
-//                final String[] tmpcolumnTypes = db.getcolumnDataTypes(GpsSQLiteHelper.TBLUSERS);
-//                String colnames = "|x|";
-//                for (int i = 0; i < tmpcolumnTypes.length; i++) {
-//                    colnames = colnames + " | " + tmpcolumnTypes[i];
-//                }
-//                colnames = colnames + " |x| " + tmpcolumnTypes.length + " - " + db.getColumnCount(GpsSQLiteHelper.TBLUSERS);
-
-                final Dialog d = Helper.createCustomThemedDialogOKOnly(activity, "Warning",
-                        "Function currently disabled: ", "OK");
-                Button ok = (Button) d.findViewById(R.id.btn_dialog_okonly_OK);
-                ok.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        d.hide();
-//
-//                        final String sql = GpsSQLiteHelper.createTableString(  tmptable , tmpcolumnNames, GpsSQLiteHelper.ALL_KEY_USERS_DATAPROP );
-//                        Log.d("UPGRADE", "create temp table");
-//                        db.createTableExute(sql);
-//
-//                        final String sqlNew = GpsSQLiteHelper.createTableString(  newtable,  GpsSQLiteHelper.ALL_KEY_USERS, GpsSQLiteHelper.ALL_KEY_USERS_DATAPROP);
-//
-//                        Log.d("UPGRADE", "transfer old table to new table");
-//                        db.trasferOldTableToTEMPTable(GpsSQLiteHelper.TBLUSERS, tmptable);
-//
-//                        Log.d("UPGRADE", "DROP OLD TABLE");
-//                        db.dropTable(GpsSQLiteHelper.TBLUSERS);
-//
-//                        Log.d("UPGRADE", "Create new table");
-//                        db.createTableExute(sqlNew);
-//
-//                        Log.d("UPGRADE", "Tranfer temp table to new table");
-//                        db.trasferTEMPTableToNewTable(tmptable, GpsSQLiteHelper.TBLUSERS, GpsSQLiteHelper.ALL_KEY_USERS, GpsSQLiteHelper.ALL_KEY_USERS);
-//
-//                        Log.d("UPGRADE", "DROP OLD TABLE");
-//                        db.dropTable(tmptable);
-//
-//                        Log.d("UPGRADE", "SUCESS");
-                    }
-                });
+                Helper.toastShort(activity, "Sorry, this function is currently unavailable");
 
             }
         });
@@ -502,7 +460,7 @@ public class Activity_LoginScreen extends Activity{
             @Override
             public void onErrorResponse(VolleyError error) {
                 PD.dismiss();
-                Helper.createCustomThemedDialogOKOnly(activity, "Error", error.toString(), "OK");
+                Helper.toastShort(activity, error.toString());
             }
         }) {
             @Override
@@ -647,7 +605,7 @@ public class Activity_LoginScreen extends Activity{
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     PD.dismiss();
-                    Helper.createCustomThemedDialogOKOnly(activity, "Error", error.toString(), "OK");
+                    Helper.toastShort(activity, error.toString());
                 }
             }) {
                 @Override

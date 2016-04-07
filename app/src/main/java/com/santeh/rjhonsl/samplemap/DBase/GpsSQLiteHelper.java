@@ -10,7 +10,7 @@ public class GpsSQLiteHelper extends SQLiteOpenHelper {
 	private static final String LOGTAG = "DB_GPS";
 	private static final String DATABASE_NAME = "local.db";
 	//each time you change data structure, you must increment this by 1
-	private static final int DATABASE_VERSION = 23;
+	private static final int DATABASE_VERSION = 24;
 	Context context;
 
 
@@ -128,10 +128,14 @@ public class GpsSQLiteHelper extends SQLiteOpenHelper {
 	public static final String CL_POND_customerId		= "customerId";
 	public static final String CL_POND_isPosted			= "p_isposted";
 	public static final String CL_POND_isHarvested		= "p_isharvested";
+	public static final String CL_POND_dateInserted		= "p_dateInserted";
+	public static final String CL_POND_dateuploaded 	= "p_uploaded";//only in web
+	public static final String CL_POND_localID			= "p_localid";//onlu in web
 	public static final String[] ALL_KEY_POND			= new String[]{CL_POND_INDEX, CL_POND_PID, CL_POND_specie, CL_POND_sizeofStock, CL_POND_survivalrate,
-			CL_POND_dateStocked, CL_POND_quantity, CL_POND_area, CL_POND_culturesystem, CL_POND_remarks, CL_POND_customerId, CL_POND_isPosted, CL_POND_isHarvested};
+			CL_POND_dateStocked, CL_POND_quantity, CL_POND_area, CL_POND_culturesystem, CL_POND_remarks, CL_POND_customerId, CL_POND_isPosted, CL_POND_isHarvested,
+			CL_POND_dateInserted};
 	public static final String[] ALL_KEY_POND_DATAPROP 	= new String[]{
-			INTEGER + " " + PRIMARY_AUTOINCRE, TEXT, TEXT, TEXT, TEXT, TEXT, TEXT, TEXT, TEXT, TEXT, TEXT, TEXT, TEXT, TEXT
+			INTEGER + " " + PRIMARY_AUTOINCRE, TEXT, TEXT, TEXT, TEXT, TEXT, TEXT, TEXT, TEXT, TEXT, TEXT, TEXT, TEXT, TEXT, TEXT
 	};
 
 
@@ -307,7 +311,8 @@ public class GpsSQLiteHelper extends SQLiteOpenHelper {
 					CL_POND_remarks 			+ " TEXT, " +
 					CL_POND_customerId			+ " INTEGER, " +
 					CL_POND_isPosted			+ " INTEGER, " +
-					CL_POND_isHarvested			+ " INTEGER " +
+					CL_POND_isHarvested			+ " INTEGER, " +
+					CL_POND_dateInserted		+ " TEXT " +
 					")";
 
 
@@ -423,6 +428,12 @@ public class GpsSQLiteHelper extends SQLiteOpenHelper {
 		if (oldVersion < 23) {
 			_db.execSQL("ALTER TABLE " + TBL_HARVESTINFO + " ADD COLUMN "
 					+ CL_HRV_DATE_INSERTED + " TEXT");
+		}
+
+		if(oldVersion < 24){
+			_db.execSQL("ALTER TABLE " + TBLPOND + " ADD COLUMN "
+					+ CL_POND_dateInserted + " TEXT");
+			_db.execSQL("UPDATE " + TBLPOND + " SET " + CL_POND_dateInserted + " = 0;");
 		}
 
 	}

@@ -514,56 +514,63 @@
                     android:layout_width="fill_parent"
                     android:layout_height="1dp"/>
 
-                <LinearLayout
 
-                    android:layout_width="fill_parent"
+
+            </LinearLayout>
+
+
+            <LinearLayout
+
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="end"
+                android:id="@+id/ll_buttonHolder"
+                android:layout_gravity="end"
+                android:background="@color/gray_50"
+                android:padding="5dp"
+                android:elevation="3dp"
+                android:layout_marginTop="15dp"
+                >
+                <Button
+                    android:visibility="gone"
+                    android:textColor="@color/material_deep_teal_500"
+                    android:background="@drawable/bg_material_transparent"
+                    android:textSize="15dp"
+                    android:text=" ADD PONDS "
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="end"
-                    android:id="@+id/ll_buttonHolder"
-                    android:layout_gravity="end"
-                    >
-                    <Button
-                        android:visibility="gone"
-                        android:textColor="@color/material_deep_teal_500"
-                        android:background="@drawable/bg_material_transparent"
-                        android:textSize="15dp"
-                        android:text=" ADD PONDS "
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/btn_markerdetail_ADDPOND"/>
+                    android:id="@+id/btn_markerdetail_ADDPOND"/>
 
-                    <Button
-                        android:textColor="@color/material_deep_teal_500"
-                        android:textSize="15sp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/bg_material_transparent"
-                        android:text="CLOSE"
-                        android:id="@+id/btn_markerdetail_CANCEL"/>
+                <Button
+                    android:textColor="@color/material_deep_teal_500"
+                    android:textSize="15sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_material_transparent"
+                    android:text="CLOSE"
+                    android:id="@+id/btn_markerdetail_CANCEL"/>
 
 
-                    <Button
-                        android:textColor="@color/material_deep_teal_500"
-                        android:textSize="15sp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/bg_material_transparent"
-                        android:text="DELETE"
-                        android:id="@+id/btn_markerdetail_Delete"/>
+                <Button
+                    android:textColor="@color/material_deep_teal_500"
+                    android:textSize="15sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_material_transparent"
+                    android:text="DELETE"
+                    android:id="@+id/btn_markerdetail_Delete"/>
 
 
-                    <Button
-                        android:textColor="@color/material_deep_teal_500"
-                        android:textSize="15sp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/bg_material_transparent"
-                        android:text="SAVE"
-                        android:id="@+id/btn_markerdetail_OK"/>
+                <Button
+                    android:textColor="@color/material_deep_teal_500"
+                    android:textSize="15sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_material_transparent"
+                    android:text="SAVE"
+                    android:id="@+id/btn_markerdetail_OK"/>
 
-
-                </LinearLayout>
 
             </LinearLayout>
 
