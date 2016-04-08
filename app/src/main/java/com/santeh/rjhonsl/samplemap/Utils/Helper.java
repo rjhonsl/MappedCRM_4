@@ -7,6 +7,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.location.LocationManager;
@@ -20,7 +21,10 @@ import android.support.design.widget.Snackbar;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -31,6 +35,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -759,35 +764,33 @@ public class Helper {
 
     public static void toastShort(Activity context, String msg){
 
-        Snackbar snackbar = Snackbar.make(context.findViewById(android.R.id.content), msg, Snackbar.LENGTH_SHORT)
-                .setActionTextColor(context.getResources().getColor(R.color.gray_100));
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+            Snackbar snackbar = Snackbar.make(context.findViewById(android.R.id.content), msg, Snackbar.LENGTH_SHORT)
+                    .setActionTextColor(context.getResources().getColor(R.color.gray_100));
 
-        View view = snackbar.getView();
-        TextView tv = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
-        tv.setTextColor(context.getResources().getColor(R.color.gray_100));
-        tv.setMaxLines(5);
-        snackbar.show();
+            View view = snackbar.getView();
+            TextView tv = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
+            tv.setTextColor(context.getResources().getColor(R.color.gray_100));
+            tv.setMaxLines(5);
+            snackbar.show();
+        }else{
+            LayoutInflater inflater = context.getLayoutInflater();
+            final View layout = inflater.inflate(R.layout.toast,
+                    (ViewGroup) context.findViewById(R.id.toast_layout_root));
 
+            TextView text = (TextView) layout.findViewById(R.id.text);
+            Typeface font = Typeface.createFromAsset(context.getAssets(), "Roboto-Light.ttf");
+            text.setTypeface(font);
+            text.setText(msg);
 
+            Toast toast = new Toast(context.getApplicationContext());
+            toast.setGravity(Gravity.BOTTOM | Gravity.FILL_HORIZONTAL, 0, 0);
+            toast.setDuration(Toast.LENGTH_SHORT);
+            toast.setMargin(0, 0);
+            toast.setView(layout);
 
-
-//        LayoutInflater inflater = context.getLayoutInflater();
-//        final View layout = inflater.inflate(R.layout.toast,
-//                (ViewGroup) context.findViewById(R.id.toast_layout_root));
-//
-//        TextView text = (TextView) layout.findViewById(R.id.text);
-//        Typeface font = Typeface.createFromAsset(context.getAssets(), "Roboto-Light.ttf");
-//        text.setTypeface(font);
-//        text.setText(msg);
-//
-//
-//        Toast toast = new Toast(context.getApplicationContext());
-//        toast.setGravity(Gravity.BOTTOM | Gravity.FILL_HORIZONTAL, 0, 0);
-//        toast.setDuration(Toast.LENGTH_SHORT);
-//        toast.setMargin(0, 0);
-//        toast.setView(layout);
-//
-//        toast.show();
+            toast.show();
+        }
 
     }
 
@@ -797,30 +800,34 @@ public class Helper {
 
     public static void toastLong(Activity context, String msg){
 
-        Snackbar snackbar = Snackbar.make(context.findViewById(android.R.id.content), msg, Snackbar.LENGTH_SHORT)
-                .setActionTextColor(context.getResources().getColor(R.color.gray_100));
 
-        View view = snackbar.getView();
-        TextView tv = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
-        tv.setTextColor(context.getResources().getColor(R.color.gray_100));
-        tv.setMaxLines(5);
-        snackbar.show();
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
 
-//        LayoutInflater inflater = context.getLayoutInflater();
-//        View layout = inflater.inflate(R.layout.toast,
-//                (ViewGroup) context.findViewById(R.id.toast_layout_root));
-//
-//        TextView text = (TextView) layout.findViewById(R.id.text);
-//        Typeface font = Typeface.createFromAsset(context.getAssets(), "Roboto-Light.ttf");
-//        text.setTypeface(font);
-//        text.setText(msg);
-//
-//        Toast toast = new Toast(context.getApplicationContext());
-//        toast.setGravity(Gravity.BOTTOM | Gravity.FILL_HORIZONTAL, 0, 0);
-//        toast.setMargin(0, 0);
-//        toast.setDuration(Toast.LENGTH_LONG);
-//        toast.setView(layout);
-//        toast.show();
+            Snackbar snackbar = Snackbar.make(context.findViewById(android.R.id.content), msg, Snackbar.LENGTH_SHORT)
+                    .setActionTextColor(context.getResources().getColor(R.color.gray_100));
+
+            View view = snackbar.getView();
+            TextView tv = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
+            tv.setTextColor(context.getResources().getColor(R.color.gray_100));
+            tv.setMaxLines(5);
+            snackbar.show();
+        }else{
+            LayoutInflater inflater = context.getLayoutInflater();
+            View layout = inflater.inflate(R.layout.toast,
+                    (ViewGroup) context.findViewById(R.id.toast_layout_root));
+
+            TextView text = (TextView) layout.findViewById(R.id.text);
+            Typeface font = Typeface.createFromAsset(context.getAssets(), "Roboto-Light.ttf");
+            text.setTypeface(font);
+            text.setText(msg);
+
+            Toast toast = new Toast(context.getApplicationContext());
+            toast.setGravity(Gravity.BOTTOM | Gravity.FILL_HORIZONTAL, 0, 0);
+            toast.setMargin(0, 0);
+            toast.setDuration(Toast.LENGTH_LONG);
+            toast.setView(layout);
+            toast.show();
+        }
     }
 
 

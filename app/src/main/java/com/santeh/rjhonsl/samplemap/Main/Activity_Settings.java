@@ -150,11 +150,11 @@ public class Activity_Settings extends Activity{
 
                         startRestore_farmInfo();
 
-                        startRestore_customerInfo();
-                        startRestore_pondInfo();
-                        startRestore_weeklyUpdates();
-
-                        startRestore_HarvestInfo();
+//                        startRestore_customerInfo();
+//                        startRestore_pondInfo();
+//                        startRestore_weeklyUpdates();
+//
+//                        startRestore_HarvestInfo();
 
                         PD.show();
 
@@ -500,9 +500,7 @@ public class Activity_Settings extends Activity{
                             custInfoObjectList =  HarvestInfoParser.parseFeed(response);
                             if (custInfoObjectList != null) {
                                 if (custInfoObjectList.size() > 0) {
-
-
-                                    Helper.createCustomThemedDialogOKOnly(activity, "Restore", response, "OK");
+//                                    Helper.createCustomThemedDialogOKOnly(activity, "Restore", response, "OK");
                                     db.delete_ALL_ITEM_ON_TABLE(GpsSQLiteHelper.TBL_HARVESTINFO);
                                     Log.d("RESTORE", "HARVEST INFO");
 

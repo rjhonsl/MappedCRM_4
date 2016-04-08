@@ -10,7 +10,7 @@ public class GpsSQLiteHelper extends SQLiteOpenHelper {
 	private static final String LOGTAG = "DB_GPS";
 	private static final String DATABASE_NAME = "local.db";
 	//each time you change data structure, you must increment this by 1
-	private static final int DATABASE_VERSION = 24;
+	private static final int DATABASE_VERSION = 25;
 	Context context;
 
 
@@ -189,6 +189,8 @@ public class GpsSQLiteHelper extends SQLiteOpenHelper {
 			INTEGER + " " + PRIMARY_AUTOINCRE, TEXT, TEXT, TEXT, TEXT, TEXT, TEXT, TEXT
 	};
 
+
+
 	public static final String TBL_HARVESTINFO 				= "tblharvest_info";
 
 	public static final String CL_HRV_ID 					= "hrv_id";
@@ -210,6 +212,24 @@ public class GpsSQLiteHelper extends SQLiteOpenHelper {
 
 	public static final String[] ALL_KEY_HARVESTEDINFO_DATAPROP = new String[]{INTEGER + " " + PRIMARY_AUTOINCRE, TEXT, TEXT, TEXT,TEXT,TEXT,TEXT,TEXT,TEXT,TEXT,TEXT,TEXT};
 
+
+
+	public static final String TBL_Pond_QH = "TBL_P_QHANDLER";
+	public static final String CL_P_QH_ID								= "PQH_ID";
+	public static final String CL_P_QH_QUANTITY							= "PQH_QUANTITY";
+	public static final String CL_P_QH_MATHOP							= "PQH_MATHOP";
+	public static final String CL_P_QH_FROM								= "PQH_FROM_ID";
+	public static final String CL_P_QH_TO								= "PQH_TO_ID";
+	public static final String CL_P_QH_TRANSDATE						= "PQH_TRANSDATE";
+																		//BELOW ONLY EXIST IN WEB
+	public static final String CL_P_QH_DATEUPLOADED						= "PQH_DATEUPLOADED";
+	public static final String CL_P_QH_LOCALID							= "PQH_LOCALID";
+	public static final String[] ALL_KEY_POND_QH = new String[]{
+			CL_P_QH_ID, CL_P_QH_QUANTITY, CL_P_QH_MATHOP, CL_P_QH_FROM, CL_P_QH_TO, CL_P_QH_TRANSDATE
+	};
+	public static final String[] ALL_KEY_POND_QH_DATAPROP = new String[]{
+			INTEGER +" "+PRIMARY_AUTOINCRE, INTEGER, TEXT, TEXT, TEXT, TEXT
+	};
 
 	//////////////////////////////////////////////////////////////////
 	///////////// STRINGS FOR CREATING AND UPDATING TABLE ////////////
@@ -392,10 +412,15 @@ public class GpsSQLiteHelper extends SQLiteOpenHelper {
 		db.execSQL(TBL_CREATE_WEEKLYUPDATES);
 		db.execSQL(TBL_CREATE_USERS);
 		db.execSQL(TBL_CREATE_USERS_ACTIVITY);
-		String createHarvestInfo = createTableString(TBL_HARVESTINFO, ALL_KEY_HARVESTINFO, ALL_KEY_HARVESTEDINFO_DATAPROP);
-		db.execSQL(createHarvestInfo);
+		createHarvestintoTable(db);
+		createPondQHTable(db);
 
 		Log.d(LOGTAG, "tables has been created: " + String.valueOf(db));
+	}
+
+	private void createPondQHTable(SQLiteDatabase db) {
+		String createPondQH = createTableString(TBL_Pond_QH, ALL_KEY_POND_QH, ALL_KEY_POND_QH_DATAPROP);
+		db.execSQL(createPondQH);
 	}
 
 	@Override
@@ -421,14 +446,13 @@ public class GpsSQLiteHelper extends SQLiteOpenHelper {
 
 		if (oldVersion < 22) {
 			// Version 22 Create Harvest Info
-			String createHarvestInfo = createTableString(TBL_HARVESTINFO, ALL_KEY_HARVESTINFO, ALL_KEY_HARVESTEDINFO_DATAPROP);
-			_db.execSQL(createHarvestInfo);
+			createHarvestintoTable(_db);
 		}
-
-		if (oldVersion < 23) {
-			_db.execSQL("ALTER TABLE " + TBL_HARVESTINFO + " ADD COLUMN "
-					+ CL_HRV_DATE_INSERTED + " TEXT");
-		}
+//
+//		if (oldVersion < 23) {
+//			_db.execSQL("ALTER TABLE " + TBL_HARVESTINFO + " ADD COLUMN "
+//					+ CL_HRV_DATE_INSERTED + " TEXT");
+//		}
 
 		if(oldVersion < 24){
 			_db.execSQL("ALTER TABLE " + TBLPOND + " ADD COLUMN "
@@ -436,178 +460,16 @@ public class GpsSQLiteHelper extends SQLiteOpenHelper {
 			_db.execSQL("UPDATE " + TBLPOND + " SET " + CL_POND_dateInserted + " = 0;");
 		}
 
+		if (oldVersion < 25){
+			createPondQHTable(_db);
+		}
+
 	}
 
-
-	public void transferMainCustomerInfo() {
-
-		GpsDB_Query db = new GpsDB_Query(context);
-		Log.d("UPGRADE", "before openDB");
-		db.open();
-		String tmptable = TBLMAINCUSTOMERINFO+TEMP;
-		String newtable = TBLMAINCUSTOMERINFO;
-
-		String[] newTBLcolumnNames = ALL_KEY_MAINCUSTOMERINFO;
-		String[] newTBLcolumnNames_DP = ALL_KEY_MAINCUSTOMERINFO_DATAPROP;
-
-		Log.d("UPGRADE", "before create temp table");
-		final String sql = GpsSQLiteHelper.createTableString(tmptable, db.getcolumnNames(newtable), db.getcolumnDataTypes(newtable));
-		Log.d("UPGRADE", "create temp table");
-		db.createTableExute(sql);
-
-		Log.d("UPGRADE", "transfer old table to new table");
-		db.trasferOldTableToTEMPTable(newtable, tmptable);
-
-		Log.d("UPGRADE", "DROP OLD TABLE");
-		db.dropTable(newtable);
-
-		final String sqlNew = GpsSQLiteHelper.createTableString(newtable, newTBLcolumnNames, newTBLcolumnNames_DP);
-		Log.d("UPGRADE", "Create new table");
-		db.createTableExute(sqlNew);
-
-		Log.d("UPGRADE", "Tranfer temp table to new table");
-		db.trasferTEMPTableToNewTable(tmptable, newtable, db.getcolumnNames(tmptable));
-
-		Log.d("UPGRADE", "DROP OLD TABLE");
-		db.dropTable(tmptable);
-
-		Log.d("UPGRADE", "SUCESS CUSTOMER INFO");
+	private void createHarvestintoTable(SQLiteDatabase _db) {
+		String createHarvestInfo = createTableString(TBL_HARVESTINFO, ALL_KEY_HARVESTINFO, ALL_KEY_HARVESTEDINFO_DATAPROP);
+		_db.execSQL(createHarvestInfo);
 	}
 
-
-	public void transferFarmInfo() {
-
-		GpsDB_Query db = new GpsDB_Query(context);
-		db.open();
-		String tmptable = TBLFARMiNFO+TEMP;
-		String newtable = TBLFARMiNFO;
-
-		String[] newTBLcolumnNames = ALL_KEY_fARM;
-		String[] newTBLcolumnNames_DP = ALL_KEY_FARM_DATAPROP;
-
-		final String sql = GpsSQLiteHelper.createTableString(tmptable, db.getcolumnNames(newtable), db.getcolumnDataTypes(newtable));
-		Log.d("UPGRADE", "create temp table");
-		db.createTableExute(sql);
-
-		Log.d("UPGRADE", "transfer old table to new table");
-		db.trasferOldTableToTEMPTable(newtable, tmptable);
-
-		Log.d("UPGRADE", "DROP OLD TABLE");
-		db.dropTable(newtable);
-
-		final String sqlNew = GpsSQLiteHelper.createTableString(newtable, newTBLcolumnNames, newTBLcolumnNames_DP);
-		Log.d("UPGRADE", "Create new table");
-		db.createTableExute(sqlNew);
-
-		Log.d("UPGRADE", "Tranfer temp table to new table");
-		db.trasferTEMPTableToNewTable(tmptable, newtable, db.getcolumnNames(tmptable));
-
-		Log.d("UPGRADE", "DROP OLD TABLE");
-		db.dropTable(tmptable);
-
-		Log.d("UPGRADE", "SUCESS FARM INFO");
-	}
-
-
-	public void transferPondInfo() {
-
-		GpsDB_Query db = new GpsDB_Query(context);
-		db.open();
-		String tmptable = TBLPOND+TEMP;
-		String newtable = TBLPOND;
-
-		String[] newTBLcolumnNames = ALL_KEY_POND;
-		String[] newTBLcolumnNames_DP = ALL_KEY_POND_DATAPROP;
-
-		final String sql = GpsSQLiteHelper.createTableString(tmptable, db.getcolumnNames(newtable), db.getcolumnDataTypes(newtable));
-		Log.d("UPGRADE", "create temp table");
-		db.createTableExute(sql);
-
-		Log.d("UPGRADE", "transfer old table to new table");
-		db.trasferOldTableToTEMPTable(newtable, tmptable);
-
-		Log.d("UPGRADE", "DROP OLD TABLE");
-		db.dropTable(newtable);
-
-		final String sqlNew = GpsSQLiteHelper.createTableString(newtable, newTBLcolumnNames, newTBLcolumnNames_DP);
-		Log.d("UPGRADE", "Create new table");
-		db.createTableExute(sqlNew);
-
-		Log.d("UPGRADE", "Tranfer temp table to new table");
-		db.trasferTEMPTableToNewTable(tmptable, newtable, db.getcolumnNames(tmptable));
-
-		Log.d("UPGRADE", "DROP OLD TABLE");
-		db.dropTable(tmptable);
-
-		Log.d("UPGRADE", "SUCESS POND INFO");
-	}
-
-
-	public void transferPond_WeeklyUpdateInfo() {
-
-		GpsDB_Query db = new GpsDB_Query(context);
-		db.open();
-		String tmptable = TBLPOND_WeeklyUpdates+TEMP;
-		String newtable = TBLPOND_WeeklyUpdates;
-
-		String[] newTBLcolumnNames = ALL_KEY_WEEKLY_UPDATES;
-		String[] newTBLcolumnNames_DP = ALL_KEY_WEEKLY_UPDATES_DATAPROP;
-
-		final String sql = GpsSQLiteHelper.createTableString(tmptable, db.getcolumnNames(newtable), db.getcolumnDataTypes(newtable));
-		Log.d("UPGRADE", "create temp table");
-		db.createTableExute(sql);
-
-		Log.d("UPGRADE", "transfer old table to new table");
-		db.trasferOldTableToTEMPTable(newtable, tmptable);
-
-		Log.d("UPGRADE", "DROP OLD TABLE");
-		db.dropTable(newtable);
-
-		final String sqlNew = GpsSQLiteHelper.createTableString(newtable, newTBLcolumnNames, newTBLcolumnNames_DP);
-		Log.d("UPGRADE", "Create new table");
-		db.createTableExute(sqlNew);
-
-		Log.d("UPGRADE", "Tranfer temp table to new table");
-		db.trasferTEMPTableToNewTable(tmptable, newtable, db.getcolumnNames(tmptable));
-
-		Log.d("UPGRADE", "DROP OLD TABLE");
-		db.dropTable(tmptable);
-
-		Log.d("UPGRADE", "SUCESS POND INFO");
-	}
-
-
-	public void transferUserInfo() {
-
-		GpsDB_Query db = new GpsDB_Query(context);
-		db.open();
-		String tmptable = TBLUSERS+TEMP;
-		String newtable = TBLUSERS;
-
-		String[] newTBLcolumnNames = ALL_KEY_USERS;
-		String[] newTBLcolumnNames_DP = ALL_KEY_USERS_DATAPROP;
-
-		final String sql = GpsSQLiteHelper.createTableString(tmptable, db.getcolumnNames(newtable), db.getcolumnDataTypes(newtable));
-		Log.d("UPGRADE", "create temp table");
-		db.createTableExute(sql);
-
-		Log.d("UPGRADE", "transfer old table to new table");
-		db.trasferOldTableToTEMPTable(newtable, tmptable);
-
-		Log.d("UPGRADE", "DROP OLD TABLE");
-		db.dropTable(newtable);
-
-		final String sqlNew = GpsSQLiteHelper.createTableString(newtable, newTBLcolumnNames, newTBLcolumnNames_DP);
-		Log.d("UPGRADE", "Create new table");
-		db.createTableExute(sqlNew);
-
-		Log.d("UPGRADE", "Tranfer temp table to new table");
-		db.trasferTEMPTableToNewTable(tmptable, newtable, db.getcolumnNames(tmptable));
-
-		Log.d("UPGRADE", "DROP OLD TABLE");
-		db.dropTable(tmptable);
-
-		Log.d("UPGRADE", "SUCESS POND INFO");
-	}
 
 }

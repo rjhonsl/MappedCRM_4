@@ -486,9 +486,11 @@ public class Activity_LoginScreen extends Activity{
     @Override
     protected void onResume() {
         super.onResume();
+        db.open();
         Helper.isLocationAvailablePrompt(Activity_LoginScreen.this, Activity_LoginScreen.this);
         fusedLocation.connectToApiClient();
-        db.open();
+        Log.d("ACTIVITY", "ACTIVITY_LOGIN");
+
         checkVersionUpdates();
 
         //creates new folder
@@ -497,17 +499,11 @@ public class Activity_LoginScreen extends Activity{
         boolean check = Helper.random.checkSD(activity);
         if (check) {
             if (!folder.exists()) {
-                success = folder.mkdirs();
-            }
-            else
-            {
-                Log.d("mkDirs", "exist");
+                success = folder.mkdirs(); } else {  Log.d("mkDirs", "exist");
             }
 
             if (success) {
-                Log.d("mkDirs", "SUCCESS");
-            } else {
-                Log.d("mkDirs", "FAIL");
+                Log.d("mkDirs", "SUCCESS"); } else { Log.d("mkDirs", "FAIL");
             }
         }
 

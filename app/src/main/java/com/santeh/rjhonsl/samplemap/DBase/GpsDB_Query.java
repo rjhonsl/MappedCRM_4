@@ -1028,6 +1028,7 @@ public class GpsDB_Query {
 
 	public int getTableCount(String tableName) {
 
+		open();
 		String query = "SELECT * FROM "+tableName+";";
 		String[] params = new String[] {};
 		Cursor cur = db.rawQuery(query, params);
@@ -1125,7 +1126,6 @@ public class GpsDB_Query {
 			}
 		}
 		Log.d("UPGRADE", "afterclose create temp table");
-		close();
 		return colnames;
 	}
 
@@ -1417,7 +1417,10 @@ public class GpsDB_Query {
 
 	public void delete_ALL_ITEM_ON_TABLE(String TABLE_NAME) {
 		if (getTableCount(TABLE_NAME) > 0) {
+			Log.d("RESTORE TABLE SERVER", TABLE_NAME + " delete all items");
 			db.execSQL("delete from " + TABLE_NAME);
+		}else{
+			Log.d("RESTORE TABLE SERVER", TABLE_NAME + " no items");
 		}
 	}
 

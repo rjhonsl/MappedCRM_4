@@ -1,12 +1,3 @@
 <?xml version="1.0" encoding="utf-8"?>
-<items version="2" >
+<items version="2" />
 
-    <item
-        jar="C:\Android Studio Projects\SampleMap_withTextBackCoordinates\SampleMap\app\build\intermediates\exploded-aar\com.github.mrengineer13\snackbar\1.2.0\jars\classes.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="cc35903814b2bf137fa6f1df823ed51cdce74977">
-        <dex dex="C:\Android Studio Projects\SampleMap_withTextBackCoordinates\SampleMap\app\build\intermediates\pre-dexed\debug\classes-cf6f557c8f517f723f29231b9ba8989b932264ff.jar" />
-    </item>
-
-</items>
