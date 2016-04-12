@@ -10,7 +10,7 @@ public class GpsSQLiteHelper extends SQLiteOpenHelper {
 	private static final String LOGTAG = "DB_GPS";
 	private static final String DATABASE_NAME = "local.db";
 	//each time you change data structure, you must increment this by 1
-	private static final int DATABASE_VERSION = 25;
+	private static final int DATABASE_VERSION = 26;
 	Context context;
 
 
@@ -227,9 +227,19 @@ public class GpsSQLiteHelper extends SQLiteOpenHelper {
 	public static final String[] ALL_KEY_POND_QH = new String[]{
 			CL_P_QH_ID, CL_P_QH_QUANTITY, CL_P_QH_MATHOP, CL_P_QH_FROM, CL_P_QH_TO, CL_P_QH_TRANSDATE
 	};
-	public static final String[] ALL_KEY_POND_QH_DATAPROP = new String[]{
-			INTEGER +" "+PRIMARY_AUTOINCRE, INTEGER, TEXT, TEXT, TEXT, TEXT
-	};
+	public static final String[] ALL_KEY_POND_QH_DATAPROP = new String[]{INTEGER +" "+PRIMARY_AUTOINCRE, INTEGER, TEXT, TEXT, TEXT, TEXT};
+
+
+	public static final String TBL_Pond_FQ 			= "TBL_P_FINALQUANTITY"; //TBLFinalQuantity
+	public static final String CL_P_FQuantity_ID 			= "PFQ_ID";
+	public static final String CL_P_FQuantity_HandlerID 	= "PFQ_HANDLER_ID";
+	public static final String CL_P_FQuantity_QUANTITY 		= "PFQ_QUANTITY";
+	public static final String CL_P_FQuantity_DATE 			= "PFQ_DATE";
+															//BELOW EXIST ONLY IN WEB DB
+	public static final String CL_P_FQuantity_DATEUPLOADED 	= "PFQ_DATEUPLOADED";
+	public static final String CL_P_FQuantity_LOCALID 		= "PFQ_LOCALID";
+	public static final String[] ALL_KEY_POND_FQ = new String[]{ CL_P_FQuantity_ID, CL_P_FQuantity_HandlerID, CL_P_FQuantity_QUANTITY, CL_P_FQuantity_DATE };
+	public static final String[] ALL_KEY_POND_FQ_DATAPROP = new String[]{INTEGER +" "+PRIMARY_AUTOINCRE, INTEGER, INTEGER, TEXT};
 
 	//////////////////////////////////////////////////////////////////
 	///////////// STRINGS FOR CREATING AND UPDATING TABLE ////////////
@@ -412,16 +422,14 @@ public class GpsSQLiteHelper extends SQLiteOpenHelper {
 		db.execSQL(TBL_CREATE_WEEKLYUPDATES);
 		db.execSQL(TBL_CREATE_USERS);
 		db.execSQL(TBL_CREATE_USERS_ACTIVITY);
-		createHarvestintoTable(db);
+		createHarvestinFoTable(db);
 		createPondQHTable(db);
+		createPondFQTable(db);
 
 		Log.d(LOGTAG, "tables has been created: " + String.valueOf(db));
 	}
 
-	private void createPondQHTable(SQLiteDatabase db) {
-		String createPondQH = createTableString(TBL_Pond_QH, ALL_KEY_POND_QH, ALL_KEY_POND_QH_DATAPROP);
-		db.execSQL(createPondQH);
-	}
+
 
 	@Override
 	//on update version renew tb
@@ -446,9 +454,9 @@ public class GpsSQLiteHelper extends SQLiteOpenHelper {
 
 		if (oldVersion < 22) {
 			// Version 22 Create Harvest Info
-			createHarvestintoTable(_db);
+			createHarvestinFoTable(_db);
 		}
-//
+
 //		if (oldVersion < 23) {
 //			_db.execSQL("ALTER TABLE " + TBL_HARVESTINFO + " ADD COLUMN "
 //					+ CL_HRV_DATE_INSERTED + " TEXT");
@@ -464,12 +472,25 @@ public class GpsSQLiteHelper extends SQLiteOpenHelper {
 			createPondQHTable(_db);
 		}
 
+		if (oldVersion < 26){
+			createPondFQTable(_db);
+		}
+
 	}
 
-	private void createHarvestintoTable(SQLiteDatabase _db) {
+	private void createHarvestinFoTable(SQLiteDatabase _db) {
 		String createHarvestInfo = createTableString(TBL_HARVESTINFO, ALL_KEY_HARVESTINFO, ALL_KEY_HARVESTEDINFO_DATAPROP);
 		_db.execSQL(createHarvestInfo);
 	}
 
+	private void createPondQHTable(SQLiteDatabase db) {
+		String createPondQH = createTableString(TBL_Pond_QH, ALL_KEY_POND_QH, ALL_KEY_POND_QH_DATAPROP);
+		db.execSQL(createPondQH);
+	}
+
+	private void createPondFQTable(SQLiteDatabase db) {
+		String createPondFinalQuantity = createTableString(TBL_Pond_FQ, ALL_KEY_POND_FQ, ALL_KEY_POND_FQ_DATAPROP);
+		db.execSQL(createPondFinalQuantity);
+	}
 
 }

@@ -811,7 +811,9 @@ public class Helper {
             tv.setTextColor(context.getResources().getColor(R.color.gray_100));
             tv.setMaxLines(5);
             snackbar.show();
+
         }else{
+
             LayoutInflater inflater = context.getLayoutInflater();
             View layout = inflater.inflate(R.layout.toast,
                     (ViewGroup) context.findViewById(R.id.toast_layout_root));
@@ -827,6 +829,7 @@ public class Helper {
             toast.setDuration(Toast.LENGTH_LONG);
             toast.setView(layout);
             toast.show();
+
         }
     }
 

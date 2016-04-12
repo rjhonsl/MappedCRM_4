@@ -3,18 +3,18 @@
     <item android:state_pressed="true"> <!-- if pressed -->
         <shape android:shape="rectangle">
             <gradient
-                android:startColor="@color/material_deep_teal_200"
-                android:endColor="@color/material_deep_teal_200"
+                android:startColor="@color/gray_400"
+                android:endColor="@color/gray_200"
                 android:type="linear"
-                android:angle="315">
+                android:angle="90">
             </gradient>
         </shape>
     </item>
     <item android:state_enabled="false"> <!-- if pressed -->
         <shape android:shape="rectangle">
             <gradient
-                android:startColor="#c8dad4"
-                android:endColor="#c8dad4"
+                android:startColor="@color/gray_300"
+                android:endColor="@color/gray_300"
                 android:type="linear"
                 android:angle="315">
             </gradient>

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
@@ -38,6 +39,7 @@ public class Activity_EditPonds extends FragmentActivity  implements DatePickerD
     Activity activity;
     Context context;
     ImageButton btn_back;
+    Button btnQuantityTransfer;
 
     FusedLocation fusedLocation;
     public static final String DATEPICKER_TAG = "datepicker";
@@ -61,6 +63,7 @@ public class Activity_EditPonds extends FragmentActivity  implements DatePickerD
 
         fusedLocation = new FusedLocation(context, activity);
         fusedLocation.connectToApiClient();
+        Helper.hideKeyboardOnLoad(activity);
 
         if (getIntent() != null){
             if (getIntent().hasExtra("pondid")){ pondid = getIntent().getIntExtra("pondid",0); }
@@ -90,14 +93,51 @@ public class Activity_EditPonds extends FragmentActivity  implements DatePickerD
         edtArea = (EditText) findViewById(R.id.edtArea);
         edtCultureSystem = (EditText) findViewById(R.id.edtCultureSystem);
         edtRemarks = (EditText) findViewById(R.id.edtRemarks);
-
         Button btnSave = (Button) findViewById(R.id.btnSave);
-        btn_back = (ImageButton) findViewById(R.id.btn_title_left);
+        btnQuantityTransfer = (Button) findViewById(R.id.btnPondQuantityTransfer);
 
+        if (isposted == 1) {
+            edtSpecie.setEnabled(false);
+            edtPondNumber.setEnabled(false);
+            edtABW.setEnabled(false);
+            edtSurvivalRate.setEnabled(false);
+            edtDateStocked.setEnabled(false);
+            edtQuantity.setEnabled(false);
+            edtArea.setEnabled(false);
+            edtCultureSystem.setEnabled(false);
+            edtRemarks.setEnabled(false);
+
+            btnSave.setEnabled(false);
+        }else{
+            edtSpecie.setEnabled(true);
+            edtPondNumber.setEnabled(true);
+            edtABW.setEnabled(true);
+            edtSurvivalRate.setEnabled(true);
+            edtDateStocked.setEnabled(true);
+            edtQuantity.setEnabled(true);
+            edtArea.setEnabled(true);
+            edtCultureSystem.setEnabled(true);
+            edtRemarks.setEnabled(true);
+
+            btnSave.setEnabled(true);
+        }
+
+
+        btn_back = (ImageButton) findViewById(R.id.btn_title_left);
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+        btnQuantityTransfer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(activity, Activity_PondQuanityTransfer.class);
+                intent.putExtra("quantity", edtQuantity.getText().toString());
+                intent.putExtra("pondid", pondid);
+                intent.putExtra("id", id);
+                startActivity(intent);
             }
         });
 

@@ -81,6 +81,10 @@
                   android:label="Edit Customer Info">
         </activity>
 
+        <activity android:name=".Main.Activity_PondQuanityTransfer"
+                  android:label="Quantity Transfer">
+        </activity>
+
         <activity android:name=".Main.Activity_ManagePonds"
                   android:theme="@style/Theme.AppCompat.Light.NoActionBar"
                   android:label="Pond Information">

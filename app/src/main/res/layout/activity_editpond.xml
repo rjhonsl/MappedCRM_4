@@ -247,19 +247,39 @@
             </LinearLayout>
 
 
-            <LinearLayout android:layout_width="fill_parent"
+            <LinearLayout android:layout_width="match_parent"
                           android:layout_height="wrap_content"
                           android:orientation="horizontal"
-                          android:gravity="right"
+                          android:gravity="center"
                           android:padding="5dp">
 
                 <Button android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/btnSave"
-                        android:textColor="@color/deepteal_500"
+                        android:id="@+id/btnPondQuantityTransfer"
+                        android:paddingLeft="25dp"
+                        android:paddingRight="25dp"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:drawableLeft="@drawable/ic_swap_horiz_black_24dp"
+                        android:textColor="@color/gray_700"
                         android:background="@drawable/bg_material_transparent"
-                        android:text="SAVE"
+                        android:text="  Transfer Quantity"
+                />
+
+                <Button android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/btnSave"
+                        android:paddingLeft="25dp"
+                        android:paddingRight="25dp"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:drawableLeft="@drawable/ic_save_black_24dp"
+                        android:textColor="@color/gray_700"
+                        android:background="@drawable/bg_material_transparent"
+                        android:text="  SAVE"
                     />
+
+
             </LinearLayout>
 
         </LinearLayout>
