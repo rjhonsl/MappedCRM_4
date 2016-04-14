@@ -3,10 +3,10 @@
     <item android:state_pressed="true"> <!-- if pressed -->
         <shape android:shape="rectangle">
             <gradient
-                android:startColor="@color/gray_300"
-                android:endColor="@color/gray_300"
+                android:startColor="#AAEEEEEE"
+                android:endColor="#AABDBDBD"
                 android:type="linear"
-                android:angle="90">
+                android:angle="180">
             </gradient>
         </shape>
     </item>

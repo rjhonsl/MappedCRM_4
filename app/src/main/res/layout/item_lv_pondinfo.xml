@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:padding="9dp"
+              android:id="@+id/ll_item_weekLyReportWrapper"
+              android:orientation="vertical"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content">
+
+    <LinearLayout android:layout_width="fill_parent"
+                  android:layout_height="wrap_content"
+                  android:orientation="horizontal"
+                  android:gravity="center"
+                  android:layout_gravity="center"
+
+        >
+
+        <LinearLayout android:layout_width="65dp"
+                      android:id="@+id/weeknoHOlder"
+                      android:background="@drawable/bg_red_box_curvesides"
+                      android:paddingBottom="1dp"
+                      android:layout_marginTop="5dp"
+                      android:layout_marginBottom="7dp"
+                      android:layout_marginLeft="4dp"
+                      android:layout_marginRight="4dp"
+                      android:layout_height="65dp"
+                      android:orientation="vertical"
+                      android:gravity="center"
+            >
+
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:textSize="12sp"
+                      android:paddingBottom="2dp"
+                      android:textColor="#FFFFFF"
+                      android:text="Case #"
+                />
+
+
+            <TextView android:layout_width="wrap_content"
+                      android:textColor="#FFFFFF"
+                      android:layout_height="wrap_content"
+                      android:id="@+id/item_lv_casenumber"
+                      android:textSize="34sp"
+                      android:text="28"
+                      android:gravity="center"/>
+
+
+        </LinearLayout>
+
+
+        <LinearLayout android:layout_width="wrap_content"
+                      android:padding="5dp"
+                      android:layout_weight="1"
+                      android:layout_marginLeft="2dp"
+                      android:layout_height="wrap_content"
+                      android:layout_gravity="center"
+                      android:orientation="vertical">
+
+
+            <TextView
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:textColor="#3a3a3a"
+                android:text="QTY: 1200"
+                android:id="@+id/item_lv_quantity"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"/>
+
+
+            <TextView
+                android:id="@+id/item_lv_specie"
+                android:text="Species: Tilapia"
+                android:textSize="14sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+
+
+            <TextView
+                android:id="@+id/item_lv_area"
+                android:text="Area: 4000m²"
+                android:textSize="14sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+
+
+
+
+</LinearLayout>

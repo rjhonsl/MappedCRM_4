@@ -70,8 +70,10 @@
                   android:id="@+id/ll_nopond"
         >
 
-        <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
+        <ImageView android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
                    android:src="@drawable/fish"/>
+
         <TextView android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   android:text="No Harvest Yet."

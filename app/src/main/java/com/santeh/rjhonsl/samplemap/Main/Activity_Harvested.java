@@ -97,6 +97,7 @@ public class Activity_Harvested extends FragmentActivity {
                         if (position2 == 0) {
                             d.hide();
                             Log.d("Harvested", "position 2 - before if");
+
                             if (harvestinfoList.get(position).getHrv_isPosted().equalsIgnoreCase("1")) {
                                 Helper.createCustomThemedDialogOKOnly(activity, "Warning", "This harvest information was already uploaded.", "OK");
                             } else {

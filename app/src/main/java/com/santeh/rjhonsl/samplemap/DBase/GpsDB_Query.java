@@ -234,6 +234,7 @@ public class GpsDB_Query {
 		values.put(GpsSQLiteHelper.CL_HRV_PRICEPERKILO, priceperkilo);
 		values.put(GpsSQLiteHelper.CL_HRV_TOTALHARVEST, totalharvest);
 		values.put(GpsSQLiteHelper.CL_HRV_DATE_INSERTED, dateinserted);
+		values.put(GpsSQLiteHelper.CL_HRV_ISPOSTED, 1);
 
 		return  db.insert(GpsSQLiteHelper.TBL_HARVESTINFO, null, values);
 	}
@@ -1168,6 +1169,38 @@ public class GpsDB_Query {
 		}
 
 		return cur.getColumnCount()+" ";
+
+	}
+
+
+	public Cursor getPondOfFarm(String pondindex){
+
+		String query = "SELECT * from tblpond where customerid in  (select customerid from tblpond where id =+'"+pondindex+"')";
+//				"SELECT * from "+GpsSQLiteHelper.TBLPOND+" where "+GpsSQLiteHelper.CL_POND_customerId+
+//				" IN (select "+GpsSQLiteHelper.CL_POND_customerId+" from tblPond where "+GpsSQLiteHelper.CL_POND_INDEX+"='"+pondindex+"')";
+		String[] params = new String[] {};
+		Cursor cur = db.rawQuery(query, params);
+		return cur;
+
+//		if (cur.getCount() > 0){
+//			while (cur.moveToNext()) {
+//				CustInfoObject custInfoObject = new CustInfoObject();
+//				custInfoObject.setId(cur.getInt(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_INDEX)));
+//				custInfoObject.setPondID(cur.getInt(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_PID)));
+//				custInfoObject.setSpecie(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_specie)));
+//				custInfoObject.setSizeofStock(cur.getInt(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_sizeofStock)));
+//				custInfoObject.setSurvivalrate_per_pond(cur.getInt(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_survivalrate)) + "");
+//				custInfoObject.setDateStocked(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_dateStocked)));
+//				custInfoObject.setQuantity(cur.getInt(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_quantity)));
+//				custInfoObject.setArea(cur.getInt(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_area)));
+//				custInfoObject.setCulturesystem(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_culturesystem)));
+//				custInfoObject.setRemarks(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_remarks)));
+//				custInfoObject.setCustomerID(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_customerId)));
+//				custInfoObject.setIsPosted(cur.getInt(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_isPosted)));
+//				custInfoObject.setCurrentABW(cur.getInt(cur.getColumnIndex(GpsSQLiteHelper.CL_WEEKLY_UPDATES_CURRENT_ABW)));
+//				pondList.add(custInfoObject);
+//			}
+//		}
 
 	}
 

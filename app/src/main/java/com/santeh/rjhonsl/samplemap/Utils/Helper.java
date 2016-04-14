@@ -876,6 +876,7 @@ public class Helper {
 
 
 
+
     public static Dialog createCustomDialogYesNO(Activity activity, int dialogResID, String prompt, String title, String strButton1, String strButton2){
         final Dialog d = new Dialog(activity);//
         d.requestWindowFeature(Window.FEATURE_NO_TITLE);

@@ -15,7 +15,7 @@
 
         <LinearLayout android:layout_width="65dp"
                       android:id="@+id/weeknoHOlder"
-                      android:background="@drawable/bg_darkteal_box_curvebottom"
+                      android:background="@drawable/bg_red_box_curvesides"
                       android:paddingBottom="1dp"
                       android:layout_marginTop="5dp"
                       android:layout_marginBottom="7dp"

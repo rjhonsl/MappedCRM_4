@@ -134,9 +134,10 @@ public class Activity_EditPonds extends FragmentActivity  implements DatePickerD
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(activity, Activity_PondQuanityTransfer.class);
-                intent.putExtra("quantity", edtQuantity.getText().toString());
+                intent.putExtra("quantity", quantity+"");
                 intent.putExtra("pondid", pondid);
                 intent.putExtra("id", id);
+                intent.putExtra("species", specie);
                 startActivity(intent);
             }
         });
@@ -295,7 +296,7 @@ public class Activity_EditPonds extends FragmentActivity  implements DatePickerD
                                         @Override
                                         public void onClick(View v) {
                                             x.hide();
-                                            updateCustomerInfoDB();
+                                            pondInfoDB();
                                         }
                                     });
                                 }
@@ -307,7 +308,7 @@ public class Activity_EditPonds extends FragmentActivity  implements DatePickerD
         });
     }
 
-    public void updateCustomerInfoDB() {
+    public void pondInfoDB() {
         Log.d("DB", "before query "+id);
         int res = db.updatePondInfo(id+"", edtPondNumber.getText().toString(), edtSpecie.getText().toString(), edtABW.getText().toString(),
                 edtSurvivalRate.getText().toString(), edtDateStocked.getText().toString(), edtQuantity.getEditableText().toString(), edtArea.getText().toString(),

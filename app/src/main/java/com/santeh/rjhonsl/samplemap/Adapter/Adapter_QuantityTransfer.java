@@ -15,7 +15,7 @@ import com.santeh.rjhonsl.samplemap.R;
 
 import java.util.List;
 
-public class Adapter_Growouts_PondWeekLyConsumption extends ArrayAdapter<CustInfoObject> {
+public class Adapter_QuantityTransfer extends ArrayAdapter<CustInfoObject> {
 
 	Context context;
 	LayoutInflater inflater;
@@ -25,7 +25,7 @@ public class Adapter_Growouts_PondWeekLyConsumption extends ArrayAdapter<CustInf
 	private SparseBooleanArray mSelectedItemsIds;
 
 
-	public Adapter_Growouts_PondWeekLyConsumption(Context context, int resourceId, List<CustInfoObject> items) {
+	public Adapter_QuantityTransfer(Context context, int resourceId, List<CustInfoObject> items) {
 		super(context, resourceId, items);
 		mSelectedItemsIds = new SparseBooleanArray();
 		this.context = context;
@@ -38,7 +38,7 @@ public class Adapter_Growouts_PondWeekLyConsumption extends ArrayAdapter<CustInf
 	}
 
 	private class ViewHolder {
-		TextView txtweekno, txtfeedtype, txtabw, txtrecommended, txtremarks;
+		TextView txtcasenumber, txtQuantity, txtSpecies, txtArea;
 		LinearLayout weeknoHOlder, wrapper;
 	}
 
@@ -51,17 +51,15 @@ public class Adapter_Growouts_PondWeekLyConsumption extends ArrayAdapter<CustInf
 			Log.d(tag, "if null");
 			holder = new ViewHolder();
 
-			view = inflater.inflate(R.layout.item_lv_weeklypondsummary, null);
+			view = inflater.inflate(R.layout.item_lv_pondinfo, null);
 
-			holder.txtweekno = (TextView) view.findViewById(R.id.itemlv_weeklyreport_pondsummary_weeknum);
-			holder.txtfeedtype = (TextView) view.findViewById(R.id.itemlv_weeklyreport_pondsummary_feedtype);
-			holder.txtabw = (TextView) view.findViewById(R.id.itemlv_weeklyreport_pondsummary_abw);
-			holder.txtrecommended = (TextView) view.findViewById(R.id.itemlv_weeklyreport_pondsummary_recommended);
-			holder.txtremarks = (TextView) view.findViewById(R.id.itemlv_weeklyreport_pondsummary_remarks);
+			holder.txtcasenumber = (TextView) view.findViewById(R.id.item_lv_casenumber);
+			holder.txtQuantity = (TextView) view.findViewById(R.id.item_lv_quantity);
+			holder.txtSpecies = (TextView) view.findViewById(R.id.item_lv_specie);
+			holder.txtArea = (TextView) view.findViewById(R.id.item_lv_area);
 
 			holder.wrapper = (LinearLayout) view.findViewById(R.id.ll_item_weekLyReportWrapper);
 
-//			holder.chkisVisited = (CheckBox) view.findViewById(R.id.chk_weeklyreport_pondsummary_isVisited);
 
 			holder.weeknoHOlder = (LinearLayout) view.findViewById(R.id.weeknoHOlder);
 
@@ -73,19 +71,21 @@ public class Adapter_Growouts_PondWeekLyConsumption extends ArrayAdapter<CustInf
 			holder = (ViewHolder) view.getTag();
 		}
 
-		holder.txtremarks.setText("Remarks: " + objArrayList.get(positions).getRemarks()+"");
-		holder.txtabw.setText("ABW: " + objArrayList.get(positions).getSizeofStock() + "");
-		holder.txtweekno.setText("" + (objArrayList.size() - positions)); //objArrayList.get(positions).getWeek()+""
-		holder.txtrecommended.setVisibility(View.GONE);
-		String feedtype = "";
-		if (objArrayList.get(positions).getCurrentFeedType() == "" || objArrayList.get(positions).getCurrentFeedType().isEmpty() || objArrayList.get(positions).getCurrentFeedType() == null){
-			feedtype = "N/A";
-		}else{
-			feedtype = objArrayList.get(positions).getCurrentFeedType();
-		}
-		holder.txtrecommended.setText("Recommended: " + objArrayList.get(positions).getRecommendedConsumption()+"kg");
-		holder.txtfeedtype.setText("Feed Type: " + feedtype +"");
+		holder.txtArea.setText("Area: " + objArrayList.get(positions).getArea()+"");
+		holder.txtSpecies.setText("Specie: " + objArrayList.get(positions).getSpecie() + "");
+		holder.txtcasenumber.setText("" + objArrayList.get(position).getPondID());
+		holder.txtQuantity.setText("Qty:" + objArrayList.get(position).getQuantity());
 
+//		holder.txtrecommended.setVisibility(View.GONE);
+//		String feedtype = "";
+//		if (objArrayList.get(positions).getCurrentFeedType() == "" || objArrayList.get(positions).getCurrentFeedType().isEmpty() || objArrayList.get(positions).getCurrentFeedType() == null){
+//			feedtype = "N/A";
+//		}else{
+//			feedtype = objArrayList.get(positions).getCurrentFeedType();
+//		}
+//		holder.txtrecommended.setText("Recommended: " + objArrayList.get(positions).getRecommendedConsumption()+"kg");
+//		holder.txtQuantity.setText("Feed Type: " + feedtype +"");
+		
 		return view;
 
 	}
