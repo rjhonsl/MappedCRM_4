@@ -1175,7 +1175,7 @@ public class GpsDB_Query {
 
 	public Cursor getPondOfFarm(String pondindex){
 
-		String query = "SELECT * from tblpond where customerid in  (select customerid from tblpond where id =+'"+pondindex+"')";
+		String query = "SELECT * from tblpond where customerid in  (select customerid from tblpond where id =+'"+pondindex+"') AND id != '"+pondindex+"'";
 //				"SELECT * from "+GpsSQLiteHelper.TBLPOND+" where "+GpsSQLiteHelper.CL_POND_customerId+
 //				" IN (select "+GpsSQLiteHelper.CL_POND_customerId+" from tblPond where "+GpsSQLiteHelper.CL_POND_INDEX+"='"+pondindex+"')";
 		String[] params = new String[] {};

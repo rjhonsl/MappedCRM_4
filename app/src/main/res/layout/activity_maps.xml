@@ -26,6 +26,23 @@
         android:animateLayoutChanges="true"
         >
 
+
+
+        <ImageButton
+            android:padding="12dp"
+            android:layout_marginRight="11dp"
+            android:layout_marginTop="20dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:translationX="-15dp"
+            android:background="@drawable/bg_white_box_shadowed"
+            android:src="@drawable/ic_menu_black_24dp"
+            android:id="@+id/btnBurgermenu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+        />
+
+
         <TextView
             android:elevation="3dp"
             android:layout_centerHorizontal="true"
@@ -254,6 +271,8 @@
             android:elevation="3dp"
             android:layout_height="120dp">
 
+
+
             <TextView
 
                 android:text="Current User"
@@ -374,6 +393,18 @@
                     android:textColor="#7d7e7e"
                     android:id="@+id/txt_Nav_CustomerUpdates"
                     android:padding="3dp"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"/>
+
+
+                <TextView
+                    android:text="      Fishbook"
+                    android:background="@drawable/bg_material_transparent_gradfromleft"
+                    android:textSize="16sp"
+                    android:enabled="true"
+                    android:id="@+id/txtFishbook"
+                    android:padding="13dp"
+                    android:drawableLeft="@drawable/ic_library_books_black_24dp"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"/>
 

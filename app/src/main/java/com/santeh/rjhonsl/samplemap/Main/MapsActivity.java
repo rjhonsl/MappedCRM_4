@@ -92,7 +92,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     LatLng curLatlng, lastlatlng;
 
-    TextView  tvBottomPopUp, txtViewTop, nav_fingerlings, nav_customerAddress, nav_sperms, nav_logout, nav_maptype, nav_displayAllMarkers, nav_settings, nav_growout,nav_usermonitoring, txtusername;
+    TextView  tvBottomPopUp,txtfishbook, txtViewTop, nav_fingerlings, nav_customerAddress, nav_sperms, nav_logout, nav_maptype, nav_displayAllMarkers, nav_settings, nav_growout,nav_usermonitoring, txtusername;
 
     String activeSelection;
     List<CustInfoObject> custInfoObjectList;
@@ -109,7 +109,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     int userlvl;
 
     String[] markerdetails;
-    ImageButton btnOwnerLocation, btnCasePond, btnFarmDetails, btnChangeLocation, btnDeleteMarker;
+    ImageButton btnOwnerLocation, btnCasePond, btnFarmDetails, btnChangeLocation, btnDeleteMarker, btnBurgermenu;
 
     ViewGroup hiddenPanel;
 
@@ -119,11 +119,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         setContentView(R.layout.activity_maps);
         activity = MapsActivity.this;
         context = MapsActivity.this;
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        getSupportActionBar().setHomeButtonEnabled(true);
+//        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
+//        getSupportActionBar().setDisplayShowHomeEnabled(true);
+//        getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         passedintent = getIntent();
         extrass = getIntent().getExtras();
         db = new GpsDB_Query(this);
@@ -158,6 +158,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         txtViewTop = (TextView) findViewById(R.id.txtTopTextView);
         nav_usermonitoring = (TextView) findViewById(R.id.txt_Nav_UserMonitoring);
         txtusername = (TextView) findViewById(R.id.username);
+        txtfishbook = (TextView) findViewById(R.id.txtFishbook);
 
 
         hiddenPanel = (ViewGroup)findViewById(R.id.ll_bottomedit);
@@ -166,6 +167,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         btnChangeLocation = (ImageButton) findViewById(R.id.btn_changeMarkerLocation);
         btnFarmDetails = (ImageButton) findViewById(R.id.btn_farminfo);
         btnDeleteMarker = (ImageButton) findViewById(R.id.btn_deleteMarker);
+        btnBurgermenu = (ImageButton) findViewById(R.id.btnBurgermenu);
 
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -180,8 +182,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         PD.setCancelable(false);
 
     }
-
-
 
 
 
@@ -289,6 +289,25 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
 
+        btnBurgermenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isDrawerOpen){
+                    closeDrawer();
+                }else{
+                    openDrawer();
+                }
+            }
+        });
+
+        txtfishbook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(activity, ActivityFB_Main.class);
+                startActivity(intent);
+
+            }
+        });
         btnCasePond.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -973,7 +992,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     private void openDrawer() {
-        drawerLayout.closeDrawer(Gravity.RIGHT);
+        drawerLayout.openDrawer(Gravity.LEFT);
     }
 
 
