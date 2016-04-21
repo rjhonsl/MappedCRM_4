@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "com.santeh.rjhonsl.samplemap"
-        minSdkVersion 16
+        minSdkVersion 19
         targetSdkVersion 22
 
         //latest version released 28
