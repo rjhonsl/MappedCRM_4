@@ -402,6 +402,7 @@ public class ActivityFB_Main extends AppCompatActivity {
                 public void onAnimationEnd(Animation animation) {
                     isBottomAnimating = false;
                     llbottomwrapper.setVisibility(View.GONE);
+                    //
                 }
 
                 @Override
