@@ -49,8 +49,8 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.santeh.rjhonsl.samplemap.APIs.MyVolleyAPI;
-import com.santeh.rjhonsl.samplemap.DBase.GpsDB_Query;
-import com.santeh.rjhonsl.samplemap.DBase.GpsSQLiteHelper;
+import com.santeh.rjhonsl.samplemap.DBase.GPSHelper;
+import com.santeh.rjhonsl.samplemap.DBase.GPSQuery;
 import com.santeh.rjhonsl.samplemap.Obj.CustInfoObject;
 import com.santeh.rjhonsl.samplemap.Obj.Var;
 import com.santeh.rjhonsl.samplemap.Parsers.CustAndPondParser;
@@ -105,7 +105,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     boolean isMarkerSelected = false;
     FusedLocation fusedLocation;
-    GpsDB_Query db;
+    GPSQuery db;
     int userlvl;
 
     String[] markerdetails;
@@ -126,7 +126,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 //        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         passedintent = getIntent();
         extrass = getIntent().getExtras();
-        db = new GpsDB_Query(this);
+        db = new GPSQuery(this);
         db.open();
 
         userlvl = Helper.variables.getGlobalVar_currentLevel(activity);
@@ -371,16 +371,16 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                                         hiddenPanel.setVisibility(View.VISIBLE);
                                         marker.showInfoWindow();
                                         db.updateOneRow(
-                                                GpsSQLiteHelper.TBLFARMiNFO,     //table name
-                                                GpsSQLiteHelper.CL_FARMINFO_LAT,  //column name
+                                                GPSHelper.TBLFARMiNFO,     //table name
+                                                GPSHelper.CL_FARMINFO_LAT,  //column name
                                                 marker.getPosition().latitude + "",       //value
-                                                GpsSQLiteHelper.CL_FarmInfo_ID + " = " + markerdetails[0] //condition;
+                                                GPSHelper.CL_FarmInfo_ID + " = " + markerdetails[0] //condition;
                                         );
                                         db.updateOneRow(
-                                                GpsSQLiteHelper.TBLFARMiNFO,     //table name
-                                                GpsSQLiteHelper.CL_FARMINFO_LNG,  //column name
+                                                GPSHelper.TBLFARMiNFO,     //table name
+                                                GPSHelper.CL_FARMINFO_LNG,  //column name
                                                 marker.getPosition().longitude+"",       //value
-                                                GpsSQLiteHelper.CL_FarmInfo_ID +" = "+ markerdetails[0] //condition;
+                                                GPSHelper.CL_FarmInfo_ID +" = "+ markerdetails[0] //condition;
                                         );
                                     }
                                 });
@@ -1175,63 +1175,63 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 while (cur.moveToNext()) {
                     CustInfoObject custInfoObject = new CustInfoObject();
                     /** FARM INFO **/
-                    custInfoObject.setCi_id(cur.getInt(cur.getColumnIndex(GpsSQLiteHelper.CL_FarmInfo_ID)));
-                    custInfoObject.setLatitude(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_FARMINFO_LAT)));
-                    custInfoObject.setLongtitude(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_FARMINFO_LNG)));
-                    custInfoObject.setContact_name(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_FARMINFO_CONTACT_NAME)));
-                    custInfoObject.setCompany(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_FARMINFO_COMPANY)));
-                    custInfoObject.setAddress(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_FARMINFO_FARM_ADDRESS)));
-                    custInfoObject.setFarmname(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_FARMINFO_FARM_NAME)));
+                    custInfoObject.setCi_id(cur.getInt(cur.getColumnIndex(GPSHelper.CL_FarmInfo_ID)));
+                    custInfoObject.setLatitude(cur.getString(cur.getColumnIndex(GPSHelper.CL_FARMINFO_LAT)));
+                    custInfoObject.setLongtitude(cur.getString(cur.getColumnIndex(GPSHelper.CL_FARMINFO_LNG)));
+                    custInfoObject.setContact_name(cur.getString(cur.getColumnIndex(GPSHelper.CL_FARMINFO_CONTACT_NAME)));
+                    custInfoObject.setCompany(cur.getString(cur.getColumnIndex(GPSHelper.CL_FARMINFO_COMPANY)));
+                    custInfoObject.setAddress(cur.getString(cur.getColumnIndex(GPSHelper.CL_FARMINFO_FARM_ADDRESS)));
+                    custInfoObject.setFarmname(cur.getString(cur.getColumnIndex(GPSHelper.CL_FARMINFO_FARM_NAME)));
                     custInfoObject.setCounter(0);
-                    custInfoObject.setFarmID(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_FARMINFO_FARM_ID)));
-                    custInfoObject.setContact_number(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_FARMINFO_C_NUMBER)));
-                    custInfoObject.setCultureType(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_FARMINFO_CULTYPE)));
-                    custInfoObject.setCulturelevel(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_FARMINFO_CULTlVL)));
-                    custInfoObject.setWaterType(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_FARMINFO_WATTYPE)));
-                    custInfoObject.setDateAddedToDB(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_FARMINFO_dateAdded)));
-                    custInfoObject.setIsPosted_farm(cur.getInt(cur.getColumnIndex(GpsSQLiteHelper.CL_FARMINFO_IsPosted)));
+                    custInfoObject.setFarmID(cur.getString(cur.getColumnIndex(GPSHelper.CL_FARMINFO_FARM_ID)));
+                    custInfoObject.setContact_number(cur.getString(cur.getColumnIndex(GPSHelper.CL_FARMINFO_C_NUMBER)));
+                    custInfoObject.setCultureType(cur.getString(cur.getColumnIndex(GPSHelper.CL_FARMINFO_CULTYPE)));
+                    custInfoObject.setCulturelevel(cur.getString(cur.getColumnIndex(GPSHelper.CL_FARMINFO_CULTlVL)));
+                    custInfoObject.setWaterType(cur.getString(cur.getColumnIndex(GPSHelper.CL_FARMINFO_WATTYPE)));
+                    custInfoObject.setDateAddedToDB(cur.getString(cur.getColumnIndex(GPSHelper.CL_FARMINFO_dateAdded)));
+                    custInfoObject.setIsPosted_farm(cur.getInt(cur.getColumnIndex(GPSHelper.CL_FARMINFO_IsPosted)));
                     custInfoObject.setAllSpecie(cur.getString(cur.getColumnIndex("allSpecie"))); //(obj.getString("allSpecie"));
 
                     /** POND INFO **/
-                    custInfoObject.setId(cur.getInt(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_INDEX)));
+                    custInfoObject.setId(cur.getInt(cur.getColumnIndex(GPSHelper.CL_POND_INDEX)));
                     custInfoObject.setTotalStockOfFarm(cur.getInt(cur.getColumnIndex("Totalquantity")));//(obj.getInt("Totalquantity"));
-                    custInfoObject.setSizeofStock(cur.getInt(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_sizeofStock)));
-                    custInfoObject.setPondID(cur.getInt(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_PID)));
-                    custInfoObject.setQuantity(cur.getInt(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_quantity)));
-                    custInfoObject.setArea(cur.getInt(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_area)));
-                    custInfoObject.setSpecie(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_specie)));
-                    custInfoObject.setDateStocked(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_dateStocked)));
-                    custInfoObject.setCulturesystem(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_culturesystem)));
-                    custInfoObject.setRemarks(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_remarks)));
-                    custInfoObject.setCustomerID(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_customerId)));
-                    custInfoObject.setSurvivalrate_per_pond(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_survivalrate)));
+                    custInfoObject.setSizeofStock(cur.getInt(cur.getColumnIndex(GPSHelper.CL_POND_sizeofStock)));
+                    custInfoObject.setPondID(cur.getInt(cur.getColumnIndex(GPSHelper.CL_POND_PID)));
+                    custInfoObject.setQuantity(cur.getInt(cur.getColumnIndex(GPSHelper.CL_POND_quantity)));
+                    custInfoObject.setArea(cur.getInt(cur.getColumnIndex(GPSHelper.CL_POND_area)));
+                    custInfoObject.setSpecie(cur.getString(cur.getColumnIndex(GPSHelper.CL_POND_specie)));
+                    custInfoObject.setDateStocked(cur.getString(cur.getColumnIndex(GPSHelper.CL_POND_dateStocked)));
+                    custInfoObject.setCulturesystem(cur.getString(cur.getColumnIndex(GPSHelper.CL_POND_culturesystem)));
+                    custInfoObject.setRemarks(cur.getString(cur.getColumnIndex(GPSHelper.CL_POND_remarks)));
+                    custInfoObject.setCustomerID(cur.getString(cur.getColumnIndex(GPSHelper.CL_POND_customerId)));
+                    custInfoObject.setSurvivalrate_per_pond(cur.getString(cur.getColumnIndex(GPSHelper.CL_POND_survivalrate)));
 
                     /** ADDRESS **/
-                    custInfoObject.setMainCustomerId(cur.getInt(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_ID))+"" );
-                    custInfoObject.setLastname(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_LastName)));
-                    custInfoObject.setFirstname(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_FirstName)));
-                    custInfoObject.setMiddleName(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_MiddleName)));
-                    custInfoObject.setCustfarmID(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_FarmId)));
-                    custInfoObject.setStreet(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_Street)));
-                    custInfoObject.setHouseNumber(cur.getInt(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_HouseNumber)));
-                    custInfoObject.setSubdivision(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_Subdivision)));
-                    custInfoObject.setBarangay(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_Barangay)));
-                    custInfoObject.setCity(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_City)));
-                    custInfoObject.setProvince(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_Province)));
-                    custInfoObject.setBirthday(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_CBirthday)));
-                    custInfoObject.setBirthPlace(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_CBirthPlace)));
-                    custInfoObject.setTelephone(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_Telephone)));
-                    custInfoObject.setCellphone(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_Cellphone)));
-                    custInfoObject.setCivilStatus(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_CivilStatus)));
-                    custInfoObject.setSpouse_lname(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_S_LastName)));
-                    custInfoObject.setSpouse_fname(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_S_FirstName)));
-                    custInfoObject.setSpouse_mname(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_S_MiddleName)));
-                    custInfoObject.setSpouse_birthday(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_S_BirthDay)));
-                    custInfoObject.setHouseStatus(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_HouseStatus)));
-                    custInfoObject.setCust_longtitude(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_Longitude)));
-                    custInfoObject.setCust_latitude(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_Latitude)));
-                    custInfoObject.setDateAddedToDB(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_DateAdded)));
-                    custInfoObject.setAddedBy(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_AddedBy)));
+                    custInfoObject.setMainCustomerId(cur.getInt(cur.getColumnIndex(GPSHelper.CL_MAINCUSTINFO_ID))+"" );
+                    custInfoObject.setLastname(cur.getString(cur.getColumnIndex(GPSHelper.CL_MAINCUSTINFO_LastName)));
+                    custInfoObject.setFirstname(cur.getString(cur.getColumnIndex(GPSHelper.CL_MAINCUSTINFO_FirstName)));
+                    custInfoObject.setMiddleName(cur.getString(cur.getColumnIndex(GPSHelper.CL_MAINCUSTINFO_MiddleName)));
+                    custInfoObject.setCustfarmID(cur.getString(cur.getColumnIndex(GPSHelper.CL_MAINCUSTINFO_FarmId)));
+                    custInfoObject.setStreet(cur.getString(cur.getColumnIndex(GPSHelper.CL_MAINCUSTINFO_Street)));
+                    custInfoObject.setHouseNumber(cur.getInt(cur.getColumnIndex(GPSHelper.CL_MAINCUSTINFO_HouseNumber)));
+                    custInfoObject.setSubdivision(cur.getString(cur.getColumnIndex(GPSHelper.CL_MAINCUSTINFO_Subdivision)));
+                    custInfoObject.setBarangay(cur.getString(cur.getColumnIndex(GPSHelper.CL_MAINCUSTINFO_Barangay)));
+                    custInfoObject.setCity(cur.getString(cur.getColumnIndex(GPSHelper.CL_MAINCUSTINFO_City)));
+                    custInfoObject.setProvince(cur.getString(cur.getColumnIndex(GPSHelper.CL_MAINCUSTINFO_Province)));
+                    custInfoObject.setBirthday(cur.getString(cur.getColumnIndex(GPSHelper.CL_MAINCUSTINFO_CBirthday)));
+                    custInfoObject.setBirthPlace(cur.getString(cur.getColumnIndex(GPSHelper.CL_MAINCUSTINFO_CBirthPlace)));
+                    custInfoObject.setTelephone(cur.getString(cur.getColumnIndex(GPSHelper.CL_MAINCUSTINFO_Telephone)));
+                    custInfoObject.setCellphone(cur.getString(cur.getColumnIndex(GPSHelper.CL_MAINCUSTINFO_Cellphone)));
+                    custInfoObject.setCivilStatus(cur.getString(cur.getColumnIndex(GPSHelper.CL_MAINCUSTINFO_CivilStatus)));
+                    custInfoObject.setSpouse_lname(cur.getString(cur.getColumnIndex(GPSHelper.CL_MAINCUSTINFO_S_LastName)));
+                    custInfoObject.setSpouse_fname(cur.getString(cur.getColumnIndex(GPSHelper.CL_MAINCUSTINFO_S_FirstName)));
+                    custInfoObject.setSpouse_mname(cur.getString(cur.getColumnIndex(GPSHelper.CL_MAINCUSTINFO_S_MiddleName)));
+                    custInfoObject.setSpouse_birthday(cur.getString(cur.getColumnIndex(GPSHelper.CL_MAINCUSTINFO_S_BirthDay)));
+                    custInfoObject.setHouseStatus(cur.getString(cur.getColumnIndex(GPSHelper.CL_MAINCUSTINFO_HouseStatus)));
+                    custInfoObject.setCust_longtitude(cur.getString(cur.getColumnIndex(GPSHelper.CL_MAINCUSTINFO_Longitude)));
+                    custInfoObject.setCust_latitude(cur.getString(cur.getColumnIndex(GPSHelper.CL_MAINCUSTINFO_Latitude)));
+                    custInfoObject.setDateAddedToDB(cur.getString(cur.getColumnIndex(GPSHelper.CL_MAINCUSTINFO_DateAdded)));
+                    custInfoObject.setAddedBy(cur.getString(cur.getColumnIndex(GPSHelper.CL_MAINCUSTINFO_AddedBy)));
 
                     custInfoObjectList.add(custInfoObject);
                 }
@@ -1371,32 +1371,32 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     while (cur.moveToNext()) {
                         CustInfoObject custInfoObject = new CustInfoObject();
 
-                        custInfoObject.setMainCustomerId(cur.getInt(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_ID))+"" );
-                        custInfoObject.setLastname(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_LastName)));
-                        custInfoObject.setFirstname(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_FirstName)));
-                        custInfoObject.setMiddleName(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_MiddleName)));
-                        custInfoObject.setFarmID(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_FarmId)));
-                        custInfoObject.setStreet(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_Street)));
-                        custInfoObject.setHouseNumber(cur.getInt(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_HouseNumber)));
-                        custInfoObject.setSubdivision(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_Subdivision)));
-                        custInfoObject.setBarangay(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_Barangay)));
-                        custInfoObject.setCity(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_City)));
-                        custInfoObject.setProvince(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_Province)));
-                        custInfoObject.setBirthday(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_CBirthday)));
-                        custInfoObject.setBirthPlace(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_CBirthPlace)));
-                        custInfoObject.setTelephone(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_Telephone)));
-                        custInfoObject.setCellphone(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_Cellphone)));
-                        custInfoObject.setCivilStatus(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_CivilStatus)));
-                        custInfoObject.setSpouse_lname(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_S_LastName)));
-                        custInfoObject.setSpouse_fname(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_S_FirstName)));
-                        custInfoObject.setSpouse_mname(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_S_MiddleName)));
-                        custInfoObject.setSpouse_birthday(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_S_BirthDay)));
-                        custInfoObject.setHouseStatus(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_HouseStatus)));
-                        custInfoObject.setCust_longtitude(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_Longitude)));
-                        custInfoObject.setCust_latitude(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_Latitude)));
-                        custInfoObject.setDateAddedToDB(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_DateAdded)));
-                        custInfoObject.setAddedBy(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_AddedBy)));
-                        custInfoObject.setIsPosted_cust(cur.getInt(cur.getColumnIndex(GpsSQLiteHelper.CL_MAINCUSTINFO_isposted)));
+                        custInfoObject.setMainCustomerId(cur.getInt(cur.getColumnIndex(GPSHelper.CL_MAINCUSTINFO_ID))+"" );
+                        custInfoObject.setLastname(cur.getString(cur.getColumnIndex(GPSHelper.CL_MAINCUSTINFO_LastName)));
+                        custInfoObject.setFirstname(cur.getString(cur.getColumnIndex(GPSHelper.CL_MAINCUSTINFO_FirstName)));
+                        custInfoObject.setMiddleName(cur.getString(cur.getColumnIndex(GPSHelper.CL_MAINCUSTINFO_MiddleName)));
+                        custInfoObject.setFarmID(cur.getString(cur.getColumnIndex(GPSHelper.CL_MAINCUSTINFO_FarmId)));
+                        custInfoObject.setStreet(cur.getString(cur.getColumnIndex(GPSHelper.CL_MAINCUSTINFO_Street)));
+                        custInfoObject.setHouseNumber(cur.getInt(cur.getColumnIndex(GPSHelper.CL_MAINCUSTINFO_HouseNumber)));
+                        custInfoObject.setSubdivision(cur.getString(cur.getColumnIndex(GPSHelper.CL_MAINCUSTINFO_Subdivision)));
+                        custInfoObject.setBarangay(cur.getString(cur.getColumnIndex(GPSHelper.CL_MAINCUSTINFO_Barangay)));
+                        custInfoObject.setCity(cur.getString(cur.getColumnIndex(GPSHelper.CL_MAINCUSTINFO_City)));
+                        custInfoObject.setProvince(cur.getString(cur.getColumnIndex(GPSHelper.CL_MAINCUSTINFO_Province)));
+                        custInfoObject.setBirthday(cur.getString(cur.getColumnIndex(GPSHelper.CL_MAINCUSTINFO_CBirthday)));
+                        custInfoObject.setBirthPlace(cur.getString(cur.getColumnIndex(GPSHelper.CL_MAINCUSTINFO_CBirthPlace)));
+                        custInfoObject.setTelephone(cur.getString(cur.getColumnIndex(GPSHelper.CL_MAINCUSTINFO_Telephone)));
+                        custInfoObject.setCellphone(cur.getString(cur.getColumnIndex(GPSHelper.CL_MAINCUSTINFO_Cellphone)));
+                        custInfoObject.setCivilStatus(cur.getString(cur.getColumnIndex(GPSHelper.CL_MAINCUSTINFO_CivilStatus)));
+                        custInfoObject.setSpouse_lname(cur.getString(cur.getColumnIndex(GPSHelper.CL_MAINCUSTINFO_S_LastName)));
+                        custInfoObject.setSpouse_fname(cur.getString(cur.getColumnIndex(GPSHelper.CL_MAINCUSTINFO_S_FirstName)));
+                        custInfoObject.setSpouse_mname(cur.getString(cur.getColumnIndex(GPSHelper.CL_MAINCUSTINFO_S_MiddleName)));
+                        custInfoObject.setSpouse_birthday(cur.getString(cur.getColumnIndex(GPSHelper.CL_MAINCUSTINFO_S_BirthDay)));
+                        custInfoObject.setHouseStatus(cur.getString(cur.getColumnIndex(GPSHelper.CL_MAINCUSTINFO_HouseStatus)));
+                        custInfoObject.setCust_longtitude(cur.getString(cur.getColumnIndex(GPSHelper.CL_MAINCUSTINFO_Longitude)));
+                        custInfoObject.setCust_latitude(cur.getString(cur.getColumnIndex(GPSHelper.CL_MAINCUSTINFO_Latitude)));
+                        custInfoObject.setDateAddedToDB(cur.getString(cur.getColumnIndex(GPSHelper.CL_MAINCUSTINFO_DateAdded)));
+                        custInfoObject.setAddedBy(cur.getString(cur.getColumnIndex(GPSHelper.CL_MAINCUSTINFO_AddedBy)));
+                        custInfoObject.setIsPosted_cust(cur.getInt(cur.getColumnIndex(GPSHelper.CL_MAINCUSTINFO_isposted)));
 
                         custInfoObjectList.add(custInfoObject);
                     }

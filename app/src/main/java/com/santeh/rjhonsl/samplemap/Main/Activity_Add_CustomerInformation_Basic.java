@@ -11,7 +11,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.fourmob.datetimepicker.date.DatePickerDialog;
-import com.santeh.rjhonsl.samplemap.DBase.GpsDB_Query;
+import com.santeh.rjhonsl.samplemap.DBase.GPSQuery;
 import com.santeh.rjhonsl.samplemap.R;
 import com.santeh.rjhonsl.samplemap.Utils.Helper;
 
@@ -33,7 +33,7 @@ public class Activity_Add_CustomerInformation_Basic extends FragmentActivity imp
     Activity activity;
     Context context;
 
-    GpsDB_Query db;
+    GPSQuery db;
 
     EditText edtBirhday, edtFarmId, edtFname, edtMname, edtLname, edtBirthPlace;
     TextView txtnote, txttitle;
@@ -49,7 +49,7 @@ public class Activity_Add_CustomerInformation_Basic extends FragmentActivity imp
         btnBack = (ImageButton) findViewById(R.id.btn_back);
         btnNext = (ImageButton) findViewById(R.id.btn_next);
 
-        db = new GpsDB_Query(this);
+        db = new GPSQuery(this);
         db.open();
 
 

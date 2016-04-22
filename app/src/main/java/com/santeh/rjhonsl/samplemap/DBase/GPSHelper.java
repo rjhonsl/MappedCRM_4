@@ -5,7 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-public class GpsSQLiteHelper extends SQLiteOpenHelper {
+public class GPSHelper extends SQLiteOpenHelper {
 
 	private static final String LOGTAG = "DB_GPS";
 	private static final String DATABASE_NAME = "local.db";
@@ -86,7 +86,6 @@ public class GpsSQLiteHelper extends SQLiteOpenHelper {
 	public static final String[] ALL_KEY_MUNICIPALITY		= new String[]{CL_MUNICIPALITY_ID, CL_MUNICIPALITY_DESCRIPTION, CL_MUNICIPALITY_PROVINCE};
 
 
-
 	//reference for tblarea
 	public static final String TBLFARMiNFO 				= "tblCustomerInfo";
 
@@ -155,6 +154,29 @@ public class GpsSQLiteHelper extends SQLiteOpenHelper {
 	};
 
 
+	public static final String TBL_USERS_SUBINFO = "user_subinfo_";
+	public static final String CL_USI_ID 				= "user_subinfo_id";
+	public static final String CL_USI_UID 				= "user_subinfo_uid";
+	public static final String CL_USI_BDAY 				= "user_subinfo_birthday";
+	public static final String CL_USI_PROFILE_IMGURL 	= "user_subinfo_profileurl";
+	public static final String CL_USI_AREA_ASSIGNED 	= "user_subinfo_areaassigned";
+	public static final String CL_USI_CURRENT_ADDRESS 	= "user_subinfo_currentaddress";
+
+	public static final String TBL_FEED_MAIN = "feed_main_";
+	public static final String CL_FM_id 		= "feed_main_id";
+	public static final String CL_FM_UID 		= "feed_main_uid";
+	public static final String CL_FM_DATE 		= "feed_main_date";
+	public static final String CL_FM_LocLat 	= "feed_main_loclat";
+	public static final String CL_FM_LocLong 	= "feed_main_loclong";
+	public static final String CL_FM_fetchAt	= "feed_main_fetch_at";
+	public static final String CL_FM_SeenState	= "feed_main_seen_state";
+
+	public static final String TBL_FEEDTYPE = "feed_type_";
+	public static final String CL_FT_ID 	= "feed_type_id";
+	public static final String CL_FT_DESC 	= "feed_type_description";
+
+
+	//TBLUSERS
 	public static final String TBLUSERS = "tblusers";
 	public static final String CL_USERS_ID				= "users_id";
 	public static final String CL_USERS_userlvl			= "userlvl";
@@ -192,7 +214,6 @@ public class GpsSQLiteHelper extends SQLiteOpenHelper {
 
 
 	public static final String TBL_HARVESTINFO 				= "tblharvest_info";
-
 	public static final String CL_HRV_ID 					= "hrv_id";
 	public static final String CL_HRV_PONDID 				= "hrv_pondid";
 	public static final String CL_HRV_CASENUM 				= "hrv_casenum";
@@ -406,7 +427,7 @@ public class GpsSQLiteHelper extends SQLiteOpenHelper {
 
 
 	//connects db
-	public GpsSQLiteHelper(Context ctx) {
+	public GPSHelper(Context ctx) {
 		super(ctx, DATABASE_NAME, null, DATABASE_VERSION);
 		Log.d(LOGTAG, "table " + DATABASE_NAME + " has been opened: " + String.valueOf(ctx));
 

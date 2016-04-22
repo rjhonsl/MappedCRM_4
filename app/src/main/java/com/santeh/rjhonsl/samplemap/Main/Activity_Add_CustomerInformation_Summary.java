@@ -14,7 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.fourmob.datetimepicker.date.DatePickerDialog;
-import com.santeh.rjhonsl.samplemap.DBase.GpsDB_Query;
+import com.santeh.rjhonsl.samplemap.DBase.GPSQuery;
 import com.santeh.rjhonsl.samplemap.R;
 import com.santeh.rjhonsl.samplemap.Utils.Helper;
 import com.santeh.rjhonsl.samplemap.Utils.Logging;
@@ -44,7 +44,7 @@ public class Activity_Add_CustomerInformation_Summary extends FragmentActivity{
 
     Dialog PD;
     TextView dialogmessage;
-    GpsDB_Query db;
+    GPSQuery db;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -56,7 +56,7 @@ public class Activity_Add_CustomerInformation_Summary extends FragmentActivity{
 
         PD = Helper.initProgressDialog(activity);
         dialogmessage = (TextView) PD.findViewById(R.id.progress_message);
-        db = new GpsDB_Query(this);
+        db = new GPSQuery(this);
         db.open();
 
 

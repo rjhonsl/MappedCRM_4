@@ -35,8 +35,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.google.android.gms.maps.model.LatLng;
 import com.santeh.rjhonsl.samplemap.APIs.MyVolleyAPI;
-import com.santeh.rjhonsl.samplemap.DBase.GpsDB_Query;
-import com.santeh.rjhonsl.samplemap.DBase.GpsSQLiteHelper;
+import com.santeh.rjhonsl.samplemap.DBase.GPSHelper;
+import com.santeh.rjhonsl.samplemap.DBase.GPSQuery;
 import com.santeh.rjhonsl.samplemap.Obj.CustInfoObject;
 import com.santeh.rjhonsl.samplemap.Parsers.AccountsParser;
 import com.santeh.rjhonsl.samplemap.R;
@@ -80,8 +80,8 @@ public class Activity_LoginScreen extends Activity{
     FusedLocation fusedLocation;
     PackageInfo pInfo = null;
 
-    GpsSQLiteHelper dbHelper;
-    GpsDB_Query db;
+    GPSHelper dbHelper;
+    GPSQuery db;
 
     float filesize;
 
@@ -96,8 +96,8 @@ public class Activity_LoginScreen extends Activity{
         activity = this;
         context = Activity_LoginScreen.this;
 
-        dbHelper = new GpsSQLiteHelper(this);
-        db = new GpsDB_Query(this);
+        dbHelper = new GPSHelper(this);
+        db = new GPSQuery(this);
         db.open();
 
         fusedLocation = new FusedLocation(context, activity);
@@ -340,15 +340,15 @@ public class Activity_LoginScreen extends Activity{
                     Log.d("DEBUG", "if account is valid");
                     for (int i = 0; i < cur.getCount() ; i++) {
                         while (cur.moveToNext()) {
-                            Helper.variables.setGlobalVar_currentlevel(cur.getInt(cur.getColumnIndex(GpsSQLiteHelper.CL_USERS_userlvl)), activity);
-                            Helper.variables.setGlobalVar_currentUserID(cur.getInt(cur.getColumnIndex(GpsSQLiteHelper.CL_USERS_ID)), activity);
-                            Helper.variables.setGlobalVar_currentFirstname(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_USERS_firstName)), activity);
-                            Helper.variables.setGlobalVar_currentLastname(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_USERS_lastName)), activity);
+                            Helper.variables.setGlobalVar_currentlevel(cur.getInt(cur.getColumnIndex(GPSHelper.CL_USERS_userlvl)), activity);
+                            Helper.variables.setGlobalVar_currentUserID(cur.getInt(cur.getColumnIndex(GPSHelper.CL_USERS_ID)), activity);
+                            Helper.variables.setGlobalVar_currentFirstname(cur.getString(cur.getColumnIndex(GPSHelper.CL_USERS_firstName)), activity);
+                            Helper.variables.setGlobalVar_currentLastname(cur.getString(cur.getColumnIndex(GPSHelper.CL_USERS_lastName)), activity);
                             Helper.variables.setGlobalVar_currentUsername(txtusername.getText().toString(),activity);
                             Helper.variables.setGlobalVar_currentUserpassword(txtpassword.getText().toString(),activity);
                             Helper.variables.setGlobalVar_currentAssignedArea("n/a", activity);
-                            Helper.variables.setGlobalVar_DateAddedToDb(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_USERS_dateAdded)), activity);
-                            Helper.variables.setGlobalVar_currentIsActive(cur.getInt(cur.getColumnIndex(GpsSQLiteHelper.CL_USERS_isactive)), activity);
+                            Helper.variables.setGlobalVar_DateAddedToDb(cur.getString(cur.getColumnIndex(GPSHelper.CL_USERS_dateAdded)), activity);
+                            Helper.variables.setGlobalVar_currentIsActive(cur.getInt(cur.getColumnIndex(GPSHelper.CL_USERS_isactive)), activity);
                         }
 
                         if (Helper.variables.getGlobalVar_currentisActive(activity) == 1) {

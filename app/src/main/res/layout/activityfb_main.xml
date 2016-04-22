@@ -5,20 +5,7 @@
                 android:layout_height="match_parent"
                 xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_addpost"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_add_white_24dp"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:layout_margin="15dp"
-        android:layout_above="@+id/ll_wrapper_bottom"
-        app:backgroundTint="@color/red_material_500"
-        app:rippleColor="@color/red_material_900"
-        app:borderWidth="0dp"
-        app:fabSize="normal"
-        app:elevation="8dp" />
+
 
     <include layout="@layout/toolbar"
     android:id="@+id/toolbar2"
@@ -27,56 +14,81 @@
     android:layout_width="match_parent"/>
 
 
-    <ScrollView android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/scrollView_fbmain"
-                android:layout_below="@+id/toolbar2"
-                android:layout_above="@+id/ll_wrapper_bottom"
-    >
+    <ListView android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:id="@+id/lv_feeds"
+              android:entries="@array/province"
+              android:layout_below="@+id/toolbar2"
+              android:layout_above="@+id/ll_wrapper_bottom"
+              android:overScrollMode="ifContentScrolls"
+    />
 
-        <LinearLayout android:layout_width="match_parent"
-                      android:layout_height="wrap_content"
-                      android:orientation="vertical"
-        android:background="@color/gray_300">
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_addpost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_add_white_24dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="15dp"
+        app:backgroundTint="@color/red_material_500"
+        app:rippleColor="@color/red_material_900"
+        app:borderWidth="0dp"
+        app:fabSize="normal"
+        app:elevation="8dp" />
 
+    <!---->
+    <!--<ScrollView android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:id="@+id/scrollView_fbmain"-->
+                <!--android:layout_below="@+id/toolbar2"-->
+                <!--android:layout_above="@+id/ll_wrapper_bottom"-->
+                <!--android:visibility="gone"-->
+    <!--&gt;-->
 
-
-            <include layout="@layout/cardview_posttext"
-                     android:layout_width="match_parent"
-                     android:layout_height="wrap_content"
-                     android:id="@+id/post1"
-                     android:layout_marginBottom="10dp"/>
-
-            <include layout="@layout/cardview_postimage"
-                     android:layout_width="match_parent"
-                     android:layout_height="wrap_content"
-                     android:id="@+id/post2"
-                     android:layout_marginBottom="10dp"/>
-
-            <include layout="@layout/cardview_posttext"
-                     android:layout_width="match_parent"
-                     android:layout_height="wrap_content"
-                     android:id="@+id/post3"
-                     android:layout_marginBottom="10dp"/>
-
-            <include layout="@layout/cardview_posttext"
-                     android:layout_width="match_parent"
-                     android:layout_height="wrap_content"
-                     android:id="@+id/post4"
-                     android:layout_marginBottom="10dp"/>
-
-            <include layout="@layout/cardview_postimage"
-                     android:layout_width="match_parent"
-                     android:layout_height="wrap_content"
-                     android:id="@+id/post5"
-                     android:layout_marginBottom="10dp"/>
+        <!--<LinearLayout android:layout_width="match_parent"-->
+                      <!--android:layout_height="wrap_content"-->
+                      <!--android:orientation="vertical"-->
+        <!--android:background="@color/gray_300">-->
 
 
 
+            <!--<include layout="@layout/cardview_posttext"-->
+                     <!--android:layout_width="match_parent"-->
+                     <!--android:layout_height="wrap_content"-->
+                     <!--android:id="@+id/post1"-->
+                     <!--android:layout_marginBottom="10dp"/>-->
 
-        </LinearLayout>
+            <!--<include layout="@layout/cardview_postimage"-->
+                     <!--android:layout_width="match_parent"-->
+                     <!--android:layout_height="wrap_content"-->
+                     <!--android:id="@+id/post2"-->
+                     <!--android:layout_marginBottom="10dp"/>-->
 
-    </ScrollView>
+            <!--<include layout="@layout/cardview_posttext"-->
+                     <!--android:layout_width="match_parent"-->
+                     <!--android:layout_height="wrap_content"-->
+                     <!--android:id="@+id/post3"-->
+                     <!--android:layout_marginBottom="10dp"/>-->
+
+            <!--<include layout="@layout/cardview_posttext"-->
+                     <!--android:layout_width="match_parent"-->
+                     <!--android:layout_height="wrap_content"-->
+                     <!--android:id="@+id/post4"-->
+                     <!--android:layout_marginBottom="10dp"/>-->
+
+            <!--<include layout="@layout/cardview_postimage"-->
+                     <!--android:layout_width="match_parent"-->
+                     <!--android:layout_height="wrap_content"-->
+                     <!--android:id="@+id/post5"-->
+                     <!--android:layout_marginBottom="10dp"/>-->
+
+
+
+
+        <!--</LinearLayout>-->
+
+    <!--</ScrollView>-->
 
 
     <LinearLayout android:layout_width="match_parent"

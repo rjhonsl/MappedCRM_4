@@ -19,7 +19,7 @@ import android.widget.ListView;
 
 import com.fourmob.datetimepicker.date.DatePickerDialog;
 import com.google.android.gms.maps.model.LatLng;
-import com.santeh.rjhonsl.samplemap.DBase.GpsDB_Query;
+import com.santeh.rjhonsl.samplemap.DBase.GPSQuery;
 import com.santeh.rjhonsl.samplemap.R;
 import com.santeh.rjhonsl.samplemap.Utils.FusedLocation;
 import com.santeh.rjhonsl.samplemap.Utils.Helper;
@@ -47,7 +47,7 @@ public class Activity_EditPonds extends FragmentActivity  implements DatePickerD
     DatePickerDialog datePickerDialog;
     int y, m, d;
 
-    GpsDB_Query db;
+    GPSQuery db;
     private int isposted;
     
     @Override
@@ -58,7 +58,7 @@ public class Activity_EditPonds extends FragmentActivity  implements DatePickerD
         PD.setCancelable(false);
         activity = this;
         context = Activity_EditPonds.this;
-        db = new GpsDB_Query(this);
+        db = new GPSQuery(this);
         db.open();
 
         fusedLocation = new FusedLocation(context, activity);

@@ -49,6 +49,7 @@
                               android:orientation="horizontal"
                               android:layout_gravity="center"
                               android:gravity="center_horizontal" >
+
                     <ImageView android:layout_width="40dp"
                                android:layout_height="40dp"
                                android:src="@drawable/ic_face_black_24dp"/>
@@ -406,6 +407,7 @@
 
         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
         android:orientation="horizontal">
+
             <EditText android:layout_width="match_parent" android:layout_height="wrap_content"
                       android:hint="Write a comment..."
                       android:paddingLeft="15dp"
@@ -417,6 +419,7 @@
                       android:layout_weight="1"
                       android:id="@+id/edtAddComment"
                       android:background="@color/transparent" />
+
             <ImageButton android:layout_width="wrap_content"
                          android:layout_height="match_parent"
                          android:paddingLeft="5dp"

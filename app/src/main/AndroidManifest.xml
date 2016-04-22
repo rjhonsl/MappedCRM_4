@@ -168,6 +168,11 @@
                   android:parentActivityName=".Main.ActivityFB_Main">
         </activity>
 
+        <activity android:name=".Main.Activity_PostText"
+                  android:label="Post Something"
+                  android:parentActivityName=".Main.ActivityFB_Main">
+        </activity>
+
 
 
 

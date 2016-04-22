@@ -3,9 +3,6 @@ package com.santeh.rjhonsl.samplemap.Main;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,27 +10,18 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.Toolbar;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.TextPaint;
-import android.text.method.LinkMovementMethod;
-import android.text.style.ClickableSpan;
-import android.text.style.ForegroundColorSpan;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.ScrollView;
-import android.widget.TextView;
 
 import com.santeh.rjhonsl.samplemap.R;
 import com.santeh.rjhonsl.samplemap.Utils.Helper;
@@ -54,6 +42,7 @@ public class ActivityFB_Main extends AppCompatActivity {
     ImageButton btnPopupOptions;
     String finalHashtag;
     ScrollView scrollView;
+    ListView lvFeeds;
     private static final int SELECT_PICTURE = 1;
     private static final int SELECT_FILE = 2;
     private String selectedFilePath;
@@ -77,201 +66,186 @@ public class ActivityFB_Main extends AppCompatActivity {
         myToolbar.inflateMenu(R.menu.menu_search);
 
         ActionBar ab = getSupportActionBar();
+        ab.setDisplayHomeAsUpEnabled(true);
+
 
 
         fabAddPost = (FloatingActionButton) findViewById(R.id.fab_addpost);
-        scrollView = (ScrollView) findViewById(R.id.scrollView_fbmain);
+//        scrollView = (ScrollView) findViewById(R.id.scrollView_fbmain);
         llbottomwrapper = (LinearLayout) findViewById(R.id.ll_wrapper_bottom);
-        CardView cardview1 = (CardView) findViewById(R.id.post1);
-        TextView txtLinkToComments1 = (TextView) cardview1.findViewById(R.id.txtlinkcomments);
-        final ImageButton btn1 = (ImageButton) cardview1.findViewById(R.id.btnPostOptions);
-
+        lvFeeds = (ListView) findViewById(R.id.lv_feeds);
+//        CardView cardview1 = (CardView) findViewById(R.id.post1);
+//        TextView txtLinkToComments1 = (TextView) cardview1.findViewById(R.id.txtlinkcomments);
+//        final ImageButton btn1 = (ImageButton) cardview1.findViewById(R.id.btnPostOptions);
+//
         LinearLayout llpostSomething = (LinearLayout) findViewById(R.id.ll_postSomething);
         LinearLayout lluploadPhoto = (LinearLayout) findViewById(R.id.ll_uploadPhoto);
         LinearLayout lluploadFile = (LinearLayout) findViewById(R.id.ll_uploadfile);
-        LinearLayout llshare = (LinearLayout) cardview1.findViewById(R.id.ll_share);
+//        LinearLayout llshare = (LinearLayout) cardview1.findViewById(R.id.ll_share);
+//
+//        llshare.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                String message = "Text I want to share.";
+//                Intent share = new Intent(Intent.ACTION_SEND);
+//                share.setType("text/plain");
+//                share.putExtra(Intent.EXTRA_TEXT, message);
+//
+//                startActivity(Intent.createChooser(share, "Share to:"));
+//            }
+//        });
+//
 
-        llshare.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String message = "Text I want to share.";
-                Intent share = new Intent(Intent.ACTION_SEND);
-                share.setType("text/plain");
-                share.putExtra(Intent.EXTRA_TEXT, message);
-
-                startActivity(Intent.createChooser(share, "Share to:"));
-            }
-        });
-
-        llpostSomething.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-        lluploadPhoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-        lluploadFile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
-
-
-        txtLinkToComments1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(activity, Activity_Comments.class);
-                startActivity(intent);
-                
-            }
-        });
-
-        btn1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PopupMenu popup = new PopupMenu(activity, btn1);
-                popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu());
-
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    public boolean onMenuItemClick(MenuItem item) {
-                        if (item.getItemId()== R.id.reportPostAsSpam){
-                            Helper.toastShort(activity,"Reported as spam");
-                        }else if (item.getItemId()== R.id.copyPostText){
-                            Helper.toastShort(activity,"Post Copied");
-                        }
-                        return true;
-                    }
-                });
-
-                popup.show();//showing popup menu
-            }
-        });
-
-        CardView cardview2 = (CardView) findViewById(R.id.post2);
-        CardView cardview5 = (CardView) findViewById(R.id.post5);
-        final ImageButton btn2 = (ImageButton) cardview2.findViewById(R.id.btnPostOptions);
-        ImageView justimage = (ImageView) cardview2.findViewById(R.id.justimage);
-        ImageView justimage5 = (ImageView) cardview5.findViewById(R.id.justimage);
-
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inSampleSize = 4;
-        Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), R.drawable.wall4, options);
-        Bitmap largeIcon5 = BitmapFactory.decodeResource(getResources(), R.drawable.wall, options);
-
-        justimage.setImageBitmap(largeIcon);
-        justimage5.setImageBitmap(largeIcon5);
-
-
-        SpannableString ss = new SpannableString("Here @ Malangaan Rock formation! #natureTrip");
-
-        ClickableSpan clickableSpan = new ClickableSpan() {
-            @Override
-            public void onClick(View textView) {
-//                startActivity(new Intent(MyActivity.this, NextActivity.class));
-                Helper.toastShort(activity, "hashtag: " + finalHashtag);
-            }
-            @Override
-            public void updateDrawState(TextPaint ds) {
-                super.updateDrawState(ds);
-                ds.setUnderlineText(false);
-            }
-        };
-
-        ForegroundColorSpan fcs = new ForegroundColorSpan(Color.BLUE);
-
-        int startint = 0 , endint=0, isspace = 0;
-        finalHashtag = "";
-        for (int i = 0; i < ss.length(); i++) {
-
-            if (ss.charAt(i) == '#') {
-                startint = i;
-            }
-
-            if (startint!=0 && (endint == 0)){
-                finalHashtag = finalHashtag + ss.charAt(i);
-            }
-
-            if (startint != 0 || ss.charAt(i) == ' ' ) {
-                    endint =  i;
-            }
-
-        }
-        ss.setSpan(clickableSpan, startint, endint, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        ss.setSpan(fcs, startint, endint, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-
-        final TextView txtpost = (TextView) cardview2.findViewById(R.id.txtpost);
-        txtpost.setText(ss);
-        txtpost.setMovementMethod(LinkMovementMethod.getInstance());
-        txtpost.setHighlightColor(Color.TRANSPARENT);
-
-
-        btn2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PopupMenu popup = new PopupMenu(activity, btn2);
-                popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu());
-
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    public boolean onMenuItemClick(MenuItem item) {
-                        if (item.getItemId()== R.id.reportPostAsSpam){
-                            Helper.toastShort(activity,"Reported as spam");
-                        }else if (item.getItemId()== R.id.copyPostText){
-                            Helper.toastShort(activity,"Post Copied");
-                        }
-
-                        return true;
-                    }
-                });
-
-                popup.show();//showing popup menu
-            }
-        });
+//
+//
+//        txtLinkToComments1.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(activity, Activity_Comments.class);
+//                startActivity(intent);
+//
+//            }
+//        });
+//
+//        btn1.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                PopupMenu popup = new PopupMenu(activity, btn1);
+//                popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu());
+//
+//                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+//                    public boolean onMenuItemClick(MenuItem item) {
+//                        if (item.getItemId()== R.id.reportPostAsSpam){
+//                            Helper.toastShort(activity,"Reported as spam");
+//                        }else if (item.getItemId()== R.id.copyPostText){
+//                            Helper.toastShort(activity,"Post Copied");
+//                        }
+//                        return true;
+//                    }
+//                });
+//
+//                popup.show();//showing popup menu
+//            }
+//        });
+//
+//        CardView cardview2 = (CardView) findViewById(R.id.post2);
+//        CardView cardview5 = (CardView) findViewById(R.id.post5);
+//        final ImageButton btn2 = (ImageButton) cardview2.findViewById(R.id.btnPostOptions);
+//        ImageView justimage = (ImageView) cardview2.findViewById(R.id.justimage);
+//        ImageView justimage5 = (ImageView) cardview5.findViewById(R.id.justimage);
+//
+//        BitmapFactory.Options options = new BitmapFactory.Options();
+//        options.inSampleSize = 4;
+//        Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), R.drawable.wall4, options);
+//        Bitmap largeIcon5 = BitmapFactory.decodeResource(getResources(), R.drawable.wall, options);
+//
+//        justimage.setImageBitmap(largeIcon);
+//        justimage5.setImageBitmap(largeIcon5);
+//
+//
+//        SpannableString ss = new SpannableString("Here @ Malangaan Rock formation! #natureTrip");
+//
+//        ClickableSpan clickableSpan = new ClickableSpan() {
+//            @Override
+//            public void onClick(View textView) {
+////                startActivity(new Intent(MyActivity.this, NextActivity.class));
+//                Helper.toastShort(activity, "hashtag: " + finalHashtag);
+//            }
+//            @Override
+//            public void updateDrawState(TextPaint ds) {
+//                super.updateDrawState(ds);
+//                ds.setUnderlineText(false);
+//            }
+//        };
+//
+//        ForegroundColorSpan fcs = new ForegroundColorSpan(Color.BLUE);
+//
+//        int startint = 0 , endint=0, isspace = 0;
+//        finalHashtag = "";
+//        for (int i = 0; i < ss.length(); i++) {
+//
+//            if (ss.charAt(i) == '#') {
+//                startint = i;
+//            }
+//
+//            if (startint!=0 && (endint == 0)){
+//                finalHashtag = finalHashtag + ss.charAt(i);
+//            }
+//
+//            if (startint != 0 || ss.charAt(i) == ' ' ) {
+//                    endint =  i;
+//            }
+//
+//        }
+//        ss.setSpan(clickableSpan, startint, endint, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//        ss.setSpan(fcs, startint, endint, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+//
+//        final TextView txtpost = (TextView) cardview2.findViewById(R.id.txtpost);
+//        txtpost.setText(ss);
+//        txtpost.setMovementMethod(LinkMovementMethod.getInstance());
+//        txtpost.setHighlightColor(Color.TRANSPARENT);
+//
+//
+//        btn2.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                PopupMenu popup = new PopupMenu(activity, btn2);
+//                popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu());
+//
+//                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+//                    public boolean onMenuItemClick(MenuItem item) {
+//                        if (item.getItemId()== R.id.reportPostAsSpam){
+//                            Helper.toastShort(activity,"Reported as spam");
+//                        }else if (item.getItemId()== R.id.copyPostText){
+//                            Helper.toastShort(activity,"Post Copied");
+//                        }
+//
+//                        return true;
+//                    }
+//                });
+//
+//                popup.show();//showing popup menu
+//            }
+//        });
 
 
-        CardView cardview3 = (CardView) findViewById(R.id.post3);
-        final ImageButton btn3 = (ImageButton) cardview3.findViewById(R.id.btnPostOptions);
-        btn3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PopupMenu popup = new PopupMenu(activity, btn3);
-                popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu());
-
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    public boolean onMenuItemClick(MenuItem item) {
-                        if (item.getItemId()== R.id.reportPostAsSpam){
-                            Helper.toastShort(activity,"Reported as spam");
-                        }else if (item.getItemId()== R.id.copyPostText){
-                            Helper.toastShort(activity,"Post Copied");
-                        }
-                        return true;
-                    }
-                });
-
-                popup.show();//showing popup menu
-            }
-        });
+//        CardView cardview3 = (CardView) findViewById(R.id.post3);
+//        final ImageButton btn3 = (ImageButton) cardview3.findViewById(R.id.btnPostOptions);
+//        btn3.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                PopupMenu popup = new PopupMenu(activity, btn3);
+//                popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu());
+//
+//                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+//                    public boolean onMenuItemClick(MenuItem item) {
+//                        if (item.getItemId()== R.id.reportPostAsSpam){
+//                            Helper.toastShort(activity,"Reported as spam");
+//                        }else if (item.getItemId()== R.id.copyPostText){
+//                            Helper.toastShort(activity,"Post Copied");
+//                        }
+//                        return true;
+//                    }
+//                });
+//
+//                popup.show();//showing popup menu
+//            }
+//        });
 
 
 
-        imageview = (ImageView) findViewById(R.id.justimage);
+//        imageview = (ImageView) findViewById(R.id.justimage);
+//
+//        imageview.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(activity, Activity_ViewImage.class);
+//                startActivity(intent);
+//            }
+//        });
 
-        imageview.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(activity, Activity_ViewImage.class);
-                startActivity(intent);
-            }
-        });
 
 
-        ab.setDisplayHomeAsUpEnabled(true);
 
 
 
@@ -288,20 +262,44 @@ public class ActivityFB_Main extends AppCompatActivity {
 //            }
 //        });
 
-        scrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
+        lvFeeds.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onScrollChanged() {
+            public boolean onTouch(View v, MotionEvent event) {
                 if (llbottomwrapper.getVisibility() == View.VISIBLE) {
-//                    llbottomwrapper.setVisibility(View.GONE);
-//                    fabAddPost.setVisibility(View.VISIBLE);
                     isFabSelected = false;
                     if (!isBottomAnimating){
                         animateBottom();
                     }
-
                 }
+                return false;
             }
         });
+
+//        lvFeeds.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
+//            @Override
+//            public void onScrollChanged() {
+//                if (llbottomwrapper.getVisibility() == View.VISIBLE) {
+//                    isFabSelected = false;
+//                    if (!isBottomAnimating){
+//                        animateBottom();
+//                    }
+//                }
+//            }
+//        });
+
+//        scrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
+//            @Override
+//            public void onScrollChanged() {
+//                if (llbottomwrapper.getVisibility() == View.VISIBLE) {
+////                    llbottomwrapper.setVisibility(View.GONE);
+////                    fabAddPost.setVisibility(View.VISIBLE);
+//                    isFabSelected = false;
+//                    if (!isBottomAnimating){
+//                        animateBottom();
+//                    }
+//                }
+//            }
+//        });
 
         fabAddPost.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -333,6 +331,13 @@ public class ActivityFB_Main extends AppCompatActivity {
         });
 
 
+        llpostSomething.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(activity, Activity_PostText.class);
+                startActivity(intent);
+            }
+        });
 
         lluploadFile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -402,7 +407,6 @@ public class ActivityFB_Main extends AppCompatActivity {
                 public void onAnimationEnd(Animation animation) {
                     isBottomAnimating = false;
                     llbottomwrapper.setVisibility(View.GONE);
-                    //
                 }
 
                 @Override

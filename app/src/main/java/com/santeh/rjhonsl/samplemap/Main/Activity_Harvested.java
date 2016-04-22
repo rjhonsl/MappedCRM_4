@@ -17,8 +17,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.santeh.rjhonsl.samplemap.Adapter.AdapterHarvest;
-import com.santeh.rjhonsl.samplemap.DBase.GpsDB_Query;
-import com.santeh.rjhonsl.samplemap.DBase.GpsSQLiteHelper;
+import com.santeh.rjhonsl.samplemap.DBase.GPSHelper;
+import com.santeh.rjhonsl.samplemap.DBase.GPSQuery;
 import com.santeh.rjhonsl.samplemap.Obj.CustInfoObject;
 import com.santeh.rjhonsl.samplemap.R;
 import com.santeh.rjhonsl.samplemap.Utils.FusedLocation;
@@ -41,7 +41,7 @@ public class Activity_Harvested extends FragmentActivity {
     Context context;
     List<CustInfoObject> harvestinfoList;
 
-    GpsDB_Query db;
+    GPSQuery db;
     ListView lvHarvestInfo;
     LinearLayout llnopond;
     AdapterHarvest adapterHarvested;
@@ -54,7 +54,7 @@ public class Activity_Harvested extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_harvested);
 
-        db = new GpsDB_Query(this);
+        db = new GPSQuery(this);
         db.open();
 
         activity = this;
@@ -189,37 +189,37 @@ public class Activity_Harvested extends FragmentActivity {
 
                 while (cur.moveToNext()) {
                     CustInfoObject custInfoObject = new CustInfoObject();
-                    custInfoObject.setHrv_id(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_HRV_ID)));
-                    custInfoObject.setHrv_pondid(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_HRV_PONDID)));
-                    custInfoObject.setHrv_casenum(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_HRV_CASENUM)));
-                    custInfoObject.setHrv_specie(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_HRV_SPECIES)));
-                    custInfoObject.setHrv_dateOfHarvest(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_HRV_DATEOFHARVEST)));
-                    custInfoObject.setHrv_finalABW(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_HRV_FINALABW)));
-                    custInfoObject.setHrv_totalConsumption(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_HRV_TOTAL_CONSUMPTION)));
-                    custInfoObject.setHrv_fcr(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_HRV_FCR)));
-                    custInfoObject.setHrv_pricePerKilo(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_HRV_PRICEPERKILO)));
-                    custInfoObject.setHrv_totalHarvested(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_HRV_TOTALHARVEST)));
-                    custInfoObject.setHrv_isPosted(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_HRV_ISPOSTED)));
-                    Log.d("Harvest info", ""+cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_HRV_ISPOSTED)));
-                    custInfoObject.setHrv_dateRecorded(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_HRV_DATE_INSERTED)));
+                    custInfoObject.setHrv_id(cur.getString(cur.getColumnIndex(GPSHelper.CL_HRV_ID)));
+                    custInfoObject.setHrv_pondid(cur.getString(cur.getColumnIndex(GPSHelper.CL_HRV_PONDID)));
+                    custInfoObject.setHrv_casenum(cur.getString(cur.getColumnIndex(GPSHelper.CL_HRV_CASENUM)));
+                    custInfoObject.setHrv_specie(cur.getString(cur.getColumnIndex(GPSHelper.CL_HRV_SPECIES)));
+                    custInfoObject.setHrv_dateOfHarvest(cur.getString(cur.getColumnIndex(GPSHelper.CL_HRV_DATEOFHARVEST)));
+                    custInfoObject.setHrv_finalABW(cur.getString(cur.getColumnIndex(GPSHelper.CL_HRV_FINALABW)));
+                    custInfoObject.setHrv_totalConsumption(cur.getString(cur.getColumnIndex(GPSHelper.CL_HRV_TOTAL_CONSUMPTION)));
+                    custInfoObject.setHrv_fcr(cur.getString(cur.getColumnIndex(GPSHelper.CL_HRV_FCR)));
+                    custInfoObject.setHrv_pricePerKilo(cur.getString(cur.getColumnIndex(GPSHelper.CL_HRV_PRICEPERKILO)));
+                    custInfoObject.setHrv_totalHarvested(cur.getString(cur.getColumnIndex(GPSHelper.CL_HRV_TOTALHARVEST)));
+                    custInfoObject.setHrv_isPosted(cur.getString(cur.getColumnIndex(GPSHelper.CL_HRV_ISPOSTED)));
+                    Log.d("Harvest info", ""+cur.getString(cur.getColumnIndex(GPSHelper.CL_HRV_ISPOSTED)));
+                    custInfoObject.setHrv_dateRecorded(cur.getString(cur.getColumnIndex(GPSHelper.CL_HRV_DATE_INSERTED)));
 
-                    custInfoObject.setDateStocked(  cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_dateStocked)));
-                    custInfoObject.setPondID(       cur.getInt(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_PID)));
-                    custInfoObject.setId(           cur.getInt(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_INDEX)));
-                    custInfoObject.setSpecie(       cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_specie)));
-                    custInfoObject.setSizeofStock(  cur.getInt(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_sizeofStock)));
-                    custInfoObject.setSurvivalrate_per_pond(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_survivalrate)));
-                    custInfoObject.setDateStocked(  cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_dateStocked)));
-                    custInfoObject.setQuantity(     cur.getInt(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_quantity)));
-                    custInfoObject.setArea(         cur.getInt(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_area)));
-                    custInfoObject.setCulturesystem(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_culturesystem)));
-                    custInfoObject.setRemarks(      cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_remarks)));
+                    custInfoObject.setDateStocked(  cur.getString(cur.getColumnIndex(GPSHelper.CL_POND_dateStocked)));
+                    custInfoObject.setPondID(       cur.getInt(cur.getColumnIndex(GPSHelper.CL_POND_PID)));
+                    custInfoObject.setId(           cur.getInt(cur.getColumnIndex(GPSHelper.CL_POND_INDEX)));
+                    custInfoObject.setSpecie(       cur.getString(cur.getColumnIndex(GPSHelper.CL_POND_specie)));
+                    custInfoObject.setSizeofStock(  cur.getInt(cur.getColumnIndex(GPSHelper.CL_POND_sizeofStock)));
+                    custInfoObject.setSurvivalrate_per_pond(cur.getString(cur.getColumnIndex(GPSHelper.CL_POND_survivalrate)));
+                    custInfoObject.setDateStocked(  cur.getString(cur.getColumnIndex(GPSHelper.CL_POND_dateStocked)));
+                    custInfoObject.setQuantity(     cur.getInt(cur.getColumnIndex(GPSHelper.CL_POND_quantity)));
+                    custInfoObject.setArea(         cur.getInt(cur.getColumnIndex(GPSHelper.CL_POND_area)));
+                    custInfoObject.setCulturesystem(cur.getString(cur.getColumnIndex(GPSHelper.CL_POND_culturesystem)));
+                    custInfoObject.setRemarks(      cur.getString(cur.getColumnIndex(GPSHelper.CL_POND_remarks)));
                     custInfoObject.setLatitude(     fusedlocation.getLastKnowLocation().latitude+"");
                     custInfoObject.setLongtitude(   fusedlocation.getLastKnowLocation().longitude+"");
 
 
                     farmname = "Farm";
-                    p_index = cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_INDEX));
+                    p_index = cur.getString(cur.getColumnIndex(GPSHelper.CL_POND_INDEX));
 
                     harvestinfoList.add(custInfoObject);
 

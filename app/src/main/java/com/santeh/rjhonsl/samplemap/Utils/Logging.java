@@ -10,7 +10,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.santeh.rjhonsl.samplemap.APIs.MyVolleyAPI;
-import com.santeh.rjhonsl.samplemap.DBase.GpsDB_Query;
+import com.santeh.rjhonsl.samplemap.DBase.GPSQuery;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,13 +22,13 @@ public class Logging {
 
     static boolean isRecorded = false;
     static FusedLocation fusedLocation;
-    static GpsDB_Query db;
+    static GPSQuery db;
 
     public static boolean logUserAction(final Activity activity, final Context context, final String userAction, final String actionType ) {
         fusedLocation = new FusedLocation(context, activity);
         fusedLocation.buildGoogleApiClient(context);
         fusedLocation.connectToApiClient();
-        db = new GpsDB_Query(context);
+        db = new GPSQuery(context);
 
 
         final Handler handler = new Handler();

@@ -25,8 +25,8 @@ import com.android.volley.toolbox.StringRequest;
 import com.google.android.gms.maps.model.LatLng;
 import com.santeh.rjhonsl.samplemap.APIs.MyVolleyAPI;
 import com.santeh.rjhonsl.samplemap.Adapter.Adapter_Growouts_PondWeekLyConsumption;
-import com.santeh.rjhonsl.samplemap.DBase.GpsDB_Query;
-import com.santeh.rjhonsl.samplemap.DBase.GpsSQLiteHelper;
+import com.santeh.rjhonsl.samplemap.DBase.GPSHelper;
+import com.santeh.rjhonsl.samplemap.DBase.GPSQuery;
 import com.santeh.rjhonsl.samplemap.Obj.CustInfoObject;
 import com.santeh.rjhonsl.samplemap.Parsers.PondWeeklyUpdateParser;
 import com.santeh.rjhonsl.samplemap.R;
@@ -77,7 +77,7 @@ public class Activity_PondWeeklyConsumption extends Activity {
     private String remarks;
     int startWeek, currentweek;
 
-    GpsDB_Query db;
+    GPSQuery db;
     private String latitude;
     private String longitude;
     private FusedLocation fusedLocation;
@@ -89,7 +89,7 @@ public class Activity_PondWeeklyConsumption extends Activity {
         setContentView(R.layout.activity_growout_weeklyreport);
         activity = this;
         context = Activity_PondWeeklyConsumption.this;
-        db = new GpsDB_Query(this);
+        db = new GPSQuery(this);
         db.open();
 
         PD = new ProgressDialog(this);
@@ -399,13 +399,13 @@ public class Activity_PondWeeklyConsumption extends Activity {
                     Log.d("DB", "get count" +id + " " + cur.getCount());
                     while (cur.moveToNext()) {
                         CustInfoObject custInfoObject = new CustInfoObject();
-                        custInfoObject.setId(cur.getInt(cur.getColumnIndex(GpsSQLiteHelper.CL_WEEKLY_UPDATES_ID)));
-                        custInfoObject.setSizeofStock(cur.getInt(cur.getColumnIndex(GpsSQLiteHelper.CL_WEEKLY_UPDATES_CURRENT_ABW)));
-                        custInfoObject.setRemarks(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_WEEKLY_UPDATES_REMARKS)));
-                        custInfoObject.setPondID(cur.getInt(cur.getColumnIndex(GpsSQLiteHelper.CL_WEEKLY_UPDATES_PONDID)));
-                        custInfoObject.setDateAddedToDB(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_WEEKLY_UPDATES_DATEADDED)));
-                        custInfoObject.setSurvivalrate_per_pond(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_WEEKLY_UPDATES_CURRENT_SURVIVALRATE)));
-                        custInfoObject.setIsPosted_weekly(cur.getInt(cur.getColumnIndex(GpsSQLiteHelper.CL_WEEKLY_UPDATES_isposted)));
+                        custInfoObject.setId(cur.getInt(cur.getColumnIndex(GPSHelper.CL_WEEKLY_UPDATES_ID)));
+                        custInfoObject.setSizeofStock(cur.getInt(cur.getColumnIndex(GPSHelper.CL_WEEKLY_UPDATES_CURRENT_ABW)));
+                        custInfoObject.setRemarks(cur.getString(cur.getColumnIndex(GPSHelper.CL_WEEKLY_UPDATES_REMARKS)));
+                        custInfoObject.setPondID(cur.getInt(cur.getColumnIndex(GPSHelper.CL_WEEKLY_UPDATES_PONDID)));
+                        custInfoObject.setDateAddedToDB(cur.getString(cur.getColumnIndex(GPSHelper.CL_WEEKLY_UPDATES_DATEADDED)));
+                        custInfoObject.setSurvivalrate_per_pond(cur.getString(cur.getColumnIndex(GPSHelper.CL_WEEKLY_UPDATES_CURRENT_SURVIVALRATE)));
+                        custInfoObject.setIsPosted_weekly(cur.getInt(cur.getColumnIndex(GPSHelper.CL_WEEKLY_UPDATES_isposted)));
                         pondweeklyList.add(custInfoObject);
                     }
 

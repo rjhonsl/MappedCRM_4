@@ -26,8 +26,8 @@ import com.android.volley.toolbox.StringRequest;
 import com.google.android.gms.maps.model.LatLng;
 import com.santeh.rjhonsl.samplemap.APIs.MyVolleyAPI;
 import com.santeh.rjhonsl.samplemap.Adapter.AdapterPonds;
-import com.santeh.rjhonsl.samplemap.DBase.GpsDB_Query;
-import com.santeh.rjhonsl.samplemap.DBase.GpsSQLiteHelper;
+import com.santeh.rjhonsl.samplemap.DBase.GPSHelper;
+import com.santeh.rjhonsl.samplemap.DBase.GPSQuery;
 import com.santeh.rjhonsl.samplemap.Obj.CustInfoObject;
 import com.santeh.rjhonsl.samplemap.Parsers.PondInfoJsonParser;
 import com.santeh.rjhonsl.samplemap.R;
@@ -53,7 +53,7 @@ public class Activity_ManagePonds extends AppCompatActivity {
     String farmname = "", latitude = "",  longitude ="";
     ImageButton btnaddpond;
 
-    GpsDB_Query db;
+    GPSQuery db;
 
     ListView lvPonds;
     LinearLayout llnoPond;
@@ -72,7 +72,7 @@ public class Activity_ManagePonds extends AppCompatActivity {
         fusedLocation = new FusedLocation(context, activity);
         fusedLocation.connectToApiClient();
 
-        db = new GpsDB_Query(this);
+        db = new GPSQuery(this);
         db.open();
 
         userlevel = Helper.variables.getGlobalVar_currentLevel(activity);
@@ -270,19 +270,19 @@ public class Activity_ManagePonds extends AppCompatActivity {
 
                     while (cur.moveToNext()) {
                         CustInfoObject custInfoObject = new CustInfoObject();
-                        custInfoObject.setId(cur.getInt(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_INDEX)));
-                        custInfoObject.setPondID(cur.getInt(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_PID)));
-                        custInfoObject.setSpecie(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_specie)));
-                        custInfoObject.setSizeofStock(cur.getInt(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_sizeofStock)));
-                        custInfoObject.setSurvivalrate_per_pond(cur.getInt(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_survivalrate)) + "");
-                        custInfoObject.setDateStocked(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_dateStocked)));
-                        custInfoObject.setQuantity(cur.getInt(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_quantity)));
-                        custInfoObject.setArea(cur.getInt(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_area)));
-                        custInfoObject.setCulturesystem(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_culturesystem)));
-                        custInfoObject.setRemarks(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_remarks)));
-                        custInfoObject.setCustomerID(cur.getString(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_customerId)));
-                        custInfoObject.setIsPosted(cur.getInt(cur.getColumnIndex(GpsSQLiteHelper.CL_POND_isPosted)));
-                        custInfoObject.setCurrentABW(cur.getInt(cur.getColumnIndex(GpsSQLiteHelper.CL_WEEKLY_UPDATES_CURRENT_ABW)));
+                        custInfoObject.setId(cur.getInt(cur.getColumnIndex(GPSHelper.CL_POND_INDEX)));
+                        custInfoObject.setPondID(cur.getInt(cur.getColumnIndex(GPSHelper.CL_POND_PID)));
+                        custInfoObject.setSpecie(cur.getString(cur.getColumnIndex(GPSHelper.CL_POND_specie)));
+                        custInfoObject.setSizeofStock(cur.getInt(cur.getColumnIndex(GPSHelper.CL_POND_sizeofStock)));
+                        custInfoObject.setSurvivalrate_per_pond(cur.getInt(cur.getColumnIndex(GPSHelper.CL_POND_survivalrate)) + "");
+                        custInfoObject.setDateStocked(cur.getString(cur.getColumnIndex(GPSHelper.CL_POND_dateStocked)));
+                        custInfoObject.setQuantity(cur.getInt(cur.getColumnIndex(GPSHelper.CL_POND_quantity)));
+                        custInfoObject.setArea(cur.getInt(cur.getColumnIndex(GPSHelper.CL_POND_area)));
+                        custInfoObject.setCulturesystem(cur.getString(cur.getColumnIndex(GPSHelper.CL_POND_culturesystem)));
+                        custInfoObject.setRemarks(cur.getString(cur.getColumnIndex(GPSHelper.CL_POND_remarks)));
+                        custInfoObject.setCustomerID(cur.getString(cur.getColumnIndex(GPSHelper.CL_POND_customerId)));
+                        custInfoObject.setIsPosted(cur.getInt(cur.getColumnIndex(GPSHelper.CL_POND_isPosted)));
+                        custInfoObject.setCurrentABW(cur.getInt(cur.getColumnIndex(GPSHelper.CL_WEEKLY_UPDATES_CURRENT_ABW)));
                         pondInfoList.add(custInfoObject);
                     }
                     populateListViewAdapter();

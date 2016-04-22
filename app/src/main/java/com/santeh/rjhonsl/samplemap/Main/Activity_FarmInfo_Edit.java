@@ -21,7 +21,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.santeh.rjhonsl.samplemap.APIs.MyVolleyAPI;
-import com.santeh.rjhonsl.samplemap.DBase.GpsDB_Query;
+import com.santeh.rjhonsl.samplemap.DBase.GPSQuery;
 import com.santeh.rjhonsl.samplemap.R;
 import com.santeh.rjhonsl.samplemap.Utils.Helper;
 import com.santeh.rjhonsl.samplemap.Utils.Logging;
@@ -52,7 +52,7 @@ public class Activity_FarmInfo_Edit extends Activity{
 
     ImageButton btnback;
 
-    GpsDB_Query db;
+    GPSQuery db;
     private int isposted;
 
     @Override
@@ -63,7 +63,7 @@ public class Activity_FarmInfo_Edit extends Activity{
         context = Activity_FarmInfo_Edit.this;
         PD = new ProgressDialog(this);
         PD.setCancelable(false);
-        db = new GpsDB_Query(this);
+        db = new GPSQuery(this);
         db.open();
 
         setContentView(R.layout.activity_add_farminformation);

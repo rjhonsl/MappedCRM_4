@@ -3,7 +3,7 @@ package com.santeh.rjhonsl.samplemap.Parsers;
 
 import android.util.Log;
 
-import com.santeh.rjhonsl.samplemap.DBase.GpsSQLiteHelper;
+import com.santeh.rjhonsl.samplemap.DBase.GPSHelper;
 import com.santeh.rjhonsl.samplemap.Obj.CustInfoObject;
 
 import org.json.JSONArray;
@@ -150,8 +150,8 @@ public class CustAndPondParser {
 				}
 
 				try {
-					if (obj.has(GpsSQLiteHelper.CL_POND_dateInserted))
-						custInfoObject.setPond_dateInserted(obj.getString(GpsSQLiteHelper.CL_POND_dateInserted));
+					if (obj.has(GPSHelper.CL_POND_dateInserted))
+						custInfoObject.setPond_dateInserted(obj.getString(GPSHelper.CL_POND_dateInserted));
 				}catch (Exception e){
 					custInfoObject.setPond_dateInserted("None");
 				}

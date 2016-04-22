@@ -16,8 +16,8 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.santeh.rjhonsl.samplemap.DBase.GpsDB_Query;
-import com.santeh.rjhonsl.samplemap.DBase.GpsSQLiteHelper;
+import com.santeh.rjhonsl.samplemap.DBase.GPSHelper;
+import com.santeh.rjhonsl.samplemap.DBase.GPSQuery;
 import com.santeh.rjhonsl.samplemap.R;
 import com.santeh.rjhonsl.samplemap.Utils.FusedLocation;
 import com.santeh.rjhonsl.samplemap.Utils.Helper;
@@ -46,8 +46,8 @@ public class Activity_Add_FarmInformation extends Activity {
     ImageButton titleback;
     FusedLocation fusedLocation;
 
-    GpsDB_Query db;
-    GpsSQLiteHelper dbHelper;
+    GPSQuery db;
+    GPSHelper dbHelper;
     private Button btnDelete;
     
     @Override
@@ -58,8 +58,8 @@ public class Activity_Add_FarmInformation extends Activity {
         context = Activity_Add_FarmInformation.this;
         activity = this;
 
-        dbHelper = new GpsSQLiteHelper(this);
-        db = new GpsDB_Query(this);
+        dbHelper = new GPSHelper(this);
+        db = new GPSQuery(this);
         db.open();
 
         fusedLocation = new FusedLocation(context, activity);

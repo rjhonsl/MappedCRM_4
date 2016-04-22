@@ -20,7 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 
 import com.fourmob.datetimepicker.date.DatePickerDialog;
-import com.santeh.rjhonsl.samplemap.DBase.GpsDB_Query;
+import com.santeh.rjhonsl.samplemap.DBase.GPSQuery;
 import com.santeh.rjhonsl.samplemap.R;
 import com.santeh.rjhonsl.samplemap.Utils.Helper;
 
@@ -34,7 +34,7 @@ public class Activity_AddtoHarvest extends FragmentActivity implements  DatePick
     Activity activity;
     Context context;
 
-    GpsDB_Query db;
+    GPSQuery db;
 
     public static final String DATEPICKER_TAG = "datepicker";
 
@@ -55,7 +55,7 @@ public class Activity_AddtoHarvest extends FragmentActivity implements  DatePick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_addtoharvest);
 
-        db = new GpsDB_Query(this);
+        db = new GPSQuery(this);
         db.open();
 
         activity = this;

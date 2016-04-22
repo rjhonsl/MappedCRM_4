@@ -16,7 +16,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.fourmob.datetimepicker.date.DatePickerDialog;
-import com.santeh.rjhonsl.samplemap.DBase.GpsDB_Query;
+import com.santeh.rjhonsl.samplemap.DBase.GPSQuery;
 import com.santeh.rjhonsl.samplemap.R;
 import com.santeh.rjhonsl.samplemap.Utils.Helper;
 import com.santeh.rjhonsl.samplemap.Utils.Logging;
@@ -43,7 +43,7 @@ public class Activity_AddPond extends FragmentActivity  implements DatePickerDia
     DatePickerDialog datePickerDialog;
     int y, m, d, userlvl;
 
-    GpsDB_Query db;
+    GPSQuery db;
     Activity activity;
     Context context;
     @Override
@@ -52,7 +52,7 @@ public class Activity_AddPond extends FragmentActivity  implements DatePickerDia
         setContentView(R.layout.activity_addpond);
         activity = this;
         context = Activity_AddPond.this;
-        db = new GpsDB_Query(this);
+        db = new GPSQuery(this);
         db.open();
 
         userlvl =  Helper.variables.getGlobalVar_currentLevel(activity);

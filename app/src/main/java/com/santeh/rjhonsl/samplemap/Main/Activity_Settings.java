@@ -20,8 +20,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.santeh.rjhonsl.samplemap.APIs.MyVolleyAPI;
-import com.santeh.rjhonsl.samplemap.DBase.GpsDB_Query;
-import com.santeh.rjhonsl.samplemap.DBase.GpsSQLiteHelper;
+import com.santeh.rjhonsl.samplemap.DBase.GPSHelper;
+import com.santeh.rjhonsl.samplemap.DBase.GPSQuery;
 import com.santeh.rjhonsl.samplemap.Obj.CustInfoObject;
 import com.santeh.rjhonsl.samplemap.Parsers.CustAndPondParser;
 import com.santeh.rjhonsl.samplemap.Parsers.HarvestInfoParser;
@@ -55,7 +55,7 @@ public class Activity_Settings extends Activity{
     List<CustInfoObject> custInfoObjectList;
     ProgressDialog PD;
 
-    GpsDB_Query db;
+    GPSQuery db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +63,7 @@ public class Activity_Settings extends Activity{
         setContentView(R.layout.activity_settings);
         context = Activity_Settings.this;
         activity = this;
-        db = new GpsDB_Query(this);
+        db = new GPSQuery(this);
         PD = new ProgressDialog(this);
         PD.setCancelable(false);
         PD.setIndeterminate(true);
@@ -177,8 +177,8 @@ public class Activity_Settings extends Activity{
                             custInfoObjectList =  CustAndPondParser.parseFeed(response);
                             if (custInfoObjectList != null) {
                                 if (custInfoObjectList.size() > 0) {
-                                    db.delete_ALL_ITEM_ON_TABLE(GpsSQLiteHelper.TBLFARMiNFO);
-                                    Log.d("RESTORE", "TABLE CLEARED - " + GpsSQLiteHelper.TBLFARMiNFO);
+                                    db.delete_ALL_ITEM_ON_TABLE(GPSHelper.TBLFARMiNFO);
+                                    Log.d("RESTORE", "TABLE CLEARED - " + GPSHelper.TBLFARMiNFO);
                                     for (int i = 0; i < custInfoObjectList.size() ; i++) {
                                         db.insertFarmInformation_RESTORE(
                                                 custInfoObjectList.get(i).getLatitude(),
@@ -252,8 +252,8 @@ public class Activity_Settings extends Activity{
                             custInfoObjectList =  CustAndPondParser.parseFeed(response);
                             if (custInfoObjectList != null) {
                                 if (custInfoObjectList.size() > 0) {
-                                    db.delete_ALL_ITEM_ON_TABLE(GpsSQLiteHelper.TBLMAINCUSTOMERINFO);
-                                    Log.d("RESTORE", "TABLE CLEARED - " + GpsSQLiteHelper.TBLMAINCUSTOMERINFO);
+                                    db.delete_ALL_ITEM_ON_TABLE(GPSHelper.TBLMAINCUSTOMERINFO);
+                                    Log.d("RESTORE", "TABLE CLEARED - " + GPSHelper.TBLMAINCUSTOMERINFO);
 
                                     for (int i = 0; i < custInfoObjectList.size() ; i++) {
                                         db.insertMainCustomerInformation_RESTORE(
@@ -345,7 +345,7 @@ public class Activity_Settings extends Activity{
                             custInfoObjectList =  CustAndPondParser.parseFeed(response);
                             if (custInfoObjectList != null) {
                                 if (custInfoObjectList.size() > 0) {
-                                    db.delete_ALL_ITEM_ON_TABLE(GpsSQLiteHelper.TBLPOND);
+                                    db.delete_ALL_ITEM_ON_TABLE(GPSHelper.TBLPOND);
                                     Log.d("RESTORE", "TABLE CLEARED - pond info");
 
                                     for (int i = 0; i < custInfoObjectList.size() ; i++) {
@@ -423,7 +423,7 @@ public class Activity_Settings extends Activity{
                             custInfoObjectList =  CustAndPondParser.parseFeed(response);
                             if (custInfoObjectList != null) {
                                 if (custInfoObjectList.size() > 0) {
-                                    db.delete_ALL_ITEM_ON_TABLE(GpsSQLiteHelper.TBLPOND_WeeklyUpdates);
+                                    db.delete_ALL_ITEM_ON_TABLE(GPSHelper.TBLPOND_WeeklyUpdates);
                                     Log.d("RESTORE", "TABLE CLEARED - weekly");
 
                                     for (int i = 0; i < custInfoObjectList.size() ; i++) {
@@ -501,7 +501,7 @@ public class Activity_Settings extends Activity{
                             if (custInfoObjectList != null) {
                                 if (custInfoObjectList.size() > 0) {
 //                                    Helper.createCustomThemedDialogOKOnly(activity, "Restore", response, "OK");
-                                    db.delete_ALL_ITEM_ON_TABLE(GpsSQLiteHelper.TBL_HARVESTINFO);
+                                    db.delete_ALL_ITEM_ON_TABLE(GPSHelper.TBL_HARVESTINFO);
                                     Log.d("RESTORE", "HARVEST INFO");
 
                                     for (int i = 0; i < custInfoObjectList.size() ; i++) {
