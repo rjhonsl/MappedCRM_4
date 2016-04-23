@@ -15,6 +15,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.santeh.rjhonsl.samplemap.APIs.MyVolleyAPI;
 import com.santeh.rjhonsl.samplemap.R;
+import com.santeh.rjhonsl.samplemap.Utils.FusedLocation;
 import com.santeh.rjhonsl.samplemap.Utils.Helper;
 
 import java.util.HashMap;
@@ -28,6 +29,7 @@ public class Activity_PostText extends AppCompatActivity {
     Activity activity;
     Context context;
     EditText edtPostContent;
+    FusedLocation fusedLocation;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -36,6 +38,9 @@ public class Activity_PostText extends AppCompatActivity {
         activity = this;
         context = Activity_PostText.this;
         Helper.hideKeyboardOnLoad(this);
+
+        fusedLocation = new FusedLocation(context, activity);
+        fusedLocation.connectToApiClient();
 
         edtPostContent = (EditText) findViewById(R.id.edtPostSomethingContent);
 
@@ -46,6 +51,7 @@ public class Activity_PostText extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Helper.toastShort(activity, edtPostContent.getText().toString());
+                startPostSomethingToWeb();
             }
         });
 
@@ -59,23 +65,22 @@ public class Activity_PostText extends AppCompatActivity {
     }
 
 
-
-    private void startPostSomethingToWeb(final String sqlString) {
-        StringRequest postRequest = new StringRequest(Request.Method.POST, Helper.variables.URL_PHP_RAW_QUERY_POST_INSERT,
+    private void startPostSomethingToWeb() {
+        StringRequest postRequest = new StringRequest(Request.Method.POST, Helper.variables.URL_PHP_INSERT_FEEDPOST,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(final String response) {
                         if (!response.substring(1, 2).equalsIgnoreCase("0")) {
-
+                            Helper.toastShort(activity, "Error"+response);
                         } else {
-
+                            Helper.toastShort(activity, "Posted");
                         }
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Helper.toastLong(activity, error.toString());
+                        Helper.toastLong(activity, "error: "+error.toString());
                     }
                 })
         {
@@ -88,6 +93,23 @@ public class Activity_PostText extends AppCompatActivity {
                 params.put("userid", Helper.variables.getGlobalVar_currentUserID(activity) + "");
                 params.put("userlvl", Helper.variables.getGlobalVar_currentLevel(activity) + "");
 
+                params.put("content_type", 0 + "");
+                params.put("content_desc", edtPostContent.getText().toString() + "");
+                params.put("content_imgurl", "");
+                params.put("content_eventid", "");
+                params.put("content_fileurl",  "");
+                params.put("content_fetchAt", System.currentTimeMillis() + "");
+
+
+                String sqlString = "INSERT INTO `feed_main_` " +
+                        "(`feed_main_id`, `feed_main_uid`, `feed_main_date`, `feed_main_loclat`, `feed_main_loclong`, `feed_main_fetch_at`, `feed_main_seen_state`) " +
+                        "VALUES " +
+                        "(NULL, '"+Helper.variables.getGlobalVar_currentUserID(activity)+"', " +
+                        "'"+System.currentTimeMillis()+"', " +
+                        "'"+fusedLocation.getLastKnowLocation().latitude+"', " +
+                        "'"+fusedLocation.getLastKnowLocation().latitude+"', '0', '0');";
+
+
                 params.put("sql", sqlString);
 
 
@@ -95,7 +117,9 @@ public class Activity_PostText extends AppCompatActivity {
             }
         };
 
+
         MyVolleyAPI api = new MyVolleyAPI();
         api.addToReqQueue(postRequest, context);
     }
+
 }

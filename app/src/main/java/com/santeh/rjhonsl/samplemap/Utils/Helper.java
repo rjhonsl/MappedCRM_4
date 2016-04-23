@@ -96,6 +96,7 @@ public class Helper {
         public static String sourceAddress_bizNF                    = "http://santeh.co.nf/phpsql/";
         public static String sourceAddress_goDaddy                  = "http://santeh-webservice.com/php/android_json_post/";
         public static String sourceAddress_goDaddy_downloadable     = "http://santeh.co.nf/downloadable/";
+        public static String sourceAddress_goDaddy_FishBookUpload   = "http://santeh.co.nf/Images/androidimageupload_fishbook/";
         public static String sourceAddress_downloadable_downloadable       = "http://santeh-webservice.com/downloadables/";
         public static String sourceAddress_000webhost               = "http://mysanteh.site50.net/santehweb/";
 
@@ -136,8 +137,10 @@ public class Helper {
         public static String URL_INSERT_POND_REPORT                     = sourceAddress_goDaddy + "insertPondReport.php";
         public static String URL_INSERT_MAIN_CUSTOMERINFO               = sourceAddress_goDaddy + "insertMainCustomerInfo.php";
         public static String URL_INSERT_FARM_INFO                       = sourceAddress_goDaddy + "insertFarmInformation.php";
-        public static String URL_PHP_RAW_QUERY_POST_INSERT              = sourceAddress_goDaddy + "insertSyncFarmInfo.php";
-        public static String URL_PHP_RAW_QUERY_POST_SELECT              = sourceAddress_goDaddy + "selectquery.php";
+        public static String URL_PHP_RAW_QUERY_POST_SELECT              = sourceAddress_goDaddy + "insertSyncFarmInfo.php";
+        public static String URL_PHP_INSERT_FEEDPOST                    = sourceAddress_goDaddy + "insertFeedContent.php";
+        public static String URL_PHP_INSERT_FEEDPOST_PHOTO              = sourceAddress_goDaddy + "insertFeedContentPhoto.php";
+        public static String URL_PHP_RAW_QUERY_POST_INSERT              = sourceAddress_goDaddy + "selectquery.php";
         public static String URL_PHP_RAW_QUERY_POST_SELECT_CUSTOMER     = sourceAddress_goDaddy + "selectQuery_customer.php";
         public static String URL_SELECT_POND_BY_ADDEDBY_USER            = sourceAddress_goDaddy + "aqua_select_ponds_by_addedbyUser.php";
         public static String URL_SELECT_WEEKLYUPDATES_BY_USER           = sourceAddress_goDaddy + "aqua_select_weekly_updates_by_useradded.php";

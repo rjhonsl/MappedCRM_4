@@ -175,6 +175,37 @@ public class GPSHelper extends SQLiteOpenHelper {
 	public static final String CL_FT_ID 	= "feed_type_id";
 	public static final String CL_FT_DESC 	= "feed_type_description";
 
+	public static final String TBL_FeedContents 	= "feedcontents_";
+	public static final String CL_FC_ID					= "feedcontents_id";
+	public static final String CL_FC_MAINID				= "feedcontents_mainid";
+	public static final String CL_FC_TYPE				= "feedcontents_type";
+	public static final String CL_FC_DESC				= "feedcontents_description";
+	public static final String CL_FC_IMAGEURL			= "feedcontents_imageurl";
+	public static final String CL_FC_EVENT				= "feedcontents_event";
+	public static final String CL_FC_FILEURL			= "feedcontents_fileurl";
+	public static final String CL_FC_FetchAT			= "feedcontents_fetchat";
+
+	public static final String TBL_FEED_COMMENTS = "feedcomments_";
+	public static final String CL_FCOMM_ID				= "feedcomments_id";
+	public static final String CL_FCOMM_MAINID			= "feedcomments_mainid";
+	public static final String CL_FCOMM_UID				= "feedcomments_uid";
+	public static final String CL_FCOMM_CONTENT			= "feedcomments_content";
+	public static final String CL_FCOMM_DATECOMMENTED	= "feedcomments_datecommented";
+	public static final String CL_FCOMM_loclat			= "feedcomments_loclat";
+	public static final String CL_FCOMM_locLong			= "feedcomments_loclong";
+	public static final String CL_FCOMM_fetchAt			= "feedcomments_fetchat";
+
+	public static final String TBL_FEED_SUBCOMM = "feedsubcomments_";
+	public static final String TCL_FSUBCOMM_ID 				= "feedsubcomments_id";
+	public static final String TCL_FSUBCOMM_COMMENTID 		= "feedsubcomments_commentid";
+	public static final String TCL_FSUBCOMM_UID 			= "feedsubcomments_uid";
+	public static final String TCL_FSUBCOMM_CONTENT			= "feedsubcomments_content";
+	public static final String TCL_FSUBCOMM_DATECOMM		= "feedsubcomments_datecommented";
+	public static final String TCL_FSUBCOMM_loclat			= "feedsubcomments_loclat";
+	public static final String TCL_FSUBCOMM_locLong			= "feedsubcomments_loclong";
+	public static final String TCL_FSUBCOMM_fetchedAt		= "feedsubcomments_fetchat";
+
+
 
 	//TBLUSERS
 	public static final String TBLUSERS = "tblusers";

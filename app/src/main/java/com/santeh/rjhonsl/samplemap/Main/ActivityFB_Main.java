@@ -1,16 +1,20 @@
 package com.santeh.rjhonsl.samplemap.Main;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -22,14 +26,27 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
+import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.santeh.rjhonsl.samplemap.R;
+import com.santeh.rjhonsl.samplemap.Utils.FusedLocation;
 import com.santeh.rjhonsl.samplemap.Utils.Helper;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Hashtable;
+import java.util.Map;
 
 /**
  * Created by rjhonsl on 4/14/2016.
@@ -50,6 +67,8 @@ public class ActivityFB_Main extends AppCompatActivity {
     FloatingActionButton fabAddPost;
     LinearLayout llbottomwrapper;
 
+    FusedLocation fusedLocation;
+
     Boolean isBottomAnimating = false;
     Boolean isFabSelected = false;
 
@@ -67,6 +86,9 @@ public class ActivityFB_Main extends AppCompatActivity {
 
         ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
+
+        fusedLocation = new FusedLocation(context, activity);
+        fusedLocation.connectToApiClient();
 
 
 
@@ -464,7 +486,17 @@ public class ActivityFB_Main extends AppCompatActivity {
                 File file = getPath(selectedFileUri);
                 selectedFilePath = file.getAbsolutePath();
 
-                Helper.toastLong(activity, selectedFilePath);
+                uploadImage(selectedFileUri);
+//
+//                startPostSomethingToWeb(file, selectedFilePath, selectedFileUri);
+//                Bitmap bitmap = null;
+//                try {
+//                    bitmap = MediaStore.Images.Media.getBitmap(activity.getContentResolver(), selectedFileUri);
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//                Helper.toastLong(activity, selectedFilePath);
+
                 try {
                     FileInputStream is = new FileInputStream(file);
                     FileOutputStream os = new FileOutputStream(file);
@@ -475,6 +507,141 @@ public class ActivityFB_Main extends AppCompatActivity {
         }
 
 
+    }
+
+
+
+
+
+
+    private void uploadImage(final Uri uriFilepath){
+        //Showing the progress dialog
+        final ProgressDialog loading = ProgressDialog.show(this,"Uploading...","Please wait...",false,false);
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Helper.variables.URL_PHP_INSERT_FEEDPOST_PHOTO,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String s) {
+                        //Disimissing the progress dialog
+                        loading.dismiss();
+                        //Showing toast message of the response
+                        Toast.makeText(activity, s , Toast.LENGTH_LONG).show();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        //Dismissing the progress dialog
+                        loading.dismiss();
+
+                        //Showing toast
+                        Toast.makeText(activity, volleyError.getMessage().toString(), Toast.LENGTH_LONG).show();
+                    }
+                }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                //Converting Bitmap to String
+                Bitmap bitmap = null;
+                try {
+                    bitmap = MediaStore.Images.Media.getBitmap(activity.getContentResolver(), uriFilepath);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                String image = getStringImage(bitmap);
+
+                //Getting Image Name
+                String name = "name";
+
+                //Creating parameters
+                Map<String,String> params = new Hashtable<String, String>();
+
+                //Adding parameters
+                params.put("keyimage", image);
+                params.put("keyname", name);
+
+                //returning parameters
+                return params;
+            }
+        };
+
+        //Creating a Request Queue
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+
+        //Adding request to the queue
+        requestQueue.add(stringRequest);
+    }
+
+//    private void startPostSomethingToWeb(final File file, final String filepath, final Uri uriFilepath) {
+//        StringRequest postRequest = new StringRequest(Request.Method.POST, Helper.variables.URL_PHP_INSERT_FEEDPOST_PHOTO,
+//                new Response.Listener<String>() {
+//                    @Override
+//                    public void onResponse(final String response) {
+//                        if (!response.substring(1, 2).equalsIgnoreCase("0")) {
+//                            Helper.createCustomThemedDialogOKOnly_scrolling(activity,"TITLE" ,response+"", "OK", R.color.red);
+////                            Helper.toastShort(activity, "Response: "+response);
+//                        } else {
+//                            Helper.toastShort(activity, "Error: " + response);
+//                        }
+//                    }
+//                },
+//                new Response.ErrorListener() {
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//                        Helper.toastLong(activity, "error: "+error.toString());
+//                    }
+//                })
+//        {
+//            @Override
+//            protected Map<String, String> getParams() {
+//                Map<String, String> params = new HashMap<>();
+//                params.put("username", Helper.variables.getGlobalVar_currentUserName(activity));
+//                params.put("password", Helper.variables.getGlobalVar_currentUserPassword(activity));
+//                params.put("deviceid", Helper.getMacAddress(context));
+//                params.put("userid", Helper.variables.getGlobalVar_currentUserID(activity) + "");
+//                params.put("userlvl", Helper.variables.getGlobalVar_currentLevel(activity) + "");
+//                Bitmap bitmap = null;
+//                try {
+//                    bitmap = MediaStore.Images.Media.getBitmap(activity.getContentResolver(), uriFilepath);
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//
+//                params.put("content_type", 0 + "");
+//                params.put("content_desc", filepath + "");
+//                params.put("content_imgurl", "");
+//                params.put("content_eventid", "");
+//                params.put("content_fileurl",  "");
+//                params.put("imagearray",  getStringImage(bitmap)+"");
+//                params.put("content_fetchAt", System.currentTimeMillis() + "");
+//
+//
+//                String sqlString = "INSERT INTO `feed_main_` " +
+//                        "(`feed_main_id`, `feed_main_uid`, `feed_main_date`, `feed_main_loclat`, `feed_main_loclong`, `feed_main_fetch_at`, `feed_main_seen_state`) " +
+//                        "VALUES " +
+//                        "(NULL, '"+Helper.variables.getGlobalVar_currentUserID(activity)+"', " +
+//                        "'"+System.currentTimeMillis()+"', " +
+//                        "'"+fusedLocation.getLastKnowLocation().latitude+"', " +
+//                        "'"+fusedLocation.getLastKnowLocation().latitude+"', '0', '0');";
+//
+//
+//                params.put("sql", sqlString);
+//
+//
+//                return params;
+//            }
+//        };
+//
+//
+//        MyVolleyAPI api = new MyVolleyAPI();
+//        api.addToReqQueue(postRequest, context);
+//    }
+
+
+    public String getStringImage(Bitmap bmp){
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] imageBytes = baos.toByteArray();
+        String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+        return encodedImage;
     }
 
     public File getPath(Uri uri) {
