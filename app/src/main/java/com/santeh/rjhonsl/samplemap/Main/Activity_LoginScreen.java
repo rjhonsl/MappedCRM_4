@@ -92,7 +92,6 @@ public class Activity_LoginScreen extends Activity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loginscreen);
-        Log.d("ONRESUME", "OnCreate");
         activity = this;
         context = Activity_LoginScreen.this;
 
@@ -298,8 +297,8 @@ public class Activity_LoginScreen extends Activity{
         txtusername.getBackground().setColorFilter(getResources().getColor(R.color.yellow), PorterDuff.Mode.SRC_IN);
         txtpassword.getBackground().setColorFilter(getResources().getColor(R.color.yellow), PorterDuff.Mode.SRC_IN);
 
-        txtusername.setText("tsraqua");
-        txtpassword.setText("tsraqua");
+        txtusername.setText("sfcwest");
+        txtpassword.setText("sfcwest");
 
     }
 
