@@ -1413,7 +1413,7 @@ public class Helper {
         } catch(Exception ex) {}
 
         if(!gps_enabled) {
-            final Dialog d = createCustomThemedDialogOKOnly(activity, "GPS Service", "Location services is needed to use this application. Please turn on Location in settings", "OK");
+            final Dialog d = createCustomThemedDialogOKOnly(activity, "GPS Service", "Location services is needed to use this application. Please turn on Location in settings and set it to High Accuracy", "OK");
             Button b1 = (Button) d.findViewById(R.id.btn_dialog_okonly_OK);
 
             d.setCancelable(false);
