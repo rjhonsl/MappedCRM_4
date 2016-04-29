@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
@@ -28,25 +29,16 @@ import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 import com.santeh.rjhonsl.samplemap.R;
 import com.santeh.rjhonsl.samplemap.Utils.FusedLocation;
 import com.santeh.rjhonsl.samplemap.Utils.Helper;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Hashtable;
-import java.util.Map;
 
 /**
  * Created by rjhonsl on 4/14/2016.
@@ -57,18 +49,20 @@ public class ActivityFB_Main extends AppCompatActivity {
     Context context;
     ImageView imageview;
     ImageButton btnPopupOptions;
-    String finalHashtag;
+    String encodedImage;
     ScrollView scrollView;
     ListView lvFeeds;
+    Bitmap bitmap;
     private static final int SELECT_PICTURE = 1;
     private static final int SELECT_FILE = 2;
     private String selectedFilePath;
 
+    ProgressDialog loading;
     FloatingActionButton fabAddPost;
     LinearLayout llbottomwrapper;
 
     FusedLocation fusedLocation;
-
+    RequestParams params;
     Boolean isBottomAnimating = false;
     Boolean isFabSelected = false;
 
@@ -78,9 +72,15 @@ public class ActivityFB_Main extends AppCompatActivity {
         setContentView(R.layout.activityfb_main);
         activity = ActivityFB_Main.this;
         context = ActivityFB_Main.this;
+
+        params = new RequestParams();
+        loading = new ProgressDialog(context);
+        loading.setIndeterminate(true);
+        loading.setCancelable(false);
+        loading.setMessage("Uploading");
+
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar2);
         myToolbar.setBackgroundColor(getResources().getColor(R.color.blue_400));
-
         setSupportActionBar(myToolbar);
         myToolbar.inflateMenu(R.menu.menu_search);
 
@@ -326,18 +326,8 @@ public class ActivityFB_Main extends AppCompatActivity {
         fabAddPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                if (llbottomwrapper.getVisibility() == View.VISIBLE) {
-////                    llbottomwrapper.setVisibility(View.GONE);
-////                    fabAddPost.setVisibility(View.VISIBLE);
                 isFabSelected = true;
-
                 animateBottom();
-//                } else {
-////                    llbottomwrapper.setVisibility(View.VISIBLE);
-////                    fabAddPost.setVisibility(View.GONE);
-//                    isFabSelected = false;
-//                    animateBottom();
-//                }
             }
         });
 
@@ -480,29 +470,32 @@ public class ActivityFB_Main extends AppCompatActivity {
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
-            if (requestCode == SELECT_PICTURE || requestCode == SELECT_FILE) {
+            if (requestCode == SELECT_PICTURE) { //
                 Uri selectedFileUri = data.getData();
+                Uri filePath = data.getData();
 
                 File file = getPath(selectedFileUri);
-                selectedFilePath = file.getAbsolutePath();
-
-                uploadImage(selectedFileUri);
-//
-//                startPostSomethingToWeb(file, selectedFilePath, selectedFileUri);
-//                Bitmap bitmap = null;
-//                try {
-//                    bitmap = MediaStore.Images.Media.getBitmap(activity.getContentResolver(), selectedFileUri);
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//                Helper.toastLong(activity, selectedFilePath);
+                selectedFilePath = file.getAbsoluteFile().getName().toString();
 
                 try {
-                    FileInputStream is = new FileInputStream(file);
-                    FileOutputStream os = new FileOutputStream(file);
-                } catch (FileNotFoundException e) {
+                    bitmap = MediaStore.Images.Media.getBitmap(activity.getContentResolver(), selectedFileUri);
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
+                String imageString = getStringImageBase64(bitmap);
+                encodeImagetoString(bitmap);
+
+
+            }else if(requestCode == SELECT_FILE){
+                Uri selectedFileUri = data.getData();
+                Uri filePath = data.getData();
+
+                File file = getPath(selectedFileUri);
+                selectedFilePath = file.getAbsoluteFile().getName();
+                String fullpath = file.getPath();
+
+                Helper.toastLong(activity, selectedFilePath+ " size:" + getFileSize(file));
+
             }
         }
 
@@ -510,65 +503,6 @@ public class ActivityFB_Main extends AppCompatActivity {
     }
 
 
-
-
-
-
-    private void uploadImage(final Uri uriFilepath){
-        //Showing the progress dialog
-        final ProgressDialog loading = ProgressDialog.show(this,"Uploading...","Please wait...",false,false);
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Helper.variables.URL_PHP_INSERT_FEEDPOST_PHOTO,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String s) {
-                        //Disimissing the progress dialog
-                        loading.dismiss();
-                        //Showing toast message of the response
-                        Toast.makeText(activity, s , Toast.LENGTH_LONG).show();
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError volleyError) {
-                        //Dismissing the progress dialog
-                        loading.dismiss();
-
-                        //Showing toast
-                        Toast.makeText(activity, volleyError.getMessage().toString(), Toast.LENGTH_LONG).show();
-                    }
-                }){
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                //Converting Bitmap to String
-                Bitmap bitmap = null;
-                try {
-                    bitmap = MediaStore.Images.Media.getBitmap(activity.getContentResolver(), uriFilepath);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                String image = getStringImage(bitmap);
-
-                //Getting Image Name
-                String name = "name";
-
-                //Creating parameters
-                Map<String,String> params = new Hashtable<String, String>();
-
-                //Adding parameters
-                params.put("keyimage", image);
-                params.put("keyname", name);
-
-                //returning parameters
-                return params;
-            }
-        };
-
-        //Creating a Request Queue
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-
-        //Adding request to the queue
-        requestQueue.add(stringRequest);
-    }
 
 //    private void startPostSomethingToWeb(final File file, final String filepath, final Uri uriFilepath) {
 //        StringRequest postRequest = new StringRequest(Request.Method.POST, Helper.variables.URL_PHP_INSERT_FEEDPOST_PHOTO,
@@ -610,7 +544,7 @@ public class ActivityFB_Main extends AppCompatActivity {
 //                params.put("content_imgurl", "");
 //                params.put("content_eventid", "");
 //                params.put("content_fileurl",  "");
-//                params.put("imagearray",  getStringImage(bitmap)+"");
+//                params.put("imagearray",  getStringImageBase64(bitmap)+"");
 //                params.put("content_fetchAt", System.currentTimeMillis() + "");
 //
 //
@@ -636,15 +570,107 @@ public class ActivityFB_Main extends AppCompatActivity {
 //    }
 
 
-    public String getStringImage(Bitmap bmp){
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bmp.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        byte[] imageBytes = baos.toByteArray();
+    public String getStringImageBase64(Bitmap bmp){
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.JPEG, 50, stream);
+        byte[] imageBytes = stream.toByteArray();
         String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
         return encodedImage;
     }
 
+    public void encodeImagetoString(final Bitmap bmp ) {
+        new AsyncTask<Void, Void, String>() {
+
+            protected void onPreExecute() {
+              loading.show();
+            }
+
+            @Override
+            protected String doInBackground(Void... params) {
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bmp.compress(Bitmap.CompressFormat.JPEG, 50, stream);
+                byte[] imageBytes = stream.toByteArray();
+                encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+                return "";
+            }
+
+            @Override
+            protected void onPostExecute(String msg) {
+                loading.setMessage("Uploading...");
+                params.put("image", encodedImage);
+                params.put("imagename", selectedFilePath);
+                params.put("username", "tsraqua");
+                params.put("password", "tsraqua");
+                params.put("deviceid", Helper.getMacAddress(context));
+                params.put("userid",  "11");
+                params.put("userlvl", "4");
+                // Trigger Image upload
+                makeHTTPCall();
+            }
+        }.execute(null, null, null);
+    }
+
+
+    public void makeHTTPCall() {
+        loading.setMessage("Invoking Php");
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.post(Helper.variables.URL_PHP_INSERT_FEEDPOST_PHOTO,
+                params, new AsyncHttpResponseHandler() {
+                    // When the response returned by REST has Http
+                    // response code '200'
+
+
+                    @Override
+                    public void onSuccess(String content) {
+                        super.onSuccess(content);
+                    }
+
+                    @Override
+                    public void onSuccess(int statusCode, String content) {
+                        super.onSuccess(statusCode, content);
+                        loading.hide();
+                        Toast.makeText(getApplicationContext(), " " + statusCode + " " + content,
+                                Toast.LENGTH_LONG).show();
+                    }
+
+                    // When the response returned by REST has Http response code other than '200' such as '404', '500' or '403' etc
+                    @Override
+                    public void onFailure(int statusCode, Throwable error,
+                                          String content) {
+                        // Hide Progress Dialog
+                        loading.hide();
+                        // When Http response code is '404'
+                        if (statusCode == 404) {
+                            Toast.makeText(getApplicationContext(),
+                                    "Requested resource not found",
+                                    Toast.LENGTH_LONG).show();
+                        }
+                        // When Http response code is '500'
+                        else if (statusCode == 500) {
+                            Toast.makeText(getApplicationContext(),
+                                    "Something went wrong at server end",
+                                    Toast.LENGTH_LONG).show();
+                        }
+                        // When Http response code other than 404, 500
+                        else {
+                            Toast.makeText(
+                                    getApplicationContext(),
+                                    "Error Occured: Most Common Error: \n1. Device not connected to Internet\n2. Web App is not deployed in App server\n3. App server is not runningn HTTP Status code : "
+                                            + "\n"+ statusCode + "\n" +error.toString(), Toast.LENGTH_LONG)
+                                    .show();
+                        }
+                    }
+                });
+    }
+
+
     public File getPath(Uri uri) {
         return new File(uri.getPath());
     }
+
+    private double getFileSize(File file){
+        double filesize = file.length() / 1024;
+        return  filesize;
+    }
 }
+

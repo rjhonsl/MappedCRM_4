@@ -106,10 +106,10 @@
 
         <activity android:name=".Main.Activity_LoginScreen"
                   android:label="Santeh CRM">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
         </activity>
 
         <activity android:name=".Main.MapsActivity_UserMonitoring"
@@ -152,10 +152,10 @@
         <activity android:name=".Main.ActivityFB_Main"
                   android:label="Fishbook"
                   android:parentActivityName=".Main.MapsActivity">
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <activity android:name=".Main.Activity_ViewImage"
