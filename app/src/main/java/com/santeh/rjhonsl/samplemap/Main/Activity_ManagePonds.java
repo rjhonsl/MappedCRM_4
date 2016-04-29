@@ -10,7 +10,10 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.PopupMenu;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -59,7 +62,6 @@ public class Activity_ManagePonds extends AppCompatActivity {
     LinearLayout llnoPond;
 
     FusedLocation fusedLocation;
-
     int id=1, userlevel;
 
     @Override
@@ -161,22 +163,17 @@ public class Activity_ManagePonds extends AppCompatActivity {
         lvPonds.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position1, long id1) {
-                String[] options = {"View and Edit Pond Details", "View Weekly Reports", "Delete Pond", "Mark as Harvested"};
-                final Dialog d = Helper.createCustomThemedListDialog(activity, options, "Options", R.color.deepteal_500);
-                d.show();
 
-                ListView lv = (ListView) d.findViewById(R.id.dialog_list_listview);
-                lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, final int position, long id2) {
-                        d.hide();
-                        if (position == 1){
-                            startPondReports(position1);
+                PopupMenu popup = new PopupMenu(activity, view, Gravity.RIGHT);
+                popup.getMenuInflater().inflate(R.menu.popup_menu_manageponds, popup.getMenu());
 
-                        }else if (position == 0) {
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    public boolean onMenuItemClick(MenuItem item) {
+                        if (item.getItemId()== R.id.viewPondDetails){
                             startViewPond(position1);
-
-                        }else if (position == 2) {
+                        }else if (item.getItemId()== R.id.viewWeeklyReports){
+                            startPondReports(position1);
+                        }else if (item.getItemId()== R.id.deletePond){
                             if (pondInfoList.get(position1).getIsPosted() == 0) {
                                 if (Helper.variables.getGlobalVar_currentLevel(activity) == 4) {
                                     final Dialog dd = Helper.createCustomDialogThemedYesNO(activity, "Changes cannot be undone. \n\nDelete this pond?"
@@ -205,17 +202,80 @@ public class Activity_ManagePonds extends AppCompatActivity {
                             } else {
                                 Helper.createCustomThemedDialogOKOnly(activity, "Oops", "Record is already finalized/posted on server. Contact admin for further changes", "OK");
                             }
+                        }else if (item.getItemId()== R.id.markAsHarvested){
 
-                        }else if (position == 3){
                             Intent intent = new Intent(context, Activity_AddtoHarvest.class);
                             intent.putExtra("id", pondInfoList.get(position1).getId());
                             intent.putExtra("casenum", pondInfoList.get(position1).getPondID());
                             intent.putExtra("species", pondInfoList.get(position1).getSpecie());
                             intent.putExtra("datestocked", pondInfoList.get(position1).getDateStocked());
                             startActivity(intent);
+
                         }
+
+
+
+                        return true;
                     }
                 });
+
+                popup.show();//showing popup menu
+
+//                String[] options = {"View and Edit Pond Details", "View Weekly Reports", "Delete Pond", "Mark as Harvested"};
+//                final Dialog d = Helper.createCustomThemedListDialog(activity, options, "Options", R.color.deepteal_500);
+//                d.show();
+//
+//                ListView lv = (ListView) d.findViewById(R.id.dialog_list_listview);
+//                lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//                    @Override
+//                    public void onItemClick(AdapterView<?> parent, View view, final int position, long id2) {
+//                        d.hide();
+//                        if (position == 1){
+//                            startPondReports(position1);
+//
+//                        }else if (position == 0) {
+//                            startViewPond(position1);
+//
+//                        }else if (position == 2) {
+//                            if (pondInfoList.get(position1).getIsPosted() == 0) {
+//                                if (Helper.variables.getGlobalVar_currentLevel(activity) == 4) {
+//                                    final Dialog dd = Helper.createCustomDialogThemedYesNO(activity, "Changes cannot be undone. \n\nDelete this pond?"
+//                                            , "Delete", "NO", "YES", R.color.red);
+//                                    dd.show();
+//                                    Button yes = (Button) dd.findViewById(R.id.btn_dialog_yesno_opt2);
+//                                    Button no = (Button) dd.findViewById(R.id.btn_dialog_yesno_opt1);
+//
+//                                    yes.setOnClickListener(new View.OnClickListener() {
+//                                        @Override
+//                                        public void onClick(View v) {
+//                                            dd.hide();
+//                                            deletePondByID(pondInfoList.get(position1).getId());
+//                                        }
+//                                    });
+//
+//                                    no.setOnClickListener(new View.OnClickListener() {
+//                                        @Override
+//                                        public void onClick(View v) {
+//                                            dd.hide();
+//                                        }
+//                                    });
+//                                } else {
+//                                    Helper.createCustomThemedDialogOKOnly(activity, "Oops", "You have no permission delete this record", "OK");
+//                                }
+//                            } else {
+//                                Helper.createCustomThemedDialogOKOnly(activity, "Oops", "Record is already finalized/posted on server. Contact admin for further changes", "OK");
+//                            }
+//
+//                        }else if (position == 3){
+//                            Intent intent = new Intent(context, Activity_AddtoHarvest.class);
+//                            intent.putExtra("id", pondInfoList.get(position1).getId());
+//                            intent.putExtra("casenum", pondInfoList.get(position1).getPondID());
+//                            intent.putExtra("species", pondInfoList.get(position1).getSpecie());
+//                            intent.putExtra("datestocked", pondInfoList.get(position1).getDateStocked());
+//                            startActivity(intent);
+//                        }
+//                    }
+//                });
                 return true;
             }
         });

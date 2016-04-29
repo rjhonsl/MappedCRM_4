@@ -1576,7 +1576,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     private void prompt_noFarm() {
-        final Dialog d = Helper.createCustomThemedDialogOKOnly(activity, "MAP", "You have not added a farm yet. \nStart by pressing the  plus '+' on the upper right side of the screen.", "OK");
+        final Dialog d = Helper.createCustomThemedDialogOKOnly(activity, "Santeh CRM", "You have not added a farm/marker yet. \nStart by pressing the  plus '+' on the upper right side of the screen.", "OK");
         Button ok = (Button) d.findViewById(R.id.btn_dialog_okonly_OK);
         d.show();
         ok.setOnClickListener(new View.OnClickListener() {

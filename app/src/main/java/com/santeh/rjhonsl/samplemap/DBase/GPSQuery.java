@@ -946,7 +946,7 @@ public class GPSQuery {
 		String query =
 				"SELECT tblpond_weeklyupdates.* FROM tblpond_weeklyupdates \n" +
 						"WHERE tblpond_weeklyupdates.wu_pondid = ?" +
-						"ORDER BY tblpond_weeklyupdates.wu_id ASC ;";
+						"ORDER BY tblpond_weeklyupdates.wu_id DESC ;";
 
 		String[] params =  new String[] {pondid};
 		return db.rawQuery(query, params);

@@ -75,7 +75,7 @@ public class Activity_LoginScreen extends Activity{
     ProgressDialog mProgressDialog;
 
     String versionName, fileDir = "/sdcard/Download/", fulladdress, latestVersionName, versionFile;
-    int versionCode;
+    int versionCode, update_checkcount = 0;
     List<CustInfoObject> listaccounts = new ArrayList<>();
     FusedLocation fusedLocation;
     PackageInfo pInfo = null;
@@ -92,7 +92,6 @@ public class Activity_LoginScreen extends Activity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loginscreen);
-        Log.d("ONRESUME", "OnCreate");
         activity = this;
         context = Activity_LoginScreen.this;
 
@@ -552,76 +551,80 @@ public class Activity_LoginScreen extends Activity{
 //            Helper.toastShort(activity, "Internet Connection is not available. Please try again later.");
         }
         else{
-            txtprogressdialog_message.setText("Checking if app is up to date...");
-            PD.show();
+            if(update_checkcount == 0){
+                update_checkcount = update_checkcount + 1;
+                txtprogressdialog_message.setText("Checking if app is up to date...");
+                PD.show();
 
-            StringRequest postRequest = new StringRequest(Request.Method.POST, Helper.variables.URL_SELECT_CURRENT_VERSION_NUMBER,
-                    new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(final String response) {
-                            PD.dismiss();
+                StringRequest postRequest = new StringRequest(Request.Method.POST, Helper.variables.URL_SELECT_CURRENT_VERSION_NUMBER,
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(final String response) {
+                                PD.dismiss();
 
 //                            Helper.createCustomThemedDialogOKOnly(activity, "RESONSE", response, "OK", R.color.red);
-                            if (!response.substring(1, 2).equalsIgnoreCase("0")) {
-                                String[] splitted = response.split("!-!");
-                                String versionNumber = splitted[0];
-                                versionFile = splitted[1];
+                                if (!response.substring(1, 2).equalsIgnoreCase("0")) {
+                                    String[] splitted = response.split("!-!");
+                                    String versionNumber = splitted[0];
+                                    versionFile = splitted[1];
 
-                                if (Integer.parseInt(versionNumber) > versionCode) {
-                                    // download updates
-                                    // declare the dialog as a member field of your activity
+                                    if (Integer.parseInt(versionNumber) > versionCode) {
+                                        // download updates
+                                        // declare the dialog as a member field of your activity
 
-                                    // instantiate it within the onCreate method
-                                    mProgressDialog = new ProgressDialog(context);
-                                    mProgressDialog.setMessage("Getting the latest version...");
-                                    mProgressDialog.setIndeterminate(true);
-                                    mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                                    mProgressDialog.setCancelable(false);
+                                        // instantiate it within the onCreate method
+                                        mProgressDialog = new ProgressDialog(context);
+                                        mProgressDialog.setMessage("Getting the latest version...");
+                                        mProgressDialog.setIndeterminate(true);
+                                        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                                        mProgressDialog.setCancelable(false);
 
-                                    // execute this when the downloader must be fired
-                                    final DownloadTask downloadTask = new DownloadTask(context);
-                                    downloadTask.execute(Helper.variables.sourceAddress_goDaddy_downloadable +versionFile+".apk");
+                                        // execute this when the downloader must be fired
+                                        final DownloadTask downloadTask = new DownloadTask(context);
+                                        downloadTask.execute(Helper.variables.sourceAddress_goDaddy_downloadable +versionFile+".apk");
 
-                                    mProgressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                                        @Override
-                                        public void onCancel(DialogInterface dialog) {
-                                            downloadTask.cancel(true);
-                                        }
-                                    });
+                                        mProgressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                                            @Override
+                                            public void onCancel(DialogInterface dialog) {
+                                                downloadTask.cancel(true);
+                                            }
+                                        });
 
 
-                                }else{
-                                    Helper.toastShort(activity, "Your application is up to date!");
+                                    }else{
+                                        Helper.toastShort(activity, "Your application is up to date!");
+                                    }
+                                } else {
+                                    Helper.createCustomThemedDialogOKOnly(activity, "Error", "Update Failed. Please try again later."
+                                            , "OK");
                                 }
-                            } else {
-                                Helper.createCustomThemedDialogOKOnly(activity, "Error", "Update Failed. Please try again later."
-                                        , "OK");
+
                             }
+                        }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        PD.dismiss();
+                        Helper.toastShort(activity, error.toString());
+                    }
+                }) {
+                    @Override
+                    protected Map<String, String> getParams() {
+                        Map<String, String> params = new HashMap<String, String>();
+                        params.put("deviceid", Helper.getMacAddress(activity)+"");
+                        params.put("username", Helper.variables.getGlobalVar_currentUserName(activity)+"");
+                        params.put("password", Helper.variables.getGlobalVar_currentUserPassword(activity)+"");
+                        params.put("userid", Helper.variables.getGlobalVar_currentUserID(activity)+"");
+                        params.put("userlvl", Helper.variables.getGlobalVar_currentLevel(activity)+"");
 
-                        }
-                    }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    PD.dismiss();
-                    Helper.toastShort(activity, error.toString());
-                }
-            }) {
-                @Override
-                protected Map<String, String> getParams() {
-                    Map<String, String> params = new HashMap<String, String>();
-                    params.put("deviceid", Helper.getMacAddress(activity)+"");
-                    params.put("username", Helper.variables.getGlobalVar_currentUserName(activity)+"");
-                    params.put("password", Helper.variables.getGlobalVar_currentUserPassword(activity)+"");
-                    params.put("userid", Helper.variables.getGlobalVar_currentUserID(activity)+"");
-                    params.put("userlvl", Helper.variables.getGlobalVar_currentLevel(activity)+"");
+                        return params;
+                    }
+                };
 
-                    return params;
-                }
-            };
+                // Adding request to request queue
+                MyVolleyAPI api = new MyVolleyAPI();
+                api.addToReqQueue(postRequest, Activity_LoginScreen.this);
+            }
 
-            // Adding request to request queue
-            MyVolleyAPI api = new MyVolleyAPI();
-            api.addToReqQueue(postRequest, Activity_LoginScreen.this);
         }
     }
 
