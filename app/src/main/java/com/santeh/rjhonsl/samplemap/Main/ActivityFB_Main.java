@@ -37,8 +37,12 @@ import com.santeh.rjhonsl.samplemap.Utils.FusedLocation;
 import com.santeh.rjhonsl.samplemap.Utils.Helper;
 
 import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 /**
  * Created by rjhonsl on 4/14/2016.
@@ -65,6 +69,7 @@ public class ActivityFB_Main extends AppCompatActivity {
     RequestParams params;
     Boolean isBottomAnimating = false;
     Boolean isFabSelected = false;
+    private int serverResponseCode;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -482,19 +487,16 @@ public class ActivityFB_Main extends AppCompatActivity {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                String imageString = getStringImageBase64(bitmap);
                 encodeImagetoString(bitmap);
 
 
             }else if(requestCode == SELECT_FILE){
                 Uri selectedFileUri = data.getData();
                 Uri filePath = data.getData();
-
                 File file = getPath(selectedFileUri);
-                selectedFilePath = file.getAbsoluteFile().getName();
-                String fullpath = file.getPath();
-
-                Helper.toastLong(activity, selectedFilePath+ " size:" + getFileSize(file));
+                selectedFilePath = file.getAbsolutePath();
+                Helper.toastLong(activity, selectedFilePath);
+                new UploadFileAsync().execute("");
 
             }
         }
@@ -504,85 +506,17 @@ public class ActivityFB_Main extends AppCompatActivity {
 
 
 
-//    private void startPostSomethingToWeb(final File file, final String filepath, final Uri uriFilepath) {
-//        StringRequest postRequest = new StringRequest(Request.Method.POST, Helper.variables.URL_PHP_INSERT_FEEDPOST_PHOTO,
-//                new Response.Listener<String>() {
-//                    @Override
-//                    public void onResponse(final String response) {
-//                        if (!response.substring(1, 2).equalsIgnoreCase("0")) {
-//                            Helper.createCustomThemedDialogOKOnly_scrolling(activity,"TITLE" ,response+"", "OK", R.color.red);
-////                            Helper.toastShort(activity, "Response: "+response);
-//                        } else {
-//                            Helper.toastShort(activity, "Error: " + response);
-//                        }
-//                    }
-//                },
-//                new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//                        Helper.toastLong(activity, "error: "+error.toString());
-//                    }
-//                })
-//        {
-//            @Override
-//            protected Map<String, String> getParams() {
-//                Map<String, String> params = new HashMap<>();
-//                params.put("username", Helper.variables.getGlobalVar_currentUserName(activity));
-//                params.put("password", Helper.variables.getGlobalVar_currentUserPassword(activity));
-//                params.put("deviceid", Helper.getMacAddress(context));
-//                params.put("userid", Helper.variables.getGlobalVar_currentUserID(activity) + "");
-//                params.put("userlvl", Helper.variables.getGlobalVar_currentLevel(activity) + "");
-//                Bitmap bitmap = null;
-//                try {
-//                    bitmap = MediaStore.Images.Media.getBitmap(activity.getContentResolver(), uriFilepath);
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//
-//                params.put("content_type", 0 + "");
-//                params.put("content_desc", filepath + "");
-//                params.put("content_imgurl", "");
-//                params.put("content_eventid", "");
-//                params.put("content_fileurl",  "");
-//                params.put("imagearray",  getStringImageBase64(bitmap)+"");
-//                params.put("content_fetchAt", System.currentTimeMillis() + "");
-//
-//
-//                String sqlString = "INSERT INTO `feed_main_` " +
-//                        "(`feed_main_id`, `feed_main_uid`, `feed_main_date`, `feed_main_loclat`, `feed_main_loclong`, `feed_main_fetch_at`, `feed_main_seen_state`) " +
-//                        "VALUES " +
-//                        "(NULL, '"+Helper.variables.getGlobalVar_currentUserID(activity)+"', " +
-//                        "'"+System.currentTimeMillis()+"', " +
-//                        "'"+fusedLocation.getLastKnowLocation().latitude+"', " +
-//                        "'"+fusedLocation.getLastKnowLocation().latitude+"', '0', '0');";
-//
-//
-//                params.put("sql", sqlString);
-//
-//
-//                return params;
-//            }
-//        };
-//
-//
-//        MyVolleyAPI api = new MyVolleyAPI();
-//        api.addToReqQueue(postRequest, context);
-//    }
 
 
-    public String getStringImageBase64(Bitmap bmp){
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bmp.compress(Bitmap.CompressFormat.JPEG, 50, stream);
-        byte[] imageBytes = stream.toByteArray();
-        String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
-        return encodedImage;
-    }
+
+
+
 
     public void encodeImagetoString(final Bitmap bmp ) {
         new AsyncTask<Void, Void, String>() {
 
             protected void onPreExecute() {
-              loading.show();
+                loading.show();
             }
 
             @Override
@@ -614,26 +548,22 @@ public class ActivityFB_Main extends AppCompatActivity {
     public void makeHTTPCall() {
         loading.setMessage("Invoking Php");
         AsyncHttpClient client = new AsyncHttpClient();
-        client.post(Helper.variables.URL_PHP_INSERT_FEEDPOST_PHOTO,
+        // Don't forget to change the IP address to your LAN address. Port no as well.
+        client.post("http://www.santeh-webservice.com/images/androidimageupload_fishbook/feedphoto.php",
                 params, new AsyncHttpResponseHandler() {
                     // When the response returned by REST has Http
                     // response code '200'
-
-
                     @Override
-                    public void onSuccess(String content) {
-                        super.onSuccess(content);
-                    }
-
-                    @Override
-                    public void onSuccess(int statusCode, String content) {
-                        super.onSuccess(statusCode, content);
+                    public void onSuccess(String response) {
+                        // Hide Progress Dialog
                         loading.hide();
-                        Toast.makeText(getApplicationContext(), " " + statusCode + " " + content,
+                        Toast.makeText(getApplicationContext(), response,
                                 Toast.LENGTH_LONG).show();
                     }
 
-                    // When the response returned by REST has Http response code other than '200' such as '404', '500' or '403' etc
+                    // When the response returned by REST has Http
+                    // response code other than '200' such as '404',
+                    // '500' or '403' etc
                     @Override
                     public void onFailure(int statusCode, Throwable error,
                                           String content) {
@@ -655,8 +585,9 @@ public class ActivityFB_Main extends AppCompatActivity {
                         else {
                             Toast.makeText(
                                     getApplicationContext(),
-                                    "Error Occured: Most Common Error: \n1. Device not connected to Internet\n2. Web App is not deployed in App server\n3. App server is not runningn HTTP Status code : "
-                                            + "\n"+ statusCode + "\n" +error.toString(), Toast.LENGTH_LONG)
+                                    "Error Occured n Most Common Error: n1. Device not connected to Internetn2. Web App is not deployed in App servern3. App server is not runningn HTTP Status code : "
+                                            + error.toString() + " "
+                                            + statusCode, Toast.LENGTH_LONG)
                                     .show();
                         }
                     }
@@ -664,13 +595,145 @@ public class ActivityFB_Main extends AppCompatActivity {
     }
 
 
+
     public File getPath(Uri uri) {
         return new File(uri.getPath());
     }
 
-    private double getFileSize(File file){
-        double filesize = file.length() / 1024;
-        return  filesize;
+
+
+
+
+
+
+
+    private class UploadFileAsync extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            try {
+                String sourceFileUri = selectedFilePath;
+
+                HttpURLConnection conn = null;
+                DataOutputStream dos = null;
+                String lineEnd = "\r\n";
+                String twoHyphens = "--";
+                String boundary = "*****";
+                int bytesRead, bytesAvailable, bufferSize;
+                byte[] buffer;
+                int maxBufferSize = 1 * 1024 * 1024;
+                File sourceFile = new File(sourceFileUri);
+
+                if (sourceFile.isFile()) {
+
+                    try {
+                        String upLoadServerUri = "http://www.santeh-webservice.com/uploadedfile/uploadfile.php";
+
+                        // open a URL connection to the Servlet
+                        FileInputStream fileInputStream = new FileInputStream(
+                                sourceFile);
+                        URL url = new URL(upLoadServerUri);
+
+                        // Open a HTTP connection to the URL
+                        conn = (HttpURLConnection) url.openConnection();
+                        conn.setDoInput(true); // Allow Inputs
+                        conn.setDoOutput(true); // Allow Outputs
+                        conn.setUseCaches(false); // Don't use a Cached Copy
+                        conn.setRequestMethod("POST");
+                        conn.setRequestProperty("Connection", "Keep-Alive");
+                        conn.setRequestProperty("ENCTYPE",
+                                "multipart/form-data");
+                        conn.setRequestProperty("Content-Type",
+                                "multipart/form-data;boundary=" + boundary);
+                        conn.setRequestProperty("bill", sourceFileUri);
+
+                        dos = new DataOutputStream(conn.getOutputStream());
+
+                        dos.writeBytes(twoHyphens + boundary + lineEnd);
+                        dos.writeBytes("Content-Disposition: form-data; name=\"bill\";filename=\""
+                                + sourceFileUri + "\"" + lineEnd);
+
+                        dos.writeBytes(lineEnd);
+
+                        // create a buffer of maximum size
+                        bytesAvailable = fileInputStream.available();
+
+                        bufferSize = Math.min(bytesAvailable, maxBufferSize);
+                        buffer = new byte[bufferSize];
+
+                        // read file and write it into form...
+                        bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+
+                        while (bytesRead > 0) {
+
+                            dos.write(buffer, 0, bufferSize);
+                            bytesAvailable = fileInputStream.available();
+                            bufferSize = Math
+                                    .min(bytesAvailable, maxBufferSize);
+                            bytesRead = fileInputStream.read(buffer, 0,
+                                    bufferSize);
+
+                        }
+
+                        // send multipart form data necesssary after file
+                        // data...
+                        dos.writeBytes(lineEnd);
+                        dos.writeBytes(twoHyphens + boundary + twoHyphens
+                                + lineEnd);
+
+                        // Responses from the server (code and message)
+                        serverResponseCode = conn.getResponseCode();
+                        String serverResponseMessage = conn
+                                .getResponseMessage();
+
+                        if (serverResponseCode == 200) {
+
+                            // messageText.setText(msg);
+                            Toast.makeText(context, "File Upload Complete.",
+                                  Toast.LENGTH_SHORT).show();
+
+                            // recursiveDelete(mDirectory1);
+
+                        }
+
+                        // close the streams //
+                        fileInputStream.close();
+                        dos.flush();
+                        dos.close();
+
+                    } catch (Exception e) {
+
+                        // dialog.dismiss();
+                        e.printStackTrace();
+
+                    }
+                    // dialog.dismiss();
+
+                } // End else block
+
+
+            } catch (Exception ex) {
+                // dialog.dismiss();
+
+                ex.printStackTrace();
+            }
+            return "Executed";
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+        }
     }
+
 }
 

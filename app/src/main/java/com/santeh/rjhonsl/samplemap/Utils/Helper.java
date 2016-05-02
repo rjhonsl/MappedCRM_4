@@ -139,7 +139,8 @@ public class Helper {
         public static String URL_INSERT_FARM_INFO                       = sourceAddress_goDaddy + "insertFarmInformation.php";
         public static String URL_PHP_RAW_QUERY_POST_SELECT              = sourceAddress_goDaddy + "insertSyncFarmInfo.php";
         public static String URL_PHP_INSERT_FEEDPOST                    = sourceAddress_goDaddy + "insertFeedContent.php";
-        public static String URL_PHP_INSERT_FEEDPOST_PHOTO              = sourceAddress_goDaddy + "insertFeedContentPhoto.php";
+//        public static String URL_PHP_INSERT_FEEDPOST_PHOTO              = sourceAddress_goDaddy + "insertFeedContentPhoto.php";
+        public static String URL_PHP_INSERT_FEEDPOST_PHOTO              = sourceAddress_goDaddy + "uploadimage.php";
         public static String URL_PHP_RAW_QUERY_POST_INSERT              = sourceAddress_goDaddy + "selectquery.php";
         public static String URL_PHP_RAW_QUERY_POST_SELECT_CUSTOMER     = sourceAddress_goDaddy + "selectQuery_customer.php";
         public static String URL_SELECT_POND_BY_ADDEDBY_USER            = sourceAddress_goDaddy + "aqua_select_ponds_by_addedbyUser.php";
