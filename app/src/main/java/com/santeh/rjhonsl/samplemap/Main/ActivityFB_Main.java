@@ -16,6 +16,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -32,6 +33,7 @@ import android.widget.Toast;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.nbsp.materialfilepicker.ui.FilePickerActivity;
 import com.santeh.rjhonsl.samplemap.R;
 import com.santeh.rjhonsl.samplemap.Utils.FusedLocation;
 import com.santeh.rjhonsl.samplemap.Utils.Helper;
@@ -43,6 +45,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.regex.Pattern;
 
 /**
  * Created by rjhonsl on 4/14/2016.
@@ -57,6 +60,8 @@ public class ActivityFB_Main extends AppCompatActivity {
     ScrollView scrollView;
     ListView lvFeeds;
     Bitmap bitmap;
+    File selectedFile;
+    Uri fileURI;
     private static final int SELECT_PICTURE = 1;
     private static final int SELECT_FILE = 2;
     private String selectedFilePath;
@@ -341,7 +346,8 @@ public class ActivityFB_Main extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
+                intent.setAction(Intent.ACTION_PICK);
+                intent.addCategory(Intent.CATEGORY_DEFAULT);
                 startActivityForResult(Intent.createChooser(intent,
                         "Select Picture"), SELECT_PICTURE);
             }
@@ -359,24 +365,33 @@ public class ActivityFB_Main extends AppCompatActivity {
         lluploadFile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-                intent.addCategory(Intent.CATEGORY_OPENABLE);
-                intent.setType("*/*");
-                String[] mimetypes = {
-                        "text/*",
-                        "application/msword",
-                        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-                        "application/vnd.ms-excel",
-                        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                        "application/vnd.ms-powerpoint",
-                        "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-                        "application/x-rar-compressed",
-                        "application/zip"
-                };
-                intent.putExtra(Intent.EXTRA_MIME_TYPES, mimetypes);
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent,
-                        "Select Picture"), SELECT_FILE);
+
+
+                Intent intent = new Intent(activity, FilePickerActivity.class);
+                intent.putExtra(FilePickerActivity.ARG_FILE_FILTER, Pattern.compile(".*\\.txt$"));
+                intent.putExtra(FilePickerActivity.ARG_SHOW_HIDDEN, false);
+                startActivityForResult(intent, SELECT_FILE);
+
+
+//                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+//                intent.addCategory(Intent.CATEGORY_OPENABLE);
+//                intent.setType("*/*");
+//                String[] mimetypes = {
+//                        "text/*",
+//                        "application/msword",
+//                        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+//                        "application/vnd.ms-excel",
+//                        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+//                        "application/vnd.ms-powerpoint",
+//                        "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+//                        "application/x-rar-compressed",
+//                        "application/zip"
+//                };
+//                intent.putExtra(Intent.EXTRA_MIME_TYPES, mimetypes);
+//                intent.setAction(Intent.ACTION_GET_CONTENT);
+//                startActivityForResult(Intent.createChooser(intent,
+//                        "Select a file"), SELECT_FILE);
+
             }
         });
 
@@ -480,7 +495,7 @@ public class ActivityFB_Main extends AppCompatActivity {
                 Uri filePath = data.getData();
 
                 File file = getPath(selectedFileUri);
-                selectedFilePath = file.getAbsoluteFile().getName().toString();
+                selectedFilePath = file.getAbsoluteFile().getName();
 
                 try {
                     bitmap = MediaStore.Images.Media.getBitmap(activity.getContentResolver(), selectedFileUri);
@@ -490,23 +505,38 @@ public class ActivityFB_Main extends AppCompatActivity {
                 encodeImagetoString(bitmap);
 
 
-            }else if(requestCode == SELECT_FILE){
-                Uri selectedFileUri = data.getData();
-                Uri filePath = data.getData();
-                File file = getPath(selectedFileUri);
-                selectedFilePath = file.getAbsolutePath();
-                Helper.toastLong(activity, selectedFilePath);
-                new UploadFileAsync().execute("");
-
+            }else if (requestCode == SELECT_FILE) {
+                String filePath = data.getStringExtra(FilePickerActivity.RESULT_FILE_PATH);
+                Helper.toastIndefinite(activity, "path:"+ filePath + "" +
+//                        "\nfile name:"+ filename +"" +
+//                        "\nfile type:"+ filetype +"" +
+                        "");
             }
+
+
+
+//            if(requestCode == SELECT_FILE){
+//
+//
+//
+////                Uri uri = data.getData();
+////                fileURI = uri;
+////                String fullpath = FileUtils.getPath(context, uri);
+////                assert fullpath != null;
+//////                String filename = fullpath.substring(fullpath.lastIndexOf("/")+1);
+//////                String filetype = fullpath.substring(fullpath.lastIndexOf(".")+1);
+//
+//                Helper.toastIndefinite(activity, "path:"+ FileUtils.getPath(context, uri) + "" +
+////                        "\nfile name:"+ filename +"" +
+////                        "\nfile type:"+ filetype +"" +
+//                        "");
+////                new UploadFileAsync().execute("");
+//
+//            }
         }
 
 
     }
-
-
-
-
 
 
 
@@ -602,18 +632,14 @@ public class ActivityFB_Main extends AppCompatActivity {
 
 
 
-
-
-
-
-
     private class UploadFileAsync extends AsyncTask<String, Void, String> {
 
         @Override
         protected String doInBackground(String... params) {
 
             try {
-                String sourceFileUri = selectedFilePath;
+                Log.d("Upload FIle", "do in background"  );
+                String sourceFileUri = fileURI.toString();
 
                 HttpURLConnection conn = null;
                 DataOutputStream dos = null;
@@ -623,10 +649,11 @@ public class ActivityFB_Main extends AppCompatActivity {
                 int bytesRead, bytesAvailable, bufferSize;
                 byte[] buffer;
                 int maxBufferSize = 1 * 1024 * 1024;
-                File sourceFile = new File(sourceFileUri);
+                File sourceFile = selectedFile;
 
-                if (sourceFile.isFile()) {
 
+                if (sourceFile != null) {
+                    Log.d("Upload FIle", "is no a null file" );
                     try {
                         String upLoadServerUri = "http://www.santeh-webservice.com/uploadedfile/uploadfile.php";
 
@@ -688,34 +715,30 @@ public class ActivityFB_Main extends AppCompatActivity {
                                 .getResponseMessage();
 
                         if (serverResponseCode == 200) {
-
-                            // messageText.setText(msg);
-                            Toast.makeText(context, "File Upload Complete.",
-                                  Toast.LENGTH_SHORT).show();
-
-                            // recursiveDelete(mDirectory1);
-
+                            Toast.makeText(context, "File Upload Complete.", Toast.LENGTH_SHORT).show();
+                            Log.d("Upload FIle", "Response: code:" +serverResponseCode + " message:" + serverResponseMessage );
                         }
 
-                        // close the streams //
                         fileInputStream.close();
                         dos.flush();
                         dos.close();
 
                     } catch (Exception e) {
-
-                        // dialog.dismiss();
                         e.printStackTrace();
-
+                        Log.d("Upload FIle", "error on try catch: "+ e.toString() );
                     }
-                    // dialog.dismiss();
 
-                } // End else block
+
+                }else{
+                    Log.d("Upload FIle", "is a null file" );
+                    Helper.toastLong(activity, "Not a valid file");
+                }// End else block
 
 
             } catch (Exception ex) {
-                // dialog.dismiss();
-
+                loading.dismiss();
+                Log.d("Upload FIle", "ERROR: code:" +serverResponseCode + " errormessage:" + ex.toString() );
+                Helper.toastLong(activity, "ERROR: code:" +serverResponseCode + " errormessage:" + ex.toString());
                 ex.printStackTrace();
             }
             return "Executed";

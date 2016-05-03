@@ -12,6 +12,7 @@
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.MANAGE_DOCUMENTS" />
 
     <!--
  The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
@@ -173,6 +174,16 @@
                   android:parentActivityName=".Main.ActivityFB_Main">
         </activity>
 
+        <!--<activity-->
+            <!--android:name="com.nononsenseapps.filepicker.FilePickerActivity"-->
+            <!--android:label="File Chooser"-->
+            <!--android:theme="@style/FilePickerTheme"-->
+        <!--&gt;-->
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.GET_CONTENT" />-->
+                <!--<category android:name="android.intent.category.DEFAULT" />-->
+            <!--</intent-filter>-->
+        <!--</activity>-->
 
 
 
@@ -194,6 +205,8 @@
                 <action android:name="locationReceiver" />
             </intent-filter>
         </receiver>
+
+
 
     </application>
 

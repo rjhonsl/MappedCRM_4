@@ -23,6 +23,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -841,14 +842,23 @@ public class Helper {
 
     public static void toastIndefinite(Activity context, String msg){
 
-        Snackbar snackbar = Snackbar.make(context.findViewById(android.R.id.content), msg, Snackbar.LENGTH_INDEFINITE)
+        final Snackbar snackbar = Snackbar.make(context.findViewById(android.R.id.content), msg, Snackbar.LENGTH_INDEFINITE)
                 .setActionTextColor(context.getResources().getColor(R.color.gray_100));
 
         View view = snackbar.getView();
         TextView tv = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
         tv.setTextColor(context.getResources().getColor(R.color.gray_100));
+        tv.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                snackbar.dismiss();
+                return false;
+            }
+        });
         tv.setMaxLines(5);
         snackbar.show();
+
+
 
     }
 

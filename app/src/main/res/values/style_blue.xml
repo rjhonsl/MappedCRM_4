@@ -36,13 +36,24 @@
         <item name="android:textColor">#FFFFFF</item>
     </style>
 
-    <!--<style name="Theme.AppCompat.Light.NoActionBar"-->
-           <!--parent="@style/Theme.AppCompat.Light"-->
-           <!--tools:override="true">-->
-        <!--<item name="android:windowNoTitle">true</item>-->
-        <!--<item name="android:windowFullscreen">true</item>-->
-        <!--<item name="android:windowActionBar">false</item>-->
-        <!--<item name="android:windowContentOverlay">@null</item>-->
+    <!--&lt;!&ndash; You can also inherit from NNF_BaseTheme.Light &ndash;&gt;-->
+    <!--<style name="FilePickerTheme" parent="NNF_BaseTheme">-->
+        <!--&lt;!&ndash; Set these to match your theme &ndash;&gt;-->
+        <!--<item name="colorPrimary">@color/primary</item>-->
+        <!--<item name="colorPrimaryDark">@color/primary_dark</item>-->
+        <!--<item name="colorAccent">@color/accent</item>-->
+
+        <!--&lt;!&ndash; Need to set this also to style create folder dialog &ndash;&gt;-->
+        <!--<item name="alertDialogTheme">@style/FilePickerAlertDialogTheme</item>-->
+
+        <!--&lt;!&ndash; If you want to set a specific toolbar theme, do it here &ndash;&gt;-->
+        <!--&lt;!&ndash; <item name="nnf_toolbarTheme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item> &ndash;&gt;-->
+    <!--</style>-->
+
+    <!--<style name="FilePickerAlertDialogTheme" parent="Theme.AppCompat.Dialog.Alert">-->
+        <!--<item name="colorPrimary">@color/primary</item>-->
+        <!--<item name="colorPrimaryDark">@color/primary_dark</item>-->
+        <!--<item name="colorAccent">@color/accent</item>-->
     <!--</style>-->
 
 </resources>
