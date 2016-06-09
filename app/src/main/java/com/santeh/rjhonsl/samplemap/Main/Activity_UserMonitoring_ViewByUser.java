@@ -58,7 +58,7 @@ public class Activity_UserMonitoring_ViewByUser extends Activity {
 
         PD = new ProgressDialog(this);
         PD. setCancelable(false);
-        Helper.hideKeyboardOnLoad(activity);
+        Helper.random.hideKeyboardOnLoad(activity);
 
         lvUsers = (ListView) findViewById(R.id.listview_userMonitoring);
         btnsearch = (ImageButton) findViewById(R.id.btn_viewUserActivity_search);
@@ -75,7 +75,7 @@ public class Activity_UserMonitoring_ViewByUser extends Activity {
                 if (!edt_searchbox.getText().toString().equalsIgnoreCase("")) {
                     getAllUsers(edt_searchbox.getText().toString(),Helper.variables.URL_SELECT_ALL_USERS);
                 } else {
-                    Helper.toastShort(activity, "You must enter a name or keyword.");
+                    Helper.toast.short_(activity, "You must enter a name or keyword.");
                 }
             }
         });
@@ -91,7 +91,7 @@ public class Activity_UserMonitoring_ViewByUser extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
 
-                final Dialog d = Helper.createCustomDialogThemedYesNO(activity, "See " + userlist.get(position).getFirstname() + " " +
+                final Dialog d = Helper.dialog.themedYesNo(activity, "See " + userlist.get(position).getFirstname() + " " +
                         userlist.get(position).getLastname() + "'s activity in map?", "View in Map", "Cancel", "GO!", R.color.blue );
                 d.show();
 
@@ -128,8 +128,8 @@ public class Activity_UserMonitoring_ViewByUser extends Activity {
         PD.setMessage("Please wait...");
         PD.show();
 
-        if(!Helper.isNetworkAvailable(activity)) {
-            Helper.toastShort(activity, "Internet Connection is not available. Please try again later.");
+        if(!Helper.random.isNetworkAvailable(activity)) {
+            Helper.toast.short_(activity, "Internet Connection is not available. Please try again later.");
             PD.dismiss();
         }
         else{
@@ -142,7 +142,7 @@ public class Activity_UserMonitoring_ViewByUser extends Activity {
 
 
                             if (response.substring(1,2).equalsIgnoreCase("0")){
-                                Helper.toastShort(activity, "Something happened. Please try again later.");
+                                Helper.toast.short_(activity, "Something happened. Please try again later.");
                                 PD.dismiss();
 
                             }else{
@@ -160,7 +160,7 @@ public class Activity_UserMonitoring_ViewByUser extends Activity {
                                     lvUsers.setAdapter(custInfoAdapter);
                                 }else{
 //                                    Helper.toastLong(activity, "novalue on userlist " + response);
-//                                    Dialog d = Helper.createCustomDialogOKOnly(activity, "", response, "");
+//                                    Dialog d = Helper.okOnly(activity, "", response, "");
 //                                    d.show();
 
                                 }
@@ -171,7 +171,7 @@ public class Activity_UserMonitoring_ViewByUser extends Activity {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     PD.dismiss();
-                    Helper.toastShort(activity, error.toString());
+                    Helper.toast.short_(activity, error.toString());
                 }
             }) {
                 @Override
@@ -179,7 +179,7 @@ public class Activity_UserMonitoring_ViewByUser extends Activity {
                     Map<String, String> params = new HashMap<String, String>();
                     params.put("username", Helper.variables.getGlobalVar_currentUserName(activity));
                     params.put("password", Helper.variables.getGlobalVar_currentUserPassword(activity));
-                    params.put("deviceid", Helper.getMacAddress(context));
+                    params.put("deviceid", Helper.deviceInfo.getMacAddress(context));
                     params.put("userid", Helper.variables.getGlobalVar_currentUserID(activity)+"");
                     params.put("keyword", keyword);
                     return params;
@@ -198,8 +198,8 @@ public class Activity_UserMonitoring_ViewByUser extends Activity {
         PD.setMessage("Please wait...");
         PD.show();
 
-        if(!Helper.isNetworkAvailable(activity)) {
-            Helper.toastShort(activity, "Internet Connection is not available. Please try again later.");
+        if(!Helper.random.isNetworkAvailable(activity)) {
+            Helper.toast.short_(activity, "Internet Connection is not available. Please try again later.");
             PD.dismiss();
         }
         else{
@@ -222,7 +222,7 @@ public class Activity_UserMonitoring_ViewByUser extends Activity {
                                         strAvailableArea[i] = areaList.get(i).getProvince();
                                     }
 
-                                    final Dialog d = Helper.createCustomThemedListDialog(activity, strAvailableArea , "Select an Area", R.color.red);
+                                    final Dialog d = Helper.dialog.themedList(activity, strAvailableArea , "Select an Area", R.color.red);
                                     d.show();
                                     ListView lvprovince = (ListView) d.findViewById(R.id.dialog_list_listview);
                                     lvprovince.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -244,7 +244,7 @@ public class Activity_UserMonitoring_ViewByUser extends Activity {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     PD.dismiss();
-                    Helper.toastShort(activity, error.toString());
+                    Helper.toast.short_(activity, error.toString());
                 }
             }) {
                 @Override
@@ -252,7 +252,7 @@ public class Activity_UserMonitoring_ViewByUser extends Activity {
                     Map<String, String> params = new HashMap<String, String>();
                     params.put("username", Helper.variables.getGlobalVar_currentUserName(activity));
                     params.put("password", Helper.variables.getGlobalVar_currentUserPassword(activity));
-                    params.put("deviceid", Helper.getMacAddress(context));
+                    params.put("deviceid", Helper.deviceInfo.getMacAddress(context));
                     params.put("userid", Helper.variables.getGlobalVar_currentUserID(activity)+"");
                     return params;
                 }

@@ -146,7 +146,7 @@ public class Activity_PondQuanityTransfer extends FragmentActivity {
     }
 
     private void toasting(Cursor cur) {
-        Helper.toastShort(activity, "pid " + id + " xpondsize: " + pondList.size() + " xcursor:" + cur.getColumnCount() + " " + cur.getCount());
+        Helper.toast.short_(activity, "pid " + id + " xpondsize: " + pondList.size() + " xcursor:" + cur.getColumnCount() + " " + cur.getCount());
     }
 
     private Spanned setCaseTo(String quantityTo, String quantity) {

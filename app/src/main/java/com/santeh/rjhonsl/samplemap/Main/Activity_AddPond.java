@@ -94,7 +94,7 @@ public class Activity_AddPond extends FragmentActivity  implements DatePickerDia
             @Override
             public void onClick(View v) {
                 String[] options = Helper.variables.ARRAY_SPECIES;
-                final Dialog d = Helper.createCustomThemedListDialog(activity, options, "Species", R.color.deepteal_500);
+                final Dialog d = Helper.dialog.themedList(activity, options, "Species", R.color.deepteal_500);
                 d.show();
 
                 ListView lv = (ListView) d.findViewById(R.id.dialog_list_listview);
@@ -120,7 +120,7 @@ public class Activity_AddPond extends FragmentActivity  implements DatePickerDia
             @Override
             public void onClick(View v) {
                 String[] options = Helper.variables.ARRAY_CULTURE_SYSTEM;
-                final Dialog d = Helper.createCustomThemedListDialog(activity, options, "Systems", R.color.deepteal_500);
+                final Dialog d = Helper.dialog.themedList(activity, options, "Systems", R.color.deepteal_500);
                 d.show();
 
                 ListView lv = (ListView) d.findViewById(R.id.dialog_list_listview);
@@ -147,7 +147,7 @@ public class Activity_AddPond extends FragmentActivity  implements DatePickerDia
                         || edtRemarks.getText().toString().equalsIgnoreCase("")
                         ) {
 
-                    final Dialog d = Helper.createCustomThemedDialogOKOnly(activity, "Oops", "You have to complete all the following fields to continue.", "OK");
+                    final Dialog d = Helper.dialog.themedOkOnly(activity, "Oops", "You have to complete all the following fields to continue.", "OK");
                     d.show();
                     Button ok = (Button) d.findViewById(R.id.btn_dialog_okonly_OK);
                     ok.setOnClickListener(new View.OnClickListener() {
@@ -179,7 +179,7 @@ public class Activity_AddPond extends FragmentActivity  implements DatePickerDia
 
                     });
                 }else {
-                    final Dialog x = Helper.createCustomDialogThemedYesNO(activity, "Are you sure you want to add this case?", "Save", "NO", "YES",
+                    final Dialog x = Helper.dialog.themedYesNo(activity, "Are you sure you want to add this case?", "Save", "NO", "YES",
                             R.color.green_400);
                     x.show();
                     Button no = (Button) x.findViewById(R.id.btn_dialog_yesno_opt1);
@@ -228,7 +228,7 @@ public class Activity_AddPond extends FragmentActivity  implements DatePickerDia
 
             if (result != -1){
                 PD.dismiss();
-                final Dialog d = Helper.createCustomThemedDialogOKOnly(Activity_AddPond.this, "Success", "Saving successful", "OK");
+                final Dialog d = Helper.dialog.themedOkOnly(Activity_AddPond.this, "Success", "Saving successful", "OK");
                 TextView ok = (TextView) d.findViewById(R.id.btn_dialog_okonly_OK);
                 d.show();
                 ok.setOnClickListener(new View.OnClickListener() {
@@ -244,7 +244,7 @@ public class Activity_AddPond extends FragmentActivity  implements DatePickerDia
                     }
                 });
             }else{
-                final Dialog d = Helper.createCustomThemedDialogOKOnly(Activity_AddPond.this, "Error",
+                final Dialog d = Helper.dialog.themedOkOnly(Activity_AddPond.this, "Error",
                         "Adding failed. Please Try Again. ", "OK");
                 TextView ok = (TextView) d.findViewById(R.id.btn_dialog_okonly_OK);
                 d.show();
@@ -267,7 +267,7 @@ public class Activity_AddPond extends FragmentActivity  implements DatePickerDia
 //                            String responseCode = Helper.extractResponseCode(response);
 //                            String title, prompt;
 //                            PD.dismiss();
-////                            Dialog d = Helper.createCustomThemedDialogOKOnly(activity, "inserted id", response, "ok", R.color.red);
+////                            Dialog d = Helper.themedOkOnly(activity, "inserted id", response, "ok", R.color.red);
 //
 //                            if (responseCode.equalsIgnoreCase("0")){
 //                                oopsprompt(response);
@@ -278,7 +278,7 @@ public class Activity_AddPond extends FragmentActivity  implements DatePickerDia
 //                                prompt = "You have successfully updated database.";
 //
 //
-//                                final Dialog d = Helper.createCustomThemedDialogOKOnly(Activity_AddPond.this, title,
+//                                final Dialog d = Helper.themedOkOnly(Activity_AddPond.this, title,
 //                                        prompt, "OK", R.color.skyblue_500);
 //
 //                                TextView ok = (TextView) d.findViewById(R.id.btn_dialog_okonly_OK);
@@ -303,7 +303,7 @@ public class Activity_AddPond extends FragmentActivity  implements DatePickerDia
 //                            String prompt = "Something went wrong. Please try again later."+rp;
 //                            PD.dismiss();
 //
-//                            final Dialog d = Helper.createCustomDialogOKOnly(Activity_AddPond.this, title,
+//                            final Dialog d = Helper.okOnly(Activity_AddPond.this, title,
 //                                    prompt, "OK");
 //                            TextView ok = (TextView) d.findViewById(R.id.btn_dialog_okonly_OK);
 //                            d.setCancelable(false);
@@ -320,7 +320,7 @@ public class Activity_AddPond extends FragmentActivity  implements DatePickerDia
 //                public void onErrorResponse(VolleyError error) {
 //                    PD.dismiss();
 //
-//                    final Dialog d = Helper.createCustomDialogOKOnly(Activity_AddPond.this, "OOPS",
+//                    final Dialog d = Helper.okOnly(Activity_AddPond.this, "OOPS",
 //                            "Something went wrong. error( "+ error +" )", "OK");
 //                    TextView ok = (TextView) d.findViewById(R.id.btn_dialog_okonly_OK);
 //                    d.setCancelable(false);

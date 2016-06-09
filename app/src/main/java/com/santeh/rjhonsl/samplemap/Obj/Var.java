@@ -10,13 +10,6 @@ import com.google.android.gms.maps.GoogleMap;
 public class Var extends Application {
 
 
-//    intent.putExtra("userid", listaccounts.get(0).getUserid());
-//    intent.putExtra("userlevel", listaccounts.get(0).getUserid());
-//    intent.putExtra("username", listaccounts.get(0).getUserid());
-//    intent.putExtra("firstname", listaccounts.get(0).getUserid());
-//    intent.putExtra("userid", listaccounts.get(0).getUserid());
-//    intent.putExtra("userdescription", listaccounts.get(0).getAccountlevelDescription());
-
     public int currentuser;
     public int currentuserLvl;
 

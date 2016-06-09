@@ -32,7 +32,7 @@ public class Activity_Add_CustomerInformation_Address extends FragmentActivity{
         setContentView(R.layout.activity_add_customerinformation_address);
         activity = this;
         context = Activity_Add_CustomerInformation_Address.this;
-        Helper.hideKeyboardOnLoad(activity);
+        Helper.random.hideKeyboardOnLoad(activity);
 
         btnBack = (ImageButton) findViewById(R.id.btn_back);
         btnNext = (ImageButton) findViewById(R.id.btn_next);
@@ -91,7 +91,7 @@ public class Activity_Add_CustomerInformation_Address extends FragmentActivity{
                     startActivity(intent);
                     overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
                 }else{
-                    Helper.createCustomThemedDialogOKOnly(activity, "Warning", "Field with (*) is required to continue.", "OK");
+                    Helper.dialog.themedOkOnly(activity, "Warning", "Field with (*) is required to continue.", "OK");
                 }
             }
         });

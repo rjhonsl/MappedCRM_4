@@ -1,9 +1,5 @@
 package com.santeh.rjhonsl.samplemap.Utils;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Locale;
-
 import android.app.AlertDialog;
 import android.app.Service;
 import android.content.Context;
@@ -19,7 +15,9 @@ import android.os.IBinder;
 import android.provider.Settings;
 import android.util.Log;
 
-import com.santeh.rjhonsl.samplemap.R;
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * Create this Class from tutorial : 

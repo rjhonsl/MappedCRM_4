@@ -1,7 +1,6 @@
 package com.santeh.rjhonsl.samplemap.Main;
 
 import android.app.ActionBar;
-import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;

@@ -33,7 +33,7 @@
 
 
 
-
+    <!--android:name="android.support.multidex.MultiDexApplication"-->
     <application
         android:name=".Obj.Var"
         android:allowBackup="true"
@@ -61,10 +61,10 @@
             android:label="Add Marker Details">
         </activity>
 
-        <activity android:name="com.santeh.rjhonsl.samplemap.Main.Activity_Settings"
+        <activity android:name=".Main.Activity_Settings"
             android:label="Settings"></activity>
 
-        <activity android:name="com.santeh.rjhonsl.samplemap.Main.Activity_ViewCustomerInfo"
+        <activity android:name=".Main.Activity_ViewCustomerInfo"
             android:label="Customer Information">
 
         </activity>
@@ -107,10 +107,10 @@
 
         <activity android:name=".Main.Activity_LoginScreen"
                   android:label="Santeh CRM">
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <activity android:name=".Main.MapsActivity_UserMonitoring"
@@ -150,47 +150,11 @@
         <activity android:name=".Main.Activity_CustomerDetails">
         </activity>
 
-        <activity android:name=".Main.ActivityFB_Main"
-                  android:label="Fishbook"
-                  android:parentActivityName=".Main.MapsActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
-        <activity android:name=".Main.Activity_ViewImage"
-                  android:label="View Image"
-                  android:parentActivityName=".Main.ActivityFB_Main">
-        </activity>
-
-        <activity android:name=".Main.Activity_Comments"
-                  android:label="Comments"
-                  android:parentActivityName=".Main.ActivityFB_Main">
-        </activity>
-
-        <activity android:name=".Main.Activity_PostText"
-                  android:label="Post Something"
-                  android:parentActivityName=".Main.ActivityFB_Main">
-        </activity>
-
-        <!--<activity-->
-            <!--android:name="com.nononsenseapps.filepicker.FilePickerActivity"-->
-            <!--android:label="File Chooser"-->
-            <!--android:theme="@style/FilePickerTheme"-->
-        <!--&gt;-->
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.GET_CONTENT" />-->
-                <!--<category android:name="android.intent.category.DEFAULT" />-->
-            <!--</intent-filter>-->
-        <!--</activity>-->
-
-
 
         <!--RECEIVERS-->
         <!-- For Receiving SMS -->
         <receiver
-            android:name="com.santeh.rjhonsl.samplemap.BroadcastReceiver.SMS_BroadcastReceiver"
+            android:name=".BroadcastReceiver.SMS_BroadcastReceiver"
             android:permission="android.permission.BROADCAST_SMS"
             >
             <intent-filter>
@@ -200,7 +164,7 @@
         </receiver>
 
 
-        <receiver android:name="com.santeh.rjhonsl.samplemap.BroadcastReceiver.ReceiverPositioningAlarm" >
+        <receiver android:name=".BroadcastReceiver.ReceiverPositioningAlarm" >
             <intent-filter>
                 <action android:name="locationReceiver" />
             </intent-filter>

@@ -139,7 +139,7 @@ public class Activity_ManagePonds extends AppCompatActivity {
 //                        Helper.toastLong(activity, results[0]+"");
 
                         if (results[0] > 1000) {
-                            final Dialog d = Helper.createCustomThemedDialogOKOnly(activity, "Out of range", "You must be near the farm to Add a new pond.", "OK");
+                            final Dialog d = Helper.dialog.themedOkOnly(activity, "Out of range", "You must be near the farm to Add a new pond.", "OK");
                         } else {
                             Intent intent = new Intent(Activity_ManagePonds.this, Activity_AddPond.class);
                             intent.putExtra("custid", id);
@@ -176,7 +176,7 @@ public class Activity_ManagePonds extends AppCompatActivity {
                         }else if (item.getItemId()== R.id.deletePond){
                             if (pondInfoList.get(position1).getIsPosted() == 0) {
                                 if (Helper.variables.getGlobalVar_currentLevel(activity) == 4) {
-                                    final Dialog dd = Helper.createCustomDialogThemedYesNO(activity, "Changes cannot be undone. \n\nDelete this pond?"
+                                    final Dialog dd = Helper.dialog.themedYesNo(activity, "Changes cannot be undone. \n\nDelete this pond?"
                                             , "Delete", "NO", "YES", R.color.red);
                                     dd.show();
                                     Button yes = (Button) dd.findViewById(R.id.btn_dialog_yesno_opt2);
@@ -197,10 +197,10 @@ public class Activity_ManagePonds extends AppCompatActivity {
                                         }
                                     });
                                 } else {
-                                    Helper.createCustomThemedDialogOKOnly(activity, "Oops", "You have no permission delete this record", "OK");
+                                    Helper.dialog.themedOkOnly(activity, "Oops", "You have no permission delete this record", "OK");
                                 }
                             } else {
-                                Helper.createCustomThemedDialogOKOnly(activity, "Oops", "Record is already finalized/posted on server. Contact admin for further changes", "OK");
+                                Helper.dialog.themedOkOnly(activity, "Oops", "Record is already finalized/posted on server. Contact admin for further changes", "OK");
                             }
                         }else if (item.getItemId()== R.id.markAsHarvested){
 
@@ -222,7 +222,7 @@ public class Activity_ManagePonds extends AppCompatActivity {
                 popup.show();//showing popup menu
 
 //                String[] options = {"View and Edit Pond Details", "View Weekly Reports", "Delete Pond", "Mark as Harvested"};
-//                final Dialog d = Helper.createCustomThemedListDialog(activity, options, "Options", R.color.deepteal_500);
+//                final Dialog d = Helper.themedList(activity, options, "Options", R.color.deepteal_500);
 //                d.show();
 //
 //                ListView lv = (ListView) d.findViewById(R.id.dialog_list_listview);
@@ -239,7 +239,7 @@ public class Activity_ManagePonds extends AppCompatActivity {
 //                        }else if (position == 2) {
 //                            if (pondInfoList.get(position1).getIsPosted() == 0) {
 //                                if (Helper.variables.getGlobalVar_currentLevel(activity) == 4) {
-//                                    final Dialog dd = Helper.createCustomDialogThemedYesNO(activity, "Changes cannot be undone. \n\nDelete this pond?"
+//                                    final Dialog dd = Helper.themedYesNo(activity, "Changes cannot be undone. \n\nDelete this pond?"
 //                                            , "Delete", "NO", "YES", R.color.red);
 //                                    dd.show();
 //                                    Button yes = (Button) dd.findViewById(R.id.btn_dialog_yesno_opt2);
@@ -260,10 +260,10 @@ public class Activity_ManagePonds extends AppCompatActivity {
 //                                        }
 //                                    });
 //                                } else {
-//                                    Helper.createCustomThemedDialogOKOnly(activity, "Oops", "You have no permission delete this record", "OK");
+//                                    Helper.themedOkOnly(activity, "Oops", "You have no permission delete this record", "OK");
 //                                }
 //                            } else {
-//                                Helper.createCustomThemedDialogOKOnly(activity, "Oops", "Record is already finalized/posted on server. Contact admin for further changes", "OK");
+//                                Helper.themedOkOnly(activity, "Oops", "Record is already finalized/posted on server. Contact admin for further changes", "OK");
 //                            }
 //
 //                        }else if (position == 3){
@@ -349,8 +349,8 @@ public class Activity_ManagePonds extends AppCompatActivity {
                 }
             }
         } else {
-            if(!Helper.isNetworkAvailable(activity)) {
-                Helper.toastShort(activity, "Internet Connection is not available. Please try again later.");
+            if(!Helper.random.isNetworkAvailable(activity)) {
+                Helper.toast.short_(activity, "Internet Connection is not available. Please try again later.");
             }
             else{
                 PD.setMessage("Getting information from server...");
@@ -370,7 +370,7 @@ public class Activity_ManagePonds extends AppCompatActivity {
                         }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        final Dialog d = Helper.createCustomDialogOKOnly(Activity_ManagePonds.this, "OOPS",
+                        final Dialog d = Helper.dialog.okOnly(Activity_ManagePonds.this, "OOPS",
                                 "Something happened. Please try again.", "OK");
                         TextView ok = (TextView) d.findViewById(R.id.btn_dialog_okonly_OK);
                         d.setCancelable(false);
@@ -417,7 +417,7 @@ public class Activity_ManagePonds extends AppCompatActivity {
     public void deletePondByID(final int pondIndexID) {
         if (Helper.variables.getGlobalVar_currentLevel(activity) == 4) {
             if (db.deleteRow_PondInfo(pondIndexID + "")) {
-                Helper.toastLong(activity, "Case deleted");
+                Helper.toast.short_(activity, "Case deleted");
                 recreate();
             }
             getdataByID(id);
@@ -443,7 +443,7 @@ public class Activity_ManagePonds extends AppCompatActivity {
 //                    }, new Response.ErrorListener() {
 //                @Override
 //                public void onErrorResponse(VolleyError error) {
-//                    final Dialog d = Helper.createCustomDialogOKOnly(Activity_ManagePonds.this, "OOPS",
+//                    final Dialog d = Helper.okOnly(Activity_ManagePonds.this, "OOPS",
 //                            "Something went wrong. Please try again later.", "OK");
 //                    TextView ok = (TextView) d.findViewById(R.id.btn_dialog_okonly_OK);
 //                    d.setCancelable(false);

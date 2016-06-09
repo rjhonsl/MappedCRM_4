@@ -196,7 +196,7 @@ public class Activity_PondWeeklyConsumption extends Activity {
 //                        Helper.toastLong(activity, results[0]+"");
 
                         if (results[0] > 1000) {
-                            final Dialog d = Helper.createCustomThemedDialogOKOnly(activity, "Out of range", "You must be near the farm to Add a new pond.", "OK");
+                            final Dialog d = Helper.dialog.themedOkOnly(activity, "Out of range", "You must be near the farm to Add a new pond.", "OK");
                         } else {
                             final Dialog d = new Dialog(activity);//
                             d.requestWindowFeature(Window.FEATURE_NO_TITLE); //notitle
@@ -227,7 +227,7 @@ public class Activity_PondWeeklyConsumption extends Activity {
                                         d.hide();
                                         AddReport(edtAbw.getText().toString(), Helper.variables.URL_INSERT_POND_REPORT, edtRemarks.getText().toString(), edtSurvivalRate.getText().toString());
                                     } else {
-                                        Helper.toastLong(activity, "You have to complete all fields to continue");
+                                        Helper.toast.short_(activity, "You have to complete all fields to continue");
                                     }
 
                                 }
@@ -253,7 +253,7 @@ public class Activity_PondWeeklyConsumption extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 //                pondweeklyList
-                Helper.createCustomThemedDialogOKOnly(activity, "Details",
+                Helper.dialog.themedOkOnly(activity, "Details",
                         "ABW: "+pondweeklyList.get(position).getSizeofStock()+"g\n\n" +
                                 "Survival Rate: " + pondweeklyList.get(position).getSurvivalrate_per_pond()+"%\n\n"+
                                 "Date reported: \n" + pondweeklyList.get(position).getDateAddedToDB()+""
@@ -270,13 +270,13 @@ public class Activity_PondWeeklyConsumption extends Activity {
 
                 if (Helper.variables.getGlobalVar_currentLevel(activity) == 4){
                     if (position==pondweeklyList.size()-1) {
-                        Helper.createCustomThemedDialogOKOnly(activity, "Warning", "You cannot Edit or Delete Initial Stocking Data", "OK");
+                        Helper.dialog.themedOkOnly(activity, "Warning", "You cannot Edit or Delete Initial Stocking Data", "OK");
                     }else {
                        if (pondweeklyList.get(position).getIsPosted_weekly() == 1) {
-                           Helper.createCustomThemedDialogOKOnly(activity, "Oops", "Item is already posted on server. Please contact admin for further changes.", "OK");
+                           Helper.dialog.themedOkOnly(activity, "Oops", "Item is already posted on server. Please contact admin for further changes.", "OK");
                        }else{
                            String[] options = {"Edit ABW and Remarks", "Delete"};
-                           final Dialog d = Helper.createCustomThemedListDialog(activity, options, "Options ", R.color.deepteal_400);
+                           final Dialog d = Helper.dialog.themedList(activity, options, "Options ", R.color.deepteal_400);
                            d.show();
 
                            ListView lvOptions = (ListView) d.findViewById(R.id.dialog_list_listview);
@@ -322,7 +322,7 @@ public class Activity_PondWeeklyConsumption extends Activity {
 
                                    }else if (position1 == 1){
                                        d.hide();
-                                       final Dialog del = Helper.createCustomDialogThemedYesNO(activity, "Delete selected visit?", "Delete", "NO", "DELETE", R.color.red);
+                                       final Dialog del = Helper.dialog.themedYesNo(activity, "Delete selected visit?", "Delete", "NO", "DELETE", R.color.red);
                                        del.show();
 
                                        Button cancel = (Button) del.findViewById(R.id.btn_dialog_yesno_opt1);
@@ -341,10 +341,10 @@ public class Activity_PondWeeklyConsumption extends Activity {
                                            public void onClick(View v) {
                                                del.hide();
                                                if (db.deleteRow_Weekly(pondweeklyList.get(position).getId() + "")) {
-                                                   Helper.toastShort(activity, "Deleted successfully");
+                                                   Helper.toast.short_(activity, "Deleted successfully");
                                                    finish();
                                                } else {
-                                                   Helper.toastShort(activity, "Delete failed. Try again.");
+                                                   Helper.toast.short_(activity, "Delete failed. Try again.");
                                                    finish();
                                                }
                                            }
@@ -445,7 +445,7 @@ public class Activity_PondWeeklyConsumption extends Activity {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     PD.dismiss();
-                    Dialog d = Helper.createCustomThemedDialogOKOnly(activity, "Error", "Something unexpected happened: " + error.toString(), "OK");
+                    Dialog d = Helper.dialog.themedOkOnly(activity, "Error", "Something unexpected happened: " + error.toString(), "OK");
                     d.show();
                 }
             }) {
@@ -454,7 +454,7 @@ public class Activity_PondWeeklyConsumption extends Activity {
                     Map<String, String> params = new HashMap<>();
                     params.put("username", Helper.variables.getGlobalVar_currentUserName(activity));
                     params.put("password", Helper.variables.getGlobalVar_currentUserPassword(activity));
-                    params.put("deviceid", Helper.getMacAddress(context));
+                    params.put("deviceid", Helper.deviceInfo.getMacAddress(context));
                     params.put("pondindex", id+"");
                     return params;
                 }
@@ -479,27 +479,27 @@ public class Activity_PondWeeklyConsumption extends Activity {
                     strSurvivalRate = Integer.parseInt(pondweeklyList.get(i).getSurvivalrate_per_pond());
 
                     if (specie.equalsIgnoreCase("tilapia")){
-                        strweeknum = Helper.get_Tilapia_WeekNum_byABW(strabw);
+                        strweeknum = Helper.forFishComputation.get_Tilapia_WeekNum_byABW(strabw);
                     }else if (specie.equalsIgnoreCase("bangus")){
-                        strweeknum = Helper.get_Bangus_WeekNum_byABW(strabw);
+                        strweeknum = Helper.forFishComputation.get_Bangus_WeekNum_byABW(strabw);
                     }else if (specie.equalsIgnoreCase("vannamei")){
-                        strweeknum = Helper.get_Bangus_WeekNum_byABW(strabw);
+                        strweeknum = Helper.forFishComputation.get_Bangus_WeekNum_byABW(strabw);
                     }
 
                     if(specie.equalsIgnoreCase("tilapia")){
-                        strrecommended = (Double.parseDouble(Helper.computeWeeklyFeedConsumption(Double.parseDouble(strabw + ""), quantity,
-                                Helper.get_TilapiaFeedingRate_by_WeekNum(strweeknum),
+                        strrecommended = (Double.parseDouble(Helper.forFishComputation.computeWeeklyFeedConsumption(Double.parseDouble(strabw + ""), quantity,
+                                Helper.forFishComputation.get_TilapiaFeedingRate_by_WeekNum(strweeknum),
                                 (Double.parseDouble(strSurvivalRate+"") / 100)))/1000)+"";
                     }else if (specie.equalsIgnoreCase("bangus")){
-                        strrecommended = (Double.parseDouble(Helper.computeWeeklyFeedConsumption(Double.parseDouble(strabw + ""), quantity,
-                                Helper.get_BangusFeedingRate_by_WeekNum(strweeknum),
+                        strrecommended = (Double.parseDouble(Helper.forFishComputation.computeWeeklyFeedConsumption(Double.parseDouble(strabw + ""), quantity,
+                                Helper.forFishComputation.get_BangusFeedingRate_by_WeekNum(strweeknum),
                                 (Double.parseDouble(strSurvivalRate+"") / 100)))/1000)+"";
                     }
 
                     if (specie.equalsIgnoreCase("tilapia")){
-                        strFeedtype = Helper.getTilapiaFeedTypeByNumberOfWeeks(Helper.get_Tilapia_WeekNum_byABW(strabw));
+                        strFeedtype = Helper.forFishComputation.getTilapiaFeedTypeByNumberOfWeeks(Helper.forFishComputation.get_Tilapia_WeekNum_byABW(strabw));
                     }else if (specie.equalsIgnoreCase("bangus")) {
-                        strFeedtype = Helper.getBangusFeedtypeByABW(strabw);
+                        strFeedtype = Helper.forFishComputation.getBangusFeedtypeByABW(strabw);
                     }
 
                     weekinfo1.setId(pondweeklyList.get(i).getId());
@@ -522,11 +522,11 @@ public class Activity_PondWeeklyConsumption extends Activity {
         PD.setMessage("Saving Report. Please wait... ");
         PD.show();
 
-        final long result = db.insertWeeklyUpdates(abw2, remarks2, id+"", Helper.getDateDBformat(), survivalRate);
+        final long result = db.insertWeeklyUpdates(abw2, remarks2, id+"", Helper.convert.getDateDBformat(), survivalRate);
 
         if (result != -1){
             PD.dismiss();
-            final Dialog d = Helper.createCustomThemedDialogOKOnly(Activity_PondWeeklyConsumption.this,
+            final Dialog d = Helper.dialog.themedOkOnly(Activity_PondWeeklyConsumption.this,
                     "Success", "Saving successful", "OK");
             TextView ok = (TextView) d.findViewById(R.id.btn_dialog_okonly_OK);
             d.show();
@@ -545,7 +545,7 @@ public class Activity_PondWeeklyConsumption extends Activity {
             });
         }else{
             PD.dismiss();
-            final Dialog d = Helper.createCustomThemedDialogOKOnly(Activity_PondWeeklyConsumption.this,
+            final Dialog d = Helper.dialog.themedOkOnly(Activity_PondWeeklyConsumption.this,
                     "Error", "Reporting failed. Please Try Again. ", "OK");
             TextView ok = (TextView) d.findViewById(R.id.btn_dialog_okonly_OK);
             d.show();
@@ -564,7 +564,7 @@ public class Activity_PondWeeklyConsumption extends Activity {
 //                        pondweeklyList = new ArrayList<>();
 //                        PD.dismiss();
 //
-////                        Helper.createCustomThemedDialogOKOnly(activity, "Responze", response, "OK", R.color.red);
+////                        Helper.themedOkOnly(activity, "Responze", response, "OK", R.color.red);
 //                        if (!response.substring(1,2).equalsIgnoreCase("0")) {
 //                            Helper.toastShort(activity, "Report Added Successfully!");
 //                            getpondData(id, Helper.variables.URL_SELECT_POND_WEEKLY_UPDATES_BY_ID);
@@ -575,7 +575,7 @@ public class Activity_PondWeeklyConsumption extends Activity {
 //            @Override
 //            public void onErrorResponse(VolleyError error) {
 //                PD.dismiss();
-//                Dialog d = Helper.createCustomThemedDialogOKOnly(activity, "Error", "Something unexpected happened: " + error.toString(), "OK", R.color.red);
+//                Dialog d = Helper.themedOkOnly(activity, "Error", "Something unexpected happened: " + error.toString(), "OK", R.color.red);
 //                d.show();
 //            }
 //        }) {
@@ -606,11 +606,11 @@ public class Activity_PondWeeklyConsumption extends Activity {
         int res = db.updateRowWeeklyUpdates(idToBeDeleted, abw1, remarks1);
         if (res > 0) {
             PD.dismiss();
-            Helper.createCustomThemedDialogOKOnly(activity, "Success", "You have successfully updated the record", "OK");
+            Helper.dialog.themedOkOnly(activity, "Success", "You have successfully updated the record", "OK");
             getpondData(id, "");
         }else{
             PD.dismiss();
-            Helper.createCustomThemedDialogOKOnly(activity, "Error", "Updating failed. Please try again.", "OK");
+            Helper.dialog.themedOkOnly(activity, "Error", "Updating failed. Please try again.", "OK");
         }
 
 //        StringRequest postRequest = new StringRequest(Request.Method.POST, url2,
@@ -628,7 +628,7 @@ public class Activity_PondWeeklyConsumption extends Activity {
 //            @Override
 //            public void onErrorResponse(VolleyError error) {
 //                PD.dismiss();
-//                Dialog d = Helper.createCustomThemedDialogOKOnly(activity, "Error", "Something unexpected happened: " + error.toString(), "OK", R.color.red);
+//                Dialog d = Helper.themedOkOnly(activity, "Error", "Something unexpected happened: " + error.toString(), "OK", R.color.red);
 //                d.show();
 //            }
 //        }) {

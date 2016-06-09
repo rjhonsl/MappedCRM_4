@@ -75,7 +75,7 @@ public class AdapterHarvest extends ArrayAdapter<CustInfoObject> {
 			holder.updatehistory.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					Helper.toastShort((Activity) context, ""+position);
+					Helper.toast.short_((Activity) context, ""+position);
 
 
 				}
@@ -122,7 +122,7 @@ public class AdapterHarvest extends ArrayAdapter<CustInfoObject> {
 
 
 			String[] splittedDate = ItemList.get(position).getHrv_dateOfHarvest().split("-");
-			String dateofharvestt = Helper.convertDatetoGregorian(Integer.parseInt(splittedDate[0]), (Integer.parseInt(splittedDate[1])), (Integer.parseInt(splittedDate[2])));
+			String dateofharvestt = Helper.convert.convertDatetoGregorian(Integer.parseInt(splittedDate[0]), (Integer.parseInt(splittedDate[1])), (Integer.parseInt(splittedDate[2])));
 
 			String species = ItemList.get(position).getHrv_specie();
 			String casenum = ItemList.get(position).getHrv_casenum();
@@ -132,7 +132,7 @@ public class AdapterHarvest extends ArrayAdapter<CustInfoObject> {
 			String fcr = ItemList.get(position).getHrv_fcr();
 			String priceperkilo = ItemList.get(position).getHrv_pricePerKilo();
 			String totalharvested = ItemList.get(position).getHrv_totalHarvested();
-			String dateRecorded = Helper.convertLongtoDate_Gregorian(Helper.convertDateTimeStringToMilis_DB_Format(ItemList.get(position).getHrv_dateRecorded()))+"";
+			String dateRecorded = Helper.convert.convertLongtoDate_Gregorian(Helper.convert.convertDateTimeStringToMilis_DB_Format(ItemList.get(position).getHrv_dateRecorded()))+"";
 
 
 			if (priceperkilo.equalsIgnoreCase("null")) {

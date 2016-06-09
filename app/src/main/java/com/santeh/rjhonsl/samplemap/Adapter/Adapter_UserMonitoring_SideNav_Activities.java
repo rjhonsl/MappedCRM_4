@@ -62,12 +62,12 @@ public class Adapter_UserMonitoring_SideNav_Activities extends ArrayAdapter<Cust
 		}
 
 //		 Capture position and set to the TextViews
-		holder.txtDateAndTime.setText(Helper.convertLongtoDate_GregorianWithTime(Helper.convertDateTimeStringToMilis_DB_Format(objArrayList.get(position).getDateTime())));
+		holder.txtDateAndTime.setText(Helper.convert.convertLongtoDate_GregorianWithTime(Helper.convert.convertDateTimeStringToMilis_DB_Format(objArrayList.get(position).getDateTime())));
 
 		holder.txtLatlong.setText("Loc: " +
-						Helper.deciformat(Double.parseDouble(objArrayList.get(position).getLatitude()), 7)
+						Helper.random.deciformat(Double.parseDouble(objArrayList.get(position).getLatitude()), 7)
 						+ ", " +
-						Helper.deciformat(Double.parseDouble(objArrayList.get(position).getLongtitude()), 7)
+						Helper.random.deciformat(Double.parseDouble(objArrayList.get(position).getLongtitude()), 7)
 		);
 		holder.txtActivityName.setText(objArrayList.get(position).getActionDone());
 		holder.txtnum.setText(objArrayList.get(position).getPondIndex()+"");

@@ -70,7 +70,7 @@ public class Activity_Add_FarmInformation extends Activity {
         curlongtitude = (double) getIntent().getExtras().get("longtitude");
 
     }catch (Exception e){
-        Helper.toastShort(context1, "No location passed");
+        Helper.toast.short_(context1, "No location passed");
     }
 
 
@@ -158,7 +158,7 @@ public class Activity_Add_FarmInformation extends Activity {
                 txtCultureLevel.getText().toString().equalsIgnoreCase("") ||
                 txtWaterType.getText().toString().equalsIgnoreCase(""))
         {
-            final Dialog d = Helper.createCustomDialogOKOnly(Activity_Add_FarmInformation.this, "Warning",
+            final Dialog d = Helper.dialog.okOnly(Activity_Add_FarmInformation.this, "Warning",
                     "Complete fields with (*) to continue", "OK");
             TextView ok = (TextView) d.findViewById(R.id.btn_dialog_okonly_OK);
             d.show();
@@ -186,11 +186,11 @@ public class Activity_Add_FarmInformation extends Activity {
                     txtCultureType.getText().toString(),
                     txtCultureLevel.getText().toString(),
                     txtWaterType.getText().toString(),
-                    Helper.getDateDBformat(),
+                    Helper.convert.getDateDBformat(),
                     Helper.variables.getGlobalVar_currentUserID(activity) + "");
             if (id != -1){
                 PD.dismiss();
-                Dialog d = Helper.createCustomThemedDialogOKOnly(Activity_Add_FarmInformation.this, "SUCCESS",
+                Dialog d = Helper.dialog.themedOkOnly(Activity_Add_FarmInformation.this, "SUCCESS",
                         "Saving successful", "OK");
                 TextView ok = (TextView) d.findViewById(R.id.btn_dialog_okonly_OK);
                 d.setCancelable(false);
@@ -212,7 +212,7 @@ public class Activity_Add_FarmInformation extends Activity {
                 });
             }else{
                 PD.dismiss();
-                Helper.createCustomThemedDialogOKOnly(activity, "Error", "Saving Failed. Please try again.", "OK");
+                Helper.dialog.themedOkOnly(activity, "Error", "Saving Failed. Please try again.", "OK");
             }
 
 //
@@ -231,7 +231,7 @@ public class Activity_Add_FarmInformation extends Activity {
 //
 //
 //                                PD.dismiss();
-//                                Dialog d = Helper.createCustomThemedDialogOKOnly(Activity_Add_FarmInformation.this, "SUCCESS",
+//                                Dialog d = Helper.themedOkOnly(Activity_Add_FarmInformation.this, "SUCCESS",
 //                                        "You have successfully added " + txtContactName.getText().toString() + " to database", "OK", R.color.blue);
 //                                TextView ok = (TextView) d.findViewById(R.id.btn_dialog_okonly_OK);
 //                                d.setCancelable(false);
@@ -251,7 +251,7 @@ public class Activity_Add_FarmInformation extends Activity {
 //
 //
 //                            }else {
-//                                Helper.createCustomThemedDialogOKOnly(activity, "Error", "Something happened. Please try again." , "OK", R.color.red);
+//                                Helper.themedOkOnly(activity, "Error", "Something happened. Please try again." , "OK", R.color.red);
 //                                PD.dismiss();
 //                            }
 //
@@ -320,7 +320,7 @@ public class Activity_Add_FarmInformation extends Activity {
         btnOK.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Dialog d = Helper.createCustomDialogThemedYesNO(activity,
+                final Dialog d = Helper.dialog.themedYesNo(activity,
                         "Save farm location and related data?",
                         "Farm information", "YES", "NO", R.color.deepteal_500);
                 Button yes = (Button) d.findViewById(R.id.btn_dialog_yesno_opt1);

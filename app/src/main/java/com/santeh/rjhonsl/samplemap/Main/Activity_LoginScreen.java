@@ -116,7 +116,7 @@ public class Activity_LoginScreen extends Activity{
         }
 
 
-        PD =  Helper.initProgressDialog(activity);
+        PD =  Helper.dialog.initProgressDialog(activity);
         txtprogressdialog_message = (TextView) PD.findViewById(R.id.progress_message);
 
         initViews();
@@ -124,7 +124,7 @@ public class Activity_LoginScreen extends Activity{
         Typeface font_roboto = Typeface.createFromAsset(getAssets(), "Roboto-Light.ttf");
 
 
-        Helper.hideKeyboardOnLoad(activity);
+        Helper.random.hideKeyboardOnLoad(activity);
 
         btnLogin.requestFocus();
         txtappname1.setTypeface(font_roboto);
@@ -134,7 +134,7 @@ public class Activity_LoginScreen extends Activity{
 
 
         txttester.setText(
-                Helper.getMacAddress(context)
+                Helper.deviceInfo.getMacAddress(context)
                         + "\n" +
                         "update: " + versionCode + "    V." + versionName + db.getUser_Count()
         );
@@ -234,14 +234,14 @@ public class Activity_LoginScreen extends Activity{
         txtrequestaccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Helper.toastShort(activity, "Sorry, this function is currently unavailable");
+                Helper.toast.short_(activity, "Sorry, this function is currently unavailable");
             }
         });
 
         txtforgot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Helper.toastShort(activity, "Sorry, this function is currently unavailable");
+                Helper.toast.short_(activity, "Sorry, this function is currently unavailable");
 
             }
         });
@@ -252,12 +252,12 @@ public class Activity_LoginScreen extends Activity{
             public void onClick(View v) {
                 if ( ((txtpassword.getText().toString().equalsIgnoreCase("") || txtpassword.getText().toString().trim().equalsIgnoreCase(""))) &&
                         (txtusername.getText().toString().equalsIgnoreCase("") || txtusername.getText().toString().trim().equalsIgnoreCase(""))){
-                    Helper.toastShort(activity, "Username and Password is needed to continue");
+                    Helper.toast.short_(activity, "Username and Password is needed to continue");
                 }else if(txtpassword.getText().toString().equalsIgnoreCase("") || txtpassword.getText().toString().trim().equalsIgnoreCase("")){
-                    Helper.toastShort(activity, "Password is needed to continue");
+                    Helper.toast.short_(activity, "Password is needed to continue");
                 }else if(txtusername.getText().toString().equalsIgnoreCase("") || txtusername.getText().toString().trim().equalsIgnoreCase(""))
                 {
-                    Helper.toastShort(activity,"Username is needed to continue");
+                    Helper.toast.short_(activity,"Username is needed to continue");
                 }else
                 {
                     login();
@@ -297,8 +297,8 @@ public class Activity_LoginScreen extends Activity{
         txtusername.getBackground().setColorFilter(getResources().getColor(R.color.yellow), PorterDuff.Mode.SRC_IN);
         txtpassword.getBackground().setColorFilter(getResources().getColor(R.color.yellow), PorterDuff.Mode.SRC_IN);
 
-        txtusername.setText("sfcwest");
-        txtpassword.setText("sfcwest");
+        txtusername.setText("tsr");
+        txtpassword.setText("tsr");
 
     }
 
@@ -313,8 +313,8 @@ public class Activity_LoginScreen extends Activity{
     public void login() {
 
         fusedLocation.connectToApiClient();
-        Helper.isLocationAvailablePrompt(context, activity);
-        if(Helper.isNetworkAvailable(activity)) { // if network was available
+        Helper.map.isLocationAvailablePrompt(context, activity);
+        if(Helper.random.isNetworkAvailable(activity)) { // if network was available
 
             updatingUserDB();
             txtprogressdialog_message.setText("Logging in...");
@@ -324,7 +324,7 @@ public class Activity_LoginScreen extends Activity{
             if ( db.getUser_Count()  <=  0 ) { //if user db was null
                 Log.d("DEBUG", "if current user count is less than 0");
                 //require user to connect to internet
-                if(!Helper.isNetworkAvailable(activity)) { Helper.toastShort(activity, "Internet connection is needed to start using the app."); }
+                if(!Helper.random.isNetworkAvailable(activity)) { Helper.toast.short_(activity, "Internet connection is needed to start using the app."); }
                 else{
                     txtprogressdialog_message.setText("Preparing app please wait...");
                     updatingUserDB();
@@ -334,13 +334,45 @@ public class Activity_LoginScreen extends Activity{
                 Log.d("DEBUG", "if current user count greater than 0");
                 txtprogressdialog_message.setText("Logging in...");
                 PD.show();
-                Cursor cur =  db.getUserIdByLogin(txtusername.getText().toString(), txtpassword.getText().toString(), Helper.getMacAddress(context));
+                Cursor cur =  db.getUserIdByLogin(txtusername.getText().toString(), txtpassword.getText().toString(), Helper.deviceInfo.getMacAddress(context));
                 if (cur.getCount() > 0 ){
                     Log.d("DEBUG", "if account is valid");
                     for (int i = 0; i < cur.getCount() ; i++) {
                         while (cur.moveToNext()) {
+
+
+                            if(db.getTempCount() > 0){
+                                db.updateTempInfo(
+                                        cur.getInt(cur.getColumnIndex(GPSHelper.CL_USERS_ID))+"",
+                                        cur.getInt(cur.getColumnIndex(GPSHelper.CL_USERS_userlvl))+"",
+                                        cur.getInt(cur.getColumnIndex(GPSHelper.CL_USERS_isactive))+"",
+                                        cur.getInt(cur.getColumnIndex(GPSHelper.CL_USERS_username))+"",
+                                        cur.getInt(cur.getColumnIndex(GPSHelper.CL_USERS_lastName))+"",
+                                        cur.getInt(cur.getColumnIndex(GPSHelper.CL_USERS_firstName))+"",
+                                        cur.getInt(cur.getColumnIndex(GPSHelper.CL_USERS_password))+"",
+                                        cur.getInt(cur.getColumnIndex(GPSHelper.CL_USERS_dateAdded))+"",
+                                        "",
+                                        cur.getInt(cur.getColumnIndex(GPSHelper.CL_USERS_deviceid))+""
+                                        );
+                            }else{
+                                db.insertTmpValues(
+                                        cur.getInt(cur.getColumnIndex(GPSHelper.CL_USERS_ID))+"",
+                                        cur.getInt(cur.getColumnIndex(GPSHelper.CL_USERS_userlvl))+"",
+                                        cur.getInt(cur.getColumnIndex(GPSHelper.CL_USERS_isactive))+"",
+                                        cur.getInt(cur.getColumnIndex(GPSHelper.CL_USERS_username))+"",
+                                        cur.getInt(cur.getColumnIndex(GPSHelper.CL_USERS_lastName))+"",
+                                        cur.getInt(cur.getColumnIndex(GPSHelper.CL_USERS_firstName))+"",
+                                        cur.getInt(cur.getColumnIndex(GPSHelper.CL_USERS_password))+"",
+                                        cur.getInt(cur.getColumnIndex(GPSHelper.CL_USERS_dateAdded))+"",
+                                        "",
+                                        cur.getInt(cur.getColumnIndex(GPSHelper.CL_USERS_deviceid))+""
+                                );
+                            }
+
+111111
+
                             Helper.variables.setGlobalVar_currentlevel(cur.getInt(cur.getColumnIndex(GPSHelper.CL_USERS_userlvl)), activity);
-                            Helper.variables.setGlobalVar_currentUserID(cur.getInt(cur.getColumnIndex(GPSHelper.CL_USERS_ID)), activity);
+                            Helper.variables.setGlobalVar_currentUserID((), activity);
                             Helper.variables.setGlobalVar_currentFirstname(cur.getString(cur.getColumnIndex(GPSHelper.CL_USERS_firstName)), activity);
                             Helper.variables.setGlobalVar_currentLastname(cur.getString(cur.getColumnIndex(GPSHelper.CL_USERS_lastName)), activity);
                             Helper.variables.setGlobalVar_currentUsername(txtusername.getText().toString(),activity);
@@ -376,12 +408,12 @@ public class Activity_LoginScreen extends Activity{
                         }else{
                             Log.d("DEBUG", "if current user is not active");
                             PD.hide();
-                            Helper.toastShort(activity, "Wrong accout credentials please try again");
+                            Helper.toast.short_(activity, "Wrong accout credentials please try again");
                         }
                     }
                 }else{
                     PD.hide();
-                    Helper.toastShort(activity, "Wrong accout credentials please try again");
+                    Helper.toast.short_(activity, "Wrong accout credentials please try again");
                 }
             }
 
@@ -392,7 +424,7 @@ public class Activity_LoginScreen extends Activity{
     private void updatingUserDB() {
         PD.show();
 
-        StringRequest postRequest = new StringRequest(Request.Method.POST, Helper.variables.URL_LOGIN,
+        StringRequest postRequest = new StringRequest(Request.Method.POST, "http://www.santeh-webservice.com/php/android_json_post/login.php",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(final String response) {
@@ -400,7 +432,8 @@ public class Activity_LoginScreen extends Activity{
                         String accountDetail="";
                         PD.dismiss();
                         if (response.substring(1, 2).equalsIgnoreCase("0")) {
-                            Helper.toastShort(activity, "Username and password does not seem to match"
+                            Log.d("RESPONSE",""+response);
+                            Helper.toast.short_(activity, "Username and password does not seem to match"
 //                                    +response+":xx"+Helper.getMacAddress(activity)+"xx"
                             );
                         } else {
@@ -461,13 +494,13 @@ public class Activity_LoginScreen extends Activity{
             @Override
             public void onErrorResponse(VolleyError error) {
                 PD.dismiss();
-                Helper.toastShort(activity, error.toString());
+                Helper.toast.short_(activity, error.toString());
             }
         }) {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("deviceid", Helper.getMacAddress(activity));
+                params.put("deviceid", Helper.deviceInfo.getMacAddress(activity));
                 params.put("username", txtusername.getText().toString());
                 params.put("password", txtpassword.getText().toString());
 
@@ -486,7 +519,7 @@ public class Activity_LoginScreen extends Activity{
     protected void onResume() {
         super.onResume();
         db.open();
-        Helper.isLocationAvailablePrompt(Activity_LoginScreen.this, Activity_LoginScreen.this);
+        Helper.map.isLocationAvailablePrompt(Activity_LoginScreen.this, Activity_LoginScreen.this);
         fusedLocation.connectToApiClient();
         Log.d("ACTIVITY", "ACTIVITY_LOGIN");
 
@@ -521,7 +554,7 @@ public class Activity_LoginScreen extends Activity{
     }
 
     private void exitApp() {
-        final Dialog d = Helper.createCustomDialogThemedYesNO(activity, "Do you wish to wish to exit the app?", "EXIT", "YES", "NO", R.color.red);
+        final Dialog d = Helper.dialog.themedYesNo(activity, "Do you wish to wish to exit the app?", "EXIT", "YES", "NO", R.color.red);
         d.show();
         Button yes = (Button) d.findViewById(R.id.btn_dialog_yesno_opt1);
         Button no = (Button) d.findViewById(R.id.btn_dialog_yesno_opt2);
@@ -547,7 +580,7 @@ public class Activity_LoginScreen extends Activity{
     }
 
     public void checkVersionUpdates(){
-        if(!Helper.isNetworkAvailable(activity)) {
+        if(!Helper.random.isNetworkAvailable(activity)) {
 //            Helper.toastShort(activity, "Internet Connection is not available. Please try again later.");
         }
         else{
@@ -562,7 +595,7 @@ public class Activity_LoginScreen extends Activity{
                             public void onResponse(final String response) {
                                 PD.dismiss();
 
-//                            Helper.createCustomThemedDialogOKOnly(activity, "RESONSE", response, "OK", R.color.red);
+//                            Helper.themedOkOnly(activity, "RESONSE", response, "OK", R.color.red);
                                 if (!response.substring(1, 2).equalsIgnoreCase("0")) {
                                     String[] splitted = response.split("!-!");
                                     String versionNumber = splitted[0];
@@ -592,10 +625,10 @@ public class Activity_LoginScreen extends Activity{
 
 
                                     }else{
-                                        Helper.toastShort(activity, "Your application is up to date!");
+                                        Helper.toast.short_(activity, "Your application is up to date!");
                                     }
                                 } else {
-                                    Helper.createCustomThemedDialogOKOnly(activity, "Error", "Update Failed. Please try again later."
+                                    Helper.dialog.themedOkOnly(activity, "Error", "Update Failed. Please try again later."
                                             , "OK");
                                 }
 
@@ -604,13 +637,13 @@ public class Activity_LoginScreen extends Activity{
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         PD.dismiss();
-                        Helper.toastShort(activity, error.toString());
+                        Helper.toast.short_(activity, error.toString());
                     }
                 }) {
                     @Override
                     protected Map<String, String> getParams() {
                         Map<String, String> params = new HashMap<String, String>();
-                        params.put("deviceid", Helper.getMacAddress(activity)+"");
+                        params.put("deviceid", Helper.deviceInfo.getMacAddress(activity)+"");
                         params.put("username", Helper.variables.getGlobalVar_currentUserName(activity)+"");
                         params.put("password", Helper.variables.getGlobalVar_currentUserPassword(activity)+"");
                         params.put("userid", Helper.variables.getGlobalVar_currentUserID(activity)+"");

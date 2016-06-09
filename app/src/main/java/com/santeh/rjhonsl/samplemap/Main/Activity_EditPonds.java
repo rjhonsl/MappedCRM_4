@@ -63,7 +63,7 @@ public class Activity_EditPonds extends FragmentActivity  implements DatePickerD
 
         fusedLocation = new FusedLocation(context, activity);
         fusedLocation.connectToApiClient();
-        Helper.hideKeyboardOnLoad(activity);
+        Helper.random.hideKeyboardOnLoad(activity);
 
         if (getIntent() != null){
             if (getIntent().hasExtra("pondid")){ pondid = getIntent().getIntExtra("pondid",0); }
@@ -168,7 +168,7 @@ public class Activity_EditPonds extends FragmentActivity  implements DatePickerD
             @Override
             public void onClick(View v) {
                 String[] options = Helper.variables.ARRAY_SPECIES;
-                final Dialog d = Helper.createCustomThemedListDialog(activity, options, "Species", R.color.deepteal_500);
+                final Dialog d = Helper.dialog.themedList(activity, options, "Species", R.color.deepteal_500);
                 d.show();
 
                 ListView lv = (ListView) d.findViewById(R.id.dialog_list_listview);
@@ -194,7 +194,7 @@ public class Activity_EditPonds extends FragmentActivity  implements DatePickerD
             @Override
             public void onClick(View v) {
                 String[] options = Helper.variables.ARRAY_CULTURE_SYSTEM;
-                final Dialog d = Helper.createCustomThemedListDialog(activity, options, "Systems", R.color.deepteal_500);
+                final Dialog d = Helper.dialog.themedList(activity, options, "Systems", R.color.deepteal_500);
                 d.show();
 
                 ListView lv = (ListView) d.findViewById(R.id.dialog_list_listview);
@@ -213,7 +213,7 @@ public class Activity_EditPonds extends FragmentActivity  implements DatePickerD
             public void onClick(View v) {
                 fusedLocation.disconnectFromApiClient();
                 if (isposted == 1) {
-                    Helper.createCustomThemedDialogOKOnly(activity, "Oops", "Record already finalized/posted. Please contact admin for further changes", "OK");
+                    Helper.dialog.themedOkOnly(activity, "Oops", "Record already finalized/posted. Please contact admin for further changes", "OK");
                 } else {
                     fusedLocation.connectToApiClient();
                     final Handler handler = new Handler();
@@ -229,7 +229,7 @@ public class Activity_EditPonds extends FragmentActivity  implements DatePickerD
 //                        Helper.toastLong(activity, results[0]+"");
 
                             if (results[0] > 1000) {
-                                final Dialog d = Helper.createCustomThemedDialogOKOnly(activity, "Out of Range", "You must be near the farm to EDIT.", "OK");
+                                final Dialog d = Helper.dialog.themedOkOnly(activity, "Out of Range", "You must be near the farm to EDIT.", "OK");
                                 d.show();
 
                                 Button ok = (Button) d.findViewById(R.id.btn_dialog_okonly_OK);
@@ -250,7 +250,7 @@ public class Activity_EditPonds extends FragmentActivity  implements DatePickerD
                                         || edtCultureSystem.getText().toString().equalsIgnoreCase("")
                                         || edtRemarks.getText().toString().equalsIgnoreCase("")
                                         ) {
-                                    final Dialog d = Helper.createCustomThemedDialogOKOnly(activity, "Message", "Complete all the following fields to continue.", "OK");
+                                    final Dialog d = Helper.dialog.themedOkOnly(activity, "Message", "Complete all the following fields to continue.", "OK");
                                     d.show();
                                     Button ok = (Button) d.findViewById(R.id.btn_dialog_okonly_OK);
                                     ok.setOnClickListener(new View.OnClickListener() {
@@ -280,7 +280,7 @@ public class Activity_EditPonds extends FragmentActivity  implements DatePickerD
                                     });
                                 } else {
 
-                                    final Dialog x = Helper.createCustomDialogThemedYesNO(activity, "Save all information?", "Save", "NO", "YES",
+                                    final Dialog x = Helper.dialog.themedYesNo(activity, "Save all information?", "Save", "NO", "YES",
                                             R.color.green_400);
                                     x.show();
                                     Button no = (Button) x.findViewById(R.id.btn_dialog_yesno_opt1);
@@ -316,7 +316,7 @@ public class Activity_EditPonds extends FragmentActivity  implements DatePickerD
 
         Log.d("DB", "row "+res);
         if (res > 0) {
-            Dialog d = Helper.createCustomThemedDialogOKOnly(activity, "Success", "You have successfully updated the record", "OK");
+            Dialog d = Helper.dialog.themedOkOnly(activity, "Success", "You have successfully updated the record", "OK");
             Button ok = (Button) d.findViewById(R.id.btn_dialog_okonly_OK);
             ok.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -325,7 +325,7 @@ public class Activity_EditPonds extends FragmentActivity  implements DatePickerD
                 }
             });
         }else {
-            Helper.createCustomThemedDialogOKOnly(activity, "Error", "Something went wrong. Please try saving again", "OK");
+            Helper.dialog.themedOkOnly(activity, "Error", "Something went wrong. Please try saving again", "OK");
         }
 
 //        PD.setMessage("Saving Changes... ");
@@ -349,7 +349,7 @@ public class Activity_EditPonds extends FragmentActivity  implements DatePickerD
 //                            prompt = "You have successfully updated database.";
 //                            PD.dismiss();
 //
-//                            final Dialog d = Helper.createCustomThemedDialogOKOnly(activity, title,
+//                            final Dialog d = Helper.themedOkOnly(activity, title,
 //                                    prompt, "OK", R.color.skyblue_500);
 //                            TextView ok = (TextView) d.findViewById(R.id.btn_dialog_okonly_OK);
 //                            d.show();
@@ -372,7 +372,7 @@ public class Activity_EditPonds extends FragmentActivity  implements DatePickerD
 //                        String prompt = "Something went wrong. Please try again later.";
 //                        PD.dismiss();
 //
-//                        final Dialog d = Helper.createCustomDialogOKOnly(activity, title,
+//                        final Dialog d = Helper.okOnly(activity, title,
 //                                prompt, "OK");
 //                        TextView ok = (TextView) d.findViewById(R.id.btn_dialog_okonly_OK);
 //                        d.setCancelable(false);
@@ -389,7 +389,7 @@ public class Activity_EditPonds extends FragmentActivity  implements DatePickerD
 //            public void onErrorResponse(VolleyError error) {
 //                PD.dismiss();
 //
-//                final Dialog d = Helper.createCustomDialogOKOnly(activity, "OOPS",
+//                final Dialog d = Helper.okOnly(activity, "OOPS",
 //                        "Something went wrong. error( "+ error +" )", "OK");
 //                TextView ok = (TextView) d.findViewById(R.id.btn_dialog_okonly_OK);
 //                d.setCancelable(false);

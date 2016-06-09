@@ -86,7 +86,7 @@ public class Activity_ViewCustomerInfo extends Activity {
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
 
                 String [] options = {"See in Map","View and Edit Details", "Delete"};
-                final Dialog d = Helper.createCustomListDialog(Activity_ViewCustomerInfo.this, options,"OPTIONS" );
+                final Dialog d = Helper.dialog.list(Activity_ViewCustomerInfo.this, options,"OPTIONS" );
 
                 ListView list = (ListView) d.findViewById(R.id.dialog_list_listview);
                 list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -123,7 +123,7 @@ public class Activity_ViewCustomerInfo extends Activity {
                             intent.putExtra("fromActivity", "viewCustinfo");
                             startActivity(intent);
                         }else if(index ==2) {
-                            final Dialog yn = Helper.createCustomDialogYesNO(Activity_ViewCustomerInfo.this, R.layout.dialog_material_yesno,
+                            final Dialog yn = Helper.dialog.yesno(Activity_ViewCustomerInfo.this, R.layout.dialog_material_yesno,
                                     "Changes you are going to do is permanent and irreversible. \n\nDelete *"
                                             + searchedList.get(position).getContact_name() + "* from list?",
                                     "DELETE", "YES", "NO");
@@ -194,8 +194,8 @@ public class Activity_ViewCustomerInfo extends Activity {
 
     public void search() {
 
-        if(!Helper.isNetworkAvailable(thisActivity)) {
-            Helper.toastShort(thisActivity, "Internet Connection is not available. Please try again later.");
+        if(!Helper.random.isNetworkAvailable(thisActivity)) {
+            Helper.toast.short_(thisActivity, "Internet Connection is not available. Please try again later.");
         }
         else{
         PD.show();
@@ -214,7 +214,7 @@ public class Activity_ViewCustomerInfo extends Activity {
                                 lvSearch.setAdapter(custinfoAdapter);
                             }else {
                                 searchedList = beforesearchedList;
-                                final Dialog d = Helper.createCustomThemedDialogOKOnly(Activity_ViewCustomerInfo.this,
+                                final Dialog d = Helper.dialog.themedOkOnly(Activity_ViewCustomerInfo.this,
                                         "OOPS!", response, "OK");
 
                                 TextView ok = (TextView) d.findViewById(R.id.btn_dialog_okonly_OK);
@@ -228,7 +228,7 @@ public class Activity_ViewCustomerInfo extends Activity {
                             }
                         }else{
                             searchedList = beforesearchedList;
-                            final Dialog d = Helper.createCustomThemedDialogOKOnly(Activity_ViewCustomerInfo.this,
+                            final Dialog d = Helper.dialog.themedOkOnly(Activity_ViewCustomerInfo.this,
                                     "OOPS!", response, "OK");
 
                             TextView ok = (TextView) d.findViewById(R.id.btn_dialog_okonly_OK);
@@ -255,7 +255,7 @@ public class Activity_ViewCustomerInfo extends Activity {
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("keyword", keyword);
-                params.put("deviceid", Helper.getMacAddress(activity));
+                params.put("deviceid", Helper.deviceInfo.getMacAddress(activity));
                 params.put("username", Helper.variables.getGlobalVar_currentUserName(activity));
                 params.put("password", Helper.variables.getGlobalVar_currentUserPassword(activity));
                 params.put("userid", Helper.variables.getGlobalVar_currentUserID(activity)+"");
@@ -277,8 +277,8 @@ public class Activity_ViewCustomerInfo extends Activity {
     public void deleteByID(final String id) {
 
 
-        if (!Helper.isNetworkAvailable(thisActivity)) {
-            Helper.toastShort(thisActivity, "Internet Connection is not available. Please try again later.");
+        if (!Helper.random.isNetworkAvailable(thisActivity)) {
+            Helper.toast.short_(thisActivity, "Internet Connection is not available. Please try again later.");
         } else {
             PD.setMessage("Deleting....");
             PD.show();
@@ -287,7 +287,7 @@ public class Activity_ViewCustomerInfo extends Activity {
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
-                            Helper.toastShort(thisActivity,
+                            Helper.toast.short_(thisActivity,
                                     "Data has been deleted successfully");
                             PD.setMessage("Refreshing...");
                             Logging.logUserAction(activity, context, Helper.userActions.TSR.DELETE_FARM + ": index " + id, Helper.variables.ACTIVITY_LOG_TYPE_TSR_MONITORING);

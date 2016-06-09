@@ -50,10 +50,10 @@ public class Logging {
                                              final String userid, final String action, final String actiontype, final String latitude, final String longitude){
         db.open();
 
-        String dt =  Helper.convertLongtoDateTime_DB_Format(System.currentTimeMillis());
+        String dt =  Helper.convert.convertLongtoDateTime_DB_Format(System.currentTimeMillis());
         db.insertUserActivityData(Integer.parseInt(userid), action, fusedLocation.getLastKnowLocation().latitude+"", fusedLocation.getLastKnowLocation().longitude+"", dt, actiontype);
 
-        if (Helper.variables.getGlobalVar_currentLevel(activity) != 4 && Helper.isNetworkAvailable(context)){
+        if (Helper.variables.getGlobalVar_currentLevel(activity) != 4 && Helper.random.isNetworkAvailable(context)){
             StringRequest postRequest = new StringRequest(Request.Method.POST,
                     Helper.variables.URL_INSERT_USER_ACTIVITY,
                     new Response.Listener<String>() {

@@ -53,7 +53,7 @@ public class Activity_Add_CustomerInformation_Basic extends FragmentActivity imp
         db.open();
 
 
-        Helper.hideKeyboardOnLoad(activity);
+        Helper.random.hideKeyboardOnLoad(activity);
         if (getIntent().hasExtra("latitude")){lat= getIntent().getDoubleExtra("latitude", 0);}
         if (getIntent().hasExtra("longtitude")){lng= getIntent().getDoubleExtra("longtitude", 0);}
 
@@ -95,7 +95,7 @@ public class Activity_Add_CustomerInformation_Basic extends FragmentActivity imp
                         !edtBirhday.getText().toString().equalsIgnoreCase("") && !edtBirthPlace.getText().toString().equalsIgnoreCase("")){
                      boolean isExisting = db.isFarmIDexisting(edtFarmId.getText().toString());
                      if (isExisting) {
-                         Helper.createCustomThemedDialogOKOnly(activity, "Sorry", "Farm ID is already taken. \n", "OK");
+                         Helper.dialog.themedOkOnly(activity, "Sorry", "Farm ID is already taken. \n", "OK");
                      }else{
                          final Intent intent = new Intent(Activity_Add_CustomerInformation_Basic.this, Activity_Add_CustomerInformation_Address.class);
                          intent.putExtra("latitude", lat);
@@ -110,7 +110,7 @@ public class Activity_Add_CustomerInformation_Basic extends FragmentActivity imp
                          overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
                      }
                 } else {
-                    Helper.createCustomThemedDialogOKOnly(activity, "Warning", "Complete fields with (*) to continue.", "OK");
+                    Helper.dialog.themedOkOnly(activity, "Warning", "Complete fields with (*) to continue.", "OK");
                 }
             }
         });

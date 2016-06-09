@@ -1,14 +1,17 @@
 package com.santeh.rjhonsl.samplemap.Main;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
@@ -65,7 +68,7 @@ public class MapsActivity_UserMonitoring extends AppCompatActivity implements On
     Adapter_UserMonitoring_SideNav_Activities adapter_useractivity;
     GoogleMap gmap;
 
-    int yyyy= 1970;
+    int yyyy = 1970;
     int mm = 1;
     int dd = 1;
 
@@ -78,7 +81,7 @@ public class MapsActivity_UserMonitoring extends AppCompatActivity implements On
 
     public static final String DATEPICKER_TAG = "datepicker";
 
-    List <CustInfoObject> useractivityList;
+    List<CustInfoObject> useractivityList;
 
     DatePickerDialog datePickerDialog;
     TimePickerDialog timePickerDialog;
@@ -100,7 +103,6 @@ public class MapsActivity_UserMonitoring extends AppCompatActivity implements On
         context = MapsActivity_UserMonitoring.this;
 
 
-
         fusedLocation = new FusedLocation(context, activity);
         fusedLocation.buildGoogleApiClient(context);
         fusedLocation.connectToApiClient();
@@ -113,7 +115,7 @@ public class MapsActivity_UserMonitoring extends AppCompatActivity implements On
         final Calendar calendar = Calendar.getInstance();
 
         datePickerDialog = DatePickerDialog.newInstance(this, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
-        timePickerDialog = TimePickerDialog.newInstance(MapsActivity_UserMonitoring.this, calendar.get(Calendar.HOUR_OF_DAY) ,calendar.get(Calendar.MINUTE), false, false);
+        timePickerDialog = TimePickerDialog.newInstance(MapsActivity_UserMonitoring.this, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), false, false);
 
         txtdate = (TextView) findViewById(R.id.date_usermonitoring);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout_usermonitoring);
@@ -121,7 +123,7 @@ public class MapsActivity_UserMonitoring extends AppCompatActivity implements On
         txtfiller = (TextView) findViewById(R.id.usermonitoring_filler);
         txtViewAllActivity = (TextView) findViewById(R.id.txt_usermonitoring_viewAll);
 
-        txtdate.setText(Helper.convertLongtoDate_Gregorian(System.currentTimeMillis()));
+        txtdate.setText(Helper.convert.convertLongtoDate_Gregorian(System.currentTimeMillis()));
 
 
         DateTime dateTime = new DateTime();
@@ -130,18 +132,18 @@ public class MapsActivity_UserMonitoring extends AppCompatActivity implements On
 
         yyyy = dateTime.getYear();
         mm = dateTime.getMonthOfYear();
-        dd =  dateTime.getDayOfMonth();
-        givendate = Helper.convertLongtoDateTime_DB_Format(System.currentTimeMillis());
+        dd = dateTime.getDayOfMonth();
+        givendate = Helper.convert.convertLongtoDateTime_DB_Format(System.currentTimeMillis());
         extras = getIntent();
-        if (extras != null){
+        if (extras != null) {
 
-            if (extras.hasExtra("userid")){
-                passedUserid= extras.getIntExtra("userid",0);
+            if (extras.hasExtra("userid")) {
+                passedUserid = extras.getIntExtra("userid", 0);
             }
 
-            if (extras.hasExtra("firstname") && extras.hasExtra("lastname")){
-                firstname= extras.getStringExtra("firstname");
-                lastname= extras.getStringExtra("lastname");
+            if (extras.hasExtra("firstname") && extras.hasExtra("lastname")) {
+                firstname = extras.getStringExtra("firstname");
+                lastname = extras.getStringExtra("lastname");
                 setTitle(firstname + " " + lastname);
             }
         }
@@ -158,10 +160,18 @@ public class MapsActivity_UserMonitoring extends AppCompatActivity implements On
     }
 
 
-    
-
     @Override
     public void onMapReady(final GoogleMap googleMap) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
         googleMap.setMyLocationEnabled(true);
         googleMap.getUiSettings().setMapToolbarEnabled(false);
         googleMap.getUiSettings().setZoomControlsEnabled(true);
@@ -175,9 +185,9 @@ public class MapsActivity_UserMonitoring extends AppCompatActivity implements On
             public void run() {
                 try {
                     LatLng latLng = fusedLocation.getLastKnowLocation();
-                    Helper.moveCameraAnimate(googleMap, latLng, 14);
+                    Helper.map.moveCameraAnimate(googleMap, latLng, 14);
                 } catch (Exception e) {
-                    Helper.toastShort(activity, "Location is not available: " + e);
+                    Helper.toast.short_(activity, "Location is not available: " + e);
                 }
             }
         }, 200);
@@ -200,7 +210,7 @@ public class MapsActivity_UserMonitoring extends AppCompatActivity implements On
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        Helper.moveCameraAnimate(gmap, new LatLng(Double.parseDouble(useractivityList.get(position).getLatitude()),
+                        Helper.map.moveCameraAnimate(gmap, new LatLng(Double.parseDouble(useractivityList.get(position).getLatitude()),
                                 Double.parseDouble(useractivityList.get(position).getLongtitude()))
                                 , 14);
                     }
@@ -231,7 +241,7 @@ public class MapsActivity_UserMonitoring extends AppCompatActivity implements On
             public void onClick(View v) {
 
                 String[] maptypes = {"Normal","Satellite","Terrain", "Hybrid"};
-                final Dialog dd = Helper.createCustomListDialog(activity, maptypes, "Map Types");
+                final Dialog dd = Helper.dialog.list(activity, maptypes, "Map Types");
                 ListView lstMapType = (ListView) dd.findViewById(R.id.dialog_list_listview);
                 dd.show();
 
@@ -267,8 +277,8 @@ public class MapsActivity_UserMonitoring extends AppCompatActivity implements On
         PD.setMessage("Please wait...");
         PD.show();
 
-        if(!Helper.isNetworkAvailable(activity)) {
-            Helper.toastShort(activity, "Internet Connection is not available. Please try again later.");
+        if(!Helper.random.isNetworkAvailable(activity)) {
+            Helper.toast.short_(activity, "Internet Connection is not available. Please try again later.");
             PD.dismiss();
         }
         else{
@@ -283,7 +293,7 @@ public class MapsActivity_UserMonitoring extends AppCompatActivity implements On
 //                            Helper.toastLong(activity, response + " "+passedUserid);
                             if (response.substring(1,2).equalsIgnoreCase("0")){
                                 PD.dismiss();
-                                Helper.toastShort(activity, "No activity/map data to display");
+                                Helper.toast.short_(activity, "No activity/map data to display");
                                 txtfiller.setVisibility(View.VISIBLE);
                                 lvUserActivity.setVisibility(View.GONE);
                             }else{
@@ -296,11 +306,11 @@ public class MapsActivity_UserMonitoring extends AppCompatActivity implements On
                                     if (useractivityList.size() > 0){
                                         for (int i = 0; i < useractivityList.size(); i++) {
 
-                                            Helper.map_addMarkerIconGen(gmap,
+                                            Helper.map.map_addMarkerIconGen(gmap,
                                                     new LatLng(Double.parseDouble(useractivityList.get(i).getLatitude()), Double.parseDouble(useractivityList.get(i).getLongtitude())),//gets latlong
-                                                    Helper.iconGeneratorSample(context, (i + 1) + "", activity), //creates an icon with a number
+                                                    Helper.map.iconGeneratorSample(context, (i + 1) + "", activity), //creates an icon with a number
                                                     useractivityList.get(i).getActionDone(), //action done by the user in the latlong
-                                                    Helper.convertLongtoDate_GregorianWithTime(Helper.convertDateTimeStringToMilis_DB_Format(useractivityList.get(i).getDateTime()))//date when action was done
+                                                    Helper.convert.convertLongtoDate_GregorianWithTime(Helper.convert.convertDateTimeStringToMilis_DB_Format(useractivityList.get(i).getDateTime()))//date when action was done
                                             );
                                         }
                                         txtfiller.setVisibility(View.GONE);
@@ -312,7 +322,7 @@ public class MapsActivity_UserMonitoring extends AppCompatActivity implements On
                                 }else{
                                     txtfiller.setVisibility(View.VISIBLE);
                                     lvUserActivity.setVisibility(View.GONE);
-                                    Helper.toastLong(activity, firstname + " " + lastname + " has no logs on current date selected");
+                                    Helper.toast.short_(activity, firstname + " " + lastname + " has no logs on current date selected");
                                 }
 
                                 PD.dismiss();
@@ -326,7 +336,7 @@ public class MapsActivity_UserMonitoring extends AppCompatActivity implements On
                     PD.dismiss();
                     txtfiller.setVisibility(View.VISIBLE);
                     lvUserActivity.setVisibility(View.GONE);
-                    Helper.toastShort(activity, error.toString());
+                    Helper.toast.short_(activity, error.toString());
                 }
             }) {
                 @Override
@@ -334,7 +344,7 @@ public class MapsActivity_UserMonitoring extends AppCompatActivity implements On
                     Map<String, String> params = new HashMap<String, String>();
                     params.put("username", Helper.variables.getGlobalVar_currentUserName(activity));
                     params.put("password", Helper.variables.getGlobalVar_currentUserPassword(activity));
-                    params.put("deviceid", Helper.getMacAddress(context));
+                    params.put("deviceid", Helper.deviceInfo.getMacAddress(context));
                     params.put("userid", Helper.variables.getGlobalVar_currentUserID(activity)+"");
                     params.put("idofuser", passedUserid+"");
                     params.put("date", setDate);
@@ -376,7 +386,7 @@ public class MapsActivity_UserMonitoring extends AppCompatActivity implements On
         setYyyy(year);
         setDd(day);
         setMm(month + 1);
-        txtdate.setText(Helper.convertDatetoGregorian(year, month + 1, day));
+        txtdate.setText(Helper.convert.convertDatetoGregorian(year, month + 1, day));
         getActivityInfoByUserIDandDate(year + "-" + (month + 1) + "-" + day, Helper.variables.URL_SELECT_USERS_ACTIVITY_BY_DATE_AND_ID);
     }
 

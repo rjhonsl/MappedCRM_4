@@ -130,7 +130,7 @@ public class Activity_Settings extends Activity{
                 String prompt = "(NOTE) Current data will be wiped out and replaced with data from web server. This process is irreversible." +
                         "\n\n" +
                         "Continue to restore data from web server?";
-                final Dialog d = Helper.createCustomDialogThemedYesNO(activity, prompt, "Restore", "NO", "YES", R.color.red_700);
+                final Dialog d = Helper.dialog.themedYesNo(activity, prompt, "Restore", "NO", "YES", R.color.red_700);
                 Button no = (Button) d.findViewById(R.id.btn_dialog_yesno_opt1);
                 Button yes = (Button) d.findViewById(R.id.btn_dialog_yesno_opt2);
 
@@ -208,7 +208,7 @@ public class Activity_Settings extends Activity{
                             }
                         } else {
                             PD.dismiss();
-                            Helper.toastShort(activity, "RESTORE FAILED. Please try syncing again.");
+                            Helper.toast.short_(activity, "RESTORE FAILED. Please try syncing again.");
                             Log.d("RESTORE", "RESTORE FAILED - farminfo");
                         }
                     }
@@ -217,7 +217,7 @@ public class Activity_Settings extends Activity{
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         PD.dismiss();
-                        Helper.toastShort(activity, "RESTORE FAILED. Please try syncing again. \n\n"+error.toString());
+                        Helper.toast.short_(activity, "RESTORE FAILED. Please try syncing again. \n\n"+error.toString());
                         Log.d("RESTORE", "RESTORE FAILED - farminfo");
                     }
                 }) {
@@ -226,7 +226,7 @@ public class Activity_Settings extends Activity{
                 Map<String, String> params = new HashMap<>();
                 params.put("username", Helper.variables.getGlobalVar_currentUserName(activity));
                 params.put("password", Helper.variables.getGlobalVar_currentUserPassword(activity));
-                params.put("deviceid", Helper.getMacAddress(context));
+                params.put("deviceid", Helper.deviceInfo.getMacAddress(context));
                 params.put("userid", Helper.variables.getGlobalVar_currentUserID(activity)+"");
                 params.put("userlvl", Helper.variables.getGlobalVar_currentLevel(activity)+"");
                 params.put("sql", query_farminfo + "");
@@ -295,7 +295,7 @@ public class Activity_Settings extends Activity{
                                 startRestore_pondInfo();
                             }
                         } else {
-                            Helper.toastShort(activity, "RESTORE FAILED. Please try again later.");
+                            Helper.toast.short_(activity, "RESTORE FAILED. Please try again later.");
                             PD.dismiss();
                             Log.d("RESTORE", "RESTORE failed - custinfo" + response);
                         }
@@ -305,7 +305,7 @@ public class Activity_Settings extends Activity{
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         PD.dismiss();
-                        Helper.toastShort(activity, "RESTORE FAILED. Please try syncing again. \n\n" + error.toString());
+                        Helper.toast.short_(activity, "RESTORE FAILED. Please try syncing again. \n\n" + error.toString());
                         Log.d("RESTORE", "RESTORE FAILED - cstinfo");
                     }
                 }) {
@@ -314,7 +314,7 @@ public class Activity_Settings extends Activity{
                 Map<String, String> params = new HashMap<>();
                 params.put("username", Helper.variables.getGlobalVar_currentUserName(activity));
                 params.put("password", Helper.variables.getGlobalVar_currentUserPassword(activity));
-                params.put("deviceid", Helper.getMacAddress(context));
+                params.put("deviceid", Helper.deviceInfo.getMacAddress(context));
                 params.put("userid", Helper.variables.getGlobalVar_currentUserID(activity)+"");
                 params.put("userlvl", Helper.variables.getGlobalVar_currentLevel(activity)+"");
                 params.put("sql", query_customerInfo + "");
@@ -360,14 +360,14 @@ public class Activity_Settings extends Activity{
                                                 custInfoObjectList.get(i).getArea() + "",
                                                 custInfoObjectList.get(i).getCulturesystem(),
                                                 custInfoObjectList.get(i).getRemarks(),
-                                                Helper.splitter(custInfoObjectList.get(i).getCustomerID(), "-")[1],
+                                                Helper.random.splitter(custInfoObjectList.get(i).getCustomerID(), "-")[1],
                                                 custInfoObjectList.get(i).getIsharvested(),
                                                 custInfoObjectList.get(i).getPond_dateInserted()
                                         );
                                     }
 
 
-                                    Helper.toastShort(activity, "Restore Successful.");
+                                    Helper.toast.short_(activity, "Restore Successful.");
                                     startRestore_weeklyUpdates();
                                 }else{
                                     Log.d("RESTORE", "NOTHING RESTORED - pondinfo");
@@ -378,7 +378,7 @@ public class Activity_Settings extends Activity{
                                 startRestore_weeklyUpdates();
                             }
                         } else {
-                            Helper.toastShort(activity, "RESTORE FAILED. Nothing to restore. ");
+                            Helper.toast.short_(activity, "RESTORE FAILED. Nothing to restore. ");
                             PD.dismiss();
                             Log.d("RESTORE", "RESTORE failed - pondinfo: " + response);
                         }
@@ -388,7 +388,7 @@ public class Activity_Settings extends Activity{
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         PD.dismiss();
-                        Helper.toastShort(activity, "RESTORE FAILED. Please try syncing again. \n\n" + error.toString());
+                        Helper.toast.short_(activity, "RESTORE FAILED. Please try syncing again. \n\n" + error.toString());
                         Log.d("RESTORE", "RESTORE FAILED - pondinfo");
                     }
                 }) {
@@ -397,7 +397,7 @@ public class Activity_Settings extends Activity{
                 Map<String, String> params = new HashMap<>();
                 params.put("username", Helper.variables.getGlobalVar_currentUserName(activity));
                 params.put("password", Helper.variables.getGlobalVar_currentUserPassword(activity));
-                params.put("deviceid", Helper.getMacAddress(context));
+                params.put("deviceid", Helper.deviceInfo.getMacAddress(context));
                 params.put("userid", Helper.variables.getGlobalVar_currentUserID(activity)+"");
                 params.put("userlvl", Helper.variables.getGlobalVar_currentLevel(activity)+"");
                 params.put("sql", query_PondsOfCustomer + "");
@@ -432,7 +432,7 @@ public class Activity_Settings extends Activity{
                                                 custInfoObjectList.get(i).getW_update_localid(),
                                                 custInfoObjectList.get(i).getW_update_currentabw(),
                                                 custInfoObjectList.get(i).getW_update_remarks(),
-                                                Helper.splitter(custInfoObjectList.get(i).getW_update_pondid(), "-")[1],
+                                                Helper.random.splitter(custInfoObjectList.get(i).getW_update_pondid(), "-")[1],
                                                 custInfoObjectList.get(i).getW_update_dateAdded(),
                                                 custInfoObjectList.get(i).getW_update_survivalrate()
                                         );
@@ -456,7 +456,7 @@ public class Activity_Settings extends Activity{
                             }
                         } else {
                             PD.dismiss();
-                            Helper.toastShort(activity, "RESTORE FAILED weekly. Nothing to restore. ");
+                            Helper.toast.short_(activity, "RESTORE FAILED weekly. Nothing to restore. ");
                             Log.d("RESTORE", "RESTORE failed - weekly: " + response);
                         }
                     }
@@ -465,7 +465,7 @@ public class Activity_Settings extends Activity{
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         PD.dismiss();
-                        Helper.toastShort(activity, "RESTORE FAILED. Please try syncing again. \n\n" + error.toString());
+                        Helper.toast.short_(activity, "RESTORE FAILED. Please try syncing again. \n\n" + error.toString());
                         Log.d("RESTORE", "RESTORE FAILED - weekly");
                     }
                 }) {
@@ -474,7 +474,7 @@ public class Activity_Settings extends Activity{
                 Map<String, String> params = new HashMap<>();
                 params.put("username", Helper.variables.getGlobalVar_currentUserName(activity));
                 params.put("password", Helper.variables.getGlobalVar_currentUserPassword(activity));
-                params.put("deviceid", Helper.getMacAddress(context));
+                params.put("deviceid", Helper.deviceInfo.getMacAddress(context));
                 params.put("userid", Helper.variables.getGlobalVar_currentUserID(activity)+"");
                 params.put("userlvl", Helper.variables.getGlobalVar_currentLevel(activity)+"");
 
@@ -500,7 +500,7 @@ public class Activity_Settings extends Activity{
                             custInfoObjectList =  HarvestInfoParser.parseFeed(response);
                             if (custInfoObjectList != null) {
                                 if (custInfoObjectList.size() > 0) {
-//                                    Helper.createCustomThemedDialogOKOnly(activity, "Restore", response, "OK");
+//                                    Helper.themedOkOnly(activity, "Restore", response, "OK");
                                     db.delete_ALL_ITEM_ON_TABLE(GPSHelper.TBL_HARVESTINFO);
                                     Log.d("RESTORE", "HARVEST INFO");
 
@@ -533,7 +533,7 @@ public class Activity_Settings extends Activity{
                             }
                         } else {
                             PD.dismiss();
-                            Helper.toastShort(activity, "RESTORE FAILED weekly. Nothing to restore. ");
+                            Helper.toast.short_(activity, "RESTORE FAILED weekly. Nothing to restore. ");
                             Log.d("RESTORE", "RESTORE failed - harvest: " + response);
                         }
                     }
@@ -542,7 +542,7 @@ public class Activity_Settings extends Activity{
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         PD.dismiss();
-                        Helper.toastShort(activity, "RESTORE FAILED. Please try syncing again. \n\n" + error.toString());
+                        Helper.toast.short_(activity, "RESTORE FAILED. Please try syncing again. \n\n" + error.toString());
                         Log.d("RESTORE", "RESTORE FAILED - harvests");
                     }
                 }) {
@@ -551,7 +551,7 @@ public class Activity_Settings extends Activity{
                 Map<String, String> params = new HashMap<>();
                 params.put("username", Helper.variables.getGlobalVar_currentUserName(activity));
                 params.put("password", Helper.variables.getGlobalVar_currentUserPassword(activity));
-                params.put("deviceid", Helper.getMacAddress(context));
+                params.put("deviceid", Helper.deviceInfo.getMacAddress(context));
                 params.put("userid", Helper.variables.getGlobalVar_currentUserID(activity)+"");
                 params.put("userlvl", Helper.variables.getGlobalVar_currentLevel(activity)+"");
 
@@ -574,7 +574,7 @@ public class Activity_Settings extends Activity{
 
 
     private void restoreLocal(){
-        final Dialog d = Helper.createCustomDialogThemedYesNO(activity,
+        final Dialog d = Helper.dialog.themedYesNo(activity,
                 "All data will be restored to the state of when the backup was done. All existing data after the date will not be restored." +
                         "\n\nRestore backup? ",
                 "Restore", "NO", "YES", R.color.red_material_600);
@@ -625,7 +625,7 @@ public class Activity_Settings extends Activity{
                                             }
                                         }
                                     } catch (Exception e) {
-                                        Helper.toastLong(activity, "Failed to Restore: " + String.valueOf(e));
+                                        Helper.toast.short_(activity, "Failed to Restore: " + String.valueOf(e));
                                     }
 
                                 }
@@ -636,7 +636,7 @@ public class Activity_Settings extends Activity{
                     FileOpenDialog.chooseFile_or_Dir();
                     /////////////////////////////////////////////////////////////////////////////////////////////////
                 } else {
-                    Helper.toastLong(activity, "External storage not available");
+                    Helper.toast.short_(activity, "External storage not available");
                 }
             }
         });
@@ -644,7 +644,7 @@ public class Activity_Settings extends Activity{
     }
 
     private void backupLocal(){
-        final Dialog d = Helper.createCustomDialogThemedYesNO(activity,
+        final Dialog d = Helper.dialog.themedYesNo(activity,
                 "Create local backup? ",
                 "Backup", "NO", "YES", R.color.red_material_600);
         Button btnyes = (Button) d.findViewById(R.id.btn_dialog_yesno_opt2);
@@ -714,10 +714,10 @@ public class Activity_Settings extends Activity{
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    Helper.toastLong(activity, "Back up Successfull: \n" + curDate);
+                    Helper.toast.short_(activity, "Back up Successfull: \n" + curDate);
                 }
                 else{
-                    Helper.toastLong(activity, "External Storage not available!");
+                    Helper.toast.short_(activity, "External Storage not available!");
                 }
 
             }

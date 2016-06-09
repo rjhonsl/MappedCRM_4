@@ -10,7 +10,7 @@ public class GPSHelper extends SQLiteOpenHelper {
 	private static final String LOGTAG = "DB_GPS";
 	private static final String DATABASE_NAME = "local.db";
 	//each time you change data structure, you must increment this by 1
-	private static final int DATABASE_VERSION = 26;
+	private static final int DATABASE_VERSION = 27;
 	Context context;
 
 
@@ -154,6 +154,7 @@ public class GPSHelper extends SQLiteOpenHelper {
 	};
 
 
+	//UNUSED COLUMNS
 	public static final String TBL_USERS_SUBINFO = "user_subinfo_";
 	public static final String CL_USI_ID 				= "user_subinfo_id";
 	public static final String CL_USI_UID 				= "user_subinfo_uid";
@@ -195,15 +196,15 @@ public class GPSHelper extends SQLiteOpenHelper {
 	public static final String CL_FCOMM_locLong			= "feedcomments_loclong";
 	public static final String CL_FCOMM_fetchAt			= "feedcomments_fetchat";
 
-	public static final String TBL_FEED_SUBCOMM = "feedsubcomments_";
-	public static final String TCL_FSUBCOMM_ID 				= "feedsubcomments_id";
-	public static final String TCL_FSUBCOMM_COMMENTID 		= "feedsubcomments_commentid";
-	public static final String TCL_FSUBCOMM_UID 			= "feedsubcomments_uid";
-	public static final String TCL_FSUBCOMM_CONTENT			= "feedsubcomments_content";
-	public static final String TCL_FSUBCOMM_DATECOMM		= "feedsubcomments_datecommented";
-	public static final String TCL_FSUBCOMM_loclat			= "feedsubcomments_loclat";
-	public static final String TCL_FSUBCOMM_locLong			= "feedsubcomments_loclong";
-	public static final String TCL_FSUBCOMM_fetchedAt		= "feedsubcomments_fetchat";
+	public static final String TBL_FEED_SUBCOMM 		= "feedsubcomments_";
+	public static final String CL_FSUBCOMM_ID 				= "feedsubcomments_id";
+	public static final String CL_FSUBCOMM_COMMENTID 		= "feedsubcomments_commentid";
+	public static final String CL_FSUBCOMM_UID 				= "feedsubcomments_uid";
+	public static final String CL_FSUBCOMM_CONTENT			= "feedsubcomments_content";
+	public static final String CL_FSUBCOMM_DATECOMM			= "feedsubcomments_datecommented";
+	public static final String CL_FSUBCOMM_loclat			= "feedsubcomments_loclat";
+	public static final String CL_FSUBCOMM_locLong			= "feedsubcomments_loclong";
+	public static final String CL_FSUBCOMM_fetchedAt		= "feedsubcomments_fetchat";
 
 
 
@@ -292,6 +293,31 @@ public class GPSHelper extends SQLiteOpenHelper {
 	public static final String CL_P_FQuantity_LOCALID 		= "PFQ_LOCALID";
 	public static final String[] ALL_KEY_POND_FQ = new String[]{ CL_P_FQuantity_ID, CL_P_FQuantity_HandlerID, CL_P_FQuantity_QUANTITY, CL_P_FQuantity_DATE };
 	public static final String[] ALL_KEY_POND_FQ_DATAPROP = new String[]{INTEGER +" "+PRIMARY_AUTOINCRE, INTEGER, INTEGER, TEXT};
+
+
+
+	/** STORED CREDS **/
+	public static final String TBL_TMP_CRED =  "tbltemp";
+	public static final String CL_TMP_id 				=  "tmp_id";
+	public static final String CL_TMP_currentuserID 	=  "tmp_userid";
+	public static final String CL_TMP_currentuserLvl			=  "tmp_userlvl";
+	public static final String CL_TMP_isactive 			=  "tmp_isactive";
+	public static final String CL_TMP_UserName 			=  "tmp_username";
+	public static final String CL_TMP_UserFirstname 	=  "tmp_firstname";
+	public static final String CL_TMP_UserLastname		=  "tmp_lastname";
+	public static final String CL_TMP_Password			=  "tmp_password";
+	public static final String CL_TMP_dateAddedToDB		=  "tmp_dateAddedToDB";
+	public static final String CL_TMP_assignedArea		=  "tmp_assignedArea";
+	public static final String CL_TMP_deviceID			=  "tmp_deviceid";
+	public static final String CL_TMP_isloggedout		=  "tmp_isloggedOut";
+
+	public static final String[] ALL_DATATYPE_TMP= new String[]{INTEGER + " " + PRIMARY_AUTOINCRE, TEXT, TEXT, TEXT, TEXT, TEXT, TEXT, TEXT, TEXT, TEXT, TEXT, TEXT};
+	public static final String[] ALL_KEY_TMP = new String[]{CL_TMP_id, CL_TMP_currentuserID,
+			CL_TMP_currentuserLvl, CL_TMP_isactive, CL_TMP_UserName, CL_TMP_UserLastname, CL_TMP_UserFirstname,
+			CL_TMP_Password, CL_TMP_dateAddedToDB, CL_TMP_assignedArea, CL_TMP_deviceID, CL_TMP_isloggedout};
+
+
+
 
 	//////////////////////////////////////////////////////////////////
 	///////////// STRINGS FOR CREATING AND UPDATING TABLE ////////////
@@ -451,10 +477,9 @@ public class GPSHelper extends SQLiteOpenHelper {
 		sqlCreate = sqlCreate.substring(0, sqlCreate.length() - 2);
 		sqlCreate = sqlCreate +
 				" )";
+
 		return sqlCreate;
 	}
-
-
 
 
 	//connects db
@@ -477,11 +502,10 @@ public class GPSHelper extends SQLiteOpenHelper {
 		createHarvestinFoTable(db);
 		createPondQHTable(db);
 		createPondFQTable(db);
+		db.execSQL(createTableString(TBL_TMP_CRED,ALL_KEY_TMP, ALL_DATATYPE_TMP));
 
 		Log.d(LOGTAG, "tables has been created: " + String.valueOf(db));
 	}
-
-
 
 	@Override
 	//on update version renew tb
@@ -528,6 +552,9 @@ public class GPSHelper extends SQLiteOpenHelper {
 			createPondFQTable(_db);
 		}
 
+		if (oldVersion < 27){
+			_db.execSQL(createTableString(TBL_TMP_CRED,ALL_KEY_TMP, ALL_DATATYPE_TMP));
+		}
 	}
 
 	private void createHarvestinFoTable(SQLiteDatabase _db) {

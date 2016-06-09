@@ -108,9 +108,9 @@ public class Activity_FarmInfo_Edit extends Activity{
             public void onClick(View v) {
 
                 if (isposted == 1) {
-                    Helper.createCustomThemedDialogOKOnly(activity, "Oops", "Item is alrady posted on our servers. Please contact admin for further changes.", "OK");
+                    Helper.dialog.themedOkOnly(activity, "Oops", "Item is alrady posted on our servers. Please contact admin for further changes.", "OK");
                 }else{
-                    final Dialog d = Helper.createCustomDialogThemedYesNO(activity, "Delete this record? ", "Delete", "NO", "YES", R.color.red);
+                    final Dialog d = Helper.dialog.themedYesNo(activity, "Delete this record? ", "Delete", "NO", "YES", R.color.red);
                     Button no = (Button) d.findViewById(R.id.btn_dialog_yesno_opt1);
                     Button yes = (Button) d.findViewById(R.id.btn_dialog_yesno_opt2);
                     d.show();
@@ -125,7 +125,7 @@ public class Activity_FarmInfo_Edit extends Activity{
                         public void onClick(View v) {
                             boolean isDeleted = db.deleteRow_FarmInfo(farmIndexId+"");
                             if (isDeleted) {
-                                Helper.toastShort(activity, "Record has been deleted.");
+                                Helper.toast.short_(activity, "Record has been deleted.");
                                 Intent intent = new Intent(activity, MapsActivity.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                                 intent.putExtra("fromActivity", "addfarminfo");
@@ -310,7 +310,7 @@ public class Activity_FarmInfo_Edit extends Activity{
             ll.setVisibility(View.VISIBLE);
         }
 
-        Helper.hideKeyboardOnLoad(activity);
+        Helper.random.hideKeyboardOnLoad(activity);
 
     }
 
@@ -339,7 +339,7 @@ public class Activity_FarmInfo_Edit extends Activity{
 
     public void updateCustomerInformation() {
         if (isposted == 1) {
-            Helper.createCustomThemedDialogOKOnly(activity, "Oops", "Item already posted on our servers. Please contact admin for further changes.", "OK");
+            Helper.dialog.themedOkOnly(activity, "Oops", "Item already posted on our servers. Please contact admin for further changes.", "OK");
         }else{
             latitude = txtlat.getText().toString();
             longitude = txtlong.getText().toString();
@@ -354,32 +354,32 @@ public class Activity_FarmInfo_Edit extends Activity{
                     edtLevelOfCulture.getText().toString().equalsIgnoreCase("") ||
                     edtWaterType.getText().toString().equalsIgnoreCase(""))
             {
-                Helper.toastShort(activity,   "You must complete all fields to continue.");
+                Helper.toast.short_(activity,   "You must complete all fields to continue.");
 
             } else {
                 PD.show();
                 PD.setMessage("Saving changes...");
 
                 if (Helper.variables.getGlobalVar_currentLevel(activity) != 4){
-                    StringRequest postRequest = new StringRequest(Request.Method.POST, Helper.variables.URL_UPDATE_CUSTOMERINFORMATION_BY_ID,
+                    StringRequest postRequest =  new StringRequest(Request.Method.POST, Helper.variables.URL_UPDATE_CUSTOMERINFORMATION_BY_ID,
                             new Response.Listener<String>() {
                                 @Override
                                 public void onResponse(String response) {
 
-                                    if (!Helper.extractResponseCodeBySplit(response).equalsIgnoreCase("0")) {
+                                    if (!Helper.random.extractResponseCodeBySplit(response).equalsIgnoreCase("0")) {
                                         PD.dismiss();
-                                        Helper.toastShort(activity, "Update successful.");
+                                        Helper.toast.short_(activity, "Update successful.");
                                         Logging.logUserAction(activity, context, Helper.userActions.TSR.Edit_FARM + ": index " + farmIndexId, Helper.variables.ACTIVITY_LOG_TYPE_TSR_MONITORING);
                                     } else {
                                         PD.dismiss();
-                                        Helper.toastShort(activity, getResources().getString(R.string.VolleyUnexpectedError));
+                                        Helper.toast.short_(activity, getResources().getString(R.string.VolleyUnexpectedError));
                                     }
                                 }
                             }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
                             PD.dismiss();
-                            Helper.toastShort(activity, "Failed to connect to server.");
+                            Helper.toast.short_(activity, "Failed to connect to server.");
                         }
                     }) {
                         @Override
@@ -399,7 +399,7 @@ public class Activity_FarmInfo_Edit extends Activity{
                             params.put("waterType", edtWaterType.getText().toString());
                             params.put("username", Helper.variables.getGlobalVar_currentUserName(activity));
                             params.put("password", Helper.variables.getGlobalVar_currentUserPassword(activity));
-                            params.put("deviceid", Helper.getMacAddress(activity));
+                            params.put("deviceid", Helper.deviceInfo.getMacAddress(activity));
                             return params;
                         }
                     };
@@ -424,7 +424,7 @@ public class Activity_FarmInfo_Edit extends Activity{
 
                     if (rowsAffectedCount > 0) {
                         PD.dismiss();
-                        Helper.createCustomThemedDialogOKOnly(activity, "Success", "Changes was successfully saved.", "OK");
+                        Helper.dialog.themedOkOnly(activity, "Success", "Changes was successfully saved.", "OK");
                         Intent intent = new Intent(activity, MapsActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                         intent.putExtra("fromActivity", "addfarminfo");
@@ -436,7 +436,7 @@ public class Activity_FarmInfo_Edit extends Activity{
                         startActivity(intent);
                         finish(); // call this to finish the current activity
                     }else{
-                        Helper.createCustomThemedDialogOKOnly(activity, "Error", "Something happened. Please try again.", "OK");
+                        Helper.dialog.themedOkOnly(activity, "Error", "Something happened. Please try again.", "OK");
                     }
                 }
             }

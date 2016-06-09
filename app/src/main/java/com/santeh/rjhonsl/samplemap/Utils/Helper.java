@@ -6,16 +6,21 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
+import android.provider.OpenableColumns;
 import android.provider.Settings;
 import android.support.design.widget.Snackbar;
 import android.telephony.TelephonyManager;
@@ -51,11 +56,11 @@ import com.santeh.rjhonsl.samplemap.Obj.Var;
 import com.santeh.rjhonsl.samplemap.R;
 
 import org.joda.time.DateTime;
+import org.joda.time.Hours;
+import org.joda.time.Minutes;
 import org.joda.time.Weeks;
 
 import java.net.NetworkInterface;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -64,8 +69,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-
-import javax.crypto.Cipher;
 
 /**
  * Created by rjhonsl on 7/24/2015.
@@ -93,6 +96,7 @@ public class Helper {
         }
     }
 
+
     public static class variables{
         public static String sourceAddress_bizNF                    = "http://santeh.co.nf/phpsql/";
         public static String sourceAddress_goDaddy                  = "http://santeh-webservice.com/php/android_json_post/";
@@ -100,6 +104,9 @@ public class Helper {
         public static String sourceAddress_goDaddy_FishBookUpload   = "http://santeh.co.nf/Images/androidimageupload_fishbook/";
         public static String sourceAddress_downloadable_downloadable       = "http://santeh-webservice.com/downloadables/";
         public static String sourceAddress_000webhost               = "http://mysanteh.site50.net/santehweb/";
+
+
+
 
         public static final String ACTIVITY_LOG_TYPE_FARM_REPORTING= "1";
         public static final String ACTIVITY_LOG_TYPE_TSR_MONITORING= "2";
@@ -132,6 +139,7 @@ public class Helper {
         public static String URL_DELETE_POND_BY_ID                      = sourceAddress_goDaddy + "deletePondInfoByID.php";
         public static String URL_DELETE_POND_WEEKLY_DETAILS_BY_ID       = sourceAddress_goDaddy + "deletePondWeeklyDetailsByID.php";
 
+
         public static String URL_INSERT_PONDINFO                        = sourceAddress_goDaddy + "insertPondInformation.php";
         public static String URL_INSERT_LOGINLOCATION                   = sourceAddress_goDaddy + "insertLoginLocationOffUser.php";
         public static String URL_INSERT_USER_ACTIVITY                   = sourceAddress_goDaddy + "insertUserActivity.php";
@@ -140,7 +148,6 @@ public class Helper {
         public static String URL_INSERT_FARM_INFO                       = sourceAddress_goDaddy + "insertFarmInformation.php";
         public static String URL_PHP_RAW_QUERY_POST_SELECT              = sourceAddress_goDaddy + "insertSyncFarmInfo.php";
         public static String URL_PHP_INSERT_FEEDPOST                    = sourceAddress_goDaddy + "insertFeedContent.php";
-//        public static String URL_PHP_INSERT_FEEDPOST_PHOTO              = sourceAddress_goDaddy + "insertFeedContentPhoto.php";
         public static String URL_PHP_INSERT_FEEDPOST_PHOTO              = sourceAddress_goDaddy + "uploadimage.php";
         public static String URL_PHP_RAW_QUERY_POST_INSERT              = sourceAddress_goDaddy + "selectquery.php";
         public static String URL_PHP_RAW_QUERY_POST_SELECT_CUSTOMER     = sourceAddress_goDaddy + "selectQuery_customer.php";
@@ -153,6 +160,8 @@ public class Helper {
         public static String URL_UPDATE_POND_WEEKLY_DETAIL_BY_ID        = sourceAddress_goDaddy + "updatePodWeeklyDetails.php";
 
         public static String URL_LOGIN                                  = sourceAddress_goDaddy + "login.php";
+
+
 
         public static String[] ARRAY_SPECIES = {
                 "Bangus",   //0
@@ -299,14 +308,7 @@ public class Helper {
         };
 
 
-
-
-
-
-
-
         public static class tables{
-
             public static class PONDINFO{
                 public static String id = "id";
                 public static String pondID = "pondid";
@@ -319,6 +321,8 @@ public class Helper {
                 public static String customerID = "customerID";
             }
         }
+
+
 
         public static void setGlobalVar_currentUserID(int ID, Activity activity){
             ((Var) activity.getApplication()).setCurrentuser(ID);
@@ -421,9 +425,7 @@ public class Helper {
     }
 
 
-
     public static class map {
-
 
         public static float getDifference(LatLng center, LatLng touchLocation ){
 
@@ -432,1122 +434,630 @@ public class Helper {
                     touchLocation.latitude, touchLocation.longitude, results);
             return results[0];
         }
-    }
+
+        public static Marker map_addMarker(GoogleMap map, LatLng latlng, int iconResID,
+                                            final String farmname, final String address, String id, String totalstock, String specie){
 
 
-    public class cipher{
-
-        private  KeyPair javkey;
-
-        public void main (String args) throws Exception {
-            //
-            // check args and get plaintext
-            if (args.length() !=1) {
-                System.err.println("Usage: java PublicExample text");
-                System.exit(1);
-            }
-            byte[] plainText = args.getBytes("UTF8");
-
-            // generate an RSA key
-            Log.d("Cipher", "Start generating RSA key");
-            KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
-            keyGen.initialize(128);
-            KeyPair key = keyGen.generateKeyPair();
-            Log.d("Cipher", key.toString());
-            javkey = key;
-
-            System.out.println("Finish generating RSA key");
-            //
-            // get an RSA cipher object and print the provider
-            Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
-            System.out.println( "\n" + cipher.getProvider().getInfo() );
-            //
-            // encrypt the plaintext using the public key
-            System.out.println( "\nStart encryption" );
-            cipher.init(Cipher.ENCRYPT_MODE, key.getPublic());
-            byte[] cipherText = cipher.doFinal(plainText);
-            System.out.println( "Finish encryption: " );
-            System.out.println( new String(cipherText, "UTF8") );
-            //
-            // decrypt the ciphertext using the private key
-            System.out.println( "\nStart decryption" );
-            cipher.init(Cipher.DECRYPT_MODE, key.getPrivate());
-            byte[] newPlainText = cipher.doFinal(cipherText);
-            System.out.println( "Finish decryption: " );
-            System.out.println( new String(newPlainText, "UTF8") );
-        }
-    }
-
-    public static double get_ABW_BY_WEEK_NO(int weekNo) {
-        return variables.ARRAY_TILAPIA_ABW_WEEKLY[(weekNo-1)];
-    }
-
-    public static String computeWeeklyFeedConsumption(double ABW, double NumberofStock, double feedingrate, double survivalrate) {
-        DecimalFormat df = new DecimalFormat("#.##");
-        return df.format (ABW*NumberofStock*feedingrate*survivalrate*7);
-    }
-
-    public static String deciformat(double num, int numberOfDecimalPlace) {
-        String str = "";
-
-        for (int i = 0; i < numberOfDecimalPlace; i++) {
-                str = str +"#";
-        }
-        DecimalFormat df = new DecimalFormat("#."+str);
-        return df.format(num);
-    }
-
-
-    public static double get_TilapiaFeedingRate_by_WeekNum(int weeknum){
-        if (weeknum > 18){
-            return Helper.variables.ARRAY_TILAPIA_FEEDING_RATE_PER_WEEK[17];
-        }else{
-            return Helper.variables.ARRAY_TILAPIA_FEEDING_RATE_PER_WEEK[weeknum-1];
+            Marker marker = map.addMarker(new MarkerOptions()
+                            .title(id + "#-#" + farmname + "#-#" + totalstock + "#-#" + specie)
+                            .icon(BitmapDescriptorFactory.fromResource(iconResID))
+                            .snippet(address)
+                            .position(latlng)
+                            .draggable(false)
+            );
+            return marker;
         }
 
-    }
-
-    public static double get_BangusFeedingRate_by_WeekNum(int weeknum){
-        if (weeknum > 21){
-            return Helper.variables.ARRAY_BANGUS_FEEDING_RATE_PER_WEEK[21];
-        }else{
-            return Helper.variables.ARRAY_BANGUS_FEEDING_RATE_PER_WEEK[weeknum-1];
+        public static Marker map_addMarkerIconGen(GoogleMap map, LatLng latlng, Bitmap iconResID, final String activity, String datetime){
+            Marker marker = map.addMarker(new MarkerOptions()
+                    .title(activity)
+                    .icon(BitmapDescriptorFactory.fromBitmap(iconResID))
+                    .snippet(datetime)
+                    .position(latlng)
+                    .draggable(false)
+            );
+            return marker;
         }
 
-    }
-
-    public static int get_currentWeek_by_stockedDate(String stockedDate, int abw){
-
-        DateTime dt = new DateTime();
-        GregorianCalendar jdkGcal = dt.toGregorianCalendar();
-        dt = new DateTime(jdkGcal);
-
-
-        String[] datesplitter = stockedDate.split("/");
-        int weekStocked = Helper.get_Tilapia_WeekNum_byABW(abw);
-        long currendate = System.currentTimeMillis();
-        long stockeddate = Helper.convertDateToLong(Integer.parseInt(datesplitter[1]), Integer.parseInt(datesplitter[0]), Integer.parseInt(datesplitter[2]));
-
-        Log.d("Week Summary", stockeddate + " " + currendate + " " + weekStocked);
-        DateTime start = new DateTime(
-                Integer.parseInt(datesplitter[2]), //year
-                Integer.parseInt(datesplitter[0]), //month
-                Integer.parseInt(datesplitter[1]), //day
-                0, 0, 0, 0);
-
-        datesplitter = Helper.convertLongtoDateString(currendate).split("/");
-        DateTime end = new DateTime(
-                Integer.parseInt(datesplitter[2]), //year
-                Integer.parseInt(datesplitter[1]), //month
-                Integer.parseInt(datesplitter[0]), //day
-                0, 0, 0, 0);
-
-
-        Weeks weeks = Weeks.weeksBetween(start, end);
-
-        int currentWeekOfStock = weekStocked + weeks.getWeeks();
-
-        return currentWeekOfStock;
-    }
-
-
-    public static int get_Bangus_WeekNum_byABW(int abw){
-
-        if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[21]){
-            return 22;
-        }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[20]){
-            return 21;
-        }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[19]){
-            return 20;
-        }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[18]){
-            return 19;
-        }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[17]){
-            return 18;
-        }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[16]){
-            return 17;
-        }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[15]){
-            return 16;
-        }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[14]){
-            return 15;
-        }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[13]){
-            return 14;
-        }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[12]){
-            return 13;
-        }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[11]){
-            return 12;
-        }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[10]){
-            return 11;
-        }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[9]){
-            return 10;
-        }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[8]){
-            return 9;
-        }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[7]){
-            return 8;
-        }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[6]){
-            return 7;
-        }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[5]){
-            return 6;
-        }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[4]){
-            return 5;
-        }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[3]){
-            return 4;
-        }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[2]){
-            return 3;
-        }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[1]){
-            return 2;
-        }else{
-            return 1;
-        }//
-    }
-
-//    public static int get_Vannamei_WeekNum_byABW(int abw1){
-//
-//        if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[21]){
-//            return 22;
-//        }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[20]){
-//            return 21;
-//        }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[19]){
-//            return 20;
-//        }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[18]){
-//            return 19;
-//        }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[17]){
-//            return 18;
-//        }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[16]){
-//            return 17;
-//        }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[15]){
-//            return 16;
-//        }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[14]){
-//            return 15;
-//        }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[13]){
-//            return 14;
-//        }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[12]){
-//            return 13;
-//        }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[11]){
-//            return 12;
-//        }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[10]){
-//            return 11;
-//        }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[9]){
-//            return 10;
-//        }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[8]){
-//            return 9;
-//        }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[7]){
-//            return 8;
-//        }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[6]){
-//            return 7;
-//        }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[5]){
-//            return 6;
-//        }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[4]){
-//            return 5;
-//        }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[3]){
-//            return 4;
-//        }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[2]){
-//            return 3;
-//        }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[1]){
-//            return 2;
-//        }else{
-//            return 1;
-//        }//
-//    }
-
-
-
-    public static int get_Vannamei_Extenxive_WeekNum_byABW(int abw){
-
-        if (abw >= variables.ARRAY_VANNAMEI_EXTENSIVE_ABW_WEEKLY[13]){
-            return 17;
-        }else if (abw >= variables.ARRAY_VANNAMEI_EXTENSIVE_ABW_WEEKLY[12]){
-            return 16;
-        }else if (abw >= variables.ARRAY_VANNAMEI_EXTENSIVE_ABW_WEEKLY[11]){
-            return 15;
-        }else if (abw >= variables.ARRAY_VANNAMEI_EXTENSIVE_ABW_WEEKLY[10]){
-            return 14;
-        }else if (abw >= variables.ARRAY_VANNAMEI_EXTENSIVE_ABW_WEEKLY[9]){
-            return 13;
-        }else if (abw >= variables.ARRAY_VANNAMEI_EXTENSIVE_ABW_WEEKLY[8]){
-            return 12;
-        }else if (abw >= variables.ARRAY_VANNAMEI_EXTENSIVE_ABW_WEEKLY[7]){
-            return 11;
-        }else if (abw >= variables.ARRAY_VANNAMEI_EXTENSIVE_ABW_WEEKLY[6]){
-            return 10;
-        }else if (abw >= variables.ARRAY_VANNAMEI_EXTENSIVE_ABW_WEEKLY[5]){
-            return 9;
-        }else if (abw >= variables.ARRAY_VANNAMEI_EXTENSIVE_ABW_WEEKLY[4]){
-            return 8;
-        }else if (abw >= variables.ARRAY_VANNAMEI_EXTENSIVE_ABW_WEEKLY[3]){
-            return 7;
-        }else if (abw >= variables.ARRAY_VANNAMEI_EXTENSIVE_ABW_WEEKLY[2]){
-            return 6;
-        }else if (abw >= variables.ARRAY_VANNAMEI_EXTENSIVE_ABW_WEEKLY[1]){
-            return 5;
-        }else{
-            return 4;
-        }
-    }
-
-
-
-    public static int get_Tilapia_WeekNum_byABW(int abw){
-
-        if (abw >= variables.ARRAY_TILAPIA_ABW_WEEKLY[17]){
-            return 18;
-        }else if (abw >= variables.ARRAY_TILAPIA_ABW_WEEKLY[16]){
-            return 17;
-        }else if (abw >= variables.ARRAY_TILAPIA_ABW_WEEKLY[15]){
-            return 16;
-        }else if (abw >= variables.ARRAY_TILAPIA_ABW_WEEKLY[14]){
-            return 15;
-        }else if (abw >= variables.ARRAY_TILAPIA_ABW_WEEKLY[13]){
-            return 14;
-        }else if (abw >= variables.ARRAY_TILAPIA_ABW_WEEKLY[12]){
-            return 13;
-        }else if (abw >= variables.ARRAY_TILAPIA_ABW_WEEKLY[11]){
-            return 12;
-        }else if (abw >= variables.ARRAY_TILAPIA_ABW_WEEKLY[10]){
-            return 11;
-        }else if (abw >= variables.ARRAY_TILAPIA_ABW_WEEKLY[9]){
-            return 10;
-        }else if (abw >= variables.ARRAY_TILAPIA_ABW_WEEKLY[8]){
-            return 9;
-        }else if (abw >= variables.ARRAY_TILAPIA_ABW_WEEKLY[7]){
-            return 8;
-        }else if (abw >= variables.ARRAY_TILAPIA_ABW_WEEKLY[6]){
-            return 7;
-        }else if (abw >= variables.ARRAY_TILAPIA_ABW_WEEKLY[5]){
-            return 6;
-        }else if (abw >= variables.ARRAY_TILAPIA_ABW_WEEKLY[4]){
-            return 5;
-        }else if (abw >= variables.ARRAY_TILAPIA_ABW_WEEKLY[3]){
-            return 4;
-        }else if (abw >= variables.ARRAY_TILAPIA_ABW_WEEKLY[2]){
-            return 3;
-        }else if (abw >= variables.ARRAY_TILAPIA_ABW_WEEKLY[1]){
-            return 2;
-        }else{
-            return 1;
-        }
-    }
-
-
-
-    public static String getTilapiaFeedTypeByNumberOfWeeks(int week){
-        String feedtype;
-
-        if (week <= 6) {
-            feedtype = "Frymash";
-        } else if(week <= 8){
-            feedtype = "Crumble";
-        } else if(week <= 10){
-            feedtype = "Starter";
-        } else if(week <= 14){
-            feedtype = "Grower";
-        } else {
-            feedtype = "Finisher";
-        }
-
-        return feedtype;
-    }
-
-    public static String getBangusFeedtypeByABW(double abw){
-        String feedtype;
-
-        if (abw <= 10) {
-            feedtype = "Pre-Starter Zero";
-        } else if(abw <= 25){
-            feedtype = "Pre-Starter";
-        } else if(abw <= 150){
-            feedtype = "Starter";
-        } else if(abw <= 280){
-            feedtype = "Grower";
-        } else {
-            feedtype = "Finisher";
-        }
-
-        return feedtype;
-    }
-
-
-
-    public static void toastShort(Activity context, String msg){
-
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-            Snackbar snackbar = Snackbar.make(context.findViewById(android.R.id.content), msg, Snackbar.LENGTH_SHORT)
-                    .setActionTextColor(context.getResources().getColor(R.color.gray_100));
-
-            View view = snackbar.getView();
-            TextView tv = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
-            tv.setTextColor(context.getResources().getColor(R.color.gray_100));
-            tv.setMaxLines(5);
-            snackbar.show();
-        }else{
-            LayoutInflater inflater = context.getLayoutInflater();
-            final View layout = inflater.inflate(R.layout.toast,
-                    (ViewGroup) context.findViewById(R.id.toast_layout_root));
-
-            TextView text = (TextView) layout.findViewById(R.id.text);
-            Typeface font = Typeface.createFromAsset(context.getAssets(), "Roboto-Light.ttf");
-            text.setTypeface(font);
-            text.setText(msg);
-
-            Toast toast = new Toast(context.getApplicationContext());
-            toast.setGravity(Gravity.BOTTOM | Gravity.FILL_HORIZONTAL, 0, 0);
-            toast.setDuration(Toast.LENGTH_SHORT);
-            toast.setMargin(0, 0);
-            toast.setView(layout);
-
-            toast.show();
-        }
-
-    }
-
-    public static void setCursorOnEnd(EditText edt) {
-        edt.setSelection(edt.getText().length());
-    }
-
-    public static void toastLong(Activity context, String msg){
-
-
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-
-            Snackbar snackbar = Snackbar.make(context.findViewById(android.R.id.content), msg, Snackbar.LENGTH_SHORT)
-                    .setActionTextColor(context.getResources().getColor(R.color.gray_100));
-
-            View view = snackbar.getView();
-            TextView tv = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
-            tv.setTextColor(context.getResources().getColor(R.color.gray_100));
-            tv.setMaxLines(5);
-            snackbar.show();
-
-        }else{
-
-            LayoutInflater inflater = context.getLayoutInflater();
-            View layout = inflater.inflate(R.layout.toast,
-                    (ViewGroup) context.findViewById(R.id.toast_layout_root));
-
-            TextView text = (TextView) layout.findViewById(R.id.text);
-            Typeface font = Typeface.createFromAsset(context.getAssets(), "Roboto-Light.ttf");
-            text.setTypeface(font);
-            text.setText(msg);
-
-            Toast toast = new Toast(context.getApplicationContext());
-            toast.setGravity(Gravity.BOTTOM | Gravity.FILL_HORIZONTAL, 0, 0);
-            toast.setMargin(0, 0);
-            toast.setDuration(Toast.LENGTH_LONG);
-            toast.setView(layout);
-            toast.show();
-
-        }
-    }
-
-
-
-    public static void toastIndefinite(Activity context, String msg){
-
-        final Snackbar snackbar = Snackbar.make(context.findViewById(android.R.id.content), msg, Snackbar.LENGTH_INDEFINITE)
-                .setActionTextColor(context.getResources().getColor(R.color.gray_100));
-
-        View view = snackbar.getView();
-        TextView tv = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
-        tv.setTextColor(context.getResources().getColor(R.color.gray_100));
-        tv.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                snackbar.dismiss();
-                return false;
-            }
-        });
-        tv.setMaxLines(5);
-        snackbar.show();
-
-
-
-    }
-
-
-    public static Marker map_addMarker(GoogleMap map, LatLng latlng, int iconResID,
-                                        final String farmname, final String address, String id, String totalstock, String specie){
-
-
-        Marker marker = map.addMarker(new MarkerOptions()
-                        .title(id + "#-#" + farmname + "#-#" + totalstock + "#-#" + specie)
-                        .icon(BitmapDescriptorFactory.fromResource(iconResID))
-                        .snippet(address)
-                        .position(latlng)
-                        .draggable(false)
-        );
-        return marker;
-    }
-
-    public static Marker map_addMarkerIconGen(GoogleMap map, LatLng latlng, Bitmap iconResID, final String activity, String datetime){
-        Marker marker = map.addMarker(new MarkerOptions()
-                .title(activity)
-                .icon(BitmapDescriptorFactory.fromBitmap(iconResID))
-                .snippet(datetime)
-                .position(latlng)
-                .draggable(false)
-        );
-        return marker;
-    }
-
-
-
-
-    public static Dialog createCustomDialogYesNO(Activity activity, int dialogResID, String prompt, String title, String strButton1, String strButton2){
-        final Dialog d = new Dialog(activity);//
-        d.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        d.setContentView(dialogResID);//Set the xml view of the dialog
-        Button btn1 = (Button) d.findViewById(R.id.btn_dialog_yesno_opt1);
-        Button btn2 = (Button) d.findViewById(R.id.btn_dialog_yesno_opt2);
-        TextView txttitle = (TextView) d.findViewById(R.id.dialog_yesno_title);
-        TextView txtprompt = (TextView) d.findViewById(R.id.dialog_yesno_prompt);
-
-        txtprompt.setText(prompt);
-        txttitle.setText(title);
-        btn1.setText(strButton1);
-        btn2.setText(strButton2);
-        return d;
-    }
-
-
-    public static Dialog createCustomDialogThemedYesNO(Activity activity, String prompt, String title, String strButton1, String strButton2, int resIdColor){
-        final Dialog d = new Dialog(activity);//
-        d.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        d.setContentView(R.layout.dialog_material_themed_yesno);//Set the xml view of the dialog
-        Button btn1 = (Button) d.findViewById(R.id.btn_dialog_yesno_opt1);
-        Button btn2 = (Button) d.findViewById(R.id.btn_dialog_yesno_opt2);
-        TextView txttitle = (TextView) d.findViewById(R.id.dialog_yesno_title);
-        TextView txtprompt = (TextView) d.findViewById(R.id.dialog_yesno_prompt);
-
-        txtprompt.setText(prompt);
-        txttitle.setText(title);
-//        txttitle.setBackground(activity.getResources().getDrawable(resIdColor));
-        btn1.setText(strButton1);
-        btn2.setText(strButton2);
-
-
-        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-        Window window = d.getWindow();
-        lp.copyFrom(window.getAttributes());
-//This makes the dialog take up the full width
-        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
-        window.setAttributes(lp);
-
-        d.show();
-        return d;
-    }
-
-
-
-    public static Dialog createCustomDialogThemedYesNO_WithEditText(Activity activity, String prompt, String edtEntry, String title, String strButton1, String strButton2, int resIdColor){
-        final Dialog d = new Dialog(activity);//
-        d.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        d.setContentView(R.layout.dialog_material_themed_yesno_with_edittext);//Set the xml view of the dialog
-        Button btn1 = (Button) d.findViewById(R.id.btn_dialog_yesno_opt1);
-        Button btn2 = (Button) d.findViewById(R.id.btn_dialog_yesno_opt2);
-        EditText edt = (EditText) d.findViewById(R.id.dialog_edttext);
-        TextView txttitle = (TextView) d.findViewById(R.id.dialog_yesno_title);
-        TextView txtprompt = (TextView) d.findViewById(R.id.dialog_yesno_prompt);
-
-        txtprompt.setText(prompt);
-        edt.setText(edtEntry);
-        txttitle.setText(title);
-        txttitle.setBackground(activity.getResources().getDrawable(resIdColor));
-        btn1.setText(strButton1);
-        btn2.setText(strButton2);
-        d.show();
-        return d;
-    }
-
-
-
-    public static Dialog createNumberPickerdDialog(Activity activity, String dialogTitle, int minVal, int maxValue){
-        final Dialog d = new Dialog(activity);//
-//        d.requestWindowFeature(Window.FEATURE_NO_TITLE); //notitle
-        d.setContentView(R.layout.dialog_numberpicker);
-        d.setTitle(dialogTitle);
-        final NumberPicker nbp = (NumberPicker) d.findViewById(R.id.dialog_numberpicker);
-        Button set = (Button) d.findViewById(R.id.btn_numberpicker_set);
-        nbp.setMaxValue(maxValue);
-        nbp.setMinValue(minVal);
-
-        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-        lp.copyFrom(d.getWindow().getAttributes());
-        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-
-        d.show();
-        return d;
-    }
-
-
-    public static Dialog createDecimaldDialog(Activity activity, String dialogTitle, int minVal, int maxValue){
-        final Dialog d = new Dialog(activity);//
-//        d.requestWindowFeature(Window.FEATURE_NO_TITLE); //notitle
-
-        d.setContentView(R.layout.dialog_decimalpicker);
-        d.setTitle(dialogTitle);
-        NumberPicker wholeNum = (NumberPicker) d.findViewById(R.id.dialog_decipicker_whole);
-        wholeNum.setMaxValue(maxValue);
-        wholeNum.setMinValue(0);
-
-        NumberPicker decimal = (NumberPicker) d.findViewById(R.id.dialog_decipicker_deci);
-        decimal.setMaxValue(maxValue);
-        decimal.setMinValue(0);
-
-        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-        lp.copyFrom(d.getWindow().getAttributes());
-        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-
-        d.show();
-        return d;
-    }
-
-
-
-    public static Dialog createCustomDialogOKOnly(Activity activity, String title, String prompt, String button){
-        final Dialog d = new Dialog(activity);//
-        d.requestWindowFeature(Window.FEATURE_NO_TITLE); //notitle
-        d.setContentView(R.layout.dialog_material_okonly);//Set the xml view of the dialog
-        TextView txttitle = (TextView) d.findViewById(R.id.dialog_okonly_title);
-        TextView txtprompt = (TextView) d.findViewById(R.id.dialog_okonly_prompt);
-        Button txtok = (Button) d.findViewById(R.id.btn_dialog_okonly_OK);
-        txtok.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                d.hide();
-            }
-        });
-        txtprompt.setText(prompt);
-        txttitle.setText(title);
-        txtok.setText(button);
-        d.show();
-
-        return d;
-    }
-
-
-    public static int removeSuffix(String wholeValue, String unitsToRemove){
-        int initialValue;
-
-        if (wholeValue.equalsIgnoreCase("") || wholeValue.equalsIgnoreCase(null)) {
-            initialValue = 1;
-        }else {
-            if (wholeValue.substring(wholeValue.length() - unitsToRemove.length(), wholeValue.length()) .equalsIgnoreCase(unitsToRemove)){
-                initialValue = Integer.parseInt(wholeValue.substring(0, wholeValue.length() - unitsToRemove.length()));
-            }else{
-                initialValue = Integer.parseInt(wholeValue.toString());
-            }
-        }
-
-        return  initialValue;
-    }
-
-    public static Dialog createCustomThemedDialogOKOnly(Activity activity, String title, String prompt, String button){
-        final Dialog d = new Dialog(activity);//
-        d.requestWindowFeature(Window.FEATURE_NO_TITLE); //notitle
-        d.setContentView(R.layout.dialog_material_themed_okonly);//Set the xml view of the dialog
-        TextView txttitle = (TextView) d.findViewById(R.id.dialog_okonly_title);
-        TextView txtprompt = (TextView) d.findViewById(R.id.dialog_okonly_prompt);
-        Button txtok = (Button) d.findViewById(R.id.btn_dialog_okonly_OK);
-        txtok.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                d.hide();
-            }
-        });
-//        txttitle.setBackground(activity.getResources().getDrawable(resIdColor));
-        txtok.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                d.hide();
-            }
-        });
-        txtprompt.setText(prompt);
-        txttitle.setText(title);
-        txtok.setText(button);
-
-        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-        Window window = d.getWindow();
-        lp.copyFrom(window.getAttributes());
-//This makes the dialog take up the full width
-        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
-        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
-        window.setAttributes(lp);
-
-        d.show();
-        return d;
-    }
-
-
-    public static Dialog createCustomThemedDialogOKOnly_scrolling(Activity activity, String title, String prompt, String button, int resIdColor){
-        final Dialog d = new Dialog(activity);//
-        d.requestWindowFeature(Window.FEATURE_NO_TITLE); //notitle
-        d.setContentView(R.layout.dialog_material_themed_okonly_scrollview);//Set the xml view of the dialog
-        TextView txttitle = (TextView) d.findViewById(R.id.dialog_okonly_title);
-        TextView txtprompt = (TextView) d.findViewById(R.id.dialog_okonly_prompt);
-        Button txtok = (Button) d.findViewById(R.id.btn_dialog_okonly_OK);
-        txtok.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                d.hide();
-            }
-        });
-        txttitle.setBackground(activity.getResources().getDrawable(resIdColor));
-        txtok.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                d.hide();
-            }
-        });
-        txtprompt.setText(prompt);
-        txttitle.setText(title);
-        txtok.setText(button);
-        d.show();
-        return d;
-    }
-
-    public static Dialog createCustomListDialog(Activity activity, String[] options, String title){
-        final Dialog d = new Dialog(activity);//
-        d.requestWindowFeature(Window.FEATURE_NO_TITLE); //notitle
-        d.setContentView(R.layout.dialog_material_list);//Set the xml view of the dialog
-
-        ListView listview = (ListView) d.findViewById(R.id.dialog_list_listview);
-        ArrayAdapter<String> listViewAdapter = new ArrayAdapter<String>(activity, R.layout.select_dialog_item_material, options); //selected item will look like a spinner set from XML
-        listViewAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        listview.setAdapter(listViewAdapter);
-
-        TextView txtTitle = (TextView) d.findViewById(R.id.dialog_okonly_title);
-        txtTitle.setText(title);
-        d.show();
-        return d;
-    }
-
-    public static Dialog createCustomThemedListDialog(Activity activity, String[] options, String title, int resIdColor){
-        final Dialog d = new Dialog(activity);//
-        d.requestWindowFeature(Window.FEATURE_NO_TITLE); //notitle
-        d.setContentView(R.layout.dialog_material_themed_list);//Set the xml view of the dialog
-
-        ListView listview = (ListView) d.findViewById(R.id.dialog_list_listview);
-        ArrayAdapter<String> listViewAdapter = new ArrayAdapter<String>(activity, R.layout.select_dialog_item_material, options); //selected item will look like a spinner set from XML
-        listViewAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        listview.setAdapter(listViewAdapter);
-
-        TextView txtTitle = (TextView) d.findViewById(R.id.dialog_okonly_title);
-        txtTitle.setBackground(activity.getResources().getDrawable(resIdColor));
-        txtTitle.setText(title);
-        d.show();
-        return d;
-    }
-
-    public static Dialog createCustomThemedListDialogWithPrompt(Activity activity, String[] options, String title, String message, int resIdColor){
-        final Dialog d = new Dialog(activity);//
-        d.requestWindowFeature(Window.FEATURE_NO_TITLE); //notitle
-        d.setContentView(R.layout.dialog_material_themed_list_with_prompt);//Set the xml view of the dialog
-
-        ListView listview = (ListView) d.findViewById(R.id.dialog_list_listview);
-        ArrayAdapter<String> listViewAdapter = new ArrayAdapter<String>(activity, R.layout.select_dialog_item_material, options); //selected item will look like a spinner set from XML
-        listViewAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        listview.setAdapter(listViewAdapter);
-
-        TextView txtTitle = (TextView) d.findViewById(R.id.dialog_okonly_title);
-        TextView txtmessage = (TextView) d.findViewById(R.id.txt_message);
-
-        txtTitle.setBackground(activity.getResources().getDrawable(resIdColor));
-        txtTitle.setText(title);
-        txtmessage.setText(message);
-
-        d.show();
-        return d;
-    }
-
-    public static long convertDateToLong(int dd, int MM, int yyyy){
-        long startDate=000000;
-        try {
-            String dateString = dd+"/"+MM+"/"+yyyy;
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-            Date date = sdf.parse(dateString);
-            startDate = date.getTime();
-
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return startDate;
-    }
-
-    public static String convertDatetoGregorian(int yyyy, int MM, int dd){
-        String dateString_gregorian="";
-        try {
-            String dateString = dd+"/"+MM+"/"+yyyy;
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-            Date date = sdf.parse(dateString);
-            dateString_gregorian = convertLongShortGregorian(date.getTime());
-
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return dateString_gregorian;
-    }
-
-
-    public static String convertDateToShortGregorian(int yyyy, int MM, int dd){
-        String dateString_gregorian="";
-        try {
-            String dateString = dd+"/"+MM+"/"+yyyy;
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-            Date date = sdf.parse(dateString);
-            dateString_gregorian = convertLongtoDate_Gregorian(date.getTime());
-
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return dateString_gregorian;
-    }
-
-
-
-    public static long convertDateTimeStringToMilis_DB_Format(String datetime){
-        long startDate=000000;
-        try {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            Date date = sdf.parse(datetime);
-            startDate = date.getTime();
-
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return startDate;
-    }
-
-
-    public static long convertDateToMilis_DB_Format(String yyyymmdd){
-        long startDate=000000;
-        try {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            Date date = sdf.parse(yyyymmdd);
-            startDate = date.getTime();
-
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return startDate;
-    }
-
-    public static String convertLongtoDateString(long dateInMillis){
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(dateInMillis);
-        return formatter.format(calendar.getTime());
-    }
-
-    public static String convertLongtoDateString_DB_format(long dateInMillis){
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(dateInMillis);
-        return formatter.format(calendar.getTime());
-    }
-
-    public static String convertLongShortGregorian(long dateInMillis){
-        SimpleDateFormat formatter = new SimpleDateFormat("MMM dd");
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(dateInMillis);
-        return formatter.format(calendar.getTime());
-    }
-
-
-
-    public static String convertLongtoDate_Gregorian(long dateInMillis){
-        SimpleDateFormat formatter = new SimpleDateFormat("MMMM dd, yyyy");
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(dateInMillis);
-        return formatter.format(calendar.getTime());
-    }
-
-    public static String convertLongtoDate_GregorianWithTime(long dateInMillis){
-        SimpleDateFormat formatter = new SimpleDateFormat("MMMM dd, yyyy hh:mmaa");
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(dateInMillis);
-        return formatter.format(calendar.getTime());
-    }
-
-
-    public static String convertLongtoDateTimeString(long dateInMillis){
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy hh:mmaa");
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(dateInMillis);
-        return formatter.format(calendar.getTime());
-    }
-
-    public static String convertLongtoDateTime_DB_Format(long dateInMillis){
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(dateInMillis);
-        return formatter.format(calendar.getTime());
-    }
-
-
-    public static String convertLongtoDate_DB_Format(long dateInMillis){
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(dateInMillis);
-        return formatter.format(calendar.getTime());
-    }
-
-    public static String getDateTimeDBformat(){
-        return Helper.convertLongtoDateTime_DB_Format(System.currentTimeMillis());
-    }
-
-    public static String getDateDBformat(){
-        return Helper.convertLongtoDate_DB_Format(System.currentTimeMillis());
-    }
-
-    public static long getDateDifference(long date1, long date2){
-
-        long diff = date1 - date2; //result in millis
-        long days = diff / (24 * 60 * 60 * 1000);
-
-        Log.d("DIFF", "days: "+days+"");
-        return days;
-    }
-
-
-    public static int[] convertLongtoDateFormat(long dateinMilis) {
-//        Calendar calendar = null;
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-        String dateString = formatter.format(new Date(dateinMilis));
-        String[] date = dateString.split("/");
-
-//        calendar.setTimeInMillis(dateinMilis);
-        int day = Integer.parseInt(date[0]);
-        int month = Integer.parseInt(date[1]);
-        int year = Integer.parseInt(date[2]);
-
-
-        return new int[]{month,day,year};
-    }
-
-    public static boolean isNetworkAvailable(Context context) {
-
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
-    }
-
-    public static void hideKeyboardOnLoad(Activity activity){
-        activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-    }
-
-
-
-    public static void moveCursortoEnd(Activity activity, int resId){
-        EditText et = (EditText)activity.findViewById(resId);
-        et.setSelection(et.getText().length());
-    }
-
-    public static String extractResponseCode(String response){
-
-        int coloncounter = 0;
-        String responseCode="";
-        for (int i = 0; i < response.length(); i++) {
-            char c = response.charAt(i);
-            if (coloncounter>0){
-                responseCode = responseCode + String.valueOf(c);
-                break;
-            }
-            if (c ==':'){
-                coloncounter=coloncounter+1;
-            }
-        }
-        return responseCode;
-    }
-
-    public static String getMacAddress(Context context){
-        String macaddress = "";
-        if(Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1){
+        public static void isLocationAvailablePrompt(final Context context, final Activity activity){
+            LocationManager lm = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
+            boolean gps_enabled = false;
+            boolean network_enabled = false;
             try {
-                String interfaceName = "wlan0";
-                List<NetworkInterface> interfaces = Collections.list(NetworkInterface.getNetworkInterfaces());
-                for (NetworkInterface intf : interfaces) {
-                    if (!intf.getName().equalsIgnoreCase(interfaceName)){
-                        continue;
-                    }
+                gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            } catch(Exception ex) {}
+            try {
+                network_enabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+            } catch(Exception ex) {}
 
-                    byte[] mac = intf.getHardwareAddress();
-                    if (mac==null){
-                        macaddress = "";
-                    }
+            if(!gps_enabled) {
+                final Dialog d = dialog.themedOkOnly(activity, "GPS Service", "Location services is needed to use this application. Please turn on Location in settings and set it to High Accuracy", "OK");
+                Button b1 = (Button) d.findViewById(R.id.btn_dialog_okonly_OK);
 
-                    StringBuilder buf = new StringBuilder();
-                    for (byte aMac : mac) {
-                        buf.append(String.format("%02X:", aMac));
+                d.setCancelable(false);
+                d.show();
+
+                b1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        d.hide();
+                        Intent gpsOptionsIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        context.startActivity(gpsOptionsIntent);
                     }
-                    if (buf.length()>0) {
-                        buf.deleteCharAt(buf.length() - 1);
-                    }
-                    macaddress = buf.toString();
-                }
-            } catch (Exception ex) { } // for now eat exceptions
-        }else{
-            WifiManager manager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-            WifiInfo info = manager.getConnectionInfo();
-            macaddress = info.getMacAddress();
+                });
+
+            }
         }
 
-        return macaddress;
+        public static boolean isLocationEnabled(Context context) {
+            int locationMode = 0;
+            String locationProviders;
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
+                try {
+                    locationMode = Settings.Secure.getInt(context.getContentResolver(), Settings.Secure.LOCATION_MODE);
+
+                } catch (Settings.SettingNotFoundException e) {
+                    e.printStackTrace();
+                }
+
+                return locationMode != Settings.Secure.LOCATION_MODE_OFF;
+
+            }else{
+                locationProviders = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
+                return !TextUtils.isEmpty(locationProviders);
+            }
+        }
+
+        public static void moveCameraAnimate(final GoogleMap map, final LatLng latlng, final int zoom) {
+            map.animateCamera(CameraUpdateFactory.newLatLngZoom(latlng, zoom));
+        }
+
+        public static Bitmap iconGeneratorSample(Context context, String str, Activity activity) {
+
+            IconGenerator iconGenerator = new IconGenerator(context);
+            iconGenerator.setBackground(activity.getResources().getDrawable(R.drawable.ic_place_red_24dp));
+            iconGenerator.setStyle(IconGenerator.STYLE_GREEN);
+            iconGenerator.setTextAppearance(R.style.IconGeneratorTextView);
+            return  iconGenerator.makeIcon(str);
+        }
+
+        public static CircleOptions addCircle(Activity activity, LatLng latlng, float strokeWidth, int strokeColor, int fillColor, int radius){
+
+            CircleOptions circleOptions = new  CircleOptions()
+                    .center(new LatLng(latlng.latitude, latlng.longitude))
+                    .radius(radius)
+                    .strokeColor(activity.getResources().getColor(strokeColor))
+                    .fillColor(fillColor)
+                    .strokeWidth(strokeWidth);
+            return circleOptions;
+        }
 
     }
 
-    public static String getIMEI(Context context){
-        TelephonyManager telephonyManager = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
-        return telephonyManager.getDeviceId();
+
+    public static class forFishComputation{
+
+        public static String computeWeeklyFeedConsumption(double ABW, double NumberofStock, double feedingrate, double survivalrate) {
+            DecimalFormat df = new DecimalFormat("#.##");
+            return df.format (ABW*NumberofStock*feedingrate*survivalrate*7);
+        }
+
+        public static double get_TilapiaFeedingRate_by_WeekNum(int weeknum){
+            if (weeknum > 18){
+                return variables.ARRAY_TILAPIA_FEEDING_RATE_PER_WEEK[17];
+            }else{
+                return variables.ARRAY_TILAPIA_FEEDING_RATE_PER_WEEK[weeknum-1];
+            }
+
+        }
+
+        public static double get_BangusFeedingRate_by_WeekNum(int weeknum){
+            if (weeknum > 21){
+                return variables.ARRAY_BANGUS_FEEDING_RATE_PER_WEEK[21];
+            }else{
+                return variables.ARRAY_BANGUS_FEEDING_RATE_PER_WEEK[weeknum-1];
+            }
+
+        }
+
+        public static int get_currentWeek_by_stockedDate(String stockedDate, int abw){
+
+            DateTime dt = new DateTime();
+            GregorianCalendar jdkGcal = dt.toGregorianCalendar();
+            dt = new DateTime(jdkGcal);
+
+
+            String[] datesplitter = stockedDate.split("/");
+            int weekStocked = get_Tilapia_WeekNum_byABW(abw);
+            long currendate = System.currentTimeMillis();
+            long stockeddate = convert.convertDateToLong(Integer.parseInt(datesplitter[1]), Integer.parseInt(datesplitter[0]), Integer.parseInt(datesplitter[2]));
+
+            Log.d("Week Summary", stockeddate + " " + currendate + " " + weekStocked);
+            DateTime start = new DateTime(
+                    Integer.parseInt(datesplitter[2]), //year
+                    Integer.parseInt(datesplitter[0]), //month
+                    Integer.parseInt(datesplitter[1]), //day
+                    0, 0, 0, 0);
+
+            datesplitter = convert.convertLongtoDateString(currendate).split("/");
+            DateTime end = new DateTime(
+                    Integer.parseInt(datesplitter[2]), //year
+                    Integer.parseInt(datesplitter[1]), //month
+                    Integer.parseInt(datesplitter[0]), //day
+                    0, 0, 0, 0);
+
+
+            Weeks weeks = Weeks.weeksBetween(start, end);
+
+            int currentWeekOfStock = weekStocked + weeks.getWeeks();
+
+            return currentWeekOfStock;
+        }
+
+        public static int get_Bangus_WeekNum_byABW(int abw){
+
+            if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[21]){
+                return 22;
+            }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[20]){
+                return 21;
+            }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[19]){
+                return 20;
+            }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[18]){
+                return 19;
+            }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[17]){
+                return 18;
+            }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[16]){
+                return 17;
+            }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[15]){
+                return 16;
+            }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[14]){
+                return 15;
+            }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[13]){
+                return 14;
+            }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[12]){
+                return 13;
+            }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[11]){
+                return 12;
+            }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[10]){
+                return 11;
+            }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[9]){
+                return 10;
+            }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[8]){
+                return 9;
+            }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[7]){
+                return 8;
+            }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[6]){
+                return 7;
+            }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[5]){
+                return 6;
+            }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[4]){
+                return 5;
+            }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[3]){
+                return 4;
+            }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[2]){
+                return 3;
+            }else if (abw >= variables.ARRAY_BANGUS_ABW_WEEKLY[1]){
+                return 2;
+            }else{
+                return 1;
+            }//
+        }
+
+        public static int get_Vannamei_Extenxive_WeekNum_byABW(int abw){
+
+            if (abw >= variables.ARRAY_VANNAMEI_EXTENSIVE_ABW_WEEKLY[13]){
+                return 17;
+            }else if (abw >= variables.ARRAY_VANNAMEI_EXTENSIVE_ABW_WEEKLY[12]){
+                return 16;
+            }else if (abw >= variables.ARRAY_VANNAMEI_EXTENSIVE_ABW_WEEKLY[11]){
+                return 15;
+            }else if (abw >= variables.ARRAY_VANNAMEI_EXTENSIVE_ABW_WEEKLY[10]){
+                return 14;
+            }else if (abw >= variables.ARRAY_VANNAMEI_EXTENSIVE_ABW_WEEKLY[9]){
+                return 13;
+            }else if (abw >= variables.ARRAY_VANNAMEI_EXTENSIVE_ABW_WEEKLY[8]){
+                return 12;
+            }else if (abw >= variables.ARRAY_VANNAMEI_EXTENSIVE_ABW_WEEKLY[7]){
+                return 11;
+            }else if (abw >= variables.ARRAY_VANNAMEI_EXTENSIVE_ABW_WEEKLY[6]){
+                return 10;
+            }else if (abw >= variables.ARRAY_VANNAMEI_EXTENSIVE_ABW_WEEKLY[5]){
+                return 9;
+            }else if (abw >= variables.ARRAY_VANNAMEI_EXTENSIVE_ABW_WEEKLY[4]){
+                return 8;
+            }else if (abw >= variables.ARRAY_VANNAMEI_EXTENSIVE_ABW_WEEKLY[3]){
+                return 7;
+            }else if (abw >= variables.ARRAY_VANNAMEI_EXTENSIVE_ABW_WEEKLY[2]){
+                return 6;
+            }else if (abw >= variables.ARRAY_VANNAMEI_EXTENSIVE_ABW_WEEKLY[1]){
+                return 5;
+            }else{
+                return 4;
+            }
+        }
+
+        public static int get_Tilapia_WeekNum_byABW(int abw){
+
+            if (abw >= variables.ARRAY_TILAPIA_ABW_WEEKLY[17]){
+                return 18;
+            }else if (abw >= variables.ARRAY_TILAPIA_ABW_WEEKLY[16]){
+                return 17;
+            }else if (abw >= variables.ARRAY_TILAPIA_ABW_WEEKLY[15]){
+                return 16;
+            }else if (abw >= variables.ARRAY_TILAPIA_ABW_WEEKLY[14]){
+                return 15;
+            }else if (abw >= variables.ARRAY_TILAPIA_ABW_WEEKLY[13]){
+                return 14;
+            }else if (abw >= variables.ARRAY_TILAPIA_ABW_WEEKLY[12]){
+                return 13;
+            }else if (abw >= variables.ARRAY_TILAPIA_ABW_WEEKLY[11]){
+                return 12;
+            }else if (abw >= variables.ARRAY_TILAPIA_ABW_WEEKLY[10]){
+                return 11;
+            }else if (abw >= variables.ARRAY_TILAPIA_ABW_WEEKLY[9]){
+                return 10;
+            }else if (abw >= variables.ARRAY_TILAPIA_ABW_WEEKLY[8]){
+                return 9;
+            }else if (abw >= variables.ARRAY_TILAPIA_ABW_WEEKLY[7]){
+                return 8;
+            }else if (abw >= variables.ARRAY_TILAPIA_ABW_WEEKLY[6]){
+                return 7;
+            }else if (abw >= variables.ARRAY_TILAPIA_ABW_WEEKLY[5]){
+                return 6;
+            }else if (abw >= variables.ARRAY_TILAPIA_ABW_WEEKLY[4]){
+                return 5;
+            }else if (abw >= variables.ARRAY_TILAPIA_ABW_WEEKLY[3]){
+                return 4;
+            }else if (abw >= variables.ARRAY_TILAPIA_ABW_WEEKLY[2]){
+                return 3;
+            }else if (abw >= variables.ARRAY_TILAPIA_ABW_WEEKLY[1]){
+                return 2;
+            }else{
+                return 1;
+            }
+        }
+
+        public static String getTilapiaFeedTypeByNumberOfWeeks(int week){
+            String feedtype;
+
+            if (week <= 6) {
+                feedtype = "Frymash";
+            } else if(week <= 8){
+                feedtype = "Crumble";
+            } else if(week <= 10){
+                feedtype = "Starter";
+            } else if(week <= 14){
+                feedtype = "Grower";
+            } else {
+                feedtype = "Finisher";
+            }
+
+            return feedtype;
+        }
+
+        public static String getBangusFeedtypeByABW(double abw){
+            String feedtype;
+
+            if (abw <= 10) {
+                feedtype = "Pre-Starter Zero";
+            } else if(abw <= 25){
+                feedtype = "Pre-Starter";
+            } else if(abw <= 150){
+                feedtype = "Starter";
+            } else if(abw <= 280){
+                feedtype = "Grower";
+            } else {
+                feedtype = "Finisher";
+            }
+
+            return feedtype;
+        }
     }
 
-    public static Dialog initProgressDialog(Activity activity){
-        Dialog PD = new Dialog(activity);
-        PD.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        PD.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        PD.setCancelable(false);
-        PD.setContentView(R.layout.progressdialog);
-        return  PD;
-    }
+
+    public static class dialog{
+
+        public static Dialog yesno(Activity activity, int dialogResID, String prompt, String title, String strButton1, String strButton2){
+            final Dialog d = new Dialog(activity);//
+            d.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            d.setContentView(dialogResID);//Set the xml view of the dialog
+            Button btn1 = (Button) d.findViewById(R.id.btn_dialog_yesno_opt1);
+            Button btn2 = (Button) d.findViewById(R.id.btn_dialog_yesno_opt2);
+            TextView txttitle = (TextView) d.findViewById(R.id.dialog_yesno_title);
+            TextView txtprompt = (TextView) d.findViewById(R.id.dialog_yesno_prompt);
+
+            txtprompt.setText(prompt);
+            txttitle.setText(title);
+            btn1.setText(strButton1);
+            btn2.setText(strButton2);
+            return d;
+        }
+
+        public static Dialog themedYesNo(Activity activity, String prompt, String title, String strButton1, String strButton2, int resIdColor){
+            final Dialog d = new Dialog(activity);//
+            d.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            d.setContentView(R.layout.dialog_material_themed_yesno);//Set the xml view of the dialog
+            Button btn1 = (Button) d.findViewById(R.id.btn_dialog_yesno_opt1);
+            Button btn2 = (Button) d.findViewById(R.id.btn_dialog_yesno_opt2);
+            TextView txttitle = (TextView) d.findViewById(R.id.dialog_yesno_title);
+            TextView txtprompt = (TextView) d.findViewById(R.id.dialog_yesno_prompt);
+
+            txtprompt.setText(prompt);
+            txttitle.setText(title);
+    //        txttitle.setBackground(activity.getResources().getDrawable(resIdColor));
+            btn1.setText(strButton1);
+            btn2.setText(strButton2);
 
 
-    public static void isLocationAvailablePrompt(final Context context, final Activity activity){
-        LocationManager lm = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
-        boolean gps_enabled = false;
-        boolean network_enabled = false;
-        try {
-            gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        } catch(Exception ex) {}
-        try {
-            network_enabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-        } catch(Exception ex) {}
+            WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+            Window window = d.getWindow();
+            lp.copyFrom(window.getAttributes());
+    //This makes the dialog take up the full width
+            lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+            lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+            window.setAttributes(lp);
 
-        if(!gps_enabled) {
-            final Dialog d = createCustomThemedDialogOKOnly(activity, "GPS Service", "Location services is needed to use this application. Please turn on Location in settings and set it to High Accuracy", "OK");
-            Button b1 = (Button) d.findViewById(R.id.btn_dialog_okonly_OK);
-
-            d.setCancelable(false);
             d.show();
+            return d;
+        }
 
-            b1.setOnClickListener(new View.OnClickListener() {
+        public static Dialog yesNo_withEditText(Activity activity, String prompt, String edtEntry, String title, String strButton1, String strButton2, int resIdColor){
+            final Dialog d = new Dialog(activity);//
+            d.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            d.setContentView(R.layout.dialog_material_themed_yesno_with_edittext);//Set the xml view of the dialog
+            Button btn1 = (Button) d.findViewById(R.id.btn_dialog_yesno_opt1);
+            Button btn2 = (Button) d.findViewById(R.id.btn_dialog_yesno_opt2);
+            EditText edt = (EditText) d.findViewById(R.id.dialog_edttext);
+            TextView txttitle = (TextView) d.findViewById(R.id.dialog_yesno_title);
+            TextView txtprompt = (TextView) d.findViewById(R.id.dialog_yesno_prompt);
+
+            txtprompt.setText(prompt);
+            edt.setText(edtEntry);
+            txttitle.setText(title);
+            txttitle.setBackground(activity.getResources().getDrawable(resIdColor));
+            btn1.setText(strButton1);
+            btn2.setText(strButton2);
+            d.show();
+            return d;
+        }
+
+        public static Dialog numberPicker(Activity activity, String dialogTitle, int minVal, int maxValue){
+            final Dialog d = new Dialog(activity);//
+    //        d.requestWindowFeature(Window.FEATURE_NO_TITLE); //notitle
+            d.setContentView(R.layout.dialog_numberpicker);
+            d.setTitle(dialogTitle);
+            final NumberPicker nbp = (NumberPicker) d.findViewById(R.id.dialog_numberpicker);
+            Button set = (Button) d.findViewById(R.id.btn_numberpicker_set);
+            nbp.setMaxValue(maxValue);
+            nbp.setMinValue(minVal);
+
+            WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+            lp.copyFrom(d.getWindow().getAttributes());
+            lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+
+            d.show();
+            return d;
+        }
+
+        public static Dialog decimalPicker(Activity activity, String dialogTitle, int minVal, int maxValue){
+            final Dialog d = new Dialog(activity);//
+    //        d.requestWindowFeature(Window.FEATURE_NO_TITLE); //notitle
+
+            d.setContentView(R.layout.dialog_decimalpicker);
+            d.setTitle(dialogTitle);
+            NumberPicker wholeNum = (NumberPicker) d.findViewById(R.id.dialog_decipicker_whole);
+            wholeNum.setMaxValue(maxValue);
+            wholeNum.setMinValue(0);
+
+            NumberPicker decimal = (NumberPicker) d.findViewById(R.id.dialog_decipicker_deci);
+            decimal.setMaxValue(maxValue);
+            decimal.setMinValue(0);
+
+            WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+            lp.copyFrom(d.getWindow().getAttributes());
+            lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+
+            d.show();
+            return d;
+        }
+
+        public static Dialog okOnly(Activity activity, String title, String prompt, String button){
+            final Dialog d = new Dialog(activity);//
+            d.requestWindowFeature(Window.FEATURE_NO_TITLE); //notitle
+            d.setContentView(R.layout.dialog_material_okonly);//Set the xml view of the dialog
+            TextView txttitle = (TextView) d.findViewById(R.id.dialog_okonly_title);
+            TextView txtprompt = (TextView) d.findViewById(R.id.dialog_okonly_prompt);
+            Button txtok = (Button) d.findViewById(R.id.btn_dialog_okonly_OK);
+            txtok.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     d.hide();
-                    Intent gpsOptionsIntent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                    context.startActivity(gpsOptionsIntent);
                 }
             });
+            txtprompt.setText(prompt);
+            txttitle.setText(title);
+            txtok.setText(button);
+            d.show();
 
+            return d;
         }
-    }
 
-    public static boolean isLocationEnabled(Context context) {
-        int locationMode = 0;
-        String locationProviders;
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT){
-            try {
-                locationMode = Settings.Secure.getInt(context.getContentResolver(), Settings.Secure.LOCATION_MODE);
-
-            } catch (Settings.SettingNotFoundException e) {
-                e.printStackTrace();
-            }
-
-            return locationMode != Settings.Secure.LOCATION_MODE_OFF;
-
-        }else{
-            locationProviders = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
-            return !TextUtils.isEmpty(locationProviders);
-        }
-    }
-
-
-    public static LatLng getLastKnownLocation(Context context){
-
-            String location_context = Context.LOCATION_SERVICE;
-            LocationManager mLocationManager = (LocationManager) context.getSystemService(location_context);
-
-            List<String> providers = mLocationManager.getProviders(true);
-            Location bestLocation = null;
-            for (String provider : providers) {
-                final Location l = mLocationManager.getLastKnownLocation(provider);
-//            int d = Log.d("last known location, provider: %s, location: %s", provider);
-
-                if (l == null) {
-                    continue;
+        public static Dialog themedOkOnly(Activity activity, String title, String prompt, String button){
+            final Dialog d = new Dialog(activity);//
+            d.requestWindowFeature(Window.FEATURE_NO_TITLE); //notitle
+            d.setContentView(R.layout.dialog_material_themed_okonly);//Set the xml view of the dialog
+            TextView txttitle = (TextView) d.findViewById(R.id.dialog_okonly_title);
+            TextView txtprompt = (TextView) d.findViewById(R.id.dialog_okonly_prompt);
+            Button txtok = (Button) d.findViewById(R.id.btn_dialog_okonly_OK);
+            txtok.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    d.hide();
                 }
-                if (bestLocation == null
-                        || l.getAccuracy() < bestLocation.getAccuracy()) {
-//                Log.d("found best last known location: %s", String.valueOf(l));
-                    bestLocation = l;
+            });
+    //        txttitle.setBackground(activity.getResources().getDrawable(resIdColor));
+            txtok.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    d.hide();
                 }
-            }
-            if (bestLocation == null) {
-                assert bestLocation != null;
-                bestLocation.setLatitude(0.0);
-                bestLocation.setLongitude(0.0);
-                return null;
-            }
-            return new LatLng(bestLocation.getLatitude(), bestLocation.getLongitude());
-    }
+            });
+            txtprompt.setText(prompt);
+            txttitle.setText(title);
+            txtok.setText(button);
 
+            WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+            Window window = d.getWindow();
+            lp.copyFrom(window.getAttributes());
+    //This makes the dialog take up the full width
+            lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+            lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+            window.setAttributes(lp);
 
+            d.show();
+            return d;
+        }
 
+        public static Dialog themedOkOnly_scrolling(Activity activity, String title, String prompt, String button, int resIdColor){
+            final Dialog d = new Dialog(activity);//
+            d.requestWindowFeature(Window.FEATURE_NO_TITLE); //notitle
+            d.setContentView(R.layout.dialog_material_themed_okonly_scrollview);//Set the xml view of the dialog
+            TextView txttitle = (TextView) d.findViewById(R.id.dialog_okonly_title);
+            TextView txtprompt = (TextView) d.findViewById(R.id.dialog_okonly_prompt);
+            Button txtok = (Button) d.findViewById(R.id.btn_dialog_okonly_OK);
+            txtok.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    d.hide();
+                }
+            });
+            txttitle.setBackground(activity.getResources().getDrawable(resIdColor));
+            txtok.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    d.hide();
+                }
+            });
+            txtprompt.setText(prompt);
+            txttitle.setText(title);
+            txtok.setText(button);
+            d.show();
+            return d;
+        }
 
-    public static boolean isIntentKeywordNotNull(String keyword, Intent extras){
-        if (extras != null){
-            if (extras.hasExtra(keyword)) {
-                Log.d("EXTRAS", "true");
-                return true;
-            }else {
-                Log.d("EXTRAS", "false");
-                return false;
-            }
-        }else {
-            return false;
+        public static Dialog list(Activity activity, String[] options, String title){
+            final Dialog d = new Dialog(activity);//
+            d.requestWindowFeature(Window.FEATURE_NO_TITLE); //notitle
+            d.setContentView(R.layout.dialog_material_list);//Set the xml view of the dialog
+
+            ListView listview = (ListView) d.findViewById(R.id.dialog_list_listview);
+            ArrayAdapter<String> listViewAdapter = new ArrayAdapter<String>(activity, R.layout.select_dialog_item_material, options); //selected item will look like a spinner set from XML
+            listViewAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            listview.setAdapter(listViewAdapter);
+
+            TextView txtTitle = (TextView) d.findViewById(R.id.dialog_okonly_title);
+            txtTitle.setText(title);
+            d.show();
+            return d;
+        }
+
+        public static Dialog themedList(Activity activity, String[] options, String title, int resIdColor){
+            final Dialog d = new Dialog(activity);//
+            d.requestWindowFeature(Window.FEATURE_NO_TITLE); //notitle
+            d.setContentView(R.layout.dialog_material_themed_list);//Set the xml view of the dialog
+
+            ListView listview = (ListView) d.findViewById(R.id.dialog_list_listview);
+            ArrayAdapter<String> listViewAdapter = new ArrayAdapter<String>(activity, R.layout.select_dialog_item_material, options); //selected item will look like a spinner set from XML
+            listViewAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            listview.setAdapter(listViewAdapter);
+
+            TextView txtTitle = (TextView) d.findViewById(R.id.dialog_okonly_title);
+            txtTitle.setBackground(activity.getResources().getDrawable(resIdColor));
+            txtTitle.setText(title);
+            d.show();
+            return d;
+        }
+
+        public static Dialog list_withPrompt(Activity activity, String[] options, String title, String message, int resIdColor){
+            final Dialog d = new Dialog(activity);//
+            d.requestWindowFeature(Window.FEATURE_NO_TITLE); //notitle
+            d.setContentView(R.layout.dialog_material_themed_list_with_prompt);//Set the xml view of the dialog
+
+            ListView listview = (ListView) d.findViewById(R.id.dialog_list_listview);
+            ArrayAdapter<String> listViewAdapter = new ArrayAdapter<String>(activity, R.layout.select_dialog_item_material, options); //selected item will look like a spinner set from XML
+            listViewAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            listview.setAdapter(listViewAdapter);
+
+            TextView txtTitle = (TextView) d.findViewById(R.id.dialog_okonly_title);
+            TextView txtmessage = (TextView) d.findViewById(R.id.txt_message);
+
+            txtTitle.setBackground(activity.getResources().getDrawable(resIdColor));
+            txtTitle.setText(title);
+            txtmessage.setText(message);
+
+            d.show();
+            return d;
+        }
+
+        public static Dialog initProgressDialog(Activity activity){
+            Dialog PD = new Dialog(activity);
+            PD.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            PD.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+            PD.setCancelable(false);
+            PD.setContentView(R.layout.progressdialog);
+            return  PD;
         }
     }
 
 
-    public static String extractResponseCodeBySplit(String response) {
-        String[] splitted = response.split(":");
-        return splitted[1].substring(0,1);
+    public static class deviceInfo{
+
+        public static String getMacAddress(Context context){
+            String macaddress = "";
+            if(Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1){
+                try {
+                    String interfaceName = "wlan0";
+                    List<NetworkInterface> interfaces = Collections.list(NetworkInterface.getNetworkInterfaces());
+                    for (NetworkInterface intf : interfaces) {
+                        if (!intf.getName().equalsIgnoreCase(interfaceName)){
+                            continue;
+                        }
+
+                        byte[] mac = intf.getHardwareAddress();
+                        if (mac==null){
+                            macaddress = "";
+                        }
+
+                        StringBuilder buf = new StringBuilder();
+                        for (byte aMac : mac) {
+                            buf.append(String.format("%02X:", aMac));
+                        }
+                        if (buf.length()>0) {
+                            buf.deleteCharAt(buf.length() - 1);
+                        }
+                        macaddress = buf.toString();
+                    }
+                } catch (Exception ex) { } // for now eat exceptions
+            }else{
+                WifiManager manager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+                WifiInfo info = manager.getConnectionInfo();
+                macaddress = info.getMacAddress();
+            }
+
+            return macaddress;
+
+        }
+
+        public static String getIMEI(Context context){
+            TelephonyManager telephonyManager = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
+            return telephonyManager.getDeviceId();
+        }
     }
 
-    public static String[] splitter(String string, String splitter) {
-        return  string.split(splitter);
-    }
 
-    public static String getStringResource(Activity activity, int resID) {
-        return activity.getResources().getString(resID);
-    }
-
-    public static void moveCameraAnimate(final GoogleMap map, final LatLng latlng, final int zoom) {
-        map.animateCamera(CameraUpdateFactory.newLatLngZoom(latlng, zoom));
-    }
-
-    public static Bitmap iconGeneratorSample(Context context, String str, Activity activity) {
-
-        IconGenerator iconGenerator = new IconGenerator(context);
-        iconGenerator.setBackground(activity.getResources().getDrawable(R.drawable.ic_place_red_24dp));
-        iconGenerator.setStyle(IconGenerator.STYLE_GREEN);
-        iconGenerator.setTextAppearance(R.style.IconGeneratorTextView);
-        return  iconGenerator.makeIcon(str);
-    }
-    public static CircleOptions addCircle(Activity activity, LatLng latlng, float strokeWidth, int strokeColor, int fillColor, int radius){
-
-        CircleOptions circleOptions = new  CircleOptions()
-                .center(new LatLng(latlng.latitude, latlng.longitude))
-                .radius(radius)
-                .strokeColor(activity.getResources().getColor(strokeColor))
-                .fillColor(fillColor)
-                .strokeWidth(strokeWidth);
-        return circleOptions;
-    }
-
-
-    public static class nullcheck{
+    public static class isnull {
 
         public static boolean isGlobalUserIDNull(Activity activity){
             boolean isEmpty = false;
@@ -1557,10 +1067,23 @@ public class Helper {
             return  isEmpty;
         }
 
+        public static boolean isIntentKeywordNotNull(String keyword, Intent extras){
+            if (extras != null){
+                if (extras.hasExtra(keyword)) {
+                    Log.d("EXTRAS", "true");
+                    return true;
+                }else {
+                    Log.d("EXTRAS", "false");
+                    return false;
+                }
+            }else {
+                return false;
+            }
+        }
     }
 
 
-    public static class activityChooser {
+    public static class activityActions {
 
         public static void startActivityClearStack(Activity currentActivity, Class nextActivity) {
             Intent intent = new Intent(currentActivity, nextActivity);
@@ -1572,26 +1095,12 @@ public class Helper {
 
     public static class random {
 
-        public static Dialog initProgressDialog(Activity activity){
-            Dialog PD = new Dialog(activity);
-            PD.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            PD.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-            PD.setCancelable(false);
-            PD.setContentView(R.layout.progressdialog);
-            return  PD;
-        }
-
         public static String trimFirstAndLast(String string){
             String trimmed = "";
 
             trimmed = string.substring(1,string.length() );
             return  trimmed = trimmed.substring(0, trimmed.length() - 1);
         }
-
-        public static String[] splitter(String splitter, String strToSplit){
-            return strToSplit.split(splitter);
-        }
-
 
         public static boolean checkSD(Activity activity) {
             Boolean isSDPresent = android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED);
@@ -1605,8 +1114,65 @@ public class Helper {
             return isSDPresent;
         }
 
+        public static String deciformat(double num, int numberOfDecimalPlace) {
+            String str = "";
+
+            for (int i = 0; i < numberOfDecimalPlace; i++) {
+                    str = str +"#";
+            }
+            DecimalFormat df = new DecimalFormat("#."+str);
+            return df.format(num);
+        }
+
+        public static void setCursorOnEnd(EditText edt) {
+            edt.setSelection(edt.getText().length());
+        }
+
+        public static int removeSuffix(String wholeValue, String unitsToRemove){
+            int initialValue;
+
+            if (wholeValue.equalsIgnoreCase("") || wholeValue.equalsIgnoreCase(null)) {
+                initialValue = 1;
+            }else {
+                if (wholeValue.substring(wholeValue.length() - unitsToRemove.length(), wholeValue.length()) .equalsIgnoreCase(unitsToRemove)){
+                    initialValue = Integer.parseInt(wholeValue.substring(0, wholeValue.length() - unitsToRemove.length()));
+                }else{
+                    initialValue = Integer.parseInt(wholeValue.toString());
+                }
+            }
+
+            return  initialValue;
+        }
+
+        public static boolean isNetworkAvailable(Context context) {
+
+            ConnectivityManager connectivityManager
+                    = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+
+            return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+        }
+
+        public static void hideKeyboardOnLoad(Activity activity){
+            activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        }
+
+        public static void moveCursortoEnd(Activity activity, int resId){
+            EditText et = (EditText)activity.findViewById(resId);
+            et.setSelection(et.getText().length());
+        }
+
+        public static String extractResponseCodeBySplit(String response) {
+            String[] splitted = response.split(":");
+            return splitted[1].substring(0,1);
+        }
+
+        public static String[] splitter(String string, String splitter) {
+            return  string.split(splitter);
+        }
 
     }
+
 
     public static class animate{
 
@@ -1693,6 +1259,422 @@ public class Helper {
         }
     }
 
+
+    public static class convert{
+
+        public static String LongToTime12Hour(long dateInMillis){
+            SimpleDateFormat formatter = new SimpleDateFormat("HH:mmaa");
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(dateInMillis);
+            return formatter.format(calendar.getTime());
+        }
+
+        public static String LongToDate_ShortGregorian(long dateInMillis){
+            SimpleDateFormat formatter = new SimpleDateFormat("MMM dd");
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(dateInMillis);
+            return formatter.format(calendar.getTime());
+        }
+
+        public static String LongToDate_Gregorian(long dateInMillis){
+            SimpleDateFormat formatter = new SimpleDateFormat("MMMM dd, yyyy");
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(dateInMillis);
+            return formatter.format(calendar.getTime());
+        }
+
+        public static int getDateDifferenceHour(long start, long end){
+
+            DateTime datestart = new DateTime(start);
+            DateTime dateend = new DateTime(end);
+//            Interval interval = new Interval(start, end);
+
+            return Hours.hoursBetween(dateend,datestart).getHours();
+        }
+
+        public static int getDateDifferenceMinute(long start, long end){
+
+            DateTime datestart = new DateTime(start);
+            DateTime dateend = new DateTime(end);
+//            Interval interval = new Interval(start, end);
+
+            return Minutes.minutesBetween(dateend,datestart).getMinutes();
+        }
+
+        public static String getDateTimePassed(String endTime){
+            int difInHour = Helper.convert.getDateDifferenceHour(System.currentTimeMillis(), Long.valueOf(endTime));
+            int difInMinutes = Helper.convert.getDateDifferenceMinute(System.currentTimeMillis(), Long.valueOf(endTime));
+            String time = "";
+
+            if (difInMinutes  <= 0 ){
+                time = "Just now";
+            }else if (difInMinutes  < 2 ){
+                time = difInMinutes + " minute ago";
+            }else if(difInMinutes < 60){
+                time = difInMinutes +  " minutes ago";
+            }else if(difInHour == 1){
+                time = difInHour + " hour ago";
+            }else if(difInHour < 24){
+                time = difInHour + " hours ago";
+            }
+            else if (difInHour < 48){
+                time = "Yesterday "+ Helper.convert.LongToTime12Hour(Long.valueOf(endTime));
+            }else {
+                time = Helper.convert.LongToDate_ShortGregorian(Long.valueOf(endTime));
+            }
+
+            return time;
+        }
+
+
+
+        public static long convertDateToLong(int dd, int MM, int yyyy){
+            long startDate=000000;
+            try {
+                String dateString = dd+"/"+MM+"/"+yyyy;
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                Date date = sdf.parse(dateString);
+                startDate = date.getTime();
+
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            return startDate;
+        }
+
+        public static String convertDatetoGregorian(int yyyy, int MM, int dd){
+            String dateString_gregorian="";
+            try {
+                String dateString = dd+"/"+MM+"/"+yyyy;
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                Date date = sdf.parse(dateString);
+                dateString_gregorian = convertLongShortGregorian(date.getTime());
+
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            return dateString_gregorian;
+        }
+
+        public static String convertDateToShortGregorian(int yyyy, int MM, int dd){
+            String dateString_gregorian="";
+            try {
+                String dateString = dd+"/"+MM+"/"+yyyy;
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                Date date = sdf.parse(dateString);
+                dateString_gregorian = convertLongtoDate_Gregorian(date.getTime());
+
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            return dateString_gregorian;
+        }
+
+        public static long convertDateTimeStringToMilis_DB_Format(String datetime){
+            long startDate=000000;
+            try {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                Date date = sdf.parse(datetime);
+                startDate = date.getTime();
+
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            return startDate;
+        }
+
+        public static long convertDateToMilis_DB_Format(String yyyymmdd){
+            long startDate=000000;
+            try {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                Date date = sdf.parse(yyyymmdd);
+                startDate = date.getTime();
+
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            return startDate;
+        }
+
+        public static String convertLongtoDateString(long dateInMillis){
+            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(dateInMillis);
+            return formatter.format(calendar.getTime());
+        }
+
+        public static String convertLongtoDateString_DB_format(long dateInMillis){
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(dateInMillis);
+            return formatter.format(calendar.getTime());
+        }
+
+        public static String convertLongShortGregorian(long dateInMillis){
+            SimpleDateFormat formatter = new SimpleDateFormat("MMM dd");
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(dateInMillis);
+            return formatter.format(calendar.getTime());
+        }
+
+        public static String convertLongtoDate_Gregorian(long dateInMillis){
+            SimpleDateFormat formatter = new SimpleDateFormat("MMMM dd, yyyy");
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(dateInMillis);
+            return formatter.format(calendar.getTime());
+        }
+
+        public static String convertLongtoDate_GregorianWithTime(long dateInMillis){
+            SimpleDateFormat formatter = new SimpleDateFormat("MMMM dd, yyyy hh:mmaa");
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(dateInMillis);
+            return formatter.format(calendar.getTime());
+        }
+
+        public static String convertLongtoDateTimeString(long dateInMillis){
+            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy hh:mmaa");
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(dateInMillis);
+            return formatter.format(calendar.getTime());
+        }
+
+        public static String convertLongtoDateTime_DB_Format(long dateInMillis){
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(dateInMillis);
+            return formatter.format(calendar.getTime());
+        }
+
+        public static String convertLongtoDate_DB_Format(long dateInMillis){
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(dateInMillis);
+            return formatter.format(calendar.getTime());
+        }
+
+        public static String getDateTimeDBformat(){
+            return convertLongtoDateTime_DB_Format(System.currentTimeMillis());
+        }
+
+        public static String getDateDBformat(){
+            return convertLongtoDate_DB_Format(System.currentTimeMillis());
+        }
+
+        public static long getDateDifference(long date1, long date2){
+
+            long diff = date1 - date2; //result in millis
+            long days = diff / (24 * 60 * 60 * 1000);
+
+            Log.d("DIFF", "days: "+days+"");
+            return days;
+        }
+
+        public static int[] convertLongtoDateFormat(long dateinMilis) {
+    //        Calendar calendar = null;
+            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+            String dateString = formatter.format(new Date(dateinMilis));
+            String[] date = dateString.split("/");
+
+    //        calendar.setTimeInMillis(dateinMilis);
+            int day = Integer.parseInt(date[0]);
+            int month = Integer.parseInt(date[1]);
+            int year = Integer.parseInt(date[2]);
+
+
+            return new int[]{month,day,year};
+        }
+    }
+
+
+    public static class toast{
+
+        public static void short_(Activity context, String msg){
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+                Snackbar snackbar = Snackbar.make(context.findViewById(android.R.id.content), msg, Snackbar.LENGTH_SHORT)
+                        .setActionTextColor(context.getResources().getColor(R.color.gray_100));
+
+                View view = snackbar.getView();
+                TextView tv = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
+                tv.setTextColor(context.getResources().getColor(R.color.gray_100));
+                tv.setMaxLines(5);
+                snackbar.show();
+            }else{
+                LayoutInflater inflater = context.getLayoutInflater();
+                final View layout = inflater.inflate(R.layout.toast,
+                        (ViewGroup) context.findViewById(R.id.toast_layout_root));
+
+                TextView text = (TextView) layout.findViewById(R.id.text);
+                Typeface font = Typeface.createFromAsset(context.getAssets(), "Roboto-Light.ttf");
+                text.setTypeface(font);
+                text.setText(msg);
+
+                Toast toast = new Toast(context.getApplicationContext());
+                toast.setGravity(Gravity.BOTTOM | Gravity.FILL_HORIZONTAL, 0, 0);
+                toast.setDuration(Toast.LENGTH_SHORT);
+                toast.setMargin(0, 0);
+                toast.setView(layout);
+
+                toast.show();
+            }
+
+        }
+
+        public static void long_(Activity context, String msg){
+
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+
+                Snackbar snackbar = Snackbar.make(context.findViewById(android.R.id.content), msg, Snackbar.LENGTH_SHORT)
+                        .setActionTextColor(context.getResources().getColor(R.color.gray_100));
+
+                View view = snackbar.getView();
+                TextView tv = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
+                tv.setTextColor(context.getResources().getColor(R.color.gray_100));
+                tv.setMaxLines(5);
+                snackbar.show();
+
+            }else{
+
+                LayoutInflater inflater = context.getLayoutInflater();
+                View layout = inflater.inflate(R.layout.toast,
+                        (ViewGroup) context.findViewById(R.id.toast_layout_root));
+
+                TextView text = (TextView) layout.findViewById(R.id.text);
+                Typeface font = Typeface.createFromAsset(context.getAssets(), "Roboto-Light.ttf");
+                text.setTypeface(font);
+                text.setText(msg);
+
+                Toast toast = new Toast(context.getApplicationContext());
+                toast.setGravity(Gravity.BOTTOM | Gravity.FILL_HORIZONTAL, 0, 0);
+                toast.setMargin(0, 0);
+                toast.setDuration(Toast.LENGTH_LONG);
+                toast.setView(layout);
+                toast.show();
+
+            }
+        }
+
+        public static void indefinite(Activity context, String msg){
+
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+                final Snackbar snackbar = Snackbar.make(context.findViewById(android.R.id.content), msg, Snackbar.LENGTH_INDEFINITE)
+                        .setActionTextColor(context.getResources().getColor(R.color.gray_100));
+
+                View view = snackbar.getView();
+                TextView tv = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
+                tv.setTextColor(context.getResources().getColor(R.color.gray_100));
+                tv.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        snackbar.dismiss();
+                        return false;
+                    }
+                });
+                tv.setMaxLines(5);
+                snackbar.show();
+            }else{
+                LayoutInflater inflater = context.getLayoutInflater();
+                View layout = inflater.inflate(R.layout.toast,
+                        (ViewGroup) context.findViewById(R.id.toast_layout_root));
+
+                TextView text = (TextView) layout.findViewById(R.id.text);
+                Typeface font = Typeface.createFromAsset(context.getAssets(), "Roboto-Light.ttf");
+                text.setTypeface(font);
+                text.setText(msg);
+
+                Toast toast = new Toast(context.getApplicationContext());
+                toast.setGravity(Gravity.BOTTOM | Gravity.FILL_HORIZONTAL, 0, 0);
+                toast.setMargin(0, 0);
+                toast.setDuration(Toast.LENGTH_LONG);
+                toast.setView(layout);
+                toast.show();
+            }
+
+
+        }
+
+
+        public static Snackbar snackbarWithAction(Activity context, String msg){
+            Snackbar snackbar = null;
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+                snackbar = Snackbar.make(context.findViewById(android.R.id.content), msg, Snackbar.LENGTH_INDEFINITE)
+                        .setActionTextColor(context.getResources().getColor(R.color.gray_100))
+                ;
+
+                View view = snackbar.getView();
+                TextView tv = (TextView) view.findViewById(android.support.design.R.id.snackbar_text);
+                tv.setTextColor(context.getResources().getColor(R.color.gray_100));
+                final Snackbar finalSnackbar = snackbar;
+                tv.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        finalSnackbar.dismiss();
+                        return false;
+                    }
+                });
+                tv.setMaxLines(5);
+                snackbar.show();
+            }
+
+            return snackbar;
+
+        }
+
+    }
+
+
+    public static class LocationUtil{
+
+        public static String getAddress(Context context1,String lat, String lon) {
+            String address1 = "";
+            try {
+                Geocoder geocoder = new Geocoder(context1);
+                List<Address> addresses = geocoder.getFromLocation(Double.parseDouble(lat), Double.parseDouble(lon), 1);
+                String address = addresses.get(0).getAddressLine(0);
+                String city = addresses.get(0).getAddressLine(1);
+                String country = addresses.get(0).getAddressLine(2);
+                String country1 = addresses.get(0).getAddressLine(3);
+                address1 =
+//                        "" + address + ", " +
+                        city + ", " + country
+//                        + ", " + country1
+                ;
+                Log.d("TAG",address1 );
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return address1;
+        }
+    }
+
+
+    public static class fileInfo{
+
+        public static String getSize(Intent returnIntent, Context context){
+            Uri returnUri = returnIntent.getData();
+            Cursor returnCursor =
+                    context.getContentResolver().query(returnUri, null, null, null, null);
+            assert returnCursor != null;
+            int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+            int sizeIndex = returnCursor.getColumnIndex(OpenableColumns.SIZE);
+            returnCursor.moveToFirst();
+
+            return Long.toString(returnCursor.getLong(sizeIndex));
+        }
+
+
+        public static String getName(Intent returnIntent, Context context){
+            Uri returnUri = returnIntent.getData();
+            Cursor returnCursor =
+                    context.getContentResolver().query(returnUri, null, null, null, null);
+            assert returnCursor != null;
+            int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+            int sizeIndex = returnCursor.getColumnIndex(OpenableColumns.SIZE);
+            returnCursor.moveToFirst();
+
+            return returnCursor.getString(nameIndex);
+        }
+    }
 
 
 

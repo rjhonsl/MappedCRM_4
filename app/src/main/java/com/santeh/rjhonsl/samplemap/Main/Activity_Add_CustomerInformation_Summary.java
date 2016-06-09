@@ -52,9 +52,9 @@ public class Activity_Add_CustomerInformation_Summary extends FragmentActivity{
         setContentView(R.layout.activity_add_customerinformation_summary);
         activity = this;
         context = Activity_Add_CustomerInformation_Summary.this;
-        Helper.hideKeyboardOnLoad(activity);
+        Helper.random.hideKeyboardOnLoad(activity);
 
-        PD = Helper.initProgressDialog(activity);
+        PD = Helper.dialog.initProgressDialog(activity);
         dialogmessage = (TextView) PD.findViewById(R.id.progress_message);
         db = new GPSQuery(this);
         db.open();
@@ -186,7 +186,7 @@ public class Activity_Add_CustomerInformation_Summary extends FragmentActivity{
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Dialog d = Helper.createCustomDialogThemedYesNO(activity, "Add " + fname + " " + lname + "?",
+                final Dialog d = Helper.dialog.themedYesNo(activity, "Add " + fname + " " + lname + "?",
                         "Save", "YES", "NO", R.color.blue);
                 d.show();
 
@@ -225,7 +225,7 @@ public class Activity_Add_CustomerInformation_Summary extends FragmentActivity{
 
         Log.d("LOCAL DB", "Insert MainCustomer Info" + result);
         if (result != -1){
-            final Dialog d = Helper.createCustomThemedDialogOKOnly(activity, "Save", "Saving successful. ", "OK");
+            final Dialog d = Helper.dialog.themedOkOnly(activity, "Save", "Saving successful. ", "OK");
             PD.dismiss();
 
             Button ok = (Button) d.findViewById(R.id.btn_dialog_okonly_OK);
@@ -246,7 +246,7 @@ public class Activity_Add_CustomerInformation_Summary extends FragmentActivity{
 
         }else {
             PD.dismiss();
-            Helper.createCustomThemedDialogOKOnly(activity, "Error", "Something happened. Please Try again.", "OK");
+            Helper.dialog.themedOkOnly(activity, "Error", "Something happened. Please Try again.", "OK");
         }
 
 //
@@ -261,7 +261,7 @@ public class Activity_Add_CustomerInformation_Summary extends FragmentActivity{
 //
 //                        if (responseCode.equalsIgnoreCase("1")){
 //
-//                            final Dialog d = Helper.createCustomThemedDialogOKOnly(activity, "Save", "Saving successful. ", "OK", R.color.amber_600);
+//                            final Dialog d = Helper.themedOkOnly(activity, "Save", "Saving successful. ", "OK", R.color.amber_600);
 //
 //                            Button ok = (Button) d.findViewById(R.id.btn_dialog_okonly_OK);
 //                            ok.setOnClickListener(new View.OnClickListener() {
@@ -292,7 +292,7 @@ public class Activity_Add_CustomerInformation_Summary extends FragmentActivity{
 //            public void onErrorResponse(VolleyError error) {
 //                PD.dismiss();
 //
-//                final Dialog d = Helper.createCustomDialogOKOnly(activity, "OOPS",
+//                final Dialog d = Helper.okOnly(activity, "OOPS",
 //                        "Something went wrong. error( "+ error +" )", "OK");
 //                TextView ok = (TextView) d.findViewById(R.id.btn_dialog_okonly_OK);
 //                d.setCancelable(false);

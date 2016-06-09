@@ -61,7 +61,7 @@ public class Activity_EditHarvest extends FragmentActivity implements  DatePicke
         context = Activity_EditHarvest.this;
 
         intent = getIntent();
-        Helper.hideKeyboardOnLoad(activity);
+        Helper.random.hideKeyboardOnLoad(activity);
 
         if (intent.hasExtra("hrv_id")) { id = intent.getStringExtra("hrv_id"); }
         if (intent.hasExtra("hrv_pondid")) { pondid = intent.getStringExtra("hrv_pondid"); }
@@ -199,7 +199,7 @@ public class Activity_EditHarvest extends FragmentActivity implements  DatePicke
                     strdeci = "0";
                 } else {
                     try {
-                        String[] holder = Helper.splitter(edtPricePerkilo.getText().toString(), "\\.");
+                        String[] holder = Helper.random.splitter(edtPricePerkilo.getText().toString(), "\\.");
                         strwhole = holder[0];
                         strdeci = holder[1];
                     }catch (Exception e){
@@ -210,7 +210,7 @@ public class Activity_EditHarvest extends FragmentActivity implements  DatePicke
                 }
 
 
-                final Dialog d = Helper.createDecimaldDialog(activity, "Price", 1, 999);
+                final Dialog d = Helper.dialog.decimalPicker(activity, "Price", 1, 999);
                 d.show();
                 Button set = (Button) d.findViewById(R.id.btn_decimalpicker_set);
                 final NumberPicker nbpwhole = (NumberPicker) d.findViewById(R.id.dialog_decipicker_whole);
@@ -237,14 +237,14 @@ public class Activity_EditHarvest extends FragmentActivity implements  DatePicke
             public void onClick(View v) {
                 if (chkNoHarvestInfo.isChecked()) {
                     if (edtDateofHarvest.getText().toString().equalsIgnoreCase("")) {
-                        Helper.toastShort(activity, "Incomplete fields");
+                        Helper.toast.short_(activity, "Incomplete fields");
                     }else{
                         updateHarvestinfo();
                     }
                 }else {
                     if (edtFinalAbw.getText().toString().equalsIgnoreCase("") || edtTotalFeedinKilos.getText().toString().equalsIgnoreCase("")||
                             edtFCR.getText().toString().equalsIgnoreCase("") || edtPricePerkilo.getText().toString().equalsIgnoreCase("") || edtTotalWeightHarvested.getText().toString().equalsIgnoreCase("")) {
-                        Helper.toastShort(activity, "Incomplete fields");
+                        Helper.toast.short_(activity, "Incomplete fields");
                     }else{
                         updateHarvestinfo();
                     }
@@ -261,7 +261,7 @@ public class Activity_EditHarvest extends FragmentActivity implements  DatePicke
                     strdeci = "0";
                 }else {
                     try {
-                        String[] holder = Helper.splitter(edtFCR.getText().toString(), "\\.");
+                        String[] holder = Helper.random.splitter(edtFCR.getText().toString(), "\\.");
                         strwhole = holder[0];
                         strdeci = holder[1];
                     }catch (Exception e){
@@ -273,7 +273,7 @@ public class Activity_EditHarvest extends FragmentActivity implements  DatePicke
                 }
 
 
-                final Dialog d = Helper.createDecimaldDialog(activity, "FCR", 1, 999);
+                final Dialog d = Helper.dialog.decimalPicker(activity, "FCR", 1, 999);
                 d.show();
                 Button set = (Button) d.findViewById(R.id.btn_decimalpicker_set);
                 final NumberPicker nbpwhole = (NumberPicker) d.findViewById(R.id.dialog_decipicker_whole);
@@ -324,7 +324,7 @@ public class Activity_EditHarvest extends FragmentActivity implements  DatePicke
                     }
                 }
 
-                final Dialog d = Helper.createNumberPickerdDialog(activity,"Final ABW", 1, 9999);
+                final Dialog d = Helper.dialog.numberPicker(activity,"Final ABW", 1, 9999);
                 Button set = (Button) d.findViewById(R.id.btn_numberpicker_set);
                 final NumberPicker nbp = (NumberPicker) d.findViewById(R.id.dialog_numberpicker);
                 nbp.setValue(initialValue);
@@ -346,13 +346,13 @@ public class Activity_EditHarvest extends FragmentActivity implements  DatePicke
             public void onClick(View v) {
                 int kilos = 0;
                 try {
-                     kilos = Helper.removeSuffix(edtTotalFeedinKilos.getText().toString(), "kg");
+                     kilos = Helper.random.removeSuffix(edtTotalFeedinKilos.getText().toString(), "kg");
                 }catch (Exception e){
                      kilos = 1;
                 }
 
 
-                final Dialog d = Helper.createNumberPickerdDialog(activity, "Total Feed Consumed(kg)", 1, 999999);
+                final Dialog d = Helper.dialog.numberPicker(activity, "Total Feed Consumed(kg)", 1, 999999);
                 Button set = (Button) d.findViewById(R.id.btn_numberpicker_set);
                 final NumberPicker nbp = (NumberPicker) d.findViewById(R.id.dialog_numberpicker);
                 nbp.setValue(kilos);
@@ -373,13 +373,13 @@ public class Activity_EditHarvest extends FragmentActivity implements  DatePicke
             public void onClick(View v) {
                 int kilos;
                 try{
-                    kilos = Helper.removeSuffix(edtTotalWeightHarvested.getText().toString(), "kg");
+                    kilos = Helper.random.removeSuffix(edtTotalWeightHarvested.getText().toString(), "kg");
                 }catch (Exception e){
                     kilos = 1;
                 }
 
 
-                final Dialog d = Helper.createNumberPickerdDialog(activity, "Weight Harvested(kg)", 1, 999999);
+                final Dialog d = Helper.dialog.numberPicker(activity, "Weight Harvested(kg)", 1, 999999);
                 Button set = (Button) d.findViewById(R.id.btn_numberpicker_set);
                 final NumberPicker nbp = (NumberPicker) d.findViewById(R.id.dialog_numberpicker);
                 nbp.setValue(kilos);
@@ -398,7 +398,7 @@ public class Activity_EditHarvest extends FragmentActivity implements  DatePicke
 
     private void updateHarvestinfo() {
         final boolean isNoHarvestInfoChecked = chkNoHarvestInfo.isChecked();
-        final Dialog d = Helper.createCustomDialogThemedYesNO(activity, "Update harvest information for Case #" + casenum + "?", "Update", "NO", "YES", R.color.red);
+        final Dialog d = Helper.dialog.themedYesNo(activity, "Update harvest information for Case #" + casenum + "?", "Update", "NO", "YES", R.color.red);
         Button yes = (Button) d.findViewById(R.id.btn_dialog_yesno_opt2);
         Button no = (Button) d.findViewById(R.id.btn_dialog_yesno_opt1);
 
@@ -415,11 +415,11 @@ public class Activity_EditHarvest extends FragmentActivity implements  DatePicke
                 } else {
 
                     db.updateHarvestInfo(edtCaseNumber.getText().toString(), id, pondid, edtDateofHarvest.getText().toString(),
-                            Helper.removeSuffix(edtFinalAbw.getText().toString(), "g")+"",
-                            Helper.removeSuffix(edtTotalFeedinKilos.getText().toString(), "kg") + "",
+                            Helper.random.removeSuffix(edtFinalAbw.getText().toString(), "g")+"",
+                            Helper.random.removeSuffix(edtTotalFeedinKilos.getText().toString(), "kg") + "",
                             edtFCR.getText().toString(),
                             edtPricePerkilo.getText().toString(),
-                            Helper.removeSuffix(edtTotalWeightHarvested.getText().toString(), "kg") + "",
+                            Helper.random.removeSuffix(edtTotalWeightHarvested.getText().toString(), "kg") + "",
                             isposted, dateinserted, species);
 
                 }
@@ -427,7 +427,7 @@ public class Activity_EditHarvest extends FragmentActivity implements  DatePicke
 
                 d.hide();
                 finish();
-                Helper.toastShort(activity, "Update successful");
+                Helper.toast.short_(activity, "Update successful");
             }
         });
 
@@ -451,10 +451,10 @@ public class Activity_EditHarvest extends FragmentActivity implements  DatePicke
     }
 
     private void displayNumberOfDaysCultured(int selectedYear, int selectedMonth, int selectedDay) {
-        long dateSelected = Helper.convertDateToLong(selectedDay, selectedMonth, selectedYear);
-        long dateStock = Helper.convertDateToMilis_DB_Format(datestocked);
+        long dateSelected = Helper.convert.convertDateToLong(selectedDay, selectedMonth, selectedYear);
+        long dateStock = Helper.convert.convertDateToMilis_DB_Format(datestocked);
 
-        long difference = Helper.getDateDifference(dateSelected, dateStock);
+        long difference = Helper.convert.getDateDifference(dateSelected, dateStock);
 
         if (difference > 1){
             edtDaysOfCulture.setText(String.valueOf(difference)+" days");

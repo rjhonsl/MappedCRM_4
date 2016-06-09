@@ -103,9 +103,9 @@ public class GPSQuery {
 		values.put(GPSHelper.CL_POND_customerId, customerid);
 		values.put(GPSHelper.CL_POND_isPosted, 0);
 		values.put(GPSHelper.CL_POND_isHarvested, 0);
-		values.put(GPSHelper.CL_POND_dateInserted, Helper.convertLongtoDate_DB_Format(System.currentTimeMillis()));
+		values.put(GPSHelper.CL_POND_dateInserted, Helper.convert.convertLongtoDate_DB_Format(System.currentTimeMillis()));
 		long id = db.insert(GPSHelper.TBLPOND, null, values);
-		String currentTime = Helper.convertLongtoDateTime_DB_Format(System.currentTimeMillis());
+		String currentTime = Helper.convert.convertLongtoDateTime_DB_Format(System.currentTimeMillis());
 		insertWeeklyUpdates(sizeofStock, remarks, id + "", currentTime, survivalRate);
 		return id;
 	}
@@ -145,7 +145,7 @@ public class GPSQuery {
 		values.put(GPSHelper.CL_MAINCUSTINFO_S_MiddleName, s_mname);
 		values.put(GPSHelper.CL_MAINCUSTINFO_S_BirthDay, s_birthday);
 		values.put(GPSHelper.CL_MAINCUSTINFO_HouseStatus, housestat);
-		values.put(GPSHelper.CL_MAINCUSTINFO_DateAdded, Helper.getDateDBformat());
+		values.put(GPSHelper.CL_MAINCUSTINFO_DateAdded, Helper.convert.getDateDBformat());
 		values.put(GPSHelper.CL_MAINCUSTINFO_Latitude, lat);
 		values.put(GPSHelper.CL_MAINCUSTINFO_Longitude, lng);
 		values.put(GPSHelper.CL_MAINCUSTINFO_type, customerType);
@@ -192,7 +192,7 @@ public class GPSQuery {
 		values.put(GPSHelper.CL_MAINCUSTINFO_S_MiddleName, s_mname);
 		values.put(GPSHelper.CL_MAINCUSTINFO_S_BirthDay, s_birthday);
 		values.put(GPSHelper.CL_MAINCUSTINFO_HouseStatus, housestat);
-		values.put(GPSHelper.CL_MAINCUSTINFO_DateAdded, Helper.getDateDBformat());
+		values.put(GPSHelper.CL_MAINCUSTINFO_DateAdded, Helper.convert.getDateDBformat());
 		values.put(GPSHelper.CL_MAINCUSTINFO_Latitude, lat);
 		values.put(GPSHelper.CL_MAINCUSTINFO_Longitude, lng);
 		values.put(GPSHelper.CL_MAINCUSTINFO_type, customerType);
@@ -217,6 +217,31 @@ public class GPSQuery {
 
 		return  db.insert(GPSHelper.TBLPOND_WeeklyUpdates, null, values);
 	}
+
+
+
+
+	public long insertTmpValues(String userid, String userlvl, String isactive, String userName, String lastName, String firstname, String password, String dateAddedToDB, String assignedArea, String deviceID){
+
+		ContentValues values = new ContentValues();
+		values.put(GPSHelper.CL_TMP_id, 1);
+		values.put(GPSHelper.CL_TMP_currentuserID, userid );
+		values.put(GPSHelper.CL_TMP_currentuserLvl, userlvl);
+		values.put(GPSHelper.CL_TMP_isactive, isactive);
+		values.put(GPSHelper.CL_TMP_UserName, userName);
+		values.put(GPSHelper.CL_TMP_UserLastname, lastName);
+		values.put(GPSHelper.CL_TMP_UserFirstname, firstname);
+		values.put(GPSHelper.CL_TMP_Password, password);
+		values.put(GPSHelper.CL_TMP_dateAddedToDB, dateAddedToDB);
+		values.put(GPSHelper.CL_TMP_assignedArea, assignedArea);
+		values.put(GPSHelper.CL_TMP_deviceID, deviceID);
+		values.put(GPSHelper.CL_TMP_deviceID, 0);
+
+		return  db.insert(GPSHelper.TBLPOND_WeeklyUpdates, null, values);
+	}
+
+
+
 
 
 	public long insertHarvestInfo_RESTORE(String pondid, String casenumber, String specie, String dateofharvest, String finalabw, String totalconsumption, String fcr, String priceperkilo
@@ -327,7 +352,7 @@ public class GPSQuery {
 		values.put(GPSHelper.CL_HRV_FCR, fcr);
 		values.put(GPSHelper.CL_HRV_PRICEPERKILO, priceperkilo);
 		values.put(GPSHelper.CL_HRV_TOTALHARVEST, totalharvested);
-		values.put(GPSHelper.CL_HRV_DATE_INSERTED, Helper.convertLongtoDateTime_DB_Format(System.currentTimeMillis()));
+		values.put(GPSHelper.CL_HRV_DATE_INSERTED, Helper.convert.convertLongtoDateTime_DB_Format(System.currentTimeMillis()));
 		values.put(GPSHelper.CL_HRV_ISPOSTED,"0");
 
 		return  db.insert(GPSHelper.TBL_HARVESTINFO, null, values);
@@ -599,7 +624,7 @@ public class GPSQuery {
 				String plid = cur.getString(cur.getColumnIndex(GPSHelper.CL_POND_INDEX)).replaceAll("'", "\\'");
 				String isHarvested = cur.getString(cur.getColumnIndex(GPSHelper.CL_POND_isHarvested)).replaceAll("'", "\\'");
 				String dateInserted = cur.getString(cur.getColumnIndex(GPSHelper.CL_POND_dateInserted)).replaceAll("'", "\\'");
-				String dateuploaded = Helper.convertLongtoDate_DB_Format(System.currentTimeMillis());
+				String dateuploaded = Helper.convert.convertLongtoDate_DB_Format(System.currentTimeMillis());
 
 				sqlString = sqlString +
 						"( '" + id + "',  " +
@@ -732,7 +757,7 @@ public class GPSQuery {
 				String hrv_totalHarvested = cur.getString(cur.getColumnIndex(GPSHelper.CL_HRV_TOTALHARVEST)).replaceAll("'", "\\'");
 				String hrv_localid = cur.getString(cur.getColumnIndex(GPSHelper.CL_HRV_ID)).replaceAll("'", "\\'");
 				String hrv_dateInserted = cur.getString(cur.getColumnIndex(GPSHelper.CL_HRV_DATE_INSERTED)).replaceAll("'", "\\'");
-				String hrv_dateUploaded = Helper.convertLongtoDateTime_DB_Format(System.currentTimeMillis());
+				String hrv_dateUploaded = Helper.convert.convertLongtoDateTime_DB_Format(System.currentTimeMillis());
 
 
 				sqlString = sqlString +
@@ -1069,6 +1094,13 @@ public class GPSQuery {
 		return cur.getCount();
 	}
 
+	public int getTempCount(){
+		String query = "SELECT * FROM "+ GPSHelper.TBL_TMP_CRED +";";
+		String[] params = new String[] {};
+		Cursor cur = db.rawQuery(query, params);
+		return cur.getCount();
+	}
+
 	public int getMainCustInfo_Count(){
 		String query = "SELECT * FROM "+ GPSHelper.TBLMAINCUSTOMERINFO+";";
 		String[] params = new String[] {};
@@ -1288,6 +1320,28 @@ public class GPSQuery {
 		newValues.put(GPSHelper.CL_HRV_SPECIES, species);
 
 		return 	db.update(GPSHelper.TBL_HARVESTINFO, newValues, where, null);
+	}
+
+
+	public int updateTempInfo(String userid, String userlvl, String isactive, String userName, String lastName, String firstname, String password, String dateAddedToDB, String assignedArea, String deviceID ) {
+
+		String where = GPSHelper.CL_TMP_id + " = " + 1;
+
+		ContentValues values = new ContentValues();
+		values.put(GPSHelper.CL_TMP_currentuserID, userid );
+		values.put(GPSHelper.CL_TMP_currentuserLvl, userlvl);
+		values.put(GPSHelper.CL_TMP_isactive, isactive);
+		values.put(GPSHelper.CL_TMP_UserName, userName);
+		values.put(GPSHelper.CL_TMP_UserLastname, lastName);
+		values.put(GPSHelper.CL_TMP_UserFirstname, firstname);
+		values.put(GPSHelper.CL_TMP_Password, password);
+		values.put(GPSHelper.CL_TMP_dateAddedToDB, dateAddedToDB);
+		values.put(GPSHelper.CL_TMP_assignedArea, assignedArea);
+		values.put(GPSHelper.CL_TMP_deviceID, deviceID);
+		values.put(GPSHelper.CL_TMP_deviceID, 0);
+
+
+		return 	db.update(GPSHelper.TBL_HARVESTINFO, values, where, null);
 	}
 
 	public int updateCustomerInfo(String id, String firstname, String lastname, String middleName, String farmID, String houseNumber, String street, String subdivision, String barangay,

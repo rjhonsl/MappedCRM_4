@@ -87,7 +87,7 @@ public class Activity_Harvested extends FragmentActivity {
                 fusedlocation.connectToApiClient();
 
                 final String[] options = new String[]{"Edit", "Delete", "Update History"};
-                final Dialog d = Helper.createCustomThemedListDialog(activity, options, "Options", R.color.skyblue_500);
+                final Dialog d = Helper.dialog.themedList(activity, options, "Options", R.color.skyblue_500);
                 d.show();
 
                 final ListView lvoptions = (ListView) d.findViewById(R.id.dialog_list_listview);
@@ -99,7 +99,7 @@ public class Activity_Harvested extends FragmentActivity {
                             Log.d("Harvested", "position 2 - before if");
 
                             if (harvestinfoList.get(position).getHrv_isPosted().equalsIgnoreCase("1")) {
-                                Helper.createCustomThemedDialogOKOnly(activity, "Warning", "This harvest information was already uploaded.", "OK");
+                                Helper.dialog.themedOkOnly(activity, "Warning", "This harvest information was already uploaded.", "OK");
                             } else {
 
                                 Intent intent = new Intent(Activity_Harvested.this, Activity_EditHarvest.class);
@@ -122,10 +122,10 @@ public class Activity_Harvested extends FragmentActivity {
                             d.hide();
                             if (harvestinfoList.get(position).getHrv_isPosted().equalsIgnoreCase("1")) {
                                 Log.d("Harvested", "position 2 - is posted");
-                                Helper.createCustomThemedDialogOKOnly(activity, "Warning", "This harvest information was already uploaded.", "OK");
+                                Helper.dialog.themedOkOnly(activity, "Warning", "This harvest information was already uploaded.", "OK");
                                 d.hide();
                             } else {
-                                final Dialog d1 = Helper.createCustomDialogThemedYesNO(activity, "Delete this harvest info?", "Delete", "NO", "YES", R.color.red);
+                                final Dialog d1 = Helper.dialog.themedYesNo(activity, "Delete this harvest info?", "Delete", "NO", "YES", R.color.red);
                                 Button no = (Button) d1.findViewById(R.id.btn_dialog_yesno_opt1);
                                 Button yes = (Button) d1.findViewById(R.id.btn_dialog_yesno_opt2);
 
@@ -141,7 +141,7 @@ public class Activity_Harvested extends FragmentActivity {
                                     public void onClick(View v) {
                                         d1.hide();
                                         db.deleteRow_HarvestInfo(harvestinfoList.get(position).getHrv_id());
-                                        Helper.toastShort(activity, "Harvest Information Deleted");
+                                        Helper.toast.short_(activity, "Harvest Information Deleted");
                                         getHarvertInfo();
 
                                     }

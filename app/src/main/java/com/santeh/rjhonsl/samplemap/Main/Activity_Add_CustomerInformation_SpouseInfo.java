@@ -47,7 +47,7 @@ public class Activity_Add_CustomerInformation_SpouseInfo extends FragmentActivit
         setContentView(R.layout.activity_add_customerinformation_spouse);
         activity = this;
         context = Activity_Add_CustomerInformation_SpouseInfo.this;
-        Helper.hideKeyboardOnLoad(activity);
+        Helper.random.hideKeyboardOnLoad(activity);
 
         btnBack = (ImageButton) findViewById(R.id.btn_back);
         btnNext = (ImageButton) findViewById(R.id.btn_next);
@@ -99,7 +99,7 @@ public class Activity_Add_CustomerInformation_SpouseInfo extends FragmentActivit
             @Override
             public void onClick(View v) {
                 final String[] options = {"Single", "Married", "Widowed"};
-                final Dialog d = Helper.createCustomThemedListDialog(activity, options, "Status", R.color.deepteal_500);
+                final Dialog d = Helper.dialog.themedList(activity, options, "Status", R.color.deepteal_500);
                 ListView lv = (ListView) d.findViewById(R.id.dialog_list_listview);
                 lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
@@ -138,7 +138,7 @@ public class Activity_Add_CustomerInformation_SpouseInfo extends FragmentActivit
                             && !edtmname.getText().toString().equalsIgnoreCase("")) {
                         gotoSummary();
                     }else{
-                        Helper.createCustomThemedDialogOKOnly(activity, "Warning", "Complete fields with '*' to continue.", "OK");
+                        Helper.dialog.themedOkOnly(activity, "Warning", "Complete fields with '*' to continue.", "OK");
                     }
                 } else {
                     if (!edtCivilStatus.getText().toString().equalsIgnoreCase("")) {

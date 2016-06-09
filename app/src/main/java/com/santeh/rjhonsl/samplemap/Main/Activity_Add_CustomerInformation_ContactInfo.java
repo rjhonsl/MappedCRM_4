@@ -37,7 +37,7 @@ public class Activity_Add_CustomerInformation_ContactInfo extends FragmentActivi
         setContentView(R.layout.activity_add_customerinformation_contactinfo);
         activity = this;
         context = Activity_Add_CustomerInformation_ContactInfo.this;
-        Helper.hideKeyboardOnLoad(activity);
+        Helper.random.hideKeyboardOnLoad(activity);
 
         btnBack = (ImageButton) findViewById(R.id.btn_back);
         btnNext = (ImageButton) findViewById(R.id.btn_next);
@@ -67,7 +67,7 @@ public class Activity_Add_CustomerInformation_ContactInfo extends FragmentActivi
             @Override
             public void onClick(View v) {
                 final String[] options = {"Owned","Rented"};
-                final Dialog d = Helper.createCustomThemedListDialog(activity, options, "House Status", R.color.deepteal_500);
+                final Dialog d = Helper.dialog.themedList(activity, options, "House Status", R.color.deepteal_500);
                 ListView lv = (ListView) d.findViewById(R.id.dialog_list_listview);
                 lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
@@ -84,7 +84,7 @@ public class Activity_Add_CustomerInformation_ContactInfo extends FragmentActivi
             @Override
             public void onClick(View v) {
                 final String[] options = {"Farm Owner","Distributor"};
-                final Dialog d = Helper.createCustomThemedListDialog(activity, options, "Type", R.color.deepteal_500);
+                final Dialog d = Helper.dialog.themedList(activity, options, "Type", R.color.deepteal_500);
                 ListView lv = (ListView) d.findViewById(R.id.dialog_list_listview);
                 lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
@@ -138,7 +138,7 @@ public class Activity_Add_CustomerInformation_ContactInfo extends FragmentActivi
                     startActivity(intent);
                     overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
                 }else{
-                    Helper.createCustomThemedDialogOKOnly(activity, "Warning", "Complete fields with '*' to continue.", "OK");
+                    Helper.dialog.themedOkOnly(activity, "Warning", "Complete fields with '*' to continue.", "OK");
                 }
             }
         });

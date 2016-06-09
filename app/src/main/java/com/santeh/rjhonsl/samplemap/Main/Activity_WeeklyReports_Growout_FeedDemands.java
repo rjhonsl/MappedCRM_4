@@ -127,8 +127,8 @@ public class Activity_WeeklyReports_Growout_FeedDemands extends FragmentActivity
 
     public void getData(String url) {
 
-        if(!Helper.isNetworkAvailable(activity)) {
-            Helper.toastShort(activity, "Internet Connection is not available. Please try again later.");
+        if(!Helper.random.isNetworkAvailable(activity)) {
+            Helper.toast.short_(activity, "Internet Connection is not available. Please try again later.");
         }
         else{
             PD.setMessage("Retrieving info... Please wait.");
@@ -148,8 +148,8 @@ public class Activity_WeeklyReports_Growout_FeedDemands extends FragmentActivity
                                         lvFarmlist.setAdapter(custinfoAdapter);
                                         lvFarmlist.setVisibility(View.VISIBLE);
                                         llNoQuery.setVisibility(View.GONE);
-                                    }else{ Helper.toastLong(activity, "There are no demands for this week.");}
-                                }else{Helper.toastLong(activity, "There are no demands for this week.");}
+                                    }else{ Helper.toast.short_(activity, "There are no demands for this week.");}
+                                }else{Helper.toast.short_(activity, "There are no demands for this week.");}
                             }
                             else {
                                 if (custinfoAdapter != null){
@@ -171,7 +171,7 @@ public class Activity_WeeklyReports_Growout_FeedDemands extends FragmentActivity
                 @Override
                 protected Map<String, String> getParams() {
                                 Map<String, String> params = new HashMap<String, String>();
-                    params.put("deviceid", Helper.getMacAddress(activity));
+                    params.put("deviceid", Helper.deviceInfo.getMacAddress(activity));
                     params.put("username", Helper.variables.getGlobalVar_currentUserName(activity));
                     params.put("password", Helper.variables.getGlobalVar_currentUserPassword(activity));
                     params.put("userid", Helper.variables.getGlobalVar_currentUserID(activity)+"");

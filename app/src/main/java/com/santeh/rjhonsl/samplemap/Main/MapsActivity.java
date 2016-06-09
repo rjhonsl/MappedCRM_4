@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.location.Location;
@@ -203,12 +204,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             maps.setInfoWindowAdapter(new FarmInfoWindow());
                             maps.clear();
 
-                            Helper.map_addMarker(((Var) this.getApplication()).getGoogleMap(), latLng, R.drawable.ic_place_red_24dp,
+                            Helper.map.map_addMarker(((Var) this.getApplication()).getGoogleMap(), latLng, R.drawable.ic_place_red_24dp,
                                     extras.getString("contactName"), extras.getString("address"), extras.getInt("id")+"",null, null);
                         PD.dismiss();
                         }
                         else{//google map not ready
-                            Helper.toastShort(activity, "Can't find current location. Please try again later.");
+                            Helper.toast.short_(activity, "Can't find current location. Please try again later.");
                         }
                     }
                 }else{//if not from view Customer Info
@@ -238,7 +239,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             @Override
             public void onClick(View v) {
 
-                final Dialog d = Helper.createCustomDialogThemedYesNO(activity, "Sync data to our server?", "Sync", "NO", "SYNC NOW", R.color.skyblue_500);
+                final Dialog d = Helper.dialog.themedYesNo(activity, "Sync data to our server?", "Sync", "NO", "SYNC NOW", R.color.skyblue_500);
                 final Button btnNo = (Button) d.findViewById(R.id.btn_dialog_yesno_opt1);
                 Button btnSync = (Button) d.findViewById(R.id.btn_dialog_yesno_opt2);
 
@@ -303,11 +304,21 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         txtfishbook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(activity, ActivityFB_Main.class);
-                startActivity(intent);
+
+                if (isPackageInstalled("com.santeh.rjhonsl.fishbook", context)){
+                  Context ctx= context; // or you can replace **'this'** with your **ActivityName.this**
+                  Intent i = ctx.getPackageManager().getLaunchIntentForPackage("com.santeh.rjhonsl.fishbook");
+                  ctx.startActivity(i);
+                }else{
+                    Helper.toast.indefinite(activity, "Fishbook is not yet installed.");
+                }
+                closeDrawer();
+
 
             }
         });
+
+
         btnCasePond.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -327,10 +338,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     final LatLng center = fusedLocation.getLastKnowLocation();
                     moveCameraAnimate(maps, center, 14);
 
-                    Helper.createCustomThemedDialogOKOnly(activity, "Change Location", "Long press marker until InfoWindow is gone then drag marker to desired location. \n\nNOTE: You should not exceed 1000m from your current location.", "OK");
+                    Helper.dialog.themedOkOnly(activity, "Change Location", "Long press marker until InfoWindow is gone then drag marker to desired location. \n\nNOTE: You should not exceed 1000m from your current location.", "OK");
                     hiddenPanel.setVisibility(View.GONE);
                     if (mapcircle == null || !mapcircle.isVisible()) {
-                        circleOptions_addLocation = Helper.addCircle(activity, center, 1, R.color.skyblue_20,
+                        circleOptions_addLocation = Helper.map.addCircle(activity, center, 1, R.color.skyblue_20,
                                 R.color.skyblue_20, 1000);
                         mapcircle = map.addCircle(circleOptions_addLocation);
                     }
@@ -353,11 +364,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         public void onMarkerDragEnd(final Marker marker) {
                             closeAddingMarker();
                             if (Helper.map.getDifference(center, marker.getPosition()) > 1000) {
-                                Helper.createCustomThemedDialogOKOnly(activity, "Warning", "You can't place marker 1000m away from your current location", "OK");
+                                Helper.dialog.themedOkOnly(activity, "Warning", "You can't place marker 1000m away from your current location", "OK");
                                 marker.setPosition(originalPosition);
                                 marker.showInfoWindow();
                             }else{
-                                final Dialog d = Helper.createCustomDialogThemedYesNO(activity, "Move location of client's marker here?", "Change Location", "NO", "YES", R.color.red_material_600);
+                                final Dialog d = Helper.dialog.themedYesNo(activity, "Move location of client's marker here?", "Change Location", "NO", "YES", R.color.red_material_600);
                                 Button yes = (Button) d.findViewById(R.id.btn_dialog_yesno_opt2);
                                 Button no = (Button) d.findViewById(R.id.btn_dialog_yesno_opt1);
                                 d.setCancelable(false);
@@ -513,7 +524,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     zoom = 5;
                 }
             }catch(Exception e){
-                    Helper.toastShort(activity, "Location is not available: "+e);
+                    Helper.toast.short_(activity, "Location is not available: "+e);
                     Log.e("Error", e.toString());
                 }
             }
@@ -521,6 +532,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
 
+    private boolean isPackageInstalled(String packagename, Context context) {
+        PackageManager pm = context.getPackageManager();
+        try {
+            pm.getPackageInfo(packagename, PackageManager.GET_ACTIVITIES);
+            return true;
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
+    }
     private void closeAddingMarker() {
         if(mapcircle!=null){
             mapcircle.remove();
@@ -552,12 +572,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         farmidd = splitted[6];
 
         if (lat != 0 && lng != 0) {
-            Helper.moveCameraAnimate(maps, new LatLng(lat, lng), 15);
+            Helper.map.moveCameraAnimate(maps, new LatLng(lat, lng), 15);
             maps.clear();
 
             showAllCustomerLocation();
         } else {
-            Helper.createCustomThemedDialogOKOnly(activity, "Oops", "Address of farm owner is currently not available. \n\nFarm ID: " + farmidd
+            Helper.dialog.themedOkOnly(activity, "Oops", "Address of farm owner is currently not available. \n\nFarm ID: " + farmidd
                     , "OK");
         }
     }
@@ -697,7 +717,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 closeDrawer();
 
                 String[] maptypes = {"Normal", "Satellite", "Terrain", "Hybrid"};
-                final Dialog dd = Helper.createCustomThemedListDialog(activity, maptypes, "Map Types", R.color.green_400);
+                final Dialog dd = Helper.dialog.themedList(activity, maptypes, "Map Types", R.color.green_400);
                 ListView lstMapType = (ListView) dd.findViewById(R.id.dialog_list_listview);
                 dd.show();
 
@@ -734,7 +754,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             public void onClick(View v) {
 //                setUpMap();
                 fusedLocation.disconnectFromApiClient();
-                if (Helper.isLocationEnabled(context)) {
+                if (Helper.map.isLocationEnabled(context)) {
 
                     fusedLocation.connectToApiClient();
 
@@ -743,7 +763,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                         LatLng latLng = new LatLng(14.651347, 121.029381); //santeh feeds west office.
                         moveCameraAnimate(map, latLng, 9);
-                        Helper.toastShort(activity, "Current location is not available. Please try again later.");
+                        Helper.toast.short_(activity, "Current location is not available. Please try again later.");
                     } else {
 
                         final Handler handler = new Handler();
@@ -758,12 +778,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                                     @Override
                                     public void run() {
                                         if (mapcircle == null || !mapcircle.isVisible()) {
-                                            circleOptions_addLocation = Helper.addCircle(activity, curLatlng, 1, R.color.skyblue_20,
+                                            circleOptions_addLocation = Helper.map.addCircle(activity, curLatlng, 1, R.color.skyblue_20,
                                                     R.color.skyblue_20, 1000);
                                             mapcircle = maps.addCircle(circleOptions_addLocation);
                                         }
                                         btn_cancelAddmarker.setVisibility(View.VISIBLE);
-                                        Helper.createCustomThemedDialogOKOnly(activity, "Add Marker", "Long press desired location within the blue circle.", "OK");
+                                        Helper.dialog.themedOkOnly(activity, "Add Marker", "Long press desired location within the blue circle.", "OK");
                                     }
                                 }, 1200);
 
@@ -789,7 +809,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 //                        Helper.toastLong(activity, results[0]+"");
 
                                 if (results[0] > 1000) {
-                                    final Dialog d = Helper.createCustomThemedDialogOKOnly(activity, "Out of range", "Selection is out of 1km range", "OK");
+                                    final Dialog d = Helper.dialog.themedOkOnly(activity, "Out of range", "Selection is out of 1km range", "OK");
                                     d.show();
 
                                     Button ok = (Button) d.findViewById(R.id.btn_dialog_okonly_OK);
@@ -802,7 +822,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                                 } else {
 
                                     String[] options = {"Farm Information", "Customer Information"};
-                                    final Dialog d1 = Helper.createCustomThemedListDialogWithPrompt(activity, options, "Add Marker",
+                                    final Dialog d1 = Helper.dialog.list_withPrompt(activity, options, "Add Marker",
                                             "Select the type of marker you want to add.", R.color.blue);
                                     ListView lvoptions = (ListView) d1.findViewById(R.id.dialog_list_listview);
                                     lvoptions.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -838,7 +858,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
                 } else {
-                    Helper.isLocationAvailablePrompt(context, activity);
+                    Helper.map.isLocationAvailablePrompt(context, activity);
                 }
 
             }
@@ -866,7 +886,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 if (activeSelection.equalsIgnoreCase("farm")) {
 //
 //                    String[] options = new String[]{"Case/Ponds", "Farm Details"};
-//                    final Dialog d = Helper.createCustomThemedListDialog(activity, options, "Options", R.color.blue);
+//                    final Dialog d = Helper.themedList(activity, options, "Options", R.color.blue);
 //                    ListView lv = (ListView) d.findViewById(R.id.dialog_list_listview);
 //                    lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 //                        @Override
@@ -890,7 +910,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 } else if (activeSelection.equalsIgnoreCase("customer")) {
 
                     String[] options = new String[]{"Customer Details", "Owned Farms"};
-                    final Dialog d = Helper.createCustomThemedListDialog(activity, options, "Options", R.color.blue);
+                    final Dialog d = Helper.dialog.themedList(activity, options, "Options", R.color.blue);
                     ListView lv = (ListView) d.findViewById(R.id.dialog_list_listview);
                     lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
@@ -1098,7 +1118,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         //get current userlvl
         if (userlvl == 1 || userlvl == 2 || userlvl == 3 || userlvl == 0 ){ //if user is not TSR/Technician
-            if (Helper.isNetworkAvailable(context)){ //if internet is availble
+            if (Helper.random.isNetworkAvailable(context)){ //if internet is availble
                 StringRequest postRequest = new StringRequest(Request.Method.POST, url,
                         new Response.Listener<String>() {
                             @Override
@@ -1135,7 +1155,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             @Override
                             public void onErrorResponse(VolleyError error) {
                                 PD.dismiss();
-                                Helper.toastShort(MapsActivity.this, "Something happened. Please try again later");
+                                Helper.toast.short_(MapsActivity.this, "Something happened. Please try again later");
                             }
                         }) {
                     @Override
@@ -1143,7 +1163,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         Map<String, String> params = new HashMap<>();
                         params.put("username", Helper.variables.getGlobalVar_currentUserName(activity));
                         params.put("password", Helper.variables.getGlobalVar_currentUserPassword(activity));
-                        params.put("deviceid", Helper.getMacAddress(context));
+                        params.put("deviceid", Helper.deviceInfo.getMacAddress(context));
                         params.put("userid", Helper.variables.getGlobalVar_currentUserID(activity)+"");
                         params.put("userlvl", Helper.variables.getGlobalVar_currentLevel(activity)+"");
 
@@ -1154,7 +1174,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 MyVolleyAPI api = new MyVolleyAPI();
                 api.addToReqQueue(postRequest, MapsActivity.this);
             }else{
-                Helper.toastShort(MapsActivity.this, "No internet connection available. Please try again later.");
+                Helper.toast.short_(MapsActivity.this, "No internet connection available. Please try again later.");
             }
 
         }else if(userlvl == 4) {//if user is tsr/technician... then query local database
@@ -1281,7 +1301,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                                             ci = custInfoObjectList.get(i);
                                             Log.d("MARKER", "ADDING FARM MARKER"+1);
                                             LatLng custLatlng = new LatLng(Double.parseDouble(ci.getLatitude() + ""), Double.parseDouble(ci.getLongtitude() + ""));
-                                            Helper.map_addMarker(maps, custLatlng,
+                                            Helper.map.map_addMarker(maps, custLatlng,
                                                     R.drawable.ic_place_red_24dp, ci.getFarmname(), ci.getAddress(), ci.getCi_id() + "", ci.getTotalStockOfFarm() + "",
                                                     ci.getAllSpecie() + "#-#" + ci.getCust_latitude() + "#-#" + ci.getCust_longtitude() + "#-#" + ci.getMainCustomerId());
                                         }
@@ -1294,7 +1314,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         @Override
                         public void onErrorResponse(VolleyError error) {
                             PD.dismiss();
-                            Helper.toastShort(MapsActivity.this, "Something happened. Please try again later");
+                            Helper.toast.short_(MapsActivity.this, "Something happened. Please try again later");
                         }
                     }) {
                 @Override
@@ -1302,7 +1322,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     Map<String, String> params = new HashMap<>();
                     params.put("username", Helper.variables.getGlobalVar_currentUserName(activity));
                     params.put("password", Helper.variables.getGlobalVar_currentUserPassword(activity));
-                    params.put("deviceid", Helper.getMacAddress(context));
+                    params.put("deviceid", Helper.deviceInfo.getMacAddress(context));
                     params.put("userid", Helper.variables.getGlobalVar_currentUserID(activity)+"");
                     params.put("userlvl", Helper.variables.getGlobalVar_currentLevel(activity)+"");
                     params.put("farmid", farmid+"");
@@ -1346,7 +1366,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         @Override
                         public void onErrorResponse(VolleyError error) {
                             PD.dismiss();
-                            Helper.toastShort(MapsActivity.this,"Something happened. Please try again later");
+                            Helper.toast.short_(MapsActivity.this,"Something happened. Please try again later");
                         }
                     }) {
                 @Override
@@ -1354,7 +1374,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     Map<String, String> params = new HashMap<>();
                     params.put("username", Helper.variables.getGlobalVar_currentUserName(activity));
                     params.put("password", Helper.variables.getGlobalVar_currentUserPassword(activity));
-                    params.put("deviceid", Helper.getMacAddress(context));
+                    params.put("deviceid", Helper.deviceInfo.getMacAddress(context));
                     params.put("userid", Helper.variables.getGlobalVar_currentUserID(activity)+"");
                     params.put("userlvl", Helper.variables.getGlobalVar_currentLevel(activity)+"");
                     return params;
@@ -1432,7 +1452,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     maps.setInfoWindowAdapter(new CustomerInfoWindow());
                     Log.d("DEBUG", "SHOW all custlocation - Active selection customer");
                     activeSelection = "customer";
-                    Helper.map_addMarker(maps, new LatLng(Double.parseDouble(custInfoObjectList.get(i).getCust_latitude()), Double.parseDouble(custInfoObjectList.get(i).getCust_longtitude())),
+                    Helper.map.map_addMarker(maps, new LatLng(Double.parseDouble(custInfoObjectList.get(i).getCust_latitude()), Double.parseDouble(custInfoObjectList.get(i).getCust_longtitude())),
                             R.drawable.ic_housemarker_24dp,
                             custInfoObjectList.get(i).getFirstname() + " " + custInfoObjectList.get(i).getLastname(), //Firstname and LastName
                             address, custInfoObjectList.get(i).getFarmID(), custInfoObjectList.get(i).getMainCustomerId(), "0");
@@ -1442,7 +1462,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     private void prompt_noCustomerLocation() {
-        Helper.createCustomThemedDialogOKOnly(activity, "Warning", "You have not added any customer address", "OK");
+        Helper.dialog.themedOkOnly(activity, "Warning", "You have not added any customer address", "OK");
     }
 
     public void getListOfFarms(final String farmid){
@@ -1458,14 +1478,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             if (!response.substring(1, 2).equalsIgnoreCase("0")) {
                                 custInfoObjectList = CustAndPondParser.parseFeed(response);
                                 showAllCustomerFarmByFarmID();
-                            } else {Helper.createCustomThemedDialogOKOnly(activity, "Warning", "No farm related to selected customer. Please check Farm ID", "OK");}
+                            } else {
+                                Helper.dialog.themedOkOnly(activity, "Warning", "No farm related to selected customer. Please check Farm ID", "OK");}
                         }
                     },
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
                             PD.dismiss();
-                            Helper.toastShort(MapsActivity.this,"Something happened. Please try again later");
+                            Helper.toast.short_(MapsActivity.this,"Something happened. Please try again later");
                         }
                     }) {
                 @Override
@@ -1473,7 +1494,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     Map<String, String> params = new HashMap<>();
                     params.put("username", Helper.variables.getGlobalVar_currentUserName(activity));
                     params.put("password", Helper.variables.getGlobalVar_currentUserPassword(activity));
-                    params.put("deviceid", Helper.getMacAddress(context));
+                    params.put("deviceid", Helper.deviceInfo.getMacAddress(context));
                     params.put("userid", Helper.variables.getGlobalVar_currentUserID(activity)+"");
                     params.put("userlvl", Helper.variables.getGlobalVar_currentLevel(activity)+"");
                     params.put("farmid", farmid+"");
@@ -1511,7 +1532,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     farmnames[i] = custInfoObjectList.get(i).getFarmname();
                 }
 
-                final Dialog d = Helper.createCustomThemedListDialog(activity, farmnames, "Farm(s)", R.color.darkgreen_800);
+                final Dialog d = Helper.dialog.themedList(activity, farmnames, "Farm(s)", R.color.darkgreen_800);
                 d.show();
                 ListView lv = (ListView) d.findViewById(R.id.dialog_list_listview);
                 lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -1522,20 +1543,21 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         double lng = Double.parseDouble(custInfoObjectList.get(position).getLongtitude() + "");
                         LatLng latLng = new LatLng(lat, lng);
 //                                            Helper.toastShort(activity, custInfoObjectList.get(position).getFarmID() + " " + custInfoObjectList.get(position).getLongtitude() + " " + custInfoObjectList.get(position).getLatitude());
-                        Helper.moveCameraAnimate(maps, latLng, 15);
+                        Helper.map.moveCameraAnimate(maps, latLng, 15);
                         maps.clear();
                         activeSelection = "farm";
                         showAllCustomerFarmByID(custInfoObjectList.get(position).getFarmID());
                         d.hide();
                     }
                 });
-            }else{Helper.createCustomThemedDialogOKOnly(activity, "Warning", "No farm related to selected customer. Please check Farm ID", "OK");}
-        }else{ Helper.createCustomThemedDialogOKOnly(activity, "Warning", "No farm related to selected customer. Please check Farm ID", "OK");}
+            }else{
+                Helper.dialog.themedOkOnly(activity, "Warning", "No farm related to selected customer. Please check Farm ID", "OK");}
+        }else{ Helper.dialog.themedOkOnly(activity, "Warning", "No farm related to selected customer. Please check Farm ID", "OK");}
     }
 
 
     private void insertloginlocation(){
-        if (Helper.isIntentKeywordNotNull("fromActivity", passedintent)){
+        if (Helper.isnull.isIntentKeywordNotNull("fromActivity", passedintent)){
           if (extrass.getString("fromActivity").equalsIgnoreCase("login")) {
               Log.d("EXTRAS", "fromactivity = login");
 
@@ -1547,7 +1569,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
               userdescription = extrass.getString("userdescription");
 
               if (Logging.logUserAction(activity, context, Helper.userActions.TSR.USER_LOGIN, Helper.variables.ACTIVITY_LOG_TYPE_TSR_MONITORING)){
-                  Helper.toastShort(activity, "Location found :) ");
+                  Helper.toast.short_(activity, "Location found :) ");
                   passedintent = null;
               }
           }
@@ -1566,7 +1588,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     ci = custInfoObjectList.get(i);
                     maps.setInfoWindowAdapter(new FarmInfoWindow());
                     LatLng custLatlng = new LatLng(Double.parseDouble(ci.getLatitude() + ""), Double.parseDouble(ci.getLongtitude() + ""));
-                    Helper.map_addMarker(maps, custLatlng,
+                    Helper.map.map_addMarker(maps, custLatlng,
                             R.drawable.ic_place_red_24dp, ci.getFarmname(), ci.getAddress(), ci.getCi_id() + "", ci.getTotalStockOfFarm() + "",
                             ci.getAllSpecie() + "#-#" + ci.getCust_latitude() + "#-#" + ci.getCust_longtitude() + "#-#" + ci.getFarmID() + "#-#"
                                     + ci.getContact_name() + "#-#" + ci.getContact_number() + "#-#" + ci.getCultureType() + "#-#" + ci.getCulturelevel() + "#-#" + ci.getWaterType() + "#-#" + ci.getIsPosted_farm());
@@ -1576,7 +1598,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     private void prompt_noFarm() {
-        final Dialog d = Helper.createCustomThemedDialogOKOnly(activity, "Santeh CRM", "You have not added a farm/marker yet. \nStart by pressing the  plus '+' on the upper right side of the screen.", "OK");
+        final Dialog d = Helper.dialog.themedOkOnly(activity, "Santeh CRM", "You have not added a farm/marker yet. \nStart by pressing the  plus '+' on the upper right side of the screen.", "OK");
         Button ok = (Button) d.findViewById(R.id.btn_dialog_okonly_OK);
         d.show();
         ok.setOnClickListener(new View.OnClickListener() {
@@ -1665,15 +1687,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             activeFilter = 0;
         }
 
-        if (Helper.nullcheck.isGlobalUserIDNull(activity)) {
-            Dialog d = Helper.createCustomThemedDialogOKOnly(activity, "Session Expired",
+        if (Helper.isnull.isGlobalUserIDNull(activity)) {
+            Dialog d = Helper.dialog.themedOkOnly(activity, "Session Expired",
                     "It seems that you have been inactive for too long. Please log in again", "OK");
             d.setCancelable(false);
             Button ok = (Button) d.findViewById(R.id.btn_dialog_okonly_OK);
             ok.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Helper.activityChooser.startActivityClearStack(activity, Activity_LoginScreen.class);
+                    Helper.activityActions.startActivityClearStack(activity, Activity_LoginScreen.class);
                 }
             });
         }
@@ -1688,7 +1710,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     private void exitApp() {
-        final Dialog d = Helper.createCustomDialogThemedYesNO(activity, "Close the app? You will have to login next time.", "Close", "YES", "NO", R.color.blue);
+        final Dialog d = Helper.dialog.themedYesNo(activity, "Close the app? You will have to login next time.", "Close", "YES", "NO", R.color.blue);
         d.show();
         Button yes = (Button) d.findViewById(R.id.btn_dialog_yesno_opt1);
         Button no = (Button) d.findViewById(R.id.btn_dialog_yesno_opt2);
@@ -1715,7 +1737,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
     private void logout() {
-        final Dialog d = Helper.createCustomDialogThemedYesNO(activity, "Logout this account?", "Log Out", "YES", "NO", R.color.blue);
+        final Dialog d = Helper.dialog.themedYesNo(activity, "Logout this account?", "Log Out", "YES", "NO", R.color.blue);
         d.show();
         Button yes = (Button) d.findViewById(R.id.btn_dialog_yesno_opt1);
         Button no = (Button) d.findViewById(R.id.btn_dialog_yesno_opt2);
@@ -1725,7 +1747,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             public void onClick(View v) {
                 d.hide();
                 closeDrawer();
-                final Dialog d2 = Helper.initProgressDialog(activity);
+                final Dialog d2 = Helper.dialog.initProgressDialog(activity);
                 d2.show();
 
                 TextView message = (TextView) d2.findViewById(R.id.progress_message);
@@ -1792,7 +1814,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            Helper.createCustomThemedDialogOKOnly(activity, "Error", error.toString(), "OK");
+                            Helper.dialog.themedOkOnly(activity, "Error", error.toString(), "OK");
                             getunsynchedData();
                         }
                     }) {
@@ -1801,7 +1823,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     Map<String, String> params = new HashMap<>();
                     params.put("username", Helper.variables.getGlobalVar_currentUserName(activity));
                     params.put("password", Helper.variables.getGlobalVar_currentUserPassword(activity));
-                    params.put("deviceid", Helper.getMacAddress(context));
+                    params.put("deviceid", Helper.deviceInfo.getMacAddress(context));
                     params.put("userid", Helper.variables.getGlobalVar_currentUserID(activity) + "");
                     params.put("userlvl", Helper.variables.getGlobalVar_currentLevel(activity) + "");
 
@@ -1841,7 +1863,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            Helper.createCustomThemedDialogOKOnly(activity, "Error", error.toString(), "OK");
+                            Helper.dialog.themedOkOnly(activity, "Error", error.toString(), "OK");
                             getunsynchedData();
                         }
                     }) {
@@ -1850,7 +1872,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     Map<String, String> params = new HashMap<>();
                     params.put("username", Helper.variables.getGlobalVar_currentUserName(activity));
                     params.put("password", Helper.variables.getGlobalVar_currentUserPassword(activity));
-                    params.put("deviceid", Helper.getMacAddress(context));
+                    params.put("deviceid", Helper.deviceInfo.getMacAddress(context));
                     params.put("userid", Helper.variables.getGlobalVar_currentUserID(activity) + "");
                     params.put("userlvl", Helper.variables.getGlobalVar_currentLevel(activity) + "");
 
@@ -1889,7 +1911,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            Helper.createCustomThemedDialogOKOnly(activity, "Error", error.toString(), "OK");
+                            Helper.dialog.themedOkOnly(activity, "Error", error.toString(), "OK");
                             getunsynchedData();
                         }
                     }) {
@@ -1898,7 +1920,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     Map<String, String> params = new HashMap<>();
                     params.put("username", Helper.variables.getGlobalVar_currentUserName(activity));
                     params.put("password", Helper.variables.getGlobalVar_currentUserPassword(activity));
-                    params.put("deviceid", Helper.getMacAddress(context));
+                    params.put("deviceid", Helper.deviceInfo.getMacAddress(context));
                     params.put("userid", Helper.variables.getGlobalVar_currentUserID(activity) + "");
                     params.put("userlvl", Helper.variables.getGlobalVar_currentLevel(activity) + "");
                     params.put("sql", db.getSQLStringForInsert_UNPOSTED_POND(activity) + "");
@@ -1935,7 +1957,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            Helper.createCustomThemedDialogOKOnly(activity, "Error", error.toString(), "OK");
+                            Helper.dialog.themedOkOnly(activity, "Error", error.toString(), "OK");
                             getunsynchedData();
                         }
                     }) {
@@ -1944,7 +1966,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     Map<String, String> params = new HashMap<>();
                     params.put("username", Helper.variables.getGlobalVar_currentUserName(activity));
                     params.put("password", Helper.variables.getGlobalVar_currentUserPassword(activity));
-                    params.put("deviceid", Helper.getMacAddress(context));
+                    params.put("deviceid", Helper.deviceInfo.getMacAddress(context));
                     params.put("userid", Helper.variables.getGlobalVar_currentUserID(activity) + "");
                     params.put("userlvl", Helper.variables.getGlobalVar_currentLevel(activity) + "");
                     params.put("sql", db.getSQLStringForInsert_UNPOSTED_WEEKLY() + "");
@@ -1969,7 +1991,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         txtViewTop.clearAnimation();
         Log.d("SYNC", "SYNC OK - WEEK.");
         sync_userActivities1();
-        Helper.toastShort(activity, "SYNC FINISHED.");
+        Helper.toast.short_(activity, "SYNC FINISHED.");
     }
 
 
@@ -1991,7 +2013,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            Helper.createCustomThemedDialogOKOnly(activity, "Error", error.toString(), "OK");
+                            Helper.dialog.themedOkOnly(activity, "Error", error.toString(), "OK");
                             getunsynchedData();
                         }
                     }) {
@@ -2000,7 +2022,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     Map<String, String> params = new HashMap<>();
                     params.put("username", Helper.variables.getGlobalVar_currentUserName(activity));
                     params.put("password", Helper.variables.getGlobalVar_currentUserPassword(activity));
-                    params.put("deviceid", Helper.getMacAddress(context));
+                    params.put("deviceid", Helper.deviceInfo.getMacAddress(context));
                     params.put("userid", Helper.variables.getGlobalVar_currentUserID(activity) + "");
                     params.put("userlvl", Helper.variables.getGlobalVar_currentLevel(activity) + "");
                     params.put("sql", db.getSQLStringForInsert_UNPOSTED_HARVESTINFO() + "");
@@ -2022,7 +2044,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     private void sync_userActivities1() {
-        //        Helper.createCustomThemedDialogOKOnly_scrolling(activity, "SQL STRING", db.getSQLStringForInsert_UNPOSTED_USERACTIVITY(), "OK", R.color.red);
+        //        Helper.themedOkOnly_scrolling(activity, "SQL STRING", db.getSQLStringForInsert_UNPOSTED_USERACTIVITY(), "OK", R.color.red);
         if (db.getUserActivity_notPosted_Count(activity) > 0) {
             StringRequest postRequest = new StringRequest(Request.Method.POST, Helper.variables.URL_PHP_RAW_QUERY_POST_INSERT,
                     new Response.Listener<String>() {
@@ -2036,18 +2058,18 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             Log.d("SYNC", ""+response);
 
                             if (strikes > 0){
-                                Helper.toastShort(activity, "SYNC FAILED. Please try syncing again.");
+                                Helper.toast.short_(activity, "SYNC FAILED. Please try syncing again.");
                                 strikes = 0;
                             }else{
                                 strikes = 0;
-                                Helper.toastShort(activity, "SYNC FINISHED.");
+                                Helper.toast.short_(activity, "SYNC FINISHED.");
                             }
                         }
                     },
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            Helper.createCustomThemedDialogOKOnly(activity, "Error", error.toString(), "OK");
+                            Helper.dialog.themedOkOnly(activity, "Error", error.toString(), "OK");
                             getunsynchedData();
                         }
                     }) {
@@ -2056,7 +2078,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     Map<String, String> params = new HashMap<>();
                     params.put("username", Helper.variables.getGlobalVar_currentUserName(activity)+"");
                     params.put("password", Helper.variables.getGlobalVar_currentUserPassword(activity)+"");
-                    params.put("deviceid", Helper.getMacAddress(context)+"");
+                    params.put("deviceid", Helper.deviceInfo.getMacAddress(context)+"");
                     params.put("userid", Helper.variables.getGlobalVar_currentUserID(activity) + "");
                     params.put("userlvl", Helper.variables.getGlobalVar_currentLevel(activity) + "");
                     params.put("sql", db.getSQLStringForInsert_UNPOSTED_USERACTIVITY() + "");
